@@ -1,2 +1,2 @@
-# Web Applications II Labs
-Repository for the laboratories of the Web Applications II course
+# Mobile Application Development Labs
+Repository for the laboratories of the Mobile Application Development course
