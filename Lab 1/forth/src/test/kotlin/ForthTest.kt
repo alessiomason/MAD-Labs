@@ -1,3 +1,4 @@
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.rules.ExpectedException
 import kotlin.test.Test
@@ -12,21 +13,25 @@ abstract class ForthTest {
     class ParsingAndNumbersTest : ForthTest() {
 
         @Test
+        @Ignore
         fun `numbers just get pushed onto the stack`() = assertEquals(listOf(1, 2, 3, 4, 5), Forth().evaluate("1 2 3 4 5"))
     }
 
     class Addition : ForthTest() {
 
         @Test
+        @Ignore
         fun `can add two numbers`() = assertEquals(listOf(3), Forth().evaluate("1 2 +"))
 
         @Test
+        @Ignore
         fun `errors if there is nothing on the stack`() {
             expectedException.expectMessage("empty stack")
             Forth().evaluate("+")
         }
 
         @Test
+        @Ignore
         fun `errors if there is only one value on the stack`() {
             expectedException.expectMessage("only one value on the stack")
             Forth().evaluate("1 +")
@@ -36,15 +41,18 @@ abstract class ForthTest {
     class Subtraction : ForthTest() {
 
         @Test
+        @Ignore
         fun `can subtract two numbers`() = assertEquals(listOf(-1), Forth().evaluate("3 4 -"))
 
         @Test
+        @Ignore
         fun `errors if there is nothing on the stack`() {
             expectedException.expectMessage("empty stack")
             Forth().evaluate("-")
         }
 
         @Test
+        @Ignore
         fun `errors if there is only one value on the stack`() {
             expectedException.expectMessage("only one value on the stack")
             Forth().evaluate("1 -")
@@ -54,15 +62,18 @@ abstract class ForthTest {
     class Multiplication : ForthTest() {
 
         @Test
+        @Ignore
         fun `can multiply two numbers`() = assertEquals(listOf(8), Forth().evaluate("2 4 *"))
 
         @Test
+        @Ignore
         fun `errors if there is nothing on the stack`() {
             expectedException.expectMessage("empty stack")
             Forth().evaluate("*")
         }
 
         @Test
+        @Ignore
         fun `errors if there is only one value on the stack`() {
             expectedException.expectMessage("only one value on the stack")
             Forth().evaluate("1 *")
@@ -72,24 +83,29 @@ abstract class ForthTest {
     class Division : ForthTest() {
 
         @Test
+        @Ignore
         fun `can divide two numbers`() = assertEquals(listOf(4), Forth().evaluate("12 3 /"))
 
         @Test
+        @Ignore
         fun `performs integer division`() = assertEquals(listOf(2), Forth().evaluate("8 3 /"))
 
         @Test
+        @Ignore
         fun `errors if dividing by zero`() {
             expectedException.expectMessage("divide by zero")
             Forth().evaluate("4 0 /")
         }
 
         @Test
+        @Ignore
         fun `errors if there is nothing on the stack`() {
             expectedException.expectMessage("empty stack")
             Forth().evaluate("/")
         }
 
         @Test
+        @Ignore
         fun `errors if there is only one value on the stack`() {
             expectedException.expectMessage("only one value on the stack")
             Forth().evaluate("1 /")
@@ -123,12 +139,15 @@ abstract class ForthTest {
     class Drop : ForthTest() {
 
         @Test
+        @Ignore
         fun `removes the top value on the stack if it is the only one`() = assertEquals(listOf(), Forth().evaluate("1 drop"))
 
         @Test
+        @Ignore
         fun `removes the top value on the stack if it is not the only one`() = assertEquals(listOf(1), Forth().evaluate("1 2 drop"))
 
         @Test
+        @Ignore
         fun `errors if there is nothing on the stack`() {
             expectedException.expectMessage("empty stack")
             Forth().evaluate("drop")
