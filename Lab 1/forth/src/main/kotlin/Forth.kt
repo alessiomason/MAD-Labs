@@ -3,13 +3,12 @@ class Forth {
         val list = mutableListOf<Int>()
 
         for (str in line) {
-            val stack = str.split(' ').reversed().toMutableList()
+            val stack = str.split(' ').toMutableList()
 
 
             while (stack.isNotEmpty()) {
-                val result = operation(stack, 0)
-                if (result != null)
-                    list.add(0, result)
+                val result = operation(stack, stack.count() - 1)
+                list.add(0, result)
             }
         }
 
@@ -24,7 +23,7 @@ class Forth {
 // 2 3 4 1
 
 // swap 4 swap 3 swap 2 1
-fun operation(stack: MutableList<String>, i: Int): Int? {
+fun operation(stack: MutableList<String>, i: Int): Int {
     val s = stack.removeAt(i).lowercase()
     println(s)
     return when {
@@ -50,10 +49,8 @@ fun operation(stack: MutableList<String>, i: Int): Int? {
         s == "swap" -> {
             val (op1, op2) = calculateLhsRhs(stack, i)
 
-            stack.add("$op1")
             stack.add("$op2")
-
-            return null
+            return op1
         }
         s.first().isDigit() -> s.toInt()
         else -> throw Exception("empty stack")
@@ -67,15 +64,15 @@ fun calculateLhsRhs(stack: MutableList<String>, i: Int): Pair<Int, Int> {
     var op2Failed = false
 
     try {
-        op1 = operation(stack, i + 1)
+        op2 = operation(stack, i - 1)
     } catch (e: Exception) {
-        op1Failed = true
+        op2Failed = true
     }
 
     try {
-        op2 = operation(stack, i)
+        op1 = operation(stack, i - 2)
     } catch (e: Exception) {
-        op2Failed = true
+        op1Failed = true
     }
 
     if (op1Failed && op2Failed)
