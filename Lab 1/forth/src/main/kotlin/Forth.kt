@@ -1,30 +1,87 @@
 class Forth {
     fun evaluate(vararg line: String): List<Int> {
-        var lista=  mutableListOf<Int>()
-        var j=0;
+        val list = mutableListOf<Int>()
+
         for (str in line) {
             val stack = str.split(' ').reversed().toMutableList()
-            for((i, _) in stack.withIndex()) {
-                lista.add(j,operation(stack,i));
-                j++;
 
+
+            while (stack.isNotEmpty()) {
+                val result = operation(stack, 0)
+                if (result != null)
+                    list.add(0, result)
             }
-
         }
-        return lista;
+
+        return list
     }
-
-
 }
-fun operation(stack:MutableList<String>, i: Int): Int {
-    val s = stack.removeFirst();
 
+// 3 4 + 5 swap
+// 1 2 swap 3 swap 4 swap
+// 2 1 3 swap 4 swap
+// 2 3 1 4 swap
+// 2 3 4 1
+
+// swap 4 swap 3 swap 2 1
+fun operation(stack: MutableList<String>, i: Int): Int? {
+    val s = stack.removeAt(i).lowercase()
+    println(s)
     return when {
-        s == "+" ->{ operation(stack, i) + operation(stack, i+1) }
-        s == "*" -> operation(stack, i) * operation(stack, i+1)
-        s == "-" -> operation(stack, i) - operation(stack, i+1)
-        s == "/" -> operation(stack, i) / operation(stack, i+1)
+        s == "+" -> {
+            val (op1, op2) = calculateLhsRhs(stack, i)
+            return op1 + op2
+        }
+        s == "*" -> {
+            val (op1, op2) = calculateLhsRhs(stack, i)
+            return op1 * op2
+        }
+        s == "-" -> {
+            val (op1, op2) = calculateLhsRhs(stack, i)
+            return op1 - op2
+        }
+        s == "/" -> {
+            val (op1, op2) = calculateLhsRhs(stack, i)
+            if (op2 == 0)
+                throw Exception("divide by zero")
+
+            return op1 / op2
+        }
+        s == "swap" -> {
+            val (op1, op2) = calculateLhsRhs(stack, i)
+
+            stack.add("$op1")
+            stack.add("$op2")
+
+            return null
+        }
         s.first().isDigit() -> s.toInt()
-        else -> 0
+        else -> throw Exception("empty stack")
     }
+}
+
+fun calculateLhsRhs(stack: MutableList<String>, i: Int): Pair<Int, Int> {
+    var op1: Int? = null
+    var op2: Int? = null
+    var op1Failed = false
+    var op2Failed = false
+
+    try {
+        op1 = operation(stack, i + 1)
+    } catch (e: Exception) {
+        op1Failed = true
+    }
+
+    try {
+        op2 = operation(stack, i)
+    } catch (e: Exception) {
+        op2Failed = true
+    }
+
+    if (op1Failed && op2Failed)
+        throw Exception("empty stack")
+    else if (op1Failed || op2Failed)
+        throw Exception("only one value on the stack")
+
+    return Pair(op1!!, op2!!)
 }
