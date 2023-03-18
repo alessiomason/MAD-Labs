@@ -5,10 +5,10 @@ class Forth {
         for (str in line) {
             val stack = str.split(' ').toMutableList()
 
-
             while (stack.isNotEmpty()) {
                 val result = operation(stack, stack.count() - 1)
-                list.add(0, result)
+                if (result != null)     // only case when this happens is if the stack is "x drop"
+                    list.add(0, result)
             }
         }
 
@@ -16,14 +16,7 @@ class Forth {
     }
 }
 
-// 3 4 + 5 swap
-// 1 2 swap 3 swap 4 swap
-// 2 1 3 swap 4 swap
-// 2 3 1 4 swap
-// 2 3 4 1
-
-// swap 4 swap 3 swap 2 1
-fun operation(stack: MutableList<String>, i: Int): Int {
+fun operation(stack: MutableList<String>, i: Int): Int? {
     val s = stack.removeAt(i).lowercase()
     println(s)
     return when {
@@ -46,10 +39,54 @@ fun operation(stack: MutableList<String>, i: Int): Int {
 
             return op1 / op2
         }
+        s == "dup" -> {
+            val op = try {
+                operation(stack, i - 1)
+            } catch (e: Exception) {
+                throw Exception("empty stack")
+            }
+
+            // duplicates by adding to the stack and returning the same operand
+            stack.add(op.toString())
+            return op
+        }
+        s == "drop" -> {
+            var j = i - 1
+            var nDrop = 1
+            // counts consecutive drop and operates them all at once
+            // the current one is no more on the stack, it is already considered
+            while (j >= 0 && stack[j].lowercase() == "drop") {
+                nDrop++
+                j--
+            }
+
+            try {
+                for (k in 0 until nDrop) {
+                    operation(stack, i - nDrop - k)     // execute all the consecutive drops
+                    if (k != nDrop - 1)     // the first drop token has already been removed, avoid removing one more
+                        stack.removeAt(i - nDrop - k) // remove the drop token
+                }
+            } catch (e: Exception) {
+                throw Exception("empty stack")
+            }
+
+
+            return null
+        }
         s == "swap" -> {
             val (op1, op2) = calculateLhsRhs(stack, i)
 
-            stack.add("$op2")
+            // swaps by adding to the stack the top value and returning the second one
+            stack.add(op2.toString())
+            return op1
+        }
+        s == "over" -> {
+            val (op1, op2) = calculateLhsRhs(stack, i)
+
+            // takes the top of stack and the previous one, puts them again on top
+            // of the stack and returns the previous of the two
+            stack.add(op1.toString())
+            stack.add(op2.toString())
             return op1
         }
         s.first().isDigit() -> s.toInt()
