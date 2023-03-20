@@ -9,6 +9,7 @@ class Forth {
 
             while (stack.isNotEmpty()) {
                 val result = operation(stack, stack.count() - 1)
+
                 // only case when this happens is if the stack is "x drop"
                 // or when defining new words
                 if (result != null)
@@ -35,7 +36,7 @@ class Forth {
                 var j = i - 1
 
                 while (s2 != ":") {     // read all token for the definition
-                    s2 = stack.removeAt(j--)
+                    s2 = stack.removeAt(j--).lowercase()
                     definition.add(0, s2)
                 }
 
@@ -150,7 +151,7 @@ class Forth {
         }
     }
 
-    fun calculateLhsRhs(stack: MutableList<String>, i: Int): Pair<Int, Int> {
+    private fun calculateLhsRhs(stack: MutableList<String>, i: Int): Pair<Int, Int> {
         var op1: Int? = null
         var op2: Int? = null
         var op1Failed = false
