@@ -5,15 +5,15 @@
     android:id="@+id/fullscreen"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:weightSum="3">
 
     <RelativeLayout
         android:id="@+id/sidebar"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="fill_parent"
+        android:layout_width="0dp"
         android:layout_gravity="end"
         android:layout_weight="1"
         android:gravity="center">
@@ -37,8 +37,8 @@
     </RelativeLayout>
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
         android:layout_weight="2">
 
         <LinearLayout
@@ -124,8 +124,8 @@
                         android:id="@+id/chip1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
                         android:text="Tennis"
                         app:chipIconVisible="true"
                         app:chipIcon="@drawable/tennis_ball"/>
@@ -134,11 +134,11 @@
                         android:id="@+id/chip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
                         android:text="Basketball"
-                        app:chipIcon="@drawable/basket_ball"
-                        app:chipIconVisible="true" />
+                        app:chipIconVisible="true"
+                        app:chipIcon="@drawable/basket_ball"/>
 
                 </LinearLayout>
             </HorizontalScrollView>
