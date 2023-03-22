@@ -8,4 +8,6 @@
     <string name="location">Location</string>
     <string name="my_sports">My sports</string>
     <string name="my_courts">My courts</string>
+    <string name="sport_tennis">Tennis</string>
+    <string name="sport_basketball">Basketball</string>
 </resources>

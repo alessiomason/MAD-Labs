@@ -127,9 +127,9 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
-                        android:text="Tennis"
-                        app:chipIconVisible="true"
-                        app:chipIcon="@drawable/tennis_ball"/>
+                        android:text="@string/sport_tennis"
+                        app:chipIcon="@drawable/tennis_ball"
+                        app:chipIconVisible="true" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipBasketball"
@@ -137,9 +137,9 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
-                        android:text="Basketball"
-                        app:chipIconVisible="true"
-                        app:chipIcon="@drawable/basket_ball"/>
+                        android:text="@string/sport_basketball"
+                        app:chipIcon="@drawable/basket_ball"
+                        app:chipIconVisible="true" />
 
                 </LinearLayout>
             </HorizontalScrollView>

@@ -9,4 +9,6 @@
     <string name="location">Indirizzo</string>
     <string name="my_sports">I miei sport</string>
     <string name="my_courts">I miei campi</string>
+    <string name="sport_tennis">Tennis</string>
+    <string name="sport_basketball">Pallacanestro</string>
 </resources>
