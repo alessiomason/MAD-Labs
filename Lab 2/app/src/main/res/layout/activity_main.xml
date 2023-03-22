@@ -1,163 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fullscreen"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:weightSum="3">
+    android:paddingRight="16dp">
 
-    <RelativeLayout
-        android:id="@+id/sidebar"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="end"
-        android:layout_weight="1"
-        android:gravity="center">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/user_profile" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </RelativeLayout>
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" >
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imageUserProfile"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="20dp"
+            android:src="@drawable/user_profile" />
 
-            <TextView
-                android:id="@+id/textFullName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="@string/full_name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                tools:layout_editor_absoluteX="115dp"
-                tools:layout_editor_absoluteY="74dp" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
 
-            <TextView
-                android:id="@+id/textNickname"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="@string/nickname"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@android:color/secondary_text_light"
-                android:textStyle="italic" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textBio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="@string/bio"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <TextView
+                    android:id="@+id/textFullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/full_name"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    tools:layout_editor_absoluteX="115dp"
+                    tools:layout_editor_absoluteY="74dp" />
 
-            <TextView
-                android:id="@+id/textPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="@string/phone"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <TextView
+                    android:id="@+id/textNickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/nickname"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textStyle="italic" />
 
-            <TextView
-                android:id="@+id/textAge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="@string/age"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <TextView
+                    android:id="@+id/textBio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/bio"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <TextView
-                android:id="@+id/textLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="@string/location"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <TextView
+                    android:id="@+id/textPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/phone"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <TextView
-                android:id="@+id/textMySports"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="@string/my_sports"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold|italic" />
+                <TextView
+                    android:id="@+id/textAge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/age"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/textLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/location"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textMySports"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="@string/my_sports"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textStyle="bold|italic" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipTennis"
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:text="@string/sport_tennis"
-                        app:chipIcon="@drawable/tennis_ball"
-                        app:chipIconVisible="true" />
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipBasketball"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:text="@string/sport_basketball"
-                        app:chipIcon="@drawable/basket_ball"
-                        app:chipIconVisible="true" />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipTennis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:text="@string/sport_tennis"
+                            app:chipIcon="@drawable/tennis_ball"
+                            app:chipIconVisible="true" />
 
-                </LinearLayout>
-            </HorizontalScrollView>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipBasketball"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:text="@string/sport_basketball"
+                            app:chipIcon="@drawable/basket_ball"
+                            app:chipIconVisible="true" />
 
-            <TextView
-                android:id="@+id/textMyCourts"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="@string/my_courts"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold|italic" />
+                    </LinearLayout>
+                </HorizontalScrollView>
 
+                <TextView
+                    android:id="@+id/textMyCourts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="@string/my_courts"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textStyle="bold|italic" />
 
-        </LinearLayout>
-    </ScrollView>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 
-    <!-- other views, with a total layout_weight of 2 -->
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
