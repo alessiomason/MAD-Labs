@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ShowProfileActivity</string>
+    <string name="full_name">Nome completo</string>
+    <string name="nickname">Nickname</string>
+    <string name="bio">Bio</string>
+    <string name="phone">Telefono</string>
+    <string name="age">Età</string>
+    <string name="location">Indirizzo</string>
+    <string name="my_sports">I miei sport</string>
+    <string name="my_courts">I miei campi</string>
+</resources>
