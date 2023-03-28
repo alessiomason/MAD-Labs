@@ -43,12 +43,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/button3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Button" />
-
                 <TextView
                     android:id="@+id/textFullName"
                     android:layout_width="match_parent"
@@ -151,7 +145,7 @@
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="5dp"
                             android:text="@string/add_sport"
-                            app:chipIcon="@drawable/add_circle_svgrepo_com"
+                            app:chipIcon="@drawable/add_sport"
                             app:chipIconVisible="true" />
 
 

@@ -148,7 +148,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         android:text="@string/add_sport"
-                        app:chipIcon="@drawable/add_circle_svgrepo_com"
+                        app:chipIcon="@drawable/add_sport"
                         app:chipIconVisible="true" />
 
                 </LinearLayout>
