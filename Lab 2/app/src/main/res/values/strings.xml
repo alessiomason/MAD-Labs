@@ -12,4 +12,5 @@
     <string name="sport_basketball">Basketball</string>
     <string name="add_sport">Add</string>
     <string name="modify_profile">Modify</string>
+    <string name="save_profile">Save</string>
 </resources>

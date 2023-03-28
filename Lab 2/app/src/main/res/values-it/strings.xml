@@ -13,4 +13,5 @@
     <string name="sport_basketball">Pallacanestro</string>
     <string name="add_sport">Aggiungi</string>
     <string name="modify_profile">Modifica</string>
+    <string name="save_profile">Salva</string>
 </resources>
