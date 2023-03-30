@@ -25,9 +25,6 @@ class EditProfileActivity : AppCompatActivity() {
         phone=findViewById(R.id.editTextPhone)
         location=findViewById(R.id.editTextLocation)
 
-        if(savedInstanceState!=null) {
-            name.setText(savedInstanceState.getString("chiave" ))
-        }
 
     }
 
@@ -67,11 +64,11 @@ class EditProfileActivity : AppCompatActivity() {
 
                 val outState = Bundle();
                 outState?.putString("name",name.text.toString())
-                outState?.putString("nickname",nickname.text.toString())
+           /*     outState?.putString("nickname",nickname.text.toString())
                 outState?.putString("bio",bio.text.toString())
-                outState?.putString("age",age.text.toString())
+                //outState?.putInt("age",age.text.toString().toInt())
                 outState?.putString("phone",phone.text.toString())
-                outState?.putString("location",location.text.toString())
+                outState?.putString("location",location.text.toString())*/
                 intent.putExtras(outState);
                 // start your next activity
                 startActivity(intent)

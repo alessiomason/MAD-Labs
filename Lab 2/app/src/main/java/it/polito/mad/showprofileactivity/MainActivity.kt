@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -27,14 +26,16 @@ class MainActivity : AppCompatActivity() {
         phone=findViewById(R.id.textPhone)
         location=findViewById(R.id.textLocation)
 
-        if(savedInstanceState!=null)
+
+        val bundle = intent.extras
+        if(bundle!=null)
         {
-            name.setText(savedInstanceState.getString("name"))
-            nickname.setText(savedInstanceState.getString("nickname"))
-            age.setText(savedInstanceState.getString("age"))
+            name.setText(bundle.getString("name"))
+         /*   nickname.setText(savedInstanceState.getString("nickname"))
+          //  age.setText(savedInstanceState.getInt("age"))
             bio.setText(savedInstanceState.getString("bio"))
             phone.setText(savedInstanceState.getString("phone"))
-            location.setText(savedInstanceState.getString("location"))
+            location.setText(savedInstanceState.getString("location"))*/
 
         }
     }
@@ -51,14 +52,6 @@ class MainActivity : AppCompatActivity() {
             R.id.modify_profile -> {
                 val intent = Intent(this, EditProfileActivity::class.java)
                 // start your next activity
-                val outState = Bundle();
-                outState?.putString("name",name.text.toString())
-                outState?.putString("nickname",nickname.text.toString())
-                outState?.putString("bio",bio.text.toString())
-                outState?.putString("age",age.text.toString())
-                outState?.putString("phone",phone.text.toString())
-                outState?.putString("location",location.text.toString())
-                intent.putExtras(outState);
                 startActivity(intent)
                 return true
             }
