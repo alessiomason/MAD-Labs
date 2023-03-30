@@ -40,6 +40,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val bundle = intent.extras
+        if(bundle!=null)
+        {
+            name.setText(bundle.getString("name"))
+            /*   nickname.setText(savedInstanceState.getString("nickname"))
+             //  age.setText(savedInstanceState.getInt("age"))
+               bio.setText(savedInstanceState.getString("bio"))
+               phone.setText(savedInstanceState.getString("phone"))
+               location.setText(savedInstanceState.getString("location"))*/
+
+        }
+    }
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        name.setText(savedInstanceState.getString("name"));
+       /* nickname.setText(savedInstanceState.getString("nickname"));
+        bio.setText(savedInstanceState.getString("bio"));
+        age.setText(savedInstanceState.getString("age"));
+        phone.setText(savedInstanceState.getString("phone"));
+        location.setText(savedInstanceState.getString("location"));*/
+
+    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu to use in the action bar
         val inflater = menuInflater

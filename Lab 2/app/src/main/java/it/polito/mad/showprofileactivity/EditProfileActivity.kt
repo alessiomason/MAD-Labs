@@ -71,7 +71,9 @@ class EditProfileActivity : AppCompatActivity() {
                 outState?.putString("location",location.text.toString())*/
                 intent.putExtras(outState);
                 // start your next activity
+
                 startActivity(intent)
+                finish()
                 return true
             }
         }
