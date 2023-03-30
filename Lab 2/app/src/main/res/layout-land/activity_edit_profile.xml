@@ -46,47 +46,53 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textFullName"
+            <EditText
+                android:id="@+id/editTextFullName"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="@string/full_name"
+                android:minHeight="48dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 tools:layout_editor_absoluteX="115dp"
                 tools:layout_editor_absoluteY="74dp" />
 
-            <TextView
-                android:id="@+id/textNickname"
+            <EditText
+                android:id="@+id/editTextNickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="@string/nickname"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textStyle="italic" />
 
-            <TextView
-                android:id="@+id/textBio"
+            <EditText
+                android:id="@+id/editTextBio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="@string/bio"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <TextView
-                android:id="@+id/textPhone"
+            <EditText
+                android:id="@+id/editTextPhone"
                 android:layout_width="match_parent"
+                android:minHeight="48dp"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="@string/phone"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <TextView
-                android:id="@+id/textAge"
+            <EditText
+                android:id="@+id/editTextAge"
+                android:minHeight="48dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
@@ -94,8 +100,9 @@
                 android:text="@string/age"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <TextView
-                android:id="@+id/textLocation"
+            <EditText
+                android:id="@+id/editTextLocation"
+                android:minHeight="48dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
