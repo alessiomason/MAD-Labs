@@ -14,4 +14,6 @@
     <string name="modify_profile">Modify</string>
     <string name="save_profile">Save</string>
     <string name="preference_file_key">Personal data</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
 </resources>

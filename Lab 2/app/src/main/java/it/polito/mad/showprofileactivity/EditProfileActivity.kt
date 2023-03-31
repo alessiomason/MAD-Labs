@@ -13,8 +13,8 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
+import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.ImageView
 import java.io.FileDescriptor
@@ -40,22 +40,9 @@ class EditProfileActivity : AppCompatActivity() {
         location=findViewById(R.id.editTextLocation)
         imageUserProfile = findViewById(R.id.imageUserProfile)
 
-        //TODO ask for permission of camera upon first launch of application
-        if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            == PackageManager.PERMISSION_DENIED) {
-            val permission = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            requestPermissions(permission, 112)
-        }
-
+        registerForContextMenu(imageUserProfile)
         imageUserProfile?.setOnClickListener {
-            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_DENIED) {
-                val permission = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                requestPermissions(permission, 121)
-            } else {
-                openCamera()
-            }
+            imageUserProfile?.showContextMenu()
         }
         
         val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
@@ -71,7 +58,7 @@ class EditProfileActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     private val IMAGE_CAPTURE_CODE = 654
 
-    //TODO opens camera so that user can capture image
+    // opens camera so that user can capture image
     private fun openCamera() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New User Profile Picture")
@@ -91,7 +78,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    //TODO takes URI of the image and returns bitmap
+    // takes URI of the image and returns bitmap
     private fun uriToBitmap(selectedFileUri: Uri): Bitmap? {
         try {
             val parcelFileDescriptor = contentResolver.openFileDescriptor(selectedFileUri, "r")
@@ -103,6 +90,36 @@ class EditProfileActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         return null
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.context_menu, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.gallery -> {
+                // TODO
+                true
+            }
+            R.id.camera -> {
+                if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_DENIED) {
+                    val permission = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    requestPermissions(permission, 112)
+                } else
+                    openCamera()
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
