@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-
 class MainActivity : AppCompatActivity() {
     lateinit var name: TextView
     lateinit var nickname: TextView
@@ -16,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var bio: TextView
     lateinit var phone: TextView
     lateinit var location: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,18 +26,17 @@ class MainActivity : AppCompatActivity() {
         phone=findViewById(R.id.textPhone)
         location=findViewById(R.id.textLocation)
 
+        /*  val bundle = intent.extras
+          if(bundle!=null)
+          {
+              name.setText(bundle.getString("name"))
+             nickname.setText(savedInstanceState.getString("nickname"))
+             age.setText(savedInstanceState.getInt("age"))
+              bio.setText(savedInstanceState.getString("bio"))
+              phone.setText(savedInstanceState.getString("phone"))
+              location.setText(savedInstanceState.getString("location"))
 
-      /*  val bundle = intent.extras
-        if(bundle!=null)
-        {
-            name.setText(bundle.getString("name"))
-           nickname.setText(savedInstanceState.getString("nickname"))
-           age.setText(savedInstanceState.getInt("age"))
-            bio.setText(savedInstanceState.getString("bio"))
-            phone.setText(savedInstanceState.getString("phone"))
-            location.setText(savedInstanceState.getString("location"))
-
-        }*/
+          }*/
     }
 
     override fun onResume() {
