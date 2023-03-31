@@ -3,11 +3,13 @@ package it.polito.mad.showprofileactivity
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -55,6 +57,14 @@ class EditProfileActivity : AppCompatActivity() {
                 openCamera()
             }
         }
+        
+        val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        name.setText(sharedPref.getString("name", "Full Name"))
+        nickname.setText(sharedPref.getString("nickname", "Nickname"))
+        // age da fare
+        bio.setText(sharedPref.getString("bio", "Bio"))
+        phone.setText(sharedPref.getString("phone", "Phone"))
+        location.setText(sharedPref.getString("location", "Location"))
 
     }
 
@@ -139,8 +149,19 @@ class EditProfileActivity : AppCompatActivity() {
                 //intent.putExtras(outState);
                 // start your next activity
 
-               // startActivity(intent)
+                // startActivity(intent)
+
                 finish()
+                val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return true
+                with (sharedPref.edit()) {
+                    putString("name", name.text.toString())
+                    putString("nickname", nickname.text.toString())
+                    putString("nickname", nickname.text.toString())
+                    putString("bio", bio.text.toString())
+                    putString("phone", phone.text.toString())
+                    putString("location", location.text.toString())
+                    apply()
+                }
                 return true
             }
         }

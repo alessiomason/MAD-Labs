@@ -1,6 +1,8 @@
 package it.polito.mad.showprofileactivity
 
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -25,42 +27,28 @@ class MainActivity : AppCompatActivity() {
         bio=findViewById(R.id.textBio)
         phone=findViewById(R.id.textPhone)
         location=findViewById(R.id.textLocation)
-
-        /*  val bundle = intent.extras
-          if(bundle!=null)
-          {
-              name.setText(bundle.getString("name"))
-             nickname.setText(savedInstanceState.getString("nickname"))
-             age.setText(savedInstanceState.getInt("age"))
-              bio.setText(savedInstanceState.getString("bio"))
-              phone.setText(savedInstanceState.getString("phone"))
-              location.setText(savedInstanceState.getString("location"))
-
-          }*/
     }
 
     override fun onResume() {
         super.onResume()
-        val bundle = intent.extras
-        if(bundle!=null)
-        {
-            name.setText(bundle.getString("name"))
-            /*   nickname.setText(savedInstanceState.getString("nickname"))
-             //  age.setText(savedInstanceState.getInt("age"))
-               bio.setText(savedInstanceState.getString("bio"))
-               phone.setText(savedInstanceState.getString("phone"))
-               location.setText(savedInstanceState.getString("location"))*/
+        val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        name.setText(sharedPref.getString("name", "Full Name"))
+        nickname.setText(sharedPref.getString("nickname", "Nickname"))
+        // age da fare
+        bio.setText(sharedPref.getString("bio", "Bio"))
+        phone.setText(sharedPref.getString("phone", "Phone"))
+        location.setText(sharedPref.getString("location", "Location"))
 
-        }
+
     }
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        name.setText(savedInstanceState.getString("name"));
-       /* nickname.setText(savedInstanceState.getString("nickname"));
+        name.setText(savedInstanceState.getString("name"))
+        nickname.setText(savedInstanceState.getString("nickname"))
         bio.setText(savedInstanceState.getString("bio"));
-        age.setText(savedInstanceState.getString("age"));
+        // age.setText(savedInstanceState.getString("age"));
         phone.setText(savedInstanceState.getString("phone"));
-        location.setText(savedInstanceState.getString("location"));*/
+        location.setText(savedInstanceState.getString("location"));
 
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
