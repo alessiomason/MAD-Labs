@@ -27,17 +27,17 @@ class MainActivity : AppCompatActivity() {
         location=findViewById(R.id.textLocation)
 
 
-        val bundle = intent.extras
+      /*  val bundle = intent.extras
         if(bundle!=null)
         {
             name.setText(bundle.getString("name"))
-         /*   nickname.setText(savedInstanceState.getString("nickname"))
-          //  age.setText(savedInstanceState.getInt("age"))
+           nickname.setText(savedInstanceState.getString("nickname"))
+           age.setText(savedInstanceState.getInt("age"))
             bio.setText(savedInstanceState.getString("bio"))
             phone.setText(savedInstanceState.getString("phone"))
-            location.setText(savedInstanceState.getString("location"))*/
+            location.setText(savedInstanceState.getString("location"))
 
-        }
+        }*/
     }
 
     override fun onResume() {

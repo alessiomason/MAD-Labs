@@ -31,12 +31,12 @@ class EditProfileActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState?.putString("name",name.text.toString())
-        outState?.putString("nickname",nickname.text.toString())
-        outState?.putString("bio",bio.text.toString())
-        outState?.putInt("age",age.text.toString().toInt())
-        outState?.putString("phone",phone.text.toString())
-        outState?.putString("location",location.text.toString())
+        outState.putString("name",name.text.toString())
+        outState.putString("nickname",nickname.text.toString())
+        outState.putString("bio",bio.text.toString())
+        outState.putInt("age",age.text.toString().toInt())
+        outState.putString("phone",phone.text.toString())
+        outState.putString("location",location.text.toString())
 
     }
 
@@ -60,19 +60,19 @@ class EditProfileActivity : AppCompatActivity() {
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_profile -> {
-                val intent = Intent(this, MainActivity::class.java)
+            //    val intent = Intent(this, MainActivity::class.java)
 
-                val outState = Bundle();
-                outState?.putString("name",name.text.toString())
+               // val outState = Bundle();
+              //  outState.putString("name",name.text.toString())
            /*     outState?.putString("nickname",nickname.text.toString())
                 outState?.putString("bio",bio.text.toString())
                 //outState?.putInt("age",age.text.toString().toInt())
                 outState?.putString("phone",phone.text.toString())
                 outState?.putString("location",location.text.toString())*/
-                intent.putExtras(outState);
+                //intent.putExtras(outState);
                 // start your next activity
 
-                startActivity(intent)
+               // startActivity(intent)
                 finish()
                 return true
             }
