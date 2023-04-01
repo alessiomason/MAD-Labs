@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         phone = findViewById(R.id.textPhone)
         location = findViewById(R.id.textLocation)
         ratingBar = findViewById(R.id.ratingBar)
+
+        ratingBar.setIsIndicator(true);
     }
 
     override fun onResume() {
@@ -41,17 +43,19 @@ class MainActivity : AppCompatActivity() {
         bio.setText(sharedPref.getString("bio", "Bio"))
         phone.setText(sharedPref.getString("phone", "Phone"))
         location.setText(sharedPref.getString("location", "Location"))
+        ratingBar.rating = sharedPref.getFloat("rating", 3.5F)
 
-
+        ratingBar.setIsIndicator(true);
     }
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         name.setText(savedInstanceState.getString("name"))
         nickname.setText(savedInstanceState.getString("nickname"))
-        bio.setText(savedInstanceState.getString("bio"));
-        // age.setText(savedInstanceState.getString("age"));
-        phone.setText(savedInstanceState.getString("phone"));
-        location.setText(savedInstanceState.getString("location"));
+        bio.setText(savedInstanceState.getString("bio"))
+        // age.setText(savedInstanceState.getString("age"))
+        phone.setText(savedInstanceState.getString("phone"))
+        location.setText(savedInstanceState.getString("location"))
+        ratingBar.rating = savedInstanceState.getFloat("rating")
 
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -56,6 +56,7 @@ class EditProfileActivity : AppCompatActivity() {
         bio.setText(sharedPref.getString("bio", "Bio"))
         phone.setText(sharedPref.getString("phone", "Phone"))
         location.setText(sharedPref.getString("location", "Location"))
+        ratingBar.rating = sharedPref.getFloat("rating", 3.5F)
 
         // set onClick for Add new sports button
         val addChip = findViewById<Chip>(R.id.chipAdd)
@@ -150,6 +151,7 @@ class EditProfileActivity : AppCompatActivity() {
         //outState.putInt("age",age.text.toString().toInt())
         outState.putString("phone",phone.text.toString())
         outState.putString("location",location.text.toString())
+        outState.putFloat("rating", ratingBar.rating)
 
     }
 
@@ -161,6 +163,7 @@ class EditProfileActivity : AppCompatActivity() {
         age.setText(savedInstanceState.getString("age"))
         phone.setText(savedInstanceState.getString("phone"))
         location.setText(savedInstanceState.getString("location"))
+        ratingBar.rating = savedInstanceState.getFloat("rating")
 
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -196,6 +199,7 @@ class EditProfileActivity : AppCompatActivity() {
                     putString("bio", bio.text.toString())
                     putString("phone", phone.text.toString())
                     putString("location", location.text.toString())
+                    putFloat("rating", ratingBar.rating)
                     apply()
                 }
                 return true
