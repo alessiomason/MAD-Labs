@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -17,16 +18,18 @@ class MainActivity : AppCompatActivity() {
     lateinit var bio: TextView
     lateinit var phone: TextView
     lateinit var location: TextView
+    lateinit var ratingBar: RatingBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        name=findViewById(R.id.textFullName)
-        nickname=findViewById(R.id.textNickname)
-        age=findViewById(R.id.textAge)
-        bio=findViewById(R.id.textBio)
-        phone=findViewById(R.id.textPhone)
-        location=findViewById(R.id.textLocation)
+        name = findViewById(R.id.textFullName)
+        nickname = findViewById(R.id.textNickname)
+        age = findViewById(R.id.textAge)
+        bio = findViewById(R.id.textBio)
+        phone = findViewById(R.id.textPhone)
+        location = findViewById(R.id.textLocation)
+        ratingBar = findViewById(R.id.ratingBar)
     }
 
     override fun onResume() {

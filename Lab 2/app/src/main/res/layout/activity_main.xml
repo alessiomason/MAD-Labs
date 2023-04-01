@@ -40,6 +40,15 @@
                 android:orientation="vertical"
                 android:paddingBottom="20dp" >
 
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:rating="3.5"
+                    android:numStars="5"
+                    style="@style/Widget.MaterialRatingBar.RatingBar"
+                    android:layout_gravity="center_horizontal" />
+
                 <TextView
                     android:id="@+id/textFullName"
                     android:layout_width="match_parent"

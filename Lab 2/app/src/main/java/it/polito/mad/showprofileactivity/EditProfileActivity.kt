@@ -17,18 +17,20 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RatingBar
 import com.google.android.material.chip.Chip
 import java.io.FileDescriptor
 import java.io.IOException
 
 class EditProfileActivity : AppCompatActivity() {
-    lateinit var name:EditText
-    lateinit var nickname:EditText
-    lateinit var age:EditText
-    lateinit var bio:EditText
-    lateinit var phone:EditText
-    lateinit var location:EditText
-    var imageUserProfile: ImageView? = null
+    lateinit var name: EditText
+    lateinit var nickname: EditText
+    lateinit var age: EditText
+    lateinit var bio: EditText
+    lateinit var phone: EditText
+    lateinit var location: EditText
+    lateinit var ratingBar: RatingBar
+    lateinit var imageUserProfile: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +41,12 @@ class EditProfileActivity : AppCompatActivity() {
         bio = findViewById(R.id.editTextBio)
         phone = findViewById(R.id.editTextPhone)
         location = findViewById(R.id.editTextLocation)
+        ratingBar = findViewById(R.id.ratingBar)
         imageUserProfile = findViewById(R.id.imageUserProfile)
 
         registerForContextMenu(imageUserProfile)
-        imageUserProfile?.setOnClickListener {
-            imageUserProfile?.showContextMenu()
+        imageUserProfile.setOnClickListener {
+            imageUserProfile.showContextMenu()
         }
         
         val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
@@ -116,11 +119,11 @@ class EditProfileActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == IMAGE_CAPTURE_CODE && resultCode == Activity.RESULT_OK) {
             val bitmap = uriToBitmap(imageUri!!)
-            imageUserProfile?.setImageBitmap(bitmap)
+            imageUserProfile.setImageBitmap(bitmap)
         } else if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             imageUri = data.data
             val bitmap = uriToBitmap(imageUri!!)
-            imageUserProfile?.setImageBitmap(bitmap)
+            imageUserProfile.setImageBitmap(bitmap)
         }
     }
 
@@ -152,12 +155,12 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        name.setText(savedInstanceState.getString("name"));
-        nickname.setText(savedInstanceState.getString("nickname"));
-        bio.setText(savedInstanceState.getString("bio"));
-        age.setText(savedInstanceState.getString("age"));
-        phone.setText(savedInstanceState.getString("phone"));
-        location.setText(savedInstanceState.getString("location"));
+        name.setText(savedInstanceState.getString("name"))
+        nickname.setText(savedInstanceState.getString("nickname"))
+        bio.setText(savedInstanceState.getString("bio"))
+        age.setText(savedInstanceState.getString("age"))
+        phone.setText(savedInstanceState.getString("phone"))
+        location.setText(savedInstanceState.getString("location"))
 
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

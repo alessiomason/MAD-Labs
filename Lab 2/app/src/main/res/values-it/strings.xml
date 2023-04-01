@@ -22,4 +22,5 @@
     <string name="camera">Fotocamera</string>
     <string name="save_sport">Salva gli sport selezionati</string>
     <string name="select_your_sports">Seleziona i tuoi sport</string>
+    <string name="my_rating">La mia valutazione</string>
 </resources>

@@ -122,6 +122,32 @@
                     android:text="@string/location"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/my_rating"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/black" />
+
+                    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:rating="3.5"
+                        android:numStars="5"
+                        style="@style/Widget.MaterialRatingBar.RatingBar"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp" />
+
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/textMySports"
                     android:layout_width="match_parent"
