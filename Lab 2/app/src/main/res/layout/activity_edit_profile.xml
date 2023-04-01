@@ -38,7 +38,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/camera"
-                android:layout_gravity="end" />
+                android:layout_gravity="end"
+                app:tint="@color/secondary" />
         </FrameLayout>
 
         <ScrollView

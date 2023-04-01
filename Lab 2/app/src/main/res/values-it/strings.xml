@@ -11,6 +11,9 @@
     <string name="my_courts">I miei campi</string>
     <string name="sport_tennis">Tennis</string>
     <string name="sport_basketball">Pallacanestro</string>
+    <string name="sport_football">Calcio</string>
+    <string name="sport_volleyball">Pallavolo</string>
+    <string name="sport_golf">Golf</string>
     <string name="add_sport">Aggiungi</string>
     <string name="modify_profile">Modifica</string>
     <string name="save_profile">Salva</string>

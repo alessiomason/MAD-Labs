@@ -10,6 +10,9 @@
     <string name="my_courts">My courts</string>
     <string name="sport_tennis">Tennis</string>
     <string name="sport_basketball">Basketball</string>
+    <string name="sport_football">Football</string>
+    <string name="sport_volleyball">Volleyball</string>
+    <string name="sport_golf">Golf</string>
     <string name="add_sport">Add</string>
     <string name="modify_profile">Modify</string>
     <string name="save_profile">Save</string>
