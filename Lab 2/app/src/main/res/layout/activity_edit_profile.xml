@@ -50,7 +50,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="20dp" >
 
                 <EditText
                     android:id="@+id/editTextFullName"
@@ -172,15 +173,6 @@
 
                     </LinearLayout>
                 </HorizontalScrollView>
-
-                <TextView
-                    android:id="@+id/textMyCourts"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/my_courts"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold|italic" />
 
             </LinearLayout>
         </ScrollView>
