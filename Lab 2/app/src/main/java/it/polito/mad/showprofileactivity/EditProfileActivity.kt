@@ -17,6 +17,7 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.ImageView
+import com.google.android.material.chip.Chip
 import java.io.FileDescriptor
 import java.io.IOException
 
@@ -53,6 +54,12 @@ class EditProfileActivity : AppCompatActivity() {
         phone.setText(sharedPref.getString("phone", "Phone"))
         location.setText(sharedPref.getString("location", "Location"))
 
+        // set onClick for Add new sports button
+        val addChip = findViewById<Chip>(R.id.chipAdd)
+        addChip.setOnClickListener {
+            val intent = Intent(this, SelectSportsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onCreateContextMenu(

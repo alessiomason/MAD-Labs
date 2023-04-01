@@ -13,10 +13,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_your_sports"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@color/black"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp" />
+
         <CheckBox
             android:id="@+id/checkBoxTennis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             android:text="@string/sport_tennis"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -54,7 +64,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/saveSportsButton"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

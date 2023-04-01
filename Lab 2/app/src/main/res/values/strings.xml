@@ -20,4 +20,5 @@
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
     <string name="save_sport">Save selected sports</string>
+    <string name="select_your_sports">Select your sports</string>
 </resources>

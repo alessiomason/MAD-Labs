@@ -149,6 +149,7 @@
                             android:text="@string/sport_tennis"
                             app:chipIcon="@drawable/tennis_ball"
                             app:chipIconVisible="true" />
+
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipBasketball"
                             android:layout_width="wrap_content"
@@ -160,6 +161,36 @@
                             app:chipIconVisible="true" />
 
                         <com.google.android.material.chip.Chip
+                            android:id="@+id/chipFootball"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:text="@string/sport_football"
+                            app:chipIcon="@drawable/football_ball"
+                            app:chipIconVisible="true" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipVolleyball"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:text="@string/sport_volleyball"
+                            app:chipIcon="@drawable/volleyball_ball"
+                            app:chipIconVisible="true" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipGolf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:text="@string/sport_golf"
+                            app:chipIcon="@drawable/golf"
+                            app:chipIconVisible="true" />
+
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/chipAdd"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -168,8 +199,6 @@
                             android:text="@string/add_sport"
                             app:chipIcon="@drawable/plus_circle"
                             app:chipIconVisible="true" />
-
-
 
                     </LinearLayout>
                 </HorizontalScrollView>
