@@ -11,8 +11,6 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -134,20 +132,8 @@
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="5dp"
                             android:text="@string/sport_basketball"
-                            app:chipIcon="@drawable/basket_ball"
+                            app:chipIcon="@drawable/basketball_ball"
                             app:chipIconVisible="true" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipAdd"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:text="@string/add_sport"
-                            app:chipIcon="@drawable/add_sport"
-                            app:chipIconVisible="true" />
-
-
 
                     </LinearLayout>
                 </HorizontalScrollView>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/save_profile"
-        android:icon="@drawable/_639912_save_icon"
+        android:icon="@drawable/save_icon"
         android:title="@string/save_profile"
         app:showAsAction="always"
         />

@@ -145,7 +145,7 @@
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
                         android:text="@string/sport_basketball"
-                        app:chipIcon="@drawable/basket_ball"
+                        app:chipIcon="@drawable/basketball_ball"
                         app:chipIconVisible="true" />
 
                     <com.google.android.material.chip.Chip
@@ -155,7 +155,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         android:text="@string/add_sport"
-                        app:chipIcon="@drawable/add_sport"
+                        app:chipIcon="@drawable/plus_circle"
                         app:chipIconVisible="true" />
 
                 </LinearLayout>
