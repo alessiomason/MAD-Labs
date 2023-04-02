@@ -38,7 +38,7 @@
                     android:layout_weight="3"
                     android:layout_marginTop="20dp"
                     android:padding="20dp"
-                    tools:srcCompat="@drawable/user_profile" />
+                    android:src="@drawable/user_profile" />
 
             </LinearLayout>
 
