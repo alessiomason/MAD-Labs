@@ -9,18 +9,18 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
 import android.view.*
-import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RatingBar
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.chip.Chip
-import java.io.FileDescriptor
-import java.io.IOException
+import java.io.*
 
 class EditProfileActivity : AppCompatActivity() {
     lateinit var name: EditText
@@ -48,7 +48,7 @@ class EditProfileActivity : AppCompatActivity() {
         imageUserProfile.setOnClickListener {
             imageUserProfile.showContextMenu()
         }
-        
+
         val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         name.setText(sharedPref.getString("name", "Full Name"))
         nickname.setText(sharedPref.getString("nickname", "Nickname"))
@@ -57,6 +57,19 @@ class EditProfileActivity : AppCompatActivity() {
         phone.setText(sharedPref.getString("phone", "Phone"))
         location.setText(sharedPref.getString("location", "Location"))
         ratingBar.rating = sharedPref.getFloat("rating", 3.5F)
+
+        if (Build.VERSION.SDK_INT >= 30) {
+            if (!Environment.isExternalStorageManager()) {
+                val getPermission = Intent()
+                getPermission.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivity(getPermission)
+            }
+        }
+        val file = File(
+            Environment.getExternalStorageDirectory()
+                .toString() + File.separator + "user_profile_picture.png"
+        )
+        imageUserProfile.setImageBitmap(BitmapFactory.decodeFile(file.path))
 
         // set onClick for Add new sports button
         val addChip = findViewById<Chip>(R.id.chipAdd)
@@ -84,9 +97,14 @@ class EditProfileActivity : AppCompatActivity() {
             }
             R.id.camera -> {
                 if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_DENIED) {
-                    val permission = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
+                    == PackageManager.PERMISSION_DENIED
+                ) {
+                    val permission = arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
                     requestPermissions(permission, 112)
                 } else
                     openCamera()
@@ -116,16 +134,28 @@ class EditProfileActivity : AppCompatActivity() {
         startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        var bitmap: Bitmap? = null
+
         if (requestCode == IMAGE_CAPTURE_CODE && resultCode == Activity.RESULT_OK) {
-            val bitmap = uriToBitmap(imageUri!!)
-            imageUserProfile.setImageBitmap(bitmap)
+            bitmap = uriToBitmap(imageUri!!)
         } else if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             imageUri = data.data
-            val bitmap = uriToBitmap(imageUri!!)
-            imageUserProfile.setImageBitmap(bitmap)
+            bitmap = uriToBitmap(imageUri!!)
         }
+
+        imageUserProfile.setImageBitmap(bitmap)
+
+        if (Build.VERSION.SDK_INT >= 30) {
+            if (!Environment.isExternalStorageManager()) {
+                val getPermission = Intent()
+                getPermission.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivity(getPermission)
+            }
+        }
+        bitmapToFile(bitmap!!, "user_profile_picture.png")
     }
 
     // takes URI of the image and returns bitmap
@@ -142,17 +172,43 @@ class EditProfileActivity : AppCompatActivity() {
         return null
     }
 
+    fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? { // File name like "image.png"
+        //create a file to write bitmap data
+        var file: File? = null
+        return try {
+            file = File(
+                Environment.getExternalStorageDirectory()
+                    .toString() + File.separator + fileNameToSave
+            )
+            file.createNewFile()
+
+            // Convert bitmap to byte array
+            val bos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
+            val bitmapData = bos.toByteArray()
+
+            // write the bytes in file
+            val fos = FileOutputStream(file)
+            fos.write(bitmapData)
+            fos.flush()
+            fos.close()
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            file // it will return null
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString("name",name.text.toString())
-        outState.putString("nickname",nickname.text.toString())
-        outState.putString("bio",bio.text.toString())
+        outState.putString("name", name.text.toString())
+        outState.putString("nickname", nickname.text.toString())
+        outState.putString("bio", bio.text.toString())
         //outState.putInt("age",age.text.toString().toInt())
-        outState.putString("phone",phone.text.toString())
-        outState.putString("location",location.text.toString())
+        outState.putString("phone", phone.text.toString())
+        outState.putString("location", location.text.toString())
         outState.putFloat("rating", ratingBar.rating)
-
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -166,21 +222,23 @@ class EditProfileActivity : AppCompatActivity() {
         ratingBar.rating = savedInstanceState.getFloat("rating")
 
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu to use in the action bar
         val inflater = menuInflater
         inflater.inflate(R.menu.menu_edit_profile, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_profile -> {
-            //    val intent = Intent(this, MainActivity::class.java)
+                //    val intent = Intent(this, MainActivity::class.java)
 
-               // val outState = Bundle();
-              //  outState.putString("name",name.text.toString())
-           /*     outState?.putString("nickname",nickname.text.toString())
+                // val outState = Bundle();
+                //  outState.putString("name",name.text.toString())
+                /*     outState?.putString("nickname",nickname.text.toString())
                 outState?.putString("bio",bio.text.toString())
                 //outState?.putInt("age",age.text.toString().toInt())
                 outState?.putString("phone",phone.text.toString())
@@ -191,8 +249,11 @@ class EditProfileActivity : AppCompatActivity() {
                 // startActivity(intent)
 
                 finish()
-                val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return true
-                with (sharedPref.edit()) {
+                val sharedPref = this.getSharedPreferences(
+                    getString(R.string.preference_file_key),
+                    Context.MODE_PRIVATE
+                ) ?: return true
+                with(sharedPref.edit()) {
                     putString("name", name.text.toString())
                     putString("nickname", nickname.text.toString())
                     putString("nickname", nickname.text.toString())

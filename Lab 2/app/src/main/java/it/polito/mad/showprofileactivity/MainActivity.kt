@@ -1,15 +1,20 @@
 package it.polito.mad.showprofileactivity
 
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
     lateinit var name: TextView
@@ -19,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var phone: TextView
     lateinit var location: TextView
     lateinit var ratingBar: RatingBar
+    lateinit var imageUserProfile: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +36,22 @@ class MainActivity : AppCompatActivity() {
         phone = findViewById(R.id.textPhone)
         location = findViewById(R.id.textLocation)
         ratingBar = findViewById(R.id.ratingBar)
+        imageUserProfile = findViewById(R.id.imageUserProfile)
 
-        ratingBar.setIsIndicator(true);
+        ratingBar.setIsIndicator(true)
+
+        if (Build.VERSION.SDK_INT >= 30) {
+            if (!Environment.isExternalStorageManager()) {
+                val getPermission = Intent()
+                getPermission.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivity(getPermission)
+            }
+        }
+        val file = File(
+            Environment.getExternalStorageDirectory()
+                .toString() + File.separator + "user_profile_picture.png"
+        )
+        imageUserProfile.setImageBitmap(BitmapFactory.decodeFile(file.path))
     }
 
     override fun onResume() {
