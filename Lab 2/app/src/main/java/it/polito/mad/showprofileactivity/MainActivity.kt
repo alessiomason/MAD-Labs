@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         name.text = sharedPref.getString("name", "Full Name")
         nickname.text = sharedPref.getString("nickname", "Nickname")
-        // age da fare
+        age.text = sharedPref.getInt("age", 0).toString()
         bio.text = sharedPref.getString("bio", "Bio")
         phone.text = sharedPref.getString("phone", "Phone")
         location.text = sharedPref.getString("location", "Location")
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         name.text = savedInstanceState.getString("name")
         nickname.text = savedInstanceState.getString("nickname")
         bio.text = savedInstanceState.getString("bio")
-        // age.text = savedInstanceState.getString("age")
+        age.text = savedInstanceState.getInt("age").toString()
         phone.text = savedInstanceState.getString("phone")
         location.text = savedInstanceState.getString("location")
         ratingBar.rating = savedInstanceState.getFloat("rating")
