@@ -7,14 +7,6 @@ import android.widget.Button
 import android.widget.CheckBox
 import com.google.gson.Gson
 
-data class SelectedSports(
-    var tennis: Boolean,
-    var basketball: Boolean,
-    var football: Boolean,
-    var volleyball: Boolean,
-    var golf: Boolean
-)
-
 class SelectSportsActivity : AppCompatActivity() {
     private lateinit var selectedSports: SelectedSports
     private lateinit var tennisCb: CheckBox
@@ -33,7 +25,7 @@ class SelectSportsActivity : AppCompatActivity() {
         volleyballCb = findViewById(R.id.checkBoxVolleyball)
         golfCb = findViewById(R.id.checkBoxGolf)
 
-        val sharedPref = this.getSharedPreferences("selectedSports", Context.MODE_PRIVATE)
+        val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
         val gson = Gson()
         selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
 
@@ -47,11 +39,11 @@ class SelectSportsActivity : AppCompatActivity() {
         val saveButton = findViewById<Button>(R.id.saveSportsButton)
         saveButton.setOnClickListener {
             // save selected sports
-            if (tennisCb.isChecked) selectedSports.tennis = true
-            if (basketballCb.isChecked) selectedSports.basketball = true
-            if (footballCb.isChecked) selectedSports.football = true
-            if (volleyballCb.isChecked) selectedSports.volleyball = true
-            if (golfCb.isChecked) selectedSports.golf = true
+            selectedSports.tennis = tennisCb.isChecked
+            selectedSports.basketball = basketballCb.isChecked
+            selectedSports.football = footballCb.isChecked
+            selectedSports.volleyball = volleyballCb.isChecked
+            selectedSports.golf = golfCb.isChecked
 
             finish()
 

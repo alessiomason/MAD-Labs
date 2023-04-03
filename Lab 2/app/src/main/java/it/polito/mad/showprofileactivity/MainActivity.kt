@@ -9,15 +9,18 @@ import android.os.Environment
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.*
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
     private lateinit var profile: Profile
+    private lateinit var selectedSports: SelectedSports
     private lateinit var nameView: TextView
     private lateinit var nicknameView: TextView
     private lateinit var ageView: TextView
@@ -54,6 +57,18 @@ class MainActivity : AppCompatActivity() {
         if (profile.phone != null) phoneView.text = profile.phone
         if (profile.location != null) locationView.text = profile.location
         if (profile.rating != null) ratingBarView.rating = profile.rating!!
+        selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
+
+        val tennisChip = findViewById<Chip>(R.id.chipTennis)
+        if (selectedSports.tennis) tennisChip.visibility = VISIBLE else tennisChip.visibility = GONE
+        val basketballChip = findViewById<Chip>(R.id.chipBasketball)
+        if (selectedSports.basketball) basketballChip.visibility = VISIBLE else basketballChip.visibility = GONE
+        val footballChip = findViewById<Chip>(R.id.chipFootball)
+        if (selectedSports.football) footballChip.visibility = VISIBLE else footballChip.visibility = GONE
+        val volleyballChip = findViewById<Chip>(R.id.chipVolleyball)
+        if (selectedSports.volleyball) volleyballChip.visibility = VISIBLE else volleyballChip.visibility = GONE
+        val golfChip = findViewById<Chip>(R.id.chipGolf)
+        if (selectedSports.golf) golfChip.visibility = VISIBLE else golfChip.visibility = GONE
 
         if (Build.VERSION.SDK_INT >= 30) {
             if (!Environment.isExternalStorageManager()) {

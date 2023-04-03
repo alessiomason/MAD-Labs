@@ -25,6 +25,7 @@ import java.io.*
 
 class EditProfileActivity: AppCompatActivity() {
     private lateinit var profile: Profile
+    private lateinit var selectedSports: SelectedSports
     private lateinit var nameView: EditText
     private lateinit var nicknameView: EditText
     private lateinit var ageView: EditText
@@ -81,6 +82,25 @@ class EditProfileActivity: AppCompatActivity() {
             val intent = Intent(this, SelectSportsActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
+        val gson = Gson()
+        selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
+
+        val tennisChip = findViewById<Chip>(R.id.chipTennis)
+        if (selectedSports.tennis) tennisChip.visibility = View.VISIBLE else tennisChip.visibility = View.GONE
+        val basketballChip = findViewById<Chip>(R.id.chipBasketball)
+        if (selectedSports.basketball) basketballChip.visibility = View.VISIBLE else basketballChip.visibility = View.GONE
+        val footballChip = findViewById<Chip>(R.id.chipFootball)
+        if (selectedSports.football) footballChip.visibility = View.VISIBLE else footballChip.visibility = View.GONE
+        val volleyballChip = findViewById<Chip>(R.id.chipVolleyball)
+        if (selectedSports.volleyball) volleyballChip.visibility = View.VISIBLE else volleyballChip.visibility = View.GONE
+        val golfChip = findViewById<Chip>(R.id.chipGolf)
+        if (selectedSports.golf) golfChip.visibility = View.VISIBLE else golfChip.visibility = View.GONE
     }
 
     override fun onCreateContextMenu(
