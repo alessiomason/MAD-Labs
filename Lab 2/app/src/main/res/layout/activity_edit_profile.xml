@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="@string/full_name"
+                    android:hint="@string/full_name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     tools:layout_editor_absoluteX="115dp"
                     tools:layout_editor_absoluteY="74dp" />
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="@string/nickname"
+                    android:hint="@string/nickname"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textColor="@android:color/secondary_text_light"
                     android:textStyle="italic" />
@@ -88,7 +88,7 @@
                     android:minHeight="48dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="@string/bio"
+                    android:hint="@string/bio"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <EditText
@@ -99,7 +99,7 @@
                     android:minHeight="48dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="@string/phone"
+                    android:hint="@string/phone"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <EditText
@@ -110,7 +110,7 @@
                     android:minHeight="48dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="@string/age"
+                    android:hint="@string/age"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <EditText
@@ -121,7 +121,7 @@
                     android:minHeight="48dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="@string/location"
+                    android:hint="@string/location"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <LinearLayout

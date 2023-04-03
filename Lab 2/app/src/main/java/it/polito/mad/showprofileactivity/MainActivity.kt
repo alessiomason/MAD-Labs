@@ -13,45 +13,47 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var name: TextView
-    private lateinit var nickname: TextView
-    private lateinit var age: TextView
-    private lateinit var bio: TextView
-    private lateinit var phone: TextView
-    private lateinit var location: TextView
-    private lateinit var ratingBar: RatingBar
-    private lateinit var imageUserProfile: ImageView
+    private lateinit var profile: Profile
+    private lateinit var nameView: TextView
+    private lateinit var nicknameView: TextView
+    private lateinit var ageView: TextView
+    private lateinit var bioView: TextView
+    private lateinit var phoneView: TextView
+    private lateinit var locationView: TextView
+    private lateinit var ratingBarView: RatingBar
+    private lateinit var userProfileImageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        name = findViewById(R.id.textFullName)
-        nickname = findViewById(R.id.textNickname)
-        age = findViewById(R.id.textAge)
-        bio = findViewById(R.id.textBio)
-        phone = findViewById(R.id.textPhone)
-        location = findViewById(R.id.textLocation)
-        ratingBar = findViewById(R.id.ratingBar)
-        imageUserProfile = findViewById(R.id.imageUserProfile)
-
-        ratingBar.setIsIndicator(true)
+        nameView = findViewById(R.id.textFullName)
+        nicknameView = findViewById(R.id.textNickname)
+        ageView = findViewById(R.id.textAge)
+        bioView = findViewById(R.id.textBio)
+        phoneView = findViewById(R.id.textPhone)
+        locationView = findViewById(R.id.textLocation)
+        ratingBarView = findViewById(R.id.ratingBar)
+        userProfileImageView = findViewById(R.id.imageUserProfile)
+        ratingBarView.setIsIndicator(true)
     }
 
     override fun onResume() {
         super.onResume()
-        val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-        name.text = sharedPref.getString("name", "Full Name")
-        nickname.text = sharedPref.getString("nickname", "Nickname")
-        age.text = sharedPref.getInt("age", 0).toString()
-        bio.text = sharedPref.getString("bio", "Bio")
-        phone.text = sharedPref.getString("phone", "Phone")
-        location.text = sharedPref.getString("location", "Location")
-        ratingBar.rating = sharedPref.getFloat("rating", 3.5F)
 
-        ratingBar.setIsIndicator(true)
+        val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
+        val gson = Gson()
+        profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)
+        if (profile.name != null) nameView.text = profile.name
+        if (profile.nickname != null) nicknameView.text = profile.nickname
+        if (profile.age != null) ageView.text = profile.age.toString()
+        if (profile.bio != null) bioView.text = profile.bio
+        if (profile.phone != null) phoneView.text = profile.phone
+        if (profile.location != null) locationView.text = profile.location
+        if (profile.rating != null) ratingBarView.rating = profile.rating!!
 
         if (Build.VERSION.SDK_INT >= 30) {
             if (!Environment.isExternalStorageManager()) {
@@ -64,19 +66,9 @@ class MainActivity : AppCompatActivity() {
             Environment.getExternalStorageDirectory()
                 .toString() + File.separator + "user_profile_picture.png"
         )
-        imageUserProfile.setImageBitmap(BitmapFactory.decodeFile(file.path))
+        userProfileImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
     }
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        name.text = savedInstanceState.getString("name")
-        nickname.text = savedInstanceState.getString("nickname")
-        bio.text = savedInstanceState.getString("bio")
-        age.text = savedInstanceState.getInt("age").toString()
-        phone.text = savedInstanceState.getString("phone")
-        location.text = savedInstanceState.getString("location")
-        ratingBar.rating = savedInstanceState.getFloat("rating")
 
-    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu to use in the action bar
         val inflater = menuInflater

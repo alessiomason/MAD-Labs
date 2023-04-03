@@ -20,43 +20,47 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.chip.Chip
+import com.google.gson.Gson
 import java.io.*
 
-class EditProfileActivity : AppCompatActivity() {
-    private lateinit var name: EditText
-    private lateinit var nickname: EditText
-    private lateinit var age: EditText
-    private lateinit var bio: EditText
-    private lateinit var phone: EditText
-    private lateinit var location: EditText
-    private lateinit var ratingBar: RatingBar
-    private lateinit var imageUserProfile: ImageView
+class EditProfileActivity: AppCompatActivity() {
+    private lateinit var profile: Profile
+    private lateinit var nameView: EditText
+    private lateinit var nicknameView: EditText
+    private lateinit var ageView: EditText
+    private lateinit var bioView: EditText
+    private lateinit var phoneView: EditText
+    private lateinit var locationView: EditText
+    private lateinit var ratingBarView: RatingBar
+    private lateinit var userProfileImageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
-        name = findViewById(R.id.editTextFullName)
-        nickname = findViewById(R.id.editTextNickname)
-        age = findViewById(R.id.editTextAge)
-        bio = findViewById(R.id.editTextBio)
-        phone = findViewById(R.id.editTextPhone)
-        location = findViewById(R.id.editTextLocation)
-        ratingBar = findViewById(R.id.ratingBar)
-        imageUserProfile = findViewById(R.id.imageUserProfile)
+        nameView = findViewById(R.id.editTextFullName)
+        nicknameView = findViewById(R.id.editTextNickname)
+        ageView = findViewById(R.id.editTextAge)
+        bioView = findViewById(R.id.editTextBio)
+        phoneView = findViewById(R.id.editTextPhone)
+        locationView = findViewById(R.id.editTextLocation)
+        ratingBarView = findViewById(R.id.ratingBar)
+        userProfileImageView = findViewById(R.id.imageUserProfile)
 
-        registerForContextMenu(imageUserProfile)
-        imageUserProfile.setOnClickListener {
-            imageUserProfile.showContextMenu()
+        registerForContextMenu(userProfileImageView)
+        userProfileImageView.setOnClickListener {
+            userProfileImageView.showContextMenu()
         }
 
-        val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-        name.setText(sharedPref.getString("name", "Full Name"))
-        nickname.setText(sharedPref.getString("nickname", "Nickname"))
-        age.setText(sharedPref.getInt("age", 0).toString())
-        bio.setText(sharedPref.getString("bio", "Bio"))
-        phone.setText(sharedPref.getString("phone", "Phone"))
-        location.setText(sharedPref.getString("location", "Location"))
-        ratingBar.rating = sharedPref.getFloat("rating", 3.5F)
+        val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
+        val gson = Gson()
+        profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)
+        if (profile.name != null) nameView.setText(profile.name)
+        if (profile.nickname != null) nicknameView.setText(profile.nickname)
+        if (profile.age != null) ageView.setText(profile.age.toString())
+        if (profile.bio != null) bioView.setText(profile.bio)
+        if (profile.phone != null) phoneView.setText(profile.phone)
+        if (profile.location != null) locationView.setText(profile.location)
+        if (profile.rating != null) ratingBarView.rating = profile.rating!!
 
         if (Build.VERSION.SDK_INT >= 30) {
             if (!Environment.isExternalStorageManager()) {
@@ -69,7 +73,7 @@ class EditProfileActivity : AppCompatActivity() {
             Environment.getExternalStorageDirectory()
                 .toString() + File.separator + "user_profile_picture.png"
         )
-        imageUserProfile.setImageBitmap(BitmapFactory.decodeFile(file.path))
+        userProfileImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
 
         // set onClick for Add new sports button
         val addChip = findViewById<Chip>(R.id.chipAdd)
@@ -146,7 +150,7 @@ class EditProfileActivity : AppCompatActivity() {
             bitmap = uriToBitmap(imageUri!!)
         }
 
-        imageUserProfile.setImageBitmap(bitmap)
+        userProfileImageView.setImageBitmap(bitmap)
 
         if (Build.VERSION.SDK_INT >= 30) {
             if (!Environment.isExternalStorageManager()) {
@@ -202,25 +206,24 @@ class EditProfileActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString("name", name.text.toString())
-        outState.putString("nickname", nickname.text.toString())
-        outState.putString("bio", bio.text.toString())
-        outState.putInt("age", age.text.toString().toInt())
-        outState.putString("phone", phone.text.toString())
-        outState.putString("location", location.text.toString())
-        outState.putFloat("rating", ratingBar.rating)
+        outState.putString("name", nameView.text.toString())
+        outState.putString("nickname", nicknameView.text.toString())
+        outState.putString("bio", bioView.text.toString())
+        outState.putInt("age", ageView.text.toString().toInt())
+        outState.putString("phone", phoneView.text.toString())
+        outState.putString("location", locationView.text.toString())
+        outState.putFloat("rating", ratingBarView.rating)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        name.setText(savedInstanceState.getString("name"))
-        nickname.setText(savedInstanceState.getString("nickname"))
-        bio.setText(savedInstanceState.getString("bio"))
-        age.setText(savedInstanceState.getInt("age").toString())
-        phone.setText(savedInstanceState.getString("phone"))
-        location.setText(savedInstanceState.getString("location"))
-        ratingBar.rating = savedInstanceState.getFloat("rating")
-
+        nameView.setText(savedInstanceState.getString("name"))
+        nicknameView.setText(savedInstanceState.getString("nickname"))
+        bioView.setText(savedInstanceState.getString("bio"))
+        ageView.setText(savedInstanceState.getInt("age").toString())
+        phoneView.setText(savedInstanceState.getString("phone"))
+        locationView.setText(savedInstanceState.getString("location"))
+        ratingBarView.rating = savedInstanceState.getFloat("rating")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -234,34 +237,23 @@ class EditProfileActivity : AppCompatActivity() {
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_profile -> {
-                //    val intent = Intent(this, MainActivity::class.java)
-
-                // val outState = Bundle();
-                //  outState.putString("name",name.text.toString())
-                /*     outState?.putString("nickname",nickname.text.toString())
-                outState?.putString("bio",bio.text.toString())
-                //outState?.putInt("age",age.text.toString().toInt())
-                outState?.putString("phone",phone.text.toString())
-                outState?.putString("location",location.text.toString())*/
-                //intent.putExtras(outState);
-                // start your next activity
-
-                // startActivity(intent)
-
                 finish()
                 val sharedPref = this.getSharedPreferences(
-                    getString(R.string.preference_file_key),
+                    "profile",
                     Context.MODE_PRIVATE
                 ) ?: return true
                 with(sharedPref.edit()) {
-                    putString("name", name.text.toString())
-                    putString("nickname", nickname.text.toString())
-                    putString("nickname", nickname.text.toString())
-                    putInt("age", age.text.toString().toInt())
-                    putString("bio", bio.text.toString())
-                    putString("phone", phone.text.toString())
-                    putString("location", location.text.toString())
-                    putFloat("rating", ratingBar.rating)
+                    profile.name = nameView.text.toString()
+                    profile.nickname = nicknameView.text.toString()
+                    profile.age = ageView.text.toString().toIntOrNull()
+                    profile.bio = bioView.text.toString()
+                    profile.phone = phoneView.text.toString()
+                    profile.location = locationView.text.toString()
+                    profile.rating = ratingBarView.rating
+
+                    val gson = Gson()
+                    val profileJson = gson.toJson(profile)
+                    putString("profile", profileJson)
                     apply()
                 }
                 return true
