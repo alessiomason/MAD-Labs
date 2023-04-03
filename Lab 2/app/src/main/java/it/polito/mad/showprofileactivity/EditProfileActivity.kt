@@ -23,14 +23,14 @@ import com.google.android.material.chip.Chip
 import java.io.*
 
 class EditProfileActivity : AppCompatActivity() {
-    lateinit var name: EditText
-    lateinit var nickname: EditText
-    lateinit var age: EditText
-    lateinit var bio: EditText
-    lateinit var phone: EditText
-    lateinit var location: EditText
-    lateinit var ratingBar: RatingBar
-    lateinit var imageUserProfile: ImageView
+    private lateinit var name: EditText
+    private lateinit var nickname: EditText
+    private lateinit var age: EditText
+    private lateinit var bio: EditText
+    private lateinit var phone: EditText
+    private lateinit var location: EditText
+    private lateinit var ratingBar: RatingBar
+    private lateinit var imageUserProfile: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -172,7 +172,7 @@ class EditProfileActivity : AppCompatActivity() {
         return null
     }
 
-    fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? { // File name like "image.png"
+    private fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? { // File name like "image.png"
         //create a file to write bitmap data
         var file: File? = null
         return try {

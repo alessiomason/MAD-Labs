@@ -1,6 +1,5 @@
 package it.polito.mad.showprofileactivity
 
-
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -17,14 +16,14 @@ import androidx.appcompat.app.AppCompatActivity
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
-    lateinit var name: TextView
-    lateinit var nickname: TextView
-    lateinit var age: TextView
-    lateinit var bio: TextView
-    lateinit var phone: TextView
-    lateinit var location: TextView
-    lateinit var ratingBar: RatingBar
-    lateinit var imageUserProfile: ImageView
+    private lateinit var name: TextView
+    private lateinit var nickname: TextView
+    private lateinit var age: TextView
+    private lateinit var bio: TextView
+    private lateinit var phone: TextView
+    private lateinit var location: TextView
+    private lateinit var ratingBar: RatingBar
+    private lateinit var imageUserProfile: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +36,20 @@ class MainActivity : AppCompatActivity() {
         location = findViewById(R.id.textLocation)
         ratingBar = findViewById(R.id.ratingBar)
         imageUserProfile = findViewById(R.id.imageUserProfile)
+
+        ratingBar.setIsIndicator(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        name.text = sharedPref.getString("name", "Full Name")
+        nickname.text = sharedPref.getString("nickname", "Nickname")
+        // age da fare
+        bio.text = sharedPref.getString("bio", "Bio")
+        phone.text = sharedPref.getString("phone", "Phone")
+        location.text = sharedPref.getString("location", "Location")
+        ratingBar.rating = sharedPref.getFloat("rating", 3.5F)
 
         ratingBar.setIsIndicator(true)
 
@@ -53,28 +66,14 @@ class MainActivity : AppCompatActivity() {
         )
         imageUserProfile.setImageBitmap(BitmapFactory.decodeFile(file.path))
     }
-
-    override fun onResume() {
-        super.onResume()
-        val sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-        name.setText(sharedPref.getString("name", "Full Name"))
-        nickname.setText(sharedPref.getString("nickname", "Nickname"))
-        // age da fare
-        bio.setText(sharedPref.getString("bio", "Bio"))
-        phone.setText(sharedPref.getString("phone", "Phone"))
-        location.setText(sharedPref.getString("location", "Location"))
-        ratingBar.rating = sharedPref.getFloat("rating", 3.5F)
-
-        ratingBar.setIsIndicator(true);
-    }
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        name.setText(savedInstanceState.getString("name"))
-        nickname.setText(savedInstanceState.getString("nickname"))
-        bio.setText(savedInstanceState.getString("bio"))
-        // age.setText(savedInstanceState.getString("age"))
-        phone.setText(savedInstanceState.getString("phone"))
-        location.setText(savedInstanceState.getString("location"))
+        name.text = savedInstanceState.getString("name")
+        nickname.text = savedInstanceState.getString("nickname")
+        bio.text = savedInstanceState.getString("bio")
+        // age.text = savedInstanceState.getString("age")
+        phone.text = savedInstanceState.getString("phone")
+        location.text = savedInstanceState.getString("location")
         ratingBar.rating = savedInstanceState.getFloat("rating")
 
     }
