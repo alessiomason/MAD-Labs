@@ -57,7 +57,6 @@
 
                 <EditText
                     android:id="@+id/editTextFullName"
-
                     android:inputType="text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -68,61 +67,131 @@
                     tools:layout_editor_absoluteX="115dp"
                     tools:layout_editor_absoluteY="74dp" />
 
-                <EditText
-                    android:id="@+id/editTextNickname"
-                    android:inputType="text"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:hint="@string/nickname"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textColor="@android:color/secondary_text_light"
-                    android:textStyle="italic" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/editTextBio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:minHeight="48dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:hint="@string/bio"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/nickname_icon"
+                        android:paddingEnd="5dp"
+                        android:layout_gravity="center"
+                        app:tint="@color/primary" />
 
-                <EditText
-                    android:id="@+id/editTextPhone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:minHeight="48dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:hint="@string/phone"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    <EditText
+                        android:id="@+id/editTextNickname"
+                        android:inputType="text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:hint="@string/nickname"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="@android:color/secondary_text_light"
+                        android:textStyle="italic" />
+                </LinearLayout>
 
-                <EditText
-                    android:id="@+id/editTextAge"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:minHeight="48dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:hint="@string/age"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/editTextLocation"
-                    android:inputType="text"
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/bio_icon"
+                        android:paddingEnd="5dp"
+                        android:layout_gravity="center"
+                        app:tint="@color/primary" />
+
+                    <EditText
+                        android:id="@+id/editTextBio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:minHeight="48dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:hint="@string/bio"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="48dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:hint="@string/location"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/phone_icon"
+                        android:paddingEnd="5dp"
+                        android:layout_gravity="center"
+                        app:tint="@color/primary" />
+
+                    <EditText
+                        android:id="@+id/editTextPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:minHeight="48dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:hint="@string/phone"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/calendar_icon"
+                        android:paddingEnd="5dp"
+                        android:layout_gravity="center"
+                        app:tint="@color/primary" />
+
+                    <EditText
+                        android:id="@+id/editTextAge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:minHeight="48dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:hint="@string/age"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/home_icon"
+                        android:paddingEnd="5dp"
+                        android:layout_gravity="center"
+                        app:tint="@color/primary" />
+
+                    <EditText
+                        android:id="@+id/editTextLocation"
+                        android:inputType="text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:hint="@string/location"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

@@ -81,52 +81,122 @@
                 tools:layout_editor_absoluteX="115dp"
                 tools:layout_editor_absoluteY="74dp" />
 
-            <TextView
-                android:id="@+id/textNickname"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:hint="@string/nickname"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textStyle="italic" />
-
-            <TextView
-                android:id="@+id/textBio"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:hint="@string/bio"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:hint="@string/phone"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/nickname_icon"
+                    android:paddingEnd="5dp"
+                    android:layout_gravity="center"
+                    app:tint="@color/primary" />
 
-            <TextView
-                android:id="@+id/textAge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:hint="@string/age"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                <TextView
+                    android:id="@+id/textNickname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:hint="@string/nickname"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="italic" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/textLocation"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:hint="@string/location"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/bio_icon"
+                    android:paddingEnd="5dp"
+                    android:layout_gravity="center"
+                    app:tint="@color/primary" />
+
+                <TextView
+                    android:id="@+id/textBio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:hint="@string/bio"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/phone_icon"
+                    android:paddingEnd="5dp"
+                    android:layout_gravity="center"
+                    app:tint="@color/primary" />
+
+                <TextView
+                    android:id="@+id/textPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:hint="@string/phone"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/calendar_icon"
+                    android:paddingEnd="5dp"
+                    android:layout_gravity="center"
+                    app:tint="@color/primary" />
+
+                <TextView
+                    android:id="@+id/textAge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:hint="@string/age"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/home_icon"
+                    android:paddingEnd="5dp"
+                    android:layout_gravity="center"
+                    app:tint="@color/primary" />
+
+                <TextView
+                    android:id="@+id/textLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:hint="@string/location"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textMySports"
