@@ -229,7 +229,7 @@ class EditProfileActivity: AppCompatActivity() {
         outState.putString("name", nameView.text.toString())
         outState.putString("nickname", nicknameView.text.toString())
         outState.putString("bio", bioView.text.toString())
-        outState.putInt("age", ageView.text.toString().toInt())
+        if (ageView.text.toString() != "") outState.putInt("age", ageView.text.toString().toInt())
         outState.putString("phone", phoneView.text.toString())
         outState.putString("location", locationView.text.toString())
         outState.putFloat("rating", ratingBarView.rating)
