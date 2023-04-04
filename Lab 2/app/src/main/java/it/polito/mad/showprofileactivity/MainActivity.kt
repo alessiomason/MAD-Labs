@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)
         if (profile.name != null) nameView.text = profile.name
         if (profile.nickname != null) nicknameView.text = profile.nickname
-        if (profile.age != null) ageView.text = profile.age.toString()
+        if (profile.age != null) ageView.text = resources.getString(R.string.years, profile.age.toString())
         if (profile.bio != null) bioView.text = profile.bio
         if (profile.gender == Gender.MALE) genderView.text = resources.getString(R.string.genderMale)
         if (profile.gender == Gender.FEMALE) genderView.text = resources.getString(R.string.genderFemale)

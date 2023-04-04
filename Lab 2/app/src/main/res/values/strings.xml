@@ -5,6 +5,7 @@
     <string name="bio">Bio</string>
     <string name="phone">Phone</string>
     <string name="age">Age</string>
+    <string name="years">%1$s years old</string>
     <string name="gender">Gender</string>
     <string name="genderMale">Male</string>
     <string name="genderFemale">Female</string>
