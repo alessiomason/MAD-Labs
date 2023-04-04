@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
             Environment.getExternalStorageDirectory()
                 .toString() + File.separator + "user_profile_picture.png"
         )
-        userProfileImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
+        if(file.length() != 0L) userProfileImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
