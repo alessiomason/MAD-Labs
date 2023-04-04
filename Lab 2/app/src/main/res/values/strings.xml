@@ -18,7 +18,8 @@
     <string name="sport_football">Football</string>
     <string name="sport_volleyball">Volleyball</string>
     <string name="sport_golf">Golf</string>
-    <string name="add_sport">Add</string>
+    <string name="sport_empty">No sports selected yet</string>
+    <string name="add_sport">Add/Edit</string>
     <string name="modify_profile">Modify</string>
     <string name="save_profile">Save</string>
     <string name="gallery">Gallery</string>
@@ -26,4 +27,10 @@
     <string name="save_sport">Save selected sports</string>
     <string name="select_your_sports">Select your sports</string>
     <string name="my_rating">My rating</string>
+    <string name="tennis_court">Tennis court</string>
+    <string name="tennis_court_description">Hard surface</string>
+    <string name="basketball_court">Basketball court</string>
+    <string name="basketball_court_description">Internal court</string>
+    <string name="football_pitch">Football pitch</string>
+    <string name="football_pitch_description">11 external pitch</string>
 </resources>

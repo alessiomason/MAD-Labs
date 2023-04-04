@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
+        val flagChipEmpty = true;
         val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
         val gson = Gson()
         profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)
@@ -66,16 +66,34 @@ class MainActivity : AppCompatActivity() {
         if (profile.rating != null) ratingBarView.rating = profile.rating!!
         selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
 
+        val emptyChip = findViewById<Chip>(R.id.chipEmpty)
+        emptyChip.visibility = VISIBLE
         val tennisChip = findViewById<Chip>(R.id.chipTennis)
-        if (selectedSports.tennis) tennisChip.visibility = VISIBLE else tennisChip.visibility = GONE
+        if (selectedSports.tennis) {
+            tennisChip.visibility = VISIBLE
+            emptyChip.visibility = GONE
+        } else tennisChip.visibility = GONE
         val basketballChip = findViewById<Chip>(R.id.chipBasketball)
-        if (selectedSports.basketball) basketballChip.visibility = VISIBLE else basketballChip.visibility = GONE
+        if (selectedSports.basketball) {
+            basketballChip.visibility = VISIBLE
+            emptyChip.visibility = GONE
+        } else basketballChip.visibility = GONE
         val footballChip = findViewById<Chip>(R.id.chipFootball)
-        if (selectedSports.football) footballChip.visibility = VISIBLE else footballChip.visibility = GONE
+        if (selectedSports.football) {
+            footballChip.visibility = VISIBLE
+            emptyChip.visibility = GONE
+        } else footballChip.visibility = GONE
         val volleyballChip = findViewById<Chip>(R.id.chipVolleyball)
-        if (selectedSports.volleyball) volleyballChip.visibility = VISIBLE else volleyballChip.visibility = GONE
+        if (selectedSports.volleyball) {
+            volleyballChip.visibility = VISIBLE
+            emptyChip.visibility = GONE
+        } else volleyballChip.visibility = GONE
         val golfChip = findViewById<Chip>(R.id.chipGolf)
-        if (selectedSports.golf) golfChip.visibility = VISIBLE else golfChip.visibility = GONE
+        if (selectedSports.golf) {
+            golfChip.visibility = VISIBLE
+            emptyChip.visibility = GONE
+        } else golfChip.visibility = GONE
+
 
         if (profile.userProfileImageUriString != null) {
             val parcelFileDescriptor =

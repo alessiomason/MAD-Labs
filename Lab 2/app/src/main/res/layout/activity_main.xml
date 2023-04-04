@@ -270,6 +270,15 @@
                             app:chipIcon="@drawable/golf"
                             app:chipIconVisible="true" />
 
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipEmpty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:text="@string/sport_empty"
+                            app:chipIconVisible="true" />
+
                     </LinearLayout>
                 </HorizontalScrollView>
 
@@ -303,7 +312,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Campo 1"
+                                android:text="@string/tennis_court"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                 android:textColor="@color/white"
                                 android:paddingBottom="10dp" />
@@ -316,7 +325,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Descrizione 1"
+                                android:text="@string/tennis_court_description"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                 android:textColor="@color/white"
                                 android:paddingTop="10dp" />
@@ -335,7 +344,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Campo 2"
+                                android:text="@string/basketball_court"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                 android:textColor="@color/white"
                                 android:paddingBottom="10dp" />
@@ -348,7 +357,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Descrizione 2"
+                                android:text="@string/basketball_court_description"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                 android:textColor="@color/white"
                                 android:paddingTop="10dp" />
@@ -367,7 +376,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Campo 3"
+                                android:text="@string/football_pitch"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                 android:textColor="@color/white"
                                 android:paddingBottom="10dp" />
@@ -380,7 +389,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Descrizione 3"
+                                android:text="@string/football_pitch_description"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                 android:textColor="@color/white"
                                 android:paddingTop="10dp" />
