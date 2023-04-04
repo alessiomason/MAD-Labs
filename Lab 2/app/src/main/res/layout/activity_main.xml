@@ -118,18 +118,18 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/phone_icon"
+                        android:src="@drawable/gender_icon"
                         android:paddingEnd="5dp"
                         android:layout_gravity="center"
                         app:tint="@color/primary" />
 
                     <TextView
-                        android:id="@+id/textPhone"
+                        android:id="@+id/textGender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:hint="@string/phone"
+                        android:hint="@string/gender"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
 
@@ -153,6 +153,29 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:hint="@string/age"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/phone_icon"
+                        android:paddingEnd="5dp"
+                        android:layout_gravity="center"
+                        app:tint="@color/primary" />
+
+                    <TextView
+                        android:id="@+id/textPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:hint="@string/phone"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
 

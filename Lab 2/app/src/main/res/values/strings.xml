@@ -5,6 +5,10 @@
     <string name="bio">Bio</string>
     <string name="phone">Phone</string>
     <string name="age">Age</string>
+    <string name="gender">Gender</string>
+    <string name="genderMale">Male</string>
+    <string name="genderFemale">Female</string>
+    <string name="genderOther">Other</string>
     <string name="location">Location</string>
     <string name="my_sports">My sports</string>
     <string name="my_courts">My courts</string>

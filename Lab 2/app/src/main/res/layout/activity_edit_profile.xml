@@ -126,21 +126,39 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/phone_icon"
+                        android:src="@drawable/gender_icon"
                         android:paddingEnd="5dp"
                         android:layout_gravity="center"
                         app:tint="@color/primary" />
 
-                    <EditText
-                        android:id="@+id/editTextPhone"
-                        android:layout_width="match_parent"
+                    <RadioGroup
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="phone"
+                        android:orientation="horizontal"
                         android:minHeight="48dp"
                         android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:hint="@string/phone"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:paddingBottom="10dp">
+
+                        <RadioButton
+                            android:id="@+id/radioGenderMale"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/genderMale"
+                            android:layout_marginHorizontal="5dp" />
+                        <RadioButton
+                            android:id="@+id/radioGenderFemale"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/genderFemale"
+                            android:layout_marginHorizontal="5dp" />
+                        <RadioButton
+                            android:id="@+id/radioGenderOther"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/genderOther"
+                            android:layout_marginHorizontal="5dp" />
+                    </RadioGroup>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -165,6 +183,31 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:hint="@string/age"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/phone_icon"
+                        android:paddingEnd="5dp"
+                        android:layout_gravity="center"
+                        app:tint="@color/primary" />
+
+                    <EditText
+                        android:id="@+id/editTextPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:minHeight="48dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:hint="@string/phone"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
 

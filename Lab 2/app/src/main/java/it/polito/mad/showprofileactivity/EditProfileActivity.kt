@@ -17,6 +17,7 @@ import android.provider.Settings
 import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RadioButton
 import android.widget.RatingBar
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.chip.Chip
@@ -30,6 +31,9 @@ class EditProfileActivity: AppCompatActivity() {
     private lateinit var nicknameView: EditText
     private lateinit var ageView: EditText
     private lateinit var bioView: EditText
+    private lateinit var genderMaleRadioButton: RadioButton
+    private lateinit var genderFemaleRadioButton: RadioButton
+    private lateinit var genderOtherRadioButton: RadioButton
     private lateinit var phoneView: EditText
     private lateinit var locationView: EditText
     private lateinit var ratingBarView: RatingBar
@@ -42,6 +46,9 @@ class EditProfileActivity: AppCompatActivity() {
         nicknameView = findViewById(R.id.editTextNickname)
         ageView = findViewById(R.id.editTextAge)
         bioView = findViewById(R.id.editTextBio)
+        genderMaleRadioButton = findViewById(R.id.radioGenderMale)
+        genderFemaleRadioButton = findViewById(R.id.radioGenderFemale)
+        genderOtherRadioButton = findViewById(R.id.radioGenderOther)
         phoneView = findViewById(R.id.editTextPhone)
         locationView = findViewById(R.id.editTextLocation)
         ratingBarView = findViewById(R.id.ratingBar)
@@ -59,6 +66,28 @@ class EditProfileActivity: AppCompatActivity() {
         if (profile.nickname != null) nicknameView.setText(profile.nickname)
         if (profile.age != null) ageView.setText(profile.age.toString())
         if (profile.bio != null) bioView.setText(profile.bio)
+        when (profile.gender) {
+            Gender.MALE -> {
+                genderMaleRadioButton.isChecked = true
+                genderFemaleRadioButton.isChecked = false
+                genderOtherRadioButton.isChecked = false
+            }
+            Gender.FEMALE -> {
+                genderMaleRadioButton.isChecked = false
+                genderFemaleRadioButton.isChecked = true
+                genderOtherRadioButton.isChecked = false
+            }
+            Gender.OTHER -> {
+                genderMaleRadioButton.isChecked = false
+                genderFemaleRadioButton.isChecked = false
+                genderOtherRadioButton.isChecked = true
+            }
+            null -> {
+                genderMaleRadioButton.isChecked = false
+                genderFemaleRadioButton.isChecked = false
+                genderOtherRadioButton.isChecked = false
+            }
+        }
         if (profile.phone != null) phoneView.setText(profile.phone)
         if (profile.location != null) locationView.setText(profile.location)
         if (profile.rating != null) ratingBarView.rating = profile.rating!!
@@ -230,6 +259,11 @@ class EditProfileActivity: AppCompatActivity() {
         outState.putString("nickname", nicknameView.text.toString())
         outState.putString("bio", bioView.text.toString())
         if (ageView.text.toString() != "") outState.putInt("age", ageView.text.toString().toInt())
+        var gender = '/'
+        if (genderMaleRadioButton.isChecked) gender = 'M'
+        else if (genderFemaleRadioButton.isChecked) gender = 'F'
+        else if (genderOtherRadioButton.isChecked) gender = 'O'
+        outState.putChar("gender", gender)
         outState.putString("phone", phoneView.text.toString())
         outState.putString("location", locationView.text.toString())
         outState.putFloat("rating", ratingBarView.rating)
@@ -241,6 +275,28 @@ class EditProfileActivity: AppCompatActivity() {
         nicknameView.setText(savedInstanceState.getString("nickname"))
         bioView.setText(savedInstanceState.getString("bio"))
         ageView.setText(savedInstanceState.getInt("age").toString())
+        when (savedInstanceState.getChar("gender")) {
+            'M' -> {
+                genderMaleRadioButton.isChecked = true
+                genderFemaleRadioButton.isChecked = false
+                genderOtherRadioButton.isChecked = false
+            }
+            'F' -> {
+                genderMaleRadioButton.isChecked = false
+                genderFemaleRadioButton.isChecked = true
+                genderOtherRadioButton.isChecked = false
+            }
+            'O' -> {
+                genderMaleRadioButton.isChecked = false
+                genderFemaleRadioButton.isChecked = false
+                genderOtherRadioButton.isChecked = true
+            }
+            else -> {
+                genderMaleRadioButton.isChecked = false
+                genderFemaleRadioButton.isChecked = false
+                genderOtherRadioButton.isChecked = false
+            }
+        }
         phoneView.setText(savedInstanceState.getString("phone"))
         locationView.setText(savedInstanceState.getString("location"))
         ratingBarView.rating = savedInstanceState.getFloat("rating")
@@ -267,6 +323,12 @@ class EditProfileActivity: AppCompatActivity() {
                     profile.nickname = nicknameView.text.toString()
                     profile.age = ageView.text.toString().toIntOrNull()
                     profile.bio = bioView.text.toString()
+                    if (genderMaleRadioButton.isChecked)
+                        profile.gender = Gender.MALE
+                    else if (genderFemaleRadioButton.isChecked)
+                        profile.gender = Gender.FEMALE
+                    else if (genderOtherRadioButton.isChecked)
+                        profile.gender = Gender.OTHER
                     profile.phone = phoneView.text.toString()
                     profile.location = locationView.text.toString()
                     profile.rating = ratingBarView.rating

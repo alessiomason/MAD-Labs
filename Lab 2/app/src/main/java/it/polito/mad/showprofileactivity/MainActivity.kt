@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nicknameView: TextView
     private lateinit var ageView: TextView
     private lateinit var bioView: TextView
+    private lateinit var genderView: TextView
     private lateinit var phoneView: TextView
     private lateinit var locationView: TextView
     private lateinit var ratingBarView: RatingBar
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         nicknameView = findViewById(R.id.textNickname)
         ageView = findViewById(R.id.textAge)
         bioView = findViewById(R.id.textBio)
+        genderView = findViewById(R.id.textGender)
         phoneView = findViewById(R.id.textPhone)
         locationView = findViewById(R.id.textLocation)
         ratingBarView = findViewById(R.id.ratingBar)
@@ -54,6 +56,9 @@ class MainActivity : AppCompatActivity() {
         if (profile.nickname != null) nicknameView.text = profile.nickname
         if (profile.age != null) ageView.text = profile.age.toString()
         if (profile.bio != null) bioView.text = profile.bio
+        if (profile.gender == Gender.MALE) genderView.text = resources.getString(R.string.genderMale)
+        if (profile.gender == Gender.FEMALE) genderView.text = resources.getString(R.string.genderFemale)
+        if (profile.gender == Gender.OTHER) genderView.text = resources.getString(R.string.genderOther)
         if (profile.phone != null) phoneView.text = profile.phone
         if (profile.location != null) locationView.text = profile.location
         if (profile.rating != null) ratingBarView.rating = profile.rating!!
