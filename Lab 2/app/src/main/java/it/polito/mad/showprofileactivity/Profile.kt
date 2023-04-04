@@ -1,5 +1,7 @@
 package it.polito.mad.showprofileactivity
 
+import android.net.Uri
+
 enum class Gender {
     MALE, FEMALE, OTHER
 }
@@ -12,5 +14,6 @@ data class Profile(
     var gender: Gender?,
     var phone: String?,
     var location: String?,
-    var rating: Float?
+    var rating: Float?,
+    var userProfileImageUriString: String?
 )

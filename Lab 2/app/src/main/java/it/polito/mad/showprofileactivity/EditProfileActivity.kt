@@ -1,25 +1,24 @@
 package it.polito.mad.showprofileactivity
 
-import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.Settings
 import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RatingBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import java.io.*
@@ -92,19 +91,6 @@ class EditProfileActivity: AppCompatActivity() {
         if (profile.location != null) locationView.setText(profile.location)
         if (profile.rating != null) ratingBarView.rating = profile.rating!!
 
-        if (Build.VERSION.SDK_INT >= 30) {
-            if (!Environment.isExternalStorageManager()) {
-                val getPermission = Intent()
-                getPermission.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                startActivity(getPermission)
-            }
-        }
-        val file = File(
-            Environment.getExternalStorageDirectory()
-                .toString() + File.separator + "user_profile_picture.png"
-        )
-        userProfileImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
-
         // set onClick for Add new sports button
         val addChip = findViewById<Chip>(R.id.chipAdd)
         addChip.setOnClickListener {
@@ -130,6 +116,15 @@ class EditProfileActivity: AppCompatActivity() {
         if (selectedSports.volleyball) volleyballChip.visibility = View.VISIBLE else volleyballChip.visibility = View.GONE
         val golfChip = findViewById<Chip>(R.id.chipGolf)
         if (selectedSports.golf) golfChip.visibility = View.VISIBLE else golfChip.visibility = View.GONE
+
+        if (profile.userProfileImageUriString != null) {
+            val parcelFileDescriptor =
+                contentResolver.openFileDescriptor(profile.userProfileImageUriString!!.toUri(), "r", null) ?: return
+
+            val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
+            userProfileImageView.setImageBitmap(BitmapFactory.decodeStream(inputStream))
+            parcelFileDescriptor.close()
+        }
     }
 
     override fun onCreateContextMenu(
@@ -149,25 +144,16 @@ class EditProfileActivity: AppCompatActivity() {
                 true
             }
             R.id.camera -> {
-                if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    )
-                    == PackageManager.PERMISSION_DENIED
-                ) {
-                    val permission = arrayOf(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    )
-                    requestPermissions(permission, 112)
-                } else
-                    openCamera()
+                while (ContextCompat.checkSelfPermission(applicationContext, "android.permission.CAMERA") ==
+                    PERMISSION_DENIED)
+                    requestPermissions(arrayOf("android.permission.CAMERA"), 102)
+                openCamera()
                 true
             }
             else -> super.onContextItemSelected(item)
         }
     }
 
-    private var imageUri: Uri? = null
     private val RESULT_LOAD_IMAGE = 123
     private val IMAGE_CAPTURE_CODE = 654
 
@@ -176,7 +162,8 @@ class EditProfileActivity: AppCompatActivity() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New User Profile Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
-        imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        profile.userProfileImageUriString = imageUri.toString()
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
@@ -193,22 +180,13 @@ class EditProfileActivity: AppCompatActivity() {
         var bitmap: Bitmap? = null
 
         if (requestCode == IMAGE_CAPTURE_CODE && resultCode == Activity.RESULT_OK) {
-            bitmap = uriToBitmap(imageUri!!)
+            bitmap = uriToBitmap(profile.userProfileImageUriString!!.toUri())
         } else if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
-            imageUri = data.data
-            bitmap = uriToBitmap(imageUri!!)
+            profile.userProfileImageUriString = data.data.toString()
+            bitmap = uriToBitmap(profile.userProfileImageUriString!!.toUri())
         }
 
         userProfileImageView.setImageBitmap(bitmap)
-
-        if (Build.VERSION.SDK_INT >= 30) {
-            if (!Environment.isExternalStorageManager()) {
-                val getPermission = Intent()
-                getPermission.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                startActivity(getPermission)
-            }
-        }
-        bitmapToFile(bitmap!!, "user_profile_picture.png")
     }
 
     // takes URI of the image and returns bitmap
@@ -223,33 +201,6 @@ class EditProfileActivity: AppCompatActivity() {
             e.printStackTrace()
         }
         return null
-    }
-
-    private fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? { // File name like "image.png"
-        //create a file to write bitmap data
-        var file: File? = null
-        return try {
-            file = File(
-                Environment.getExternalStorageDirectory()
-                    .toString() + File.separator + fileNameToSave
-            )
-            file.createNewFile()
-
-            // Convert bitmap to byte array
-            val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
-            val bitmapData = bos.toByteArray()
-
-            // write the bytes in file
-            val fos = FileOutputStream(file)
-            fos.write(bitmapData)
-            fos.flush()
-            fos.close()
-            file
-        } catch (e: Exception) {
-            e.printStackTrace()
-            file // it will return null
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -267,6 +218,7 @@ class EditProfileActivity: AppCompatActivity() {
         outState.putString("phone", phoneView.text.toString())
         outState.putString("location", locationView.text.toString())
         outState.putFloat("rating", ratingBarView.rating)
+        outState.putString("userProfileImageUriString", profile.userProfileImageUriString)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -300,6 +252,7 @@ class EditProfileActivity: AppCompatActivity() {
         phoneView.setText(savedInstanceState.getString("phone"))
         locationView.setText(savedInstanceState.getString("location"))
         ratingBarView.rating = savedInstanceState.getFloat("rating")
+        profile.userProfileImageUriString = savedInstanceState.getString("userProfileImageUriString")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

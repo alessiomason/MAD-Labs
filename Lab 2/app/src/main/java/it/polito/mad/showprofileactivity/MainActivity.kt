@@ -14,9 +14,11 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import java.io.File
+import java.io.FileInputStream
 
 class MainActivity : AppCompatActivity() {
     private lateinit var profile: Profile
@@ -75,18 +77,14 @@ class MainActivity : AppCompatActivity() {
         val golfChip = findViewById<Chip>(R.id.chipGolf)
         if (selectedSports.golf) golfChip.visibility = VISIBLE else golfChip.visibility = GONE
 
-        if (Build.VERSION.SDK_INT >= 30) {
-            if (!Environment.isExternalStorageManager()) {
-                val getPermission = Intent()
-                getPermission.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                startActivity(getPermission)
-            }
+        if (profile.userProfileImageUriString != null) {
+            val parcelFileDescriptor =
+                contentResolver.openFileDescriptor(profile.userProfileImageUriString!!.toUri(), "r", null) ?: return
+
+            val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
+            userProfileImageView.setImageBitmap(BitmapFactory.decodeStream(inputStream))
+            parcelFileDescriptor.close()
         }
-        val file = File(
-            Environment.getExternalStorageDirectory()
-                .toString() + File.separator + "user_profile_picture.png"
-        )
-        if(file.length() != 0L) userProfileImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
