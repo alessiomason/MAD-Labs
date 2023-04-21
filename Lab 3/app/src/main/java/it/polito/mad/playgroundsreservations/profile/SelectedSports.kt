@@ -1,4 +1,4 @@
-package it.polito.mad.playgroundsreservations
+package it.polito.mad.playgroundsreservations.profile
 
 data class SelectedSports(
     var tennis: Boolean,

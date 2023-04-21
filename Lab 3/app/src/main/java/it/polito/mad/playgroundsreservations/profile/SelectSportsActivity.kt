@@ -1,4 +1,4 @@
-package it.polito.mad.playgroundsreservations
+package it.polito.mad.playgroundsreservations.profile
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import com.google.gson.Gson
+import it.polito.mad.playgroundsreservations.R
 
 class SelectSportsActivity : AppCompatActivity() {
     private lateinit var selectedSports: SelectedSports

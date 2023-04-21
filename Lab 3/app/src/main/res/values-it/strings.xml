@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ShowProfileActivity</string>
+    <string name="app_name">Playgrounds Reservations</string>
     <string name="full_name">Nome completo</string>
     <string name="nickname">Nickname</string>
     <string name="bio">Bio</string>

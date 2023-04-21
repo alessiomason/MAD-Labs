@@ -1,4 +1,4 @@
-package it.polito.mad.playgroundsreservations
+package it.polito.mad.playgroundsreservations.profile
 
 enum class Gender {
     MALE, FEMALE, OTHER

@@ -1,4 +1,4 @@
-package it.polito.mad.playgroundsreservations
+package it.polito.mad.playgroundsreservations.profile
 
 import android.app.Activity
 import android.content.ContentValues
@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
+import it.polito.mad.playgroundsreservations.R
 import java.io.*
 
 class EditProfileActivity: AppCompatActivity() {

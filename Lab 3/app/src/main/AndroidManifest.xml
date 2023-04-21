@@ -17,13 +17,16 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ShowProfileActivity"
+        android:theme="@style/Theme.PlaygroundsReservations"
         tools:targetApi="31">
         <activity
-            android:name=".SelectSportsActivity"
+            android:name=".profile.ShowProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".profile.SelectSportsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".profile.EditProfileActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
