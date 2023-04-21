@@ -1,6 +1,4 @@
-package it.polito.mad.showprofileactivity
-
-import android.net.Uri
+package it.polito.mad.playgroundsreservations
 
 enum class Gender {
     MALE, FEMALE, OTHER

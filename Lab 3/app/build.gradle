@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'it.polito.mad.showprofileactivity'
+    namespace 'it.polito.mad.playgroundsreservations'
     compileSdk 33
 
     defaultConfig {
-        applicationId "it.polito.mad.showprofileactivity"
+        applicationId "it.polito.mad.playgroundsreservations"
         minSdk 24
         targetSdk 33
         versionCode 1

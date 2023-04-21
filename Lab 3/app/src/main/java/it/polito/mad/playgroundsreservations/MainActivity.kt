@@ -1,12 +1,9 @@
-package it.polito.mad.showprofileactivity
+package it.polito.mad.playgroundsreservations
 
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.*
@@ -17,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
-import java.io.File
 import java.io.FileInputStream
 
 class MainActivity : AppCompatActivity() {

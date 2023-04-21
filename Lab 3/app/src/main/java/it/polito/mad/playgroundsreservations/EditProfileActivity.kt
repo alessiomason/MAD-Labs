@@ -1,4 +1,4 @@
-package it.polito.mad.showprofileactivity
+package it.polito.mad.playgroundsreservations
 
 import android.app.Activity
 import android.content.ContentValues
@@ -9,7 +9,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
 import android.widget.EditText

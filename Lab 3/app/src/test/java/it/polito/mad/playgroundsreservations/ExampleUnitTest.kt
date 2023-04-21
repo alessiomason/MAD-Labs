@@ -1,4 +1,4 @@
-package it.polito.mad.showprofileactivity
+package it.polito.mad.playgroundsreservations
 
 import org.junit.Test
 
