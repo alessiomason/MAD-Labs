@@ -23,15 +23,14 @@
             android:name=".profile.ShowProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".profile.EditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".profile.SelectSportsActivity"
             android:exported="false" />
         <activity
-            android:name=".profile.EditProfileActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:name=".reservations.ReservationsActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

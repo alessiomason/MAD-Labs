@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import it.polito.mad.playgroundsreservations.database.Database
 import it.polito.mad.playgroundsreservations.profile.ShowProfileActivity
+import it.polito.mad.playgroundsreservations.reservations.ReservationsActivity
 
 class MainActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +15,7 @@ class MainActivity: AppCompatActivity() {
 
         val buttonReservations = findViewById<Button>(R.id.homeButtonReservations)
         buttonReservations.setOnClickListener {
-            val intent = Intent(this, ShowProfileActivity::class.java)
+            val intent = Intent(this, ReservationsActivity::class.java)
             startActivity(intent)
         }
 
