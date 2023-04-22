@@ -21,7 +21,6 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
     fun save(reservation: Reservation) {
         viewModelScope.launch {
             reservationsDao.save(reservation)
-            println("SAVED RESERVATION")
         }
     }
 
@@ -34,7 +33,6 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
     fun delete(reservation: Reservation) {
         viewModelScope.launch {
             reservationsDao.delete(reservation)
-            println("DELETED RESERVATION")
         }
     }
 }
