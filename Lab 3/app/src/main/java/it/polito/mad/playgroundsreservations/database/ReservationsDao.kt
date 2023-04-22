@@ -1,16 +1,19 @@
 package it.polito.mad.playgroundsreservations.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Delete
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.Companion.ABORT
-import androidx.room.Query
-import androidx.room.Update
 
-@androidx.room.Dao
+@Dao
 interface ReservationsDao {
     @Query("SELECT * FROM reservations")
     fun getAllReservations(): LiveData<List<Reservation>>
+
+    @Query("SELECT * FROM reservations WHERE sport = :sport")
+    fun getReservationsBySport(sport: Sports): LiveData<List<Reservation>>
+
+    @Query("SELECT * FROM reservations WHERE userId = :userId")
+    fun getUserReservations(userId: Int): LiveData<List<Reservation>>
 
     @Insert(onConflict = ABORT)
     suspend fun save(reservation: Reservation)
