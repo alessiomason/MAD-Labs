@@ -12,6 +12,9 @@ interface ReservationsDao {
     @Query("SELECT * FROM reservations WHERE sport = :sport")
     fun getReservationsBySport(sport: Sports): LiveData<List<Reservation>>
 
+    @Query("SELECT * FROM reservations WHERE playgroundID = :playgroundId")
+    fun getReservationsByPlayground(playgroundId: Int): LiveData<List<Reservation>>
+
     @Query("SELECT * FROM reservations WHERE userId = :userId")
     fun getUserReservations(userId: Int): LiveData<List<Reservation>>
 

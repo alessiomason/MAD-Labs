@@ -17,5 +17,6 @@ data class Reservation (
     val playgroundId: Int,
     val sport: Sports,
     val time: Date,
-    val duration: Duration
+    val duration: Duration,
+    val rentingEquipment: Boolean = false
 )
