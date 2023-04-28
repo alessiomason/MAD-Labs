@@ -5,22 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/navigation"
+        tools:layout="@layout/calendar_fragment" />
 
-    <com.stacktips.view.CustomCalendarView
-        android:id="@+id/calendar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:calendarBackgroundColor="@color/white"
-        app:calendarTitleTextColor="@color/black"
-        app:currentDayOfMonthColor="@color/black"
-        app:dayOfMonthTextColor="@color/black"
-        app:dayOfWeekTextColor="@color/black"
-        app:disabledDayBackgroundColor="@color/white"
-        app:disabledDayTextColor="@color/white"
-        app:selectedDayBackgroundColor="@color/black"
-        app:titleLayoutBackgroundColor="@color/white"
-        app:weekLayoutBackgroundColor="@color/white"
-        tools:ignore="MissingConstraints">
-    </com.stacktips.view.CustomCalendarView>
 </androidx.constraintlayout.widget.ConstraintLayout>
