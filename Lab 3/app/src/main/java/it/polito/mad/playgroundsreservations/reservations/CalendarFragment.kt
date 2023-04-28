@@ -2,6 +2,7 @@ package it.polito.mad.playgroundsreservations.reservations
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stacktips.view.CalendarListener
@@ -37,17 +39,21 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         var calendarView = view.findViewById<View>(R.id.calendar_view) as CustomCalendarView
         //Initialize calendar with date
         val currentCalendar = Calendar.getInstance(Locale.getDefault())
+        val decorators: MutableList<DayDecorator> = ArrayList()
+
+        listOfReservations.observe(viewLifecycleOwner) { reservations ->
+            var aus=reservations
+            decorators.add(DisabledColorDecorator(aus))
+            calendarView.decorators = decorators
+            calendarView.refreshCalendar(currentCalendar)
+        }
 
         //Show Monday as first date of week
         calendarView.setFirstDayOfWeek(Calendar.MONDAY)
 
-        val decorators: MutableList<DayDecorator> = ArrayList()
-        decorators.add(DisabledColorDecorator())
-        calendarView.decorators = decorators
-        calendarView.refreshCalendar(currentCalendar)
 
         //Handling custom calendar events
-        calendarView.setCalendarListener(object : CalendarListener {
+   /*     calendarView.setCalendarListener(object : CalendarListener {
             override fun onDateSelected(date: Date) {
                 val df = SimpleDateFormat("dd-MM-yyyy")
                 Toast.makeText(activity?.applicationContext, df.format(date), Toast.LENGTH_SHORT).show()
@@ -58,7 +64,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
                 Toast.makeText(activity?.applicationContext, df.format(date), Toast.LENGTH_SHORT).show()
             }
         })
-
+*/
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.listOfReservations)
         listOfReservations.observe(viewLifecycleOwner) {
@@ -108,13 +114,22 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
     }
 }
 
-private class DisabledColorDecorator : DayDecorator {
+private class DisabledColorDecorator(val reservations:List<Reservation>) : DayDecorator {
     override fun decorate(dayView: DayView) {
-        val color = Color.parseColor("#cc88cc")
-        dayView.setBackgroundColor(color)
+        reservations.forEach {
+            Log.d("time", it.time.date.toString())
+            Log.d("dayview", dayView.date.date.toString())
+            if((it.time.date.toString()+" "+it.time.month.toString()+" "+it.time.year.toString())==(dayView.date.date.toString()+" "+dayView.date.month.toString()+" "+dayView.date.year.toString()))
+            {
+                val color = Color.parseColor("#cc88cc")
+                dayView.setBackgroundColor(color)
+            }
+        }
+
 
     }
 }
+
 
 
 
