@@ -52,3 +52,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'androidx.room:room-testing:2.5.1'
 }
+dependencies {
+    implementation 'com.github.npanigrahy:Custom-Calendar-View:v1.1'
+}
