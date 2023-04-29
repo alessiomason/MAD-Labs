@@ -19,10 +19,21 @@ import com.stacktips.view.DayDecorator
 import com.stacktips.view.DayView
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Reservation
+import it.polito.mad.playgroundsreservations.database.Sports
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+
+// TENNIS, BASKETBALL, FOOTBALL, VOLLEYBALL, GOLF
+
+const val TENNIS_COLOR = "#ccff00"
+const val BASKETBALL_COLOR = "#cc00cc"
+const val FOOTBALL_COLOR = "#ff0000"
+const val VOLLEYBALL_COLOR = "#ffb8ae"
+const val GOLF_COLOR = "#1ba465"
+const val MULTIPLE_COLOR = "#ffa500"
+
 
 
 class CalendarFragment: Fragment(R.layout.calendar_fragment) {
@@ -42,7 +53,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         val decorators: MutableList<DayDecorator> = ArrayList()
 
         listOfReservations.observe(viewLifecycleOwner) { reservations ->
-            var aus=reservations
+            var aus = reservations
             decorators.add(DisabledColorDecorator(aus))
             calendarView.decorators = decorators
             calendarView.refreshCalendar(currentCalendar)
@@ -116,13 +127,34 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 
 private class DisabledColorDecorator(val reservations:List<Reservation>) : DayDecorator {
     override fun decorate(dayView: DayView) {
+        var coincidenze = 0
         reservations.forEach {
-            Log.d("time", it.time.date.toString())
-            Log.d("dayview", dayView.date.date.toString())
-            if((it.time.date.toString()+" "+it.time.month.toString()+" "+it.time.year.toString())==(dayView.date.date.toString()+" "+dayView.date.month.toString()+" "+dayView.date.year.toString()))
-            {
-                val color = Color.parseColor("#cc88cc")
-                dayView.setBackgroundColor(color)
+            if(it.time.date == dayView.date.date &&
+                it.time.month == dayView.date.month &&
+                it.time.year == dayView.date.year
+            ) {
+                coincidenze++
+                if (coincidenze > 1) {
+                    val color = Color.parseColor(MULTIPLE_COLOR)
+                    dayView.setBackgroundColor(color)
+                    coincidenze--
+                }
+                else if (it.sport == Sports.TENNIS) {
+                    val color = Color.parseColor(TENNIS_COLOR)
+                    dayView.setBackgroundColor(color)
+                } else if (it.sport == Sports.BASKETBALL) {
+                    val color = Color.parseColor(BASKETBALL_COLOR)
+                    dayView.setBackgroundColor(color)
+                } else if (it.sport == Sports.FOOTBALL) {
+                    val color = Color.parseColor(FOOTBALL_COLOR)
+                    dayView.setBackgroundColor(color)
+                } else if (it.sport == Sports.VOLLEYBALL) {
+                    val color = Color.parseColor(VOLLEYBALL_COLOR)
+                    dayView.setBackgroundColor(color)
+                } else if (it.sport == Sports.GOLF) {
+                    val color = Color.parseColor(GOLF_COLOR)
+                    dayView.setBackgroundColor(color)
+                }
             }
         }
 

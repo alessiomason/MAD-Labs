@@ -35,8 +35,19 @@ class ReservationsActivity: AppCompatActivity() {
             .findFragmentById(R.id.fragmentContainerView) as NavHostFragment)
             .navController
 
-        val reservation = Reservation(userId = 1, playgroundId = 1, sport = Sports.FOOTBALL, time = Date(), duration = Duration.ofHours(1))
+        val reservationFOOTBALL = Reservation(userId = 1, playgroundId = 1, sport = Sports.FOOTBALL, time = Date(123, 3, 12), duration = Duration.ofHours(1))
+        val reservationBASKETBALL = Reservation(userId = 1, playgroundId = 1, sport = Sports.BASKETBALL, time = Date(123,3,1), duration = Duration.ofHours(1))
+        val reservationGOLF = Reservation(userId = 1, playgroundId = 1, sport = Sports.GOLF, time = Date(123,3,10), duration = Duration.ofHours(1))
+        val reservationTENNIS = Reservation(userId = 1, playgroundId = 1, sport = Sports.TENNIS, time = Date(123,3,22), duration = Duration.ofHours(1))
+        val reservationVOLLEYBALL = Reservation(userId = 1, playgroundId = 1, sport = Sports.VOLLEYBALL, time = Date(123,3,26), duration = Duration.ofHours(1))
 
-        reservationsViewModel.save(reservation)
+        val reservationStessoGiorno1 = Reservation(userId = 1, playgroundId = 1, sport = Sports.GOLF, time = Date(123,3,22), duration = Duration.ofHours(1))
+        // val reservationStessoGiorno2 = Reservation(userId = 1, playgroundId = 1, sport = Sports.BASKETBALL, time = Date(123,3,26), duration = Duration.ofHours(1))
+
+        val reservations = listOf(reservationFOOTBALL, reservationBASKETBALL, reservationGOLF, reservationTENNIS, reservationVOLLEYBALL, reservationStessoGiorno1)
+
+        reservations.forEach { reservation ->
+            reservationsViewModel.save(reservation)
+        }
     }
 }

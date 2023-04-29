@@ -20,7 +20,7 @@
         app:layout_constraintBottom_toTopOf="@id/listOfReservations"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:selectedDayBackgroundColor="@color/black"
+        app:selectedDayBackgroundColor="@color/red"
         app:titleLayoutBackgroundColor="@color/white"
         app:weekLayoutBackgroundColor="@color/white"></com.stacktips.view.CustomCalendarView>
 
