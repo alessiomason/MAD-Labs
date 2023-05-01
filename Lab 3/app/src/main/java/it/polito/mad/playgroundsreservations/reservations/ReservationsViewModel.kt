@@ -35,24 +35,24 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
 
             val playgroundsList = mutableListOf<Playground>()
             playgroundsList.add(Playground(
-                name = "Tennis Centre",
-                address = "Sports Centre Avenue",
+                name = "Tennis Center",
+                address = "Sports Center Avenue",
                 sport = Sports.TENNIS))
             playgroundsList.add(Playground(
-                name = "Basketball Centre",
-                address = "Sports Centre Avenue",
+                name = "Basketball Center",
+                address = "Sports Center Avenue",
                 sport = Sports.BASKETBALL))
             playgroundsList.add(Playground(
-                name = "Football Centre",
-                address = "Sports Centre Avenue",
+                name = "Football Center",
+                address = "Sports Center Avenue",
                 sport = Sports.FOOTBALL))
             playgroundsList.add(Playground(
-                name = "Volleyball Centre",
-                address = "Sports Centre Avenue",
+                name = "Volleyball Center",
+                address = "Sports Center Avenue",
                 sport = Sports.VOLLEYBALL))
             playgroundsList.add(Playground(
-                name = "Golf Centre",
-                address = "Sports Centre Avenue",
+                name = "Golf Center",
+                address = "Sports Center Avenue",
                 sport = Sports.GOLF))
 
             playgroundsList.forEach { p ->

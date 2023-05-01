@@ -17,6 +17,7 @@ import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
 import com.stacktips.view.DayView
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
 import java.time.Instant
@@ -36,6 +37,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 
         val reservationsViewModel by viewModels<ReservationsViewModel>()
         val reservations = reservationsViewModel.getUserReservations(1)
+        val playgrounds = reservationsViewModel.playgrounds
 
         //Initialize CustomCalendarView from layout
         val calendarView = view.findViewById<View>(R.id.calendar_view) as CustomCalendarView
@@ -70,7 +72,9 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
                     val reservationLocalDate = r.time.withZoneSameInstant(zoneId).toLocalDate()
                     reservationLocalDate.isEqual(tappedDayDate)
                 }
-                recyclerView.adapter = MyAdapter(displayedReservations, navController)
+                playgrounds.observe(viewLifecycleOwner) {
+                    recyclerView.adapter = MyAdapter(displayedReservations, it, navController)
+                }
             }
         }
 
@@ -82,7 +86,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         abstract fun unbind()
     }
 
-    class ItemViewHolder(private val view: View): MyViewHolder(view) {
+    class ItemViewHolder(private val view: View, private val playgrounds: List<Playground>): MyViewHolder(view) {
         private val titleTextView = view.findViewById<TextView>(R.id.reservation_box_title)
         private val sportTextView = view.findViewById<TextView>(R.id.reservation_box_sport)
         private val durationTextView = view.findViewById<TextView>(R.id.reservation_box_duration)
@@ -102,7 +106,10 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
             sportTextView.text = view.context.getString(sportText)
 
             durationTextView.text = view.context.getString(R.string.reservation_box_duration, r.duration.toHours())
-            playgroundTextView.text = view.context.getString(R.string.reservation_box_playground_name, r.playgroundId.toString())
+            playgroundTextView.text = view.context.getString(
+                R.string.reservation_box_playground_name,
+                playgrounds.find { it.id == r.playgroundId }?.name ?: ""
+            )
 
             super.itemView.setOnClickListener { onTap(pos) }
         }
@@ -128,12 +135,13 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 
     class MyAdapter(
         private val reservations: List<Reservation>,
+        private val playgrounds: List<Playground>,
         private val navController: NavController
         ): RecyclerView.Adapter<MyViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val v = LayoutInflater.from(parent.context)
                 .inflate(viewType, parent, false)
-            return if (viewType == R.layout.personal_reservation_add_box) DefaultViewHolder(v) else ItemViewHolder(v)
+            return if (viewType == R.layout.personal_reservation_add_box) DefaultViewHolder(v) else ItemViewHolder(v, playgrounds)
         }
 
         override fun getItemCount(): Int {
