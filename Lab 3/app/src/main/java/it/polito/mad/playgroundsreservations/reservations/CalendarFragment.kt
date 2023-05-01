@@ -107,7 +107,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
     }
 
     class MyAdapter(
-        private val listOfReservations: List<Reservation>,
+        private val reservations: List<Reservation>,
         private val navController: NavController
         ): RecyclerView.Adapter<MyViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -117,12 +117,12 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         }
 
         override fun getItemCount(): Int {
-            return listOfReservations.size
+            return reservations.size
         }
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            holder.bind(listOfReservations[position], position) {
-                val action = CalendarFragmentDirections.actionCalendarFragmentToShowReservationFragment(listOfReservations[position].id)
+            holder.bind(reservations[position], position) {
+                val action = CalendarFragmentDirections.actionCalendarFragmentToShowReservationFragment(reservations[position].id)
                 navController.navigate(action)
             }
         }

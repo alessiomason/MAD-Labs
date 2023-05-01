@@ -1,6 +1,7 @@
 package it.polito.mad.playgroundsreservations.reservations
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,14 +14,56 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
     private val reservationsDao: ReservationsDao
     private val userDao: UserDao
     private val playgroundsDao: PlaygroundsDao
+    val dbUpdated: Boolean
 
     init {
         val db = Database.getDatabase(application.applicationContext)
         reservationsDao = db.reservationsDao()
         userDao = db.userDao()
         playgroundsDao = db.playgroundsDao()
+
+        val sharedPref = application.getSharedPreferences("dbPreferences", Context.MODE_PRIVATE)
+        val savedDbVersion = sharedPref.getInt("dbVersion", 0)
+        val currentDbVersion = db.openHelper.readableDatabase.version
+        dbUpdated = savedDbVersion > currentDbVersion || savedDbVersion == 0
+
+        if (dbUpdated) {
+            with(sharedPref.edit()) {
+                putInt("dbVersion", currentDbVersion)
+                apply()
+            }
+
+            val playgroundsList = mutableListOf<Playground>()
+            playgroundsList.add(Playground(
+                name = "Tennis Centre",
+                address = "Sports Centre Avenue",
+                sport = Sports.TENNIS))
+            playgroundsList.add(Playground(
+                name = "Basketball Centre",
+                address = "Sports Centre Avenue",
+                sport = Sports.BASKETBALL))
+            playgroundsList.add(Playground(
+                name = "Football Centre",
+                address = "Sports Centre Avenue",
+                sport = Sports.FOOTBALL))
+            playgroundsList.add(Playground(
+                name = "Volleyball Centre",
+                address = "Sports Centre Avenue",
+                sport = Sports.VOLLEYBALL))
+            playgroundsList.add(Playground(
+                name = "Golf Centre",
+                address = "Sports Centre Avenue",
+                sport = Sports.GOLF))
+
+            playgroundsList.forEach { p ->
+                viewModelScope.launch {
+                    playgroundsDao.save(p)
+                }
+            }
+        }
     }
 
+    val playgrounds = playgroundsDao.getAllPlaygrounds()
     val reservations = reservationsDao.getAllReservations()
 
     fun getReservationsBySport(sport: Sports): LiveData<List<Reservation>> {
