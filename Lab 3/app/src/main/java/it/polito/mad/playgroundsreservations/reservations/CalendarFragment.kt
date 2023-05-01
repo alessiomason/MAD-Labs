@@ -1,30 +1,21 @@
 package it.polito.mad.playgroundsreservations.reservations
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
 import com.stacktips.view.DayView
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 class CalendarFragment: Fragment(R.layout.calendar_fragment) {
@@ -50,36 +41,35 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         //Show Monday as first date of week
         calendarView.firstDayOfWeek = Calendar.MONDAY
 
-
-        //Handling custom calendar events
-   /*     calendarView.setCalendarListener(object : CalendarListener {
-            override fun onDateSelected(date: Date) {
-                val df = SimpleDateFormat("dd-MM-yyyy")
-                Toast.makeText(activity?.applicationContext, df.format(date), Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onMonthChanged(date: Date) {
-                val df = SimpleDateFormat("MM-yyyy")
-                Toast.makeText(activity?.applicationContext, df.format(date), Toast.LENGTH_SHORT).show()
-            }
-        })
-*/
-
         val recyclerView = view.findViewById<RecyclerView>(R.id.listOfReservations)
         listOfReservations.observe(viewLifecycleOwner) {
             recyclerView.adapter = MyAdapter(it)
         }
 
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
-
-
     }
 
-    class MyViewHolder(v: View): RecyclerView.ViewHolder(v) {
-        private val tv: TextView = v.findViewById(R.id.reservation_box_text)
+    class MyViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
+        private val titleTextView = view.findViewById<TextView>(R.id.reservation_box_title)
+        private val sportTextView = view.findViewById<TextView>(R.id.reservation_box_sport)
+        private val durationTextView = view.findViewById<TextView>(R.id.reservation_box_duration)
+        private val playgroundTextView = view.findViewById<TextView>(R.id.reservation_box_playground)
 
         fun bind(r: Reservation, pos: Int, onTap: (Int) -> Unit) {
-            tv.text = r.sport.toString()
+            titleTextView.text = view.context.getString(R.string.reservation_box_title, r.time.toLocalDate(), r.time.toLocalTime())
+
+            val sportText = when (r.sport) {
+                Sports.TENNIS -> R.string.sport_tennis
+                Sports.BASKETBALL -> R.string.sport_basketball
+                Sports.FOOTBALL -> R.string.sport_football
+                Sports.VOLLEYBALL -> R.string.sport_volleyball
+                Sports.GOLF -> R.string.sport_golf
+            }
+            sportTextView.text = view.context.getString(sportText)
+
+            durationTextView.text = view.context.getString(R.string.reservation_box_duration, r.duration.toHours())
+            playgroundTextView.text = view.context.getString(R.string.reservation_box_playground_name, r.playgroundId.toString())
+
             super.itemView.setOnClickListener { onTap(pos) }
         }
 

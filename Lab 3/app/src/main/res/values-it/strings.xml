@@ -34,4 +34,9 @@
     <string name="basketball_court_description">Superficie interna in parquet</string>
     <string name="football_pitch">Campo da calcio</string>
     <string name="football_pitch_description">Campo erba sintetico a 11</string>
+
+    <!-- RESERVATIONS -->
+    <string name="reservation_box_title">Prenotazione per il giorno %1$s alle ore %2$s</string>
+    <string name="reservation_box_duration">Durata: %1$d ore</string>
+    <string name="reservation_box_playground_name">Campo: %1$s</string>
 </resources>
