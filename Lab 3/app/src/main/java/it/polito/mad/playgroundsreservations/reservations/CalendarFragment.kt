@@ -7,24 +7,34 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
 import com.stacktips.view.DayView
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
+
 class CalendarFragment: Fragment(R.layout.calendar_fragment) {
+    private val zoneId = ZoneId.systemDefault()
+    private var tappedDay = MutableLiveData(Instant.now().atZone(zoneId).toLocalDate())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val reservationsViewModel by viewModels<ReservationsViewModel>()
-        val listOfReservations = reservationsViewModel.getUserReservations(1)
+        val reservations = reservationsViewModel.getUserReservations(1)
 
         //Initialize CustomCalendarView from layout
         val calendarView = view.findViewById<View>(R.id.calendar_view) as CustomCalendarView
@@ -32,8 +42,8 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         val currentCalendar = Calendar.getInstance(Locale.getDefault())
         val decorators: MutableList<DayDecorator> = ArrayList()
 
-        listOfReservations.observe(viewLifecycleOwner) { reservations ->
-            decorators.add(DisabledColorDecorator(reservations))
+        reservations.observe(viewLifecycleOwner) {
+            decorators.add(DisabledColorDecorator(it))
             calendarView.decorators = decorators
             calendarView.refreshCalendar(currentCalendar)
         }
@@ -41,9 +51,26 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         //Show Monday as first date of week
         calendarView.firstDayOfWeek = Calendar.MONDAY
 
+        //Handling custom calendar events
+        calendarView.setCalendarListener(object : CalendarListener {
+            override fun onDateSelected(date: Date?) {
+                if (date != null)
+                    tappedDay.postValue(date.toInstant().atZone(zoneId).toLocalDate())
+            }
+
+            override fun onMonthChanged(date: Date?) { }
+        })
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.listOfReservations)
-        listOfReservations.observe(viewLifecycleOwner) {
-            recyclerView.adapter = MyAdapter(it)
+
+        tappedDay.observe(viewLifecycleOwner) { tappedDayDate ->
+            reservations.observe(viewLifecycleOwner) {
+                val displayedReservations = it.filter { r ->
+                    val reservationLocalDate = r.time.withZoneSameInstant(zoneId).toLocalDate()
+                    reservationLocalDate.isEqual(tappedDayDate)
+                }
+                recyclerView.adapter = MyAdapter(displayedReservations)
+            }
         }
 
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
@@ -104,12 +131,13 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 }
 
 private class DisabledColorDecorator(val reservations: List<Reservation>) : DayDecorator {
+    private val zoneId = ZoneId.systemDefault()
+
     override fun decorate(dayView: DayView) {
         var coincidenze = 0
         reservations.forEach { reservation ->
-            val reservationDate = reservation.time.toLocalDate()
-            val reservationDateZoneId = reservation.time.zone
-            val dayViewDate = dayView.date.toInstant().atZone(reservationDateZoneId).toLocalDate()
+            val reservationDate = reservation.time.withZoneSameInstant(zoneId).toLocalDate()
+            val dayViewDate = dayView.date.toInstant().atZone(zoneId).toLocalDate()
 
             if(reservationDate.isEqual(dayViewDate)) {
                 coincidenze++
