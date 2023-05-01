@@ -12,4 +12,10 @@
     <color name="primaryVariant">#003549</color>
     <color name="secondary">#007FAC</color>
     <color name="secondaryVariant">#00668B</color>
+    <color name="TENNIS_COLOR">#CCFF00</color>
+    <color name="BASKETBALL_COLOR">#CC00CC</color>
+    <color name="FOOTBALL_COLOR">#FF0000</color>
+    <color name="VOLLEYBALL_COLOR">#FFB8AE</color>
+    <color name="GOLF_COLOR">#1BA465</color>
+    <color name="MULTIPLE_COLOR">#FFA500</color>
 </resources>

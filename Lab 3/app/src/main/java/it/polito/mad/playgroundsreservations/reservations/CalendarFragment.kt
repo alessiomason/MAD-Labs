@@ -25,42 +25,28 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-// TENNIS, BASKETBALL, FOOTBALL, VOLLEYBALL, GOLF
-
-const val TENNIS_COLOR = "#ccff00"
-const val BASKETBALL_COLOR = "#cc00cc"
-const val FOOTBALL_COLOR = "#ff0000"
-const val VOLLEYBALL_COLOR = "#ffb8ae"
-const val GOLF_COLOR = "#1ba465"
-const val MULTIPLE_COLOR = "#ffa500"
-
-
-
 class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val reservationsViewModel by viewModels<ReservationsViewModel>()
         val listOfReservations = reservationsViewModel.getUserReservations(1)
 
-
         //Initialize CustomCalendarView from layout
-        var calendarView = view.findViewById<View>(R.id.calendar_view) as CustomCalendarView
+        val calendarView = view.findViewById<View>(R.id.calendar_view) as CustomCalendarView
         //Initialize calendar with date
         val currentCalendar = Calendar.getInstance(Locale.getDefault())
         val decorators: MutableList<DayDecorator> = ArrayList()
 
         listOfReservations.observe(viewLifecycleOwner) { reservations ->
-            var aus = reservations
-            decorators.add(DisabledColorDecorator(aus))
+            decorators.add(DisabledColorDecorator(reservations))
             calendarView.decorators = decorators
             calendarView.refreshCalendar(currentCalendar)
         }
 
         //Show Monday as first date of week
-        calendarView.setFirstDayOfWeek(Calendar.MONDAY)
+        calendarView.firstDayOfWeek = Calendar.MONDAY
 
 
         //Handling custom calendar events
@@ -135,25 +121,19 @@ private class DisabledColorDecorator(val reservations:List<Reservation>) : DayDe
             ) {
                 coincidenze++
                 if (coincidenze > 1) {
-                    val color = Color.parseColor(MULTIPLE_COLOR)
-                    dayView.setBackgroundColor(color)
+                    dayView.setBackgroundResource(R.color.MULTIPLE_COLOR)
                     coincidenze--
                 }
                 else if (it.sport == Sports.TENNIS) {
-                    val color = Color.parseColor(TENNIS_COLOR)
-                    dayView.setBackgroundColor(color)
+                    dayView.setBackgroundResource(R.color.TENNIS_COLOR)
                 } else if (it.sport == Sports.BASKETBALL) {
-                    val color = Color.parseColor(BASKETBALL_COLOR)
-                    dayView.setBackgroundColor(color)
+                    dayView.setBackgroundResource(R.color.BASKETBALL_COLOR)
                 } else if (it.sport == Sports.FOOTBALL) {
-                    val color = Color.parseColor(FOOTBALL_COLOR)
-                    dayView.setBackgroundColor(color)
+                    dayView.setBackgroundResource(R.color.FOOTBALL_COLOR)
                 } else if (it.sport == Sports.VOLLEYBALL) {
-                    val color = Color.parseColor(VOLLEYBALL_COLOR)
-                    dayView.setBackgroundColor(color)
+                    dayView.setBackgroundResource(R.color.VOLLEYBALL_COLOR)
                 } else if (it.sport == Sports.GOLF) {
-                    val color = Color.parseColor(GOLF_COLOR)
-                    dayView.setBackgroundColor(color)
+                    dayView.setBackgroundResource(R.color.GOLF_COLOR)
                 }
             }
         }
