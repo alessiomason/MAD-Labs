@@ -2,17 +2,19 @@ package it.polito.mad.playgroundsreservations.database
 
 import androidx.room.TypeConverter
 import java.time.Duration
-import java.util.*
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class TypeConverters {
     @TypeConverter
-    fun dateFromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
+    fun zonedDateTimeFromString(value: String?): ZonedDateTime? {
+        return value?.let { ZonedDateTime.parse(value) }
     }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
+    fun zonedDateTimeToString(zonedDateTime: ZonedDateTime?): String? {
+        val formatter = DateTimeFormatter.ISO_ZONED_DATE_TIME
+        return zonedDateTime?.format(formatter)
     }
 
     @TypeConverter

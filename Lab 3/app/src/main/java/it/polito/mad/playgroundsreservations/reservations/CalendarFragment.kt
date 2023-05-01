@@ -21,6 +21,8 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -86,7 +88,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         }
     }
 
-    class MyAdapter(val listOfReservations: List<Reservation>): RecyclerView.Adapter<MyViewHolder>() {
+    class MyAdapter(private val listOfReservations: List<Reservation>): RecyclerView.Adapter<MyViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val v = LayoutInflater.from(parent.context)
                 .inflate(viewType, parent, false)
@@ -111,37 +113,32 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
     }
 }
 
-private class DisabledColorDecorator(val reservations:List<Reservation>) : DayDecorator {
+private class DisabledColorDecorator(val reservations: List<Reservation>) : DayDecorator {
     override fun decorate(dayView: DayView) {
         var coincidenze = 0
-        reservations.forEach {
-            if(it.time.date == dayView.date.date &&
-                it.time.month == dayView.date.month &&
-                it.time.year == dayView.date.year
-            ) {
+        reservations.forEach { reservation ->
+            val reservationDate = reservation.time.toLocalDate()
+            val reservationDateZoneId = reservation.time.zone
+            val dayViewDate = dayView.date.toInstant().atZone(reservationDateZoneId).toLocalDate()
+
+            if(reservationDate.isEqual(dayViewDate)) {
                 coincidenze++
                 if (coincidenze > 1) {
                     dayView.setBackgroundResource(R.color.MULTIPLE_COLOR)
                     coincidenze--
                 }
-                else if (it.sport == Sports.TENNIS) {
+                else if (reservation.sport == Sports.TENNIS) {
                     dayView.setBackgroundResource(R.color.TENNIS_COLOR)
-                } else if (it.sport == Sports.BASKETBALL) {
+                } else if (reservation.sport == Sports.BASKETBALL) {
                     dayView.setBackgroundResource(R.color.BASKETBALL_COLOR)
-                } else if (it.sport == Sports.FOOTBALL) {
+                } else if (reservation.sport == Sports.FOOTBALL) {
                     dayView.setBackgroundResource(R.color.FOOTBALL_COLOR)
-                } else if (it.sport == Sports.VOLLEYBALL) {
+                } else if (reservation.sport == Sports.VOLLEYBALL) {
                     dayView.setBackgroundResource(R.color.VOLLEYBALL_COLOR)
-                } else if (it.sport == Sports.GOLF) {
+                } else if (reservation.sport == Sports.GOLF) {
                     dayView.setBackgroundResource(R.color.GOLF_COLOR)
                 }
             }
         }
-
-
     }
 }
-
-
-
-

@@ -3,7 +3,7 @@ package it.polito.mad.playgroundsreservations.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.Duration
-import java.util.*
+import java.time.ZonedDateTime
 
 enum class Sports {
     TENNIS, BASKETBALL, FOOTBALL, VOLLEYBALL, GOLF
@@ -16,7 +16,7 @@ data class Reservation (
     val userId: Int,
     val playgroundId: Int,
     val sport: Sports,
-    val time: Date,
+    val time: ZonedDateTime,
     val duration: Duration,
     val rentingEquipment: Boolean = false
 )

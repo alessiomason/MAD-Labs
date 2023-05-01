@@ -5,7 +5,7 @@ import androidx.room.AutoMigration
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@androidx.room.Database(entities = [Reservation::class, Playground::class, User::class], version = 6/*, autoMigrations = [AutoMigration(from = 1, to = 2)]*/)
+@androidx.room.Database(entities = [Reservation::class, Playground::class, User::class], version = 7/*, autoMigrations = [AutoMigration(from = 1, to = 2)]*/)
 @androidx.room.TypeConverters(TypeConverters::class)
 abstract class Database: RoomDatabase() {
     abstract fun reservationsDao(): ReservationsDao
