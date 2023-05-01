@@ -68,13 +68,22 @@ class ReservationsActivity: AppCompatActivity() {
                     duration = Duration.ofHours(2)
                 )
 
+                val reservationSameDaySameSport = Reservation(
+                    userId = 1,
+                    playgroundId = playgroundsList.find { it.sport == Sports.VOLLEYBALL }?.id ?: 0,
+                    sport = Sports.VOLLEYBALL,
+                    time = ZonedDateTime.of(2023, 5, 26, 14, 0, 0, 0, zoneId),
+                    duration = Duration.ofHours(2)
+                )
+
                 val reservations = listOf(
                     reservationFOOTBALL,
                     reservationBASKETBALL,
                     reservationGOLF,
                     reservationTENNIS,
                     reservationVOLLEYBALL,
-                    reservationSameDay
+                    reservationSameDay,
+                    reservationSameDaySameSport
                 )
                 reservations.forEach { reservation ->
                     reservationsViewModel.save(reservation)

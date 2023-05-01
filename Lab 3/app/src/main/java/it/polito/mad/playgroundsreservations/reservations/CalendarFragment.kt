@@ -171,26 +171,33 @@ private class DisabledColorDecorator(val reservations: List<Reservation>) : DayD
     private val zoneId = ZoneId.systemDefault()
 
     override fun decorate(dayView: DayView) {
-        var coincidenze = 0
-        reservations.forEach { reservation ->
-            val reservationDate = reservation.time.withZoneSameInstant(zoneId).toLocalDate()
+        var occurrences = 0
+        var previousSport = Sports.BASKETBALL
+        val sortedReservations = reservations.sortedBy { it.time } // sorted by day of reservation
+
+        for (r in sortedReservations.indices) { // index iteration, so I can have access to previous index
+            val reservationDate = sortedReservations[r].time.withZoneSameInstant(zoneId).toLocalDate()
             val dayViewDate = dayView.date.toInstant().atZone(zoneId).toLocalDate()
 
+            if (r>0) // only after first iteration
+                previousSport = sortedReservations[r-1].sport
+
             if(reservationDate.isEqual(dayViewDate)) {
-                coincidenze++
-                if (coincidenze > 1) {
-                    dayView.setBackgroundResource(R.color.MULTIPLE_COLOR)
-                    coincidenze--
+                occurrences++
+                if (occurrences > 1) {
+                    if (sortedReservations[r].sport != previousSport)
+                        dayView.setBackgroundResource(R.color.MULTIPLE_COLOR)
+                    occurrences--
                 }
-                else if (reservation.sport == Sports.TENNIS) {
+                else if (sortedReservations[r].sport == Sports.TENNIS) {
                     dayView.setBackgroundResource(R.color.TENNIS_COLOR)
-                } else if (reservation.sport == Sports.BASKETBALL) {
+                } else if (sortedReservations[r].sport == Sports.BASKETBALL) {
                     dayView.setBackgroundResource(R.color.BASKETBALL_COLOR)
-                } else if (reservation.sport == Sports.FOOTBALL) {
+                } else if (sortedReservations[r].sport == Sports.FOOTBALL) {
                     dayView.setBackgroundResource(R.color.FOOTBALL_COLOR)
-                } else if (reservation.sport == Sports.VOLLEYBALL) {
+                } else if (sortedReservations[r].sport == Sports.VOLLEYBALL) {
                     dayView.setBackgroundResource(R.color.VOLLEYBALL_COLOR)
-                } else if (reservation.sport == Sports.GOLF) {
+                } else if (sortedReservations[r].sport == Sports.GOLF) {
                     dayView.setBackgroundResource(R.color.GOLF_COLOR)
                 }
             }
