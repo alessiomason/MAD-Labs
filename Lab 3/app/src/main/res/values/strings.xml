@@ -35,7 +35,8 @@
     <string name="football_pitch_description">11 external pitch</string>
 
     <!-- RESERVATIONS -->
-    <string name="reservation_box_title">Reservation on %1$s at %2$s</string>
+    <string name="reservation_box_title">Reservation at %1$s</string>
+    <string name="personal_reservation_box_title">Reservation on %1$s at %2$s</string>
     <string name="reservation_box_duration">Duration: %1$d hours</string>
     <string name="reservation_box_playground_name">Playground: %1$s</string>
 </resources>

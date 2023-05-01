@@ -77,14 +77,20 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
     }
 
-    class MyViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
+    abstract class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        abstract fun bind(r: Reservation?, pos: Int, onTap: (Int) -> Unit)
+        abstract fun unbind()
+    }
+
+    class ItemViewHolder(private val view: View): MyViewHolder(view) {
         private val titleTextView = view.findViewById<TextView>(R.id.reservation_box_title)
         private val sportTextView = view.findViewById<TextView>(R.id.reservation_box_sport)
         private val durationTextView = view.findViewById<TextView>(R.id.reservation_box_duration)
         private val playgroundTextView = view.findViewById<TextView>(R.id.reservation_box_playground)
 
-        fun bind(r: Reservation, pos: Int, onTap: (Int) -> Unit) {
-            titleTextView.text = view.context.getString(R.string.reservation_box_title, r.time.toLocalDate(), r.time.toLocalTime())
+        override fun bind(r: Reservation?, pos: Int, onTap: (Int) -> Unit) {
+            r!! // abstract class requires nullable reservation, but for this class a reservation has to be passed
+            titleTextView.text = view.context.getString(R.string.personal_reservation_box_title, r.time.toLocalDate(), r.time.toLocalTime())
 
             val sportText = when (r.sport) {
                 Sports.TENNIS -> R.string.sport_tennis
@@ -101,9 +107,23 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
             super.itemView.setOnClickListener { onTap(pos) }
         }
 
-        fun unbind() {
+        override fun unbind() {
             super.itemView.setOnClickListener(null)
         }
+    }
+
+    class DefaultViewHolder(private val view: View): MyViewHolder(view) {
+        override fun bind(r: Reservation?, pos: Int, onTap: (Int) -> Unit) {
+            val plusTextView = view.findViewById<TextView>(R.id.reservation_box_plus)
+            plusTextView.setOnClickListener {
+                // TODO navigate
+            }
+        }
+
+        override fun unbind() {
+            super.itemView.setOnClickListener(null)
+        }
+
     }
 
     class MyAdapter(
@@ -113,15 +133,17 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val v = LayoutInflater.from(parent.context)
                 .inflate(viewType, parent, false)
-            return MyViewHolder(v)
+            return if (viewType == R.layout.personal_reservation_add_box) DefaultViewHolder(v) else ItemViewHolder(v)
         }
 
         override fun getItemCount(): Int {
-            return reservations.size
+            return reservations.size + 1
         }
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            holder.bind(reservations[position], position) {
+            if (position == reservations.size)
+                holder.bind(null, position) { }   // passes values that will not be used
+            else holder.bind(reservations[position], position) {
                 val action = CalendarFragmentDirections.actionCalendarFragmentToShowReservationFragment(reservations[position].id)
                 navController.navigate(action)
             }
@@ -132,7 +154,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         }
 
         override fun getItemViewType(position: Int): Int {
-            return R.layout.reservation_box_layout
+            return if (position == reservations.size) R.layout.personal_reservation_add_box else R.layout.personal_reservation_box
         }
     }
 }
