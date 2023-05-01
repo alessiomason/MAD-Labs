@@ -7,5 +7,13 @@
     <fragment
         android:id="@+id/calendarFragment"
         android:name="it.polito.mad.playgroundsreservations.reservations.CalendarFragment"
-        android:label="CalendarFragment" />
+        android:label="CalendarFragment" >
+        <action
+            android:id="@+id/action_calendarFragment_to_showReservationFragment"
+            app:destination="@id/showReservationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/showReservationFragment"
+        android:name="it.polito.mad.playgroundsreservations.reservations.ShowReservationFragment"
+        android:label="ShowReservationFragment" />
 </navigation>

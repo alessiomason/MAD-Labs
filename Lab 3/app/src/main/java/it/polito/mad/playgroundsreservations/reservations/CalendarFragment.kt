@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stacktips.view.CalendarListener
@@ -19,19 +20,19 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
 import java.time.Instant
-import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-
 class CalendarFragment: Fragment(R.layout.calendar_fragment) {
     private val zoneId = ZoneId.systemDefault()
     private var tappedDay = MutableLiveData(Instant.now().atZone(zoneId).toLocalDate())
+    private lateinit var navController: NavController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navController = view.findNavController()
 
         val reservationsViewModel by viewModels<ReservationsViewModel>()
         val reservations = reservationsViewModel.getUserReservations(1)
@@ -69,7 +70,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
                     val reservationLocalDate = r.time.withZoneSameInstant(zoneId).toLocalDate()
                     reservationLocalDate.isEqual(tappedDayDate)
                 }
-                recyclerView.adapter = MyAdapter(displayedReservations)
+                recyclerView.adapter = MyAdapter(displayedReservations, navController)
             }
         }
 
@@ -105,7 +106,10 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         }
     }
 
-    class MyAdapter(private val listOfReservations: List<Reservation>): RecyclerView.Adapter<MyViewHolder>() {
+    class MyAdapter(
+        private val listOfReservations: List<Reservation>,
+        private val navController: NavController
+        ): RecyclerView.Adapter<MyViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val v = LayoutInflater.from(parent.context)
                 .inflate(viewType, parent, false)
@@ -117,7 +121,9 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         }
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            holder.bind(listOfReservations[position], position) {  }
+            holder.bind(listOfReservations[position], position) {
+                navController.navigate(R.id.action_calendarFragment_to_showReservationFragment)
+            }
         }
 
         override fun onViewRecycled(holder: MyViewHolder) {
