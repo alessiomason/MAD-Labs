@@ -122,7 +122,8 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             holder.bind(listOfReservations[position], position) {
-                navController.navigate(R.id.action_calendarFragment_to_showReservationFragment)
+                val action = CalendarFragmentDirections.actionCalendarFragmentToShowReservationFragment(listOfReservations[position].id)
+                navController.navigate(action)
             }
         }
 

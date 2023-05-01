@@ -15,5 +15,9 @@
     <fragment
         android:id="@+id/showReservationFragment"
         android:name="it.polito.mad.playgroundsreservations.reservations.ShowReservationFragment"
-        android:label="ShowReservationFragment" />
+        android:label="ShowReservationFragment" >
+        <argument
+            android:name="reservationId"
+            app:argType="integer" />
+    </fragment>
 </navigation>
