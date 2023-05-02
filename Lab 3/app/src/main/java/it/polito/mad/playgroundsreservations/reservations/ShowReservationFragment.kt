@@ -96,7 +96,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController= view?.findNavController()
-        val action=ShowReservationFragmentDirections.actionShowReservationFragmentToCalendarFragment()
+        var action=ShowReservationFragmentDirections.actionShowReservationFragmentToCalendarFragment()
         // Handle item selection
         return when (item.itemId) {
             R.id.cancelReservation -> {
@@ -110,7 +110,6 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                         val fragmentManager = requireFragmentManager()
                         fragmentManager.popBackStack()
                         // Continue with delete operation
-                        Log.d("SUKA",myReservation.toString());
                         reservationsViewModel.delete(myReservation)
                         if (navController != null) {
                             navController.navigate(action)
@@ -125,7 +124,10 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 true
             }
             R.id.editReservation -> {
-
+                if (navController != null) {
+                    action = ShowReservationFragmentDirections.actionShowReservationFragmentToEditReservationFragment(myReservation.id)
+                    navController.navigate(action)
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

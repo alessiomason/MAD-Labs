@@ -25,9 +25,21 @@
         <action
             android:id="@+id/action_showReservationFragment_to_calendarFragment"
             app:destination="@id/calendarFragment" />
+        <action
+            android:id="@+id/action_showReservationFragment_to_editReservationFragment"
+            app:destination="@id/editReservationFragment" />
     </fragment>
     <fragment
         android:id="@+id/addReservationFragment"
         android:name="it.polito.mad.playgroundsreservations.reservations.AddReservationFragment"
         android:label="AddReservationFragment" />
+    <fragment
+        android:id="@+id/editReservationFragment"
+        android:name="it.polito.mad.playgroundsreservations.reservations.EditReservationFragment"
+        android:label="EditReservationFragment"
+        >
+        <argument
+            android:name="resId"
+            app:argType="integer" />
+    </fragment>
 </navigation>
