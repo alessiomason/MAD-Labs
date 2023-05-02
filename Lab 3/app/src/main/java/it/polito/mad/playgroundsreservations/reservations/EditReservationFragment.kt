@@ -137,7 +137,16 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
 
                 val spinner = view.findViewById<Spinner>(R.id.spinnerViewHours)
                 spinner.adapter = adapter
-                spinner.setSelection((myReservation.time.hour-8))
+                spinner.setSelection(0)
+                for(j in 0..hours.size)
+                {
+                    if (hours[j].split(":")[0].toString()==myReservation.time.hour.toString())
+                    {
+                        spinner.setSelection((j))
+                        break
+                    }
+                }
+
                 val spinnerDuration=view.findViewById<Spinner>(R.id.spinnerDuration)
                 spinnerDuration.adapter=durationAdapter
 

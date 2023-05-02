@@ -43,14 +43,14 @@ class ReservationsActivity: AppCompatActivity() {
                     userId = 1,
                     playgroundId = playgroundsList.find { it.sport == Sports.GOLF }?.id ?: 0,
                     sport = Sports.GOLF,
-                    time = ZonedDateTime.of(2023, 5, 10, 18, 0, 0, 0, zoneId),
+                    time = ZonedDateTime.of(2023, 5, 10, 23, 0, 0, 0, zoneId),
                     duration = Duration.ofHours(1)
                 )
                 val reservationTENNIS = Reservation(
                     userId = 1,
                     playgroundId = playgroundsList.find { it.sport == Sports.TENNIS }?.id ?: 0,
                     sport = Sports.TENNIS,
-                    time = ZonedDateTime.of(2023, 5, 22, 7, 0, 0, 0, zoneId),
+                    time = ZonedDateTime.of(2023, 5, 22, 8, 0, 0, 0, zoneId),
                     duration = Duration.ofHours(3)
                 )
                 val reservationVOLLEYBALL = Reservation(
