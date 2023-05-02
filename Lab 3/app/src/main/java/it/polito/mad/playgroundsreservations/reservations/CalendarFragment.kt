@@ -119,11 +119,13 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         }
     }
 
-    class DefaultViewHolder(private val view: View): MyViewHolder(view) {
+    class DefaultViewHolder(private val view: View, val nav: NavController): MyViewHolder(view) {
         override fun bind(r: Reservation?, pos: Int, onTap: (Int) -> Unit) {
             val plusTextView = view.findViewById<TextView>(R.id.reservation_box_plus)
             plusTextView.setOnClickListener {
                 // TODO navigate
+                val action = CalendarFragmentDirections.actionCalendarFragmentToAddReservationFragment()
+                nav.navigate(action)
             }
         }
 
@@ -141,7 +143,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val v = LayoutInflater.from(parent.context)
                 .inflate(viewType, parent, false)
-            return if (viewType == R.layout.personal_reservation_add_box) DefaultViewHolder(v) else ItemViewHolder(v, playgrounds)
+            return if (viewType == R.layout.personal_reservation_add_box) DefaultViewHolder(v, navController) else ItemViewHolder(v, playgrounds)
         }
 
         override fun getItemCount(): Int {
