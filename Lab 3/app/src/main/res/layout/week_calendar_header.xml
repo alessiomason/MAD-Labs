@@ -9,7 +9,7 @@
     android:paddingBottom="10dp">
 
     <TextView
-        android:id="@+id/exTwoHeaderText"
+        android:id="@+id/month_header_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -27,7 +27,7 @@
         android:layout_marginEnd="10dp"
         android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/exTwoHeaderText"
+        app:layout_constraintEnd_toStartOf="@id/month_header_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +38,7 @@
         android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/exTwoHeaderText"
+        app:layout_constraintStart_toEndOf="@id/month_header_text"
         app:layout_constraintTop_toTopOf="parent" />
 
 
