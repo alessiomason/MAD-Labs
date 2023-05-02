@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -86,6 +87,18 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 view.findViewById<TextView>(R.id.durationInfo).text = "Duration: " + myReservation.duration.toHours().toString() + "h"
 
                 view.findViewById<CheckBox>(R.id.rentingEquipment).isChecked = myReservation.rentingEquipment
+                val image = view.findViewById<ImageView>(R.id.reservationImage)
+                if (myReservation.sport == Sports.TENNIS) {
+                    image.setImageResource(R.drawable.tennis_court)
+                } else if (myReservation.sport == Sports.FOOTBALL){
+                    image.setImageResource(R.drawable.football_pitch)
+                } else if (myReservation.sport == Sports.GOLF){
+                    image.setImageResource(R.drawable.golf_field)
+                } else if (myReservation.sport == Sports.VOLLEYBALL) {
+                    image.setImageResource(R.drawable.volleyball_court)
+                } else if (myReservation.sport == Sports.BASKETBALL) {
+                    image.setImageResource(R.drawable.basketball_court)
+                }
             }
         }
      }

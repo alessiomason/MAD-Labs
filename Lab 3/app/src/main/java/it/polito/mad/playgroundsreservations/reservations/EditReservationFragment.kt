@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
@@ -120,7 +121,19 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
                 view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name
                 view.findViewById<CheckBox>(R.id.rentingEquipment).isChecked =
                     myReservation.rentingEquipment
-
+                view.findViewById<CheckBox>(R.id.rentingEquipment).isChecked = myReservation.rentingEquipment
+                val image = view.findViewById<ImageView>(R.id.reservationImage)
+                if (myReservation.sport == Sports.TENNIS) {
+                    image.setImageResource(R.drawable.tennis_court)
+                } else if (myReservation.sport == Sports.FOOTBALL){
+                    image.setImageResource(R.drawable.football_pitch)
+                } else if (myReservation.sport == Sports.GOLF){
+                    image.setImageResource(R.drawable.golf_field)
+                } else if (myReservation.sport == Sports.VOLLEYBALL) {
+                    image.setImageResource(R.drawable.volleyball_court)
+                } else if (myReservation.sport == Sports.BASKETBALL) {
+                    image.setImageResource(R.drawable.basketball_court)
+                }
 
                 val spinner = view.findViewById<Spinner>(R.id.spinnerViewHours)
                 spinner.adapter = adapter
@@ -141,7 +154,7 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
                         i=0;
                         while (i!=4 && oraTotale<24 && !esci)
                         {
-                          i=i+1
+                            i=i+1
                             if(parent.getItemAtPosition((position+i)).toString().split(":")[0].toInt()==oraTotale+1)
                             {
                                 oraTotale=oraTotale+1
