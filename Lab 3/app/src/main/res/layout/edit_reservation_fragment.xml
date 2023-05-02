@@ -70,6 +70,7 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:hint="Sport"
+                        android:enabled="false"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@android:color/secondary_text_light"
                         android:textStyle="italic" />
@@ -88,14 +89,11 @@
                         android:layout_gravity="center"
                         app:tint="@color/primary" />
 
-                    <TextView
-                        android:id="@+id/timeInfo"
+                    <ListView
+                        android:id="@+id/listViewHours"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:hint="Time"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -133,7 +131,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Renting Equipment"
                         android:checked="false"
-                        android:enabled="false"
+                        android:enabled="true"
                         />
                 </LinearLayout>
             </LinearLayout>

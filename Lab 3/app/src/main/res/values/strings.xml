@@ -40,4 +40,6 @@
     <string name="reservation_box_duration">Duration: %1$d hours</string>
     <string name="reservation_box_playground_name">Playground: %1$s</string>
     <string name="new_reservation">Make a new reservation</string>
+    <string name="cancel_reservation">Delete</string>
+    <string name="modify_reservation">Edit</string>
 </resources>

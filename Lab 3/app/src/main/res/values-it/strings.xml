@@ -41,4 +41,6 @@
     <string name="reservation_box_duration">Durata: %1$d ore</string>
     <string name="reservation_box_playground_name">Campo: %1$s</string>
     <string name="new_reservation">Inserisci una nuova prenotazione</string>
+    <string name="cancel_reservation">Cancella</string>
+    <string name="modify_reservation">Modifica</string>
 </resources>

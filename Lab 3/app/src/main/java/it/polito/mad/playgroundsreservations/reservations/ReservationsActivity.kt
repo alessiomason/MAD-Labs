@@ -27,8 +27,9 @@ class ReservationsActivity: AppCompatActivity() {
                     userId = 1,
                     playgroundId = playgroundsList.find { it.sport == Sports.FOOTBALL }?.id ?: 0,
                     sport = Sports.FOOTBALL,
-                    time = ZonedDateTime.of(2023, 5, 12, 12, 0, 0, 0, zoneId),
-                    duration = Duration.ofHours(1)
+                    time = ZonedDateTime.of(2023, 5, 2, 12, 0, 0, 0, zoneId),
+                    duration = Duration.ofHours(1),
+                    rentingEquipment = true
                 )
                 val reservationBASKETBALL = Reservation(
                     userId = 1,
@@ -73,7 +74,7 @@ class ReservationsActivity: AppCompatActivity() {
                     playgroundId = playgroundsList.find { it.sport == Sports.VOLLEYBALL }?.id ?: 0,
                     sport = Sports.VOLLEYBALL,
                     time = ZonedDateTime.of(2023, 5, 26, 14, 0, 0, 0, zoneId),
-                    duration = Duration.ofHours(2)
+                    duration = Duration.ofHours(6)
                 )
 
                 val reservations = listOf(
@@ -91,4 +92,5 @@ class ReservationsActivity: AppCompatActivity() {
             }
         }
     }
+
 }
