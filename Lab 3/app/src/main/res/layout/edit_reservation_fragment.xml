@@ -89,8 +89,8 @@
                         android:layout_gravity="center"
                         app:tint="@color/primary" />
 
-                    <ListView
-                        android:id="@+id/listViewHours"
+                    <Spinner
+                        android:id="@+id/spinnerViewHours"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         />
@@ -109,14 +109,11 @@
                         android:layout_gravity="center"
                         app:tint="@color/primary" />
 
-                    <TextView
-                        android:id="@+id/durationInfo"
+                    <Spinner
+                        android:id="@+id/spinnerDuration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:hint="Duration"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        />
                 </LinearLayout>
 
 
