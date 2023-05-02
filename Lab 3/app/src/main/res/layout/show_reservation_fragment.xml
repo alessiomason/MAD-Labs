@@ -22,12 +22,12 @@
         app:layout_constraintTop_toBottomOf="parent" >
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageUserProfile"
+            android:id="@+id/reservationImage"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:padding="20dp"
-            android:src="@drawable/user_profile"
+            android:src="@drawable/football_pitch"
             app:civ_border_width="2dp"
             app:civ_border_color="@color/secondaryVariant" />
 
@@ -42,25 +42,13 @@
                 android:orientation="vertical"
                 android:paddingBottom="20dp" >
 
-                <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                    android:id="@+id/ratingBar"
+                <TextView
+                    android:id="@+id/playgroundName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:rating="3.5"
-                    android:numStars="5"
-                    style="@style/Widget.MaterialRatingBar.RatingBar"
-                    android:layout_gravity="center_horizontal" />
-
-                <TextView
-                    android:id="@+id/textFullName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:hint="@string/full_name"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    tools:layout_editor_absoluteX="115dp"
-                    tools:layout_editor_absoluteY="74dp" />
+                    android:layout_gravity="center_horizontal"
+                    android:text="Name"
+                    />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -70,18 +58,18 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/nickname_icon"
+                        android:src="@drawable/football_ball"
                         android:paddingEnd="5dp"
                         android:layout_gravity="center"
                         app:tint="@color/primary" />
 
                     <TextView
-                        android:id="@+id/textNickname"
+                        android:id="@+id/sportName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:hint="@string/nickname"
+                        android:hint="Sport"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@android:color/secondary_text_light"
                         android:textStyle="italic" />
@@ -95,18 +83,18 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/bio_icon"
+                        android:src="@drawable/time_icon"
                         android:paddingEnd="5dp"
                         android:layout_gravity="center"
                         app:tint="@color/primary" />
 
                     <TextView
-                        android:id="@+id/textBio"
+                        android:id="@+id/timeInfo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:hint="@string/bio"
+                        android:hint="Time"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
 
@@ -118,287 +106,36 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/gender_icon"
+                        android:src="@drawable/time_icon"
                         android:paddingEnd="5dp"
                         android:layout_gravity="center"
                         app:tint="@color/primary" />
 
                     <TextView
-                        android:id="@+id/textGender"
+                        android:id="@+id/durationInfo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:hint="@string/gender"
+                        android:hint="Duration"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
 
+
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/calendar_icon"
-                        android:paddingEnd="5dp"
-                        android:layout_gravity="center"
-                        app:tint="@color/primary" />
-
-                    <TextView
-                        android:id="@+id/textAge"
+                    <CheckBox
+                        android:id="@+id/rentingEquipment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:hint="@string/age"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:hint="Renting Equipment"
+                        android:checked="false"
+                        android:enabled="false"
+                        />
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/phone_icon"
-                        android:paddingEnd="5dp"
-                        android:layout_gravity="center"
-                        app:tint="@color/primary" />
-
-                    <TextView
-                        android:id="@+id/textPhone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:hint="@string/phone"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/home_icon"
-                        android:paddingEnd="5dp"
-                        android:layout_gravity="center"
-                        app:tint="@color/primary" />
-
-                    <TextView
-                        android:id="@+id/textLocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:hint="@string/location"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textMySports"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/my_sports"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold|italic" />
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipTennis"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:text="@string/sport_tennis"
-                            app:chipIcon="@drawable/tennis_ball"
-                            app:chipIconVisible="true" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipBasketball"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:text="@string/sport_basketball"
-                            app:chipIcon="@drawable/basketball_ball"
-                            app:chipIconVisible="true" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipFootball"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:text="@string/sport_football"
-                            app:chipIcon="@drawable/football_ball"
-                            app:chipIconVisible="true" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipVolleyball"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:text="@string/sport_volleyball"
-                            app:chipIcon="@drawable/volleyball_ball"
-                            app:chipIconVisible="true" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipGolf"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:text="@string/sport_golf"
-                            app:chipIcon="@drawable/golf"
-                            app:chipIconVisible="true" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipEmpty"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:text="@string/sport_empty"
-                            app:chipIconVisible="true" />
-
-                    </LinearLayout>
-                </HorizontalScrollView>
-
-                <TextView
-                    android:id="@+id/textMyCourts"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="@string/my_courts"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold|italic" />
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal" >
-
-                        <LinearLayout
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/rounded_shape"
-                            android:orientation="vertical"
-                            android:padding="10dp"
-                            android:layout_marginEnd="5dp" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/tennis_court"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                android:textColor="@color/white"
-                                android:paddingBottom="10dp" />
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:src="@drawable/tennis_court" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/tennis_court_description"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                android:textColor="@color/white"
-                                android:paddingTop="10dp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/rounded_shape"
-                            android:orientation="vertical"
-                            android:padding="10dp"
-                            android:layout_marginHorizontal="5dp" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/basketball_court"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                android:textColor="@color/white"
-                                android:paddingBottom="10dp" />
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:src="@drawable/volleyball_court" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/basketball_court_description"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                android:textColor="@color/white"
-                                android:paddingTop="10dp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/rounded_shape"
-                            android:orientation="vertical"
-                            android:padding="10dp"
-                            android:layout_marginStart="5dp" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/football_pitch"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                android:textColor="@color/white"
-                                android:paddingBottom="10dp" />
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:src="@drawable/football_pitch" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/football_pitch_description"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                android:textColor="@color/white"
-                                android:paddingTop="10dp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </HorizontalScrollView>
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

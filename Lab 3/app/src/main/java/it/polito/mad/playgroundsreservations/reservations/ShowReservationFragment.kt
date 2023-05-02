@@ -2,15 +2,26 @@ package it.polito.mad.playgroundsreservations.reservations
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Playground
+import it.polito.mad.playgroundsreservations.database.Reservation
+import it.polito.mad.playgroundsreservations.database.Sports
+import org.w3c.dom.Text
+import java.time.Duration
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 
 class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
@@ -22,12 +33,58 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.show_reservation_fragment, container, false)
     }
-   /* override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val reservationsViewModel by viewModels<ReservationsViewModel>()
+        val reservations = reservationsViewModel.getUserReservations(1)
+        val playgrounds = reservationsViewModel.playgrounds
 
-        //  view.findViewById<TextView>(R.id.singleReservationTextView).text = "Single reservation " + args.reservationId
-    }
-    */
+         //  view.findViewById<TextView>(R.id.singleReservationTextView).text = "Single reservation " + args.reservationId
+        val zoneId = ZoneId.of("UTC+02:00")
+
+        var myReservation = Reservation(
+            userId = 0,
+            playgroundId = 0,
+            sport = Sports.VOLLEYBALL,
+            time = ZonedDateTime.of(2023, 5, 26, 14, 0, 0, 0, zoneId),
+            duration = Duration.ofHours(1)
+        )
+
+        var myPlayground = Playground(
+            id = 0,
+            name = "temp",
+            address = "",
+            sport = Sports.VOLLEYBALL
+        )
+
+        reservations.observe(viewLifecycleOwner) {
+                it.forEach { r ->
+                    if (r.id == args.reservationId) {
+                        myReservation = r
+                    }
+                }
+            Log.d("MY_RES", myReservation.toString())
+
+            playgrounds.observe(viewLifecycleOwner) {
+                it.forEach { p ->
+                    if (p.id == myReservation.playgroundId) {
+                         myPlayground = p
+                    }
+                }
+                val sportName = myReservation.sport.toString().replaceFirstChar { c -> c.uppercase() }
+                view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name
+                view.findViewById<TextView>(R.id.sportName).text = sportName
+                view.findViewById<TextView>(R.id.timeInfo).text =
+                    myReservation.time.year.toString() + " " +
+                            myReservation.time.month.toString() + " " +
+                            myReservation.time.dayOfMonth.toString()
+
+                view.findViewById<TextView>(R.id.durationInfo).text = "Duration: " + myReservation.duration.toHours().toString() + "h"
+
+                view.findViewById<CheckBox>(R.id.rentingEquipment).isChecked = myReservation.rentingEquipment
+            }
+        }
+     }
    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
        inflater.inflate(R.menu.menu_edit_reservation, menu)
        super.onCreateOptionsMenu(menu!!, inflater)
