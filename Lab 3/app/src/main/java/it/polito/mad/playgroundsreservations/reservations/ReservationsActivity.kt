@@ -27,7 +27,7 @@ class ReservationsActivity: AppCompatActivity() {
                     userId = 1,
                     playgroundId = playgroundsList.find { it.sport == Sports.FOOTBALL }?.id ?: 0,
                     sport = Sports.FOOTBALL,
-                    time = ZonedDateTime.of(2023, 5, 12, 12, 0, 0, 0, zoneId),
+                    time = ZonedDateTime.of(2023, 5, 2, 12, 0, 0, 0, zoneId),
                     duration = Duration.ofHours(1),
                     rentingEquipment = true
                 )

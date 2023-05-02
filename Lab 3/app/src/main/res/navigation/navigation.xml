@@ -22,6 +22,9 @@
         <argument
             android:name="reservationId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_showReservationFragment_to_calendarFragment"
+            app:destination="@id/calendarFragment" />
     </fragment>
     <fragment
         android:id="@+id/addReservationFragment"

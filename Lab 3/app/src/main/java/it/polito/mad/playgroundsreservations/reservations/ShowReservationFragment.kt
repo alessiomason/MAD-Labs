@@ -13,6 +13,7 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
@@ -26,6 +27,16 @@ import java.time.ZonedDateTime
 
 class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
     private val args by navArgs<ShowReservationFragmentArgs>()
+    private val reservationsViewModel by viewModels<ReservationsViewModel>();
+    val zoneId = ZoneId.of("UTC+02:00")
+    var myReservation = Reservation(
+        userId = 0,
+        playgroundId = 0,
+        sport = Sports.VOLLEYBALL,
+        time = ZonedDateTime.of(2023, 5, 26, 14, 0, 0, 0, zoneId),
+        duration = Duration.ofHours(1)
+    )
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,15 +51,8 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         val playgrounds = reservationsViewModel.playgrounds
 
          //  view.findViewById<TextView>(R.id.singleReservationTextView).text = "Single reservation " + args.reservationId
-        val zoneId = ZoneId.of("UTC+02:00")
 
-        var myReservation = Reservation(
-            userId = 0,
-            playgroundId = 0,
-            sport = Sports.VOLLEYBALL,
-            time = ZonedDateTime.of(2023, 5, 26, 14, 0, 0, 0, zoneId),
-            duration = Duration.ofHours(1)
-        )
+
 
         var myPlayground = Playground(
             id = 0,
@@ -91,6 +95,8 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val navController= view?.findNavController()
+        val action=ShowReservationFragmentDirections.actionShowReservationFragmentToCalendarFragment()
         // Handle item selection
         return when (item.itemId) {
             R.id.cancelReservation -> {
@@ -101,7 +107,16 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     .setPositiveButton(
                         "cancella"
                     ) { dialog, which ->
+                        val fragmentManager = requireFragmentManager()
+                        fragmentManager.popBackStack()
                         // Continue with delete operation
+                        Log.d("SUKA",myReservation.toString());
+                        reservationsViewModel.delete(myReservation)
+                        if (navController != null) {
+                            navController.navigate(action)
+                        }
+
+
 
                     } // A null listener allows the button to dismiss the dialog and take no further action.
                     .setNegativeButton("annulla", null)
@@ -110,7 +125,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 true
             }
             R.id.editReservation -> {
-                println("ciao")
+
                 true
             }
             else -> super.onOptionsItemSelected(item)
