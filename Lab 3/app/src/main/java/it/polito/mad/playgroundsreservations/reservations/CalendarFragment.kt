@@ -87,10 +87,10 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
     }
 
     class ItemViewHolder(private val view: View, private val playgrounds: List<Playground>): MyViewHolder(view) {
-        private val titleTextView = view.findViewById<TextView>(R.id.reservation_box_title)
-        private val sportTextView = view.findViewById<TextView>(R.id.reservation_box_sport)
-        private val durationTextView = view.findViewById<TextView>(R.id.reservation_box_duration)
-        private val playgroundTextView = view.findViewById<TextView>(R.id.reservation_box_playground)
+        private val titleTextView = view.findViewById<TextView>(R.id.personal_reservation_box_title)
+        private val sportTextView = view.findViewById<TextView>(R.id.personal_reservation_box_sport)
+        private val durationTextView = view.findViewById<TextView>(R.id.personal_reservation_box_duration)
+        private val playgroundTextView = view.findViewById<TextView>(R.id.personal_reservation_box_playground)
 
         override fun bind(r: Reservation?, pos: Int, onTap: (Int) -> Unit) {
             r!! // abstract class requires nullable reservation, but for this class a reservation has to be passed

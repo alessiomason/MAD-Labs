@@ -8,7 +8,7 @@
     android:background="@drawable/bordered_box">
 
     <TextView
-        android:id="@+id/reservation_box_title"
+        android:id="@+id/personal_reservation_box_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/personal_reservation_box_title"
@@ -16,21 +16,21 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/reservation_box_sport"
+        android:id="@+id/personal_reservation_box_sport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/sport_football"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <TextView
-        android:id="@+id/reservation_box_duration"
+        android:id="@+id/personal_reservation_box_duration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/reservation_box_duration"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <TextView
-        android:id="@+id/reservation_box_playground"
+        android:id="@+id/personal_reservation_box_playground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/reservation_box_playground_name"

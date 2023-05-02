@@ -3,6 +3,7 @@ package it.polito.mad.playgroundsreservations.reservations
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -14,6 +15,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.atStartOfMonth
@@ -29,6 +33,7 @@ import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
@@ -38,7 +43,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
     val sports = Sports.values()
     private lateinit var weekCalendarView: WeekCalendarView
     private var selectedSport = MutableLiveData(Sports.TENNIS)
-    private var selectedDate = LocalDate.now()
+    private var selectedDate = MutableLiveData(LocalDate.now())
     private lateinit var reservedPlaygrounds: LiveData<Map<Reservation, Playground>>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,6 +51,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
 
         val reservationsViewModel by viewModels<ReservationsViewModel>()
 
+        // SPINNER
         val spinner = view.findViewById<Spinner>(R.id.spinner)
         activity?.let { activity ->
             ArrayAdapter(
@@ -59,14 +65,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
         }
         spinner.onItemSelectedListener = this
 
-        selectedSport.observe(viewLifecycleOwner) { sport ->
-            reservedPlaygrounds = reservationsViewModel.getReservedPlaygrounds(sport)
-
-            reservedPlaygrounds.observe(viewLifecycleOwner) {
-                view.findViewById<TextView>(R.id.test).text = it.toString()
-            }
-        }
-
+        // CALENDAR
         weekCalendarView = view.findViewById(R.id.week_calendar_view)
 
         val currentDate = LocalDate.now()
@@ -90,10 +89,9 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
             // Called every time we need to reuse a container.
             override fun bind(container: DayViewContainer, data: WeekDay) {
                 container.day = data
-                container.t = view.findViewById(R.id.test)
                 container.textView.text = data.date.dayOfMonth.toString()
 
-                if (data.date == selectedDate) {
+                if (data.date == selectedDate.value) {
                     container.textView.setTextColor(Color.WHITE)
                     container.textView.setBackgroundResource(R.drawable.rounded_shape)
                 } else {
@@ -131,40 +129,105 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
 
         weekCalendarView.setup(startDate, endDate, daysOfWeek.first())
         weekCalendarView.scrollToWeek(currentDate)
+
+        // LIST OF RESERVED PLAYGROUNDS
+        val recyclerView = view.findViewById<RecyclerView>(R.id.reserved_playgrounds)
+        recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
+
+        selectedSport.observe(viewLifecycleOwner) { sport ->
+            reservedPlaygrounds = reservationsViewModel.getReservedPlaygrounds(sport)
+
+            reservedPlaygrounds.observe(viewLifecycleOwner) { reservedPlaygroundsMap ->
+                Log.d("reservedPlaygrounds", reservedPlaygroundsMap.toString())
+                selectedDate.observe(viewLifecycleOwner) { selectedDateValue ->
+                    val displayedReservedPlaygrounds = reservedPlaygroundsMap.filter {
+                        //it.key.time.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate() == selectedDate
+                        Log.d("it.time", it.key.time.toLocalDate().toString())
+                        Log.d("selectedDate", selectedDateValue.toString())
+                        it.key.time.toLocalDate() == selectedDateValue
+                    }
+                    recyclerView.adapter = MyAdapter(displayedReservedPlaygrounds)
+                }
+            }
+        }
     }
 
+    // SPINNER METHODS
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         // val selected = parent.getItemAtPosition(pos) as String
         selectedSport.postValue(sports[pos])
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>) {
+    override fun onNothingSelected(parent: AdapterView<*>) { }
 
-    }
-
+    // CALENDAR CLASSES
     inner class DayViewContainer(view: View): ViewContainer(view) {
         val textView = view.findViewById<TextView>(R.id.calendarDayText)
         lateinit var day: WeekDay
-        lateinit var t: TextView
 
         init {
             view.setOnClickListener {
                 // show date clicked
-                val currentSelection = selectedDate
-                selectedDate = day.date
+                val currentSelection = selectedDate.value
+                Log.d("selectedDate", selectedDate.value.toString())
+                selectedDate.postValue(day.date)
                 weekCalendarView.notifyDateChanged(day.date)
                 if (currentSelection != null) {
                     weekCalendarView.notifyDateChanged(currentSelection)
                 }
-
-                t.text = day.toString()
             }
         }
     }
 
     class WeekViewContainer(view: View) : ViewContainer(view) {
         // Alternatively, you can add an ID to the container layout and use findViewById()
-        val monthTitleContainer = view as ViewGroup
         val titlesContainer = view as ViewGroup
+    }
+
+    // RECYCLER VIEW CLASSES
+    class ItemViewHolder(private val view: View): ViewHolder(view) {
+        private val titleTextView = view.findViewById<TextView>(R.id.reservation_box_title)
+        private val durationTextView = view.findViewById<TextView>(R.id.reservation_box_duration)
+        private val playgroundTextView = view.findViewById<TextView>(R.id.reservation_box_playground)
+
+        fun bind(rp: Pair<Reservation, Playground>, pos: Int, onTap: (Int) -> Unit) {
+            titleTextView.text = view.context.getString(R.string.reservation_box_title, rp.first.time.toLocalTime())
+            durationTextView.text = view.context.getString(R.string.reservation_box_duration, rp.first.duration.toHours())
+            playgroundTextView.text = view.context.getString(R.string.reservation_box_playground_name, rp.second.name)
+
+            super.itemView.setOnClickListener { onTap(pos) }
+        }
+
+        fun unbind() {
+            super.itemView.setOnClickListener(null)
+        }
+    }
+
+    class MyAdapter(
+        private val reservedPlaygrounds: Map<Reservation, Playground>
+        ): RecyclerView.Adapter<ItemViewHolder>() {
+        private val reservedPlaygroundsList = reservedPlaygrounds.toList()
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+            val v = LayoutInflater.from(parent.context)
+                .inflate(viewType, parent, false)
+            return ItemViewHolder(v)
+        }
+
+        override fun getItemCount(): Int {
+            return reservedPlaygrounds.size
+        }
+
+        override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+            holder.bind(reservedPlaygroundsList[position], position) { }
+        }
+
+        override fun onViewRecycled(holder: ItemViewHolder) {
+            holder.unbind()
+        }
+
+        override fun getItemViewType(position: Int): Int {
+            return R.layout.reservation_box
+        }
     }
 }
