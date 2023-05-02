@@ -2,8 +2,12 @@ package it.polito.mad.playgroundsreservations.reservations
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -81,6 +85,23 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         }
 
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_switch_view_calendar, menu)
+        super.onCreateOptionsMenu(menu!!, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val navController= view?.findNavController()
+        var action = CalendarFragmentDirections.actionCalendarFragmentToPlaygroundsAvailabilityFragment()
+        // Handle presses on the action bar menu items
+        when (item.itemId) {
+            R.id.switch_calendar -> {
+                navController?.navigate(action)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     abstract class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
