@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.view.children
@@ -56,7 +57,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
         activity?.let { activity ->
             ArrayAdapter(
                 activity.applicationContext,
-                android.R.layout.simple_spinner_item,
+                R.layout.spinner_item,
                 sports.map { it.name.substring(0 until 1).uppercase() + it.name.substring(1).lowercase() }
             ).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -149,6 +150,14 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
                     recyclerView.adapter = MyAdapter(displayedReservedPlaygrounds)
                 }
             }
+        }
+
+        // NEW RESERVATION BUTTON
+        val button = view.findViewById<Button>(R.id.reserve_new_playground_button)
+        button.setOnClickListener {
+            // navigate passando
+            selectedDate.value
+            // come default della data di nuova prenotazione
         }
     }
 

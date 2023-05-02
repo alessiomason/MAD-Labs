@@ -39,4 +39,5 @@
     <string name="personal_reservation_box_title">Reservation on %1$s at %2$s</string>
     <string name="reservation_box_duration">Duration: %1$d hours</string>
     <string name="reservation_box_playground_name">Playground: %1$s</string>
+    <string name="new_reservation">Make a new reservation</string>
 </resources>
