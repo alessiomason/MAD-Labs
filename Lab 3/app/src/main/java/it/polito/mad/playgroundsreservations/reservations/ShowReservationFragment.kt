@@ -1,5 +1,6 @@
 package it.polito.mad.playgroundsreservations.reservations
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -36,7 +37,19 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         // Handle item selection
         return when (item.itemId) {
             R.id.cancelReservation -> {
-                println("ciao")
+                AlertDialog.Builder(context)
+                    .setTitle("Cancellazione prenotazione")
+                    .setMessage("Sei sicuro di voler cancellare la prenotazione?") // Specifying a listener allows you to take an action before dismissing the dialog.
+                    // The dialog is automatically dismissed when a dialog button is clicked.
+                    .setPositiveButton(
+                        "cancella"
+                    ) { dialog, which ->
+                        // Continue with delete operation
+
+                    } // A null listener allows the button to dismiss the dialog and take no further action.
+                    .setNegativeButton("annulla", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show()
                 true
             }
             R.id.editReservation -> {
