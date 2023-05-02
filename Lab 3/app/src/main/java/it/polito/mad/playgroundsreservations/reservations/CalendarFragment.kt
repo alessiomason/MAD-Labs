@@ -37,6 +37,14 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
     private var tappedDay = MutableLiveData(Instant.now().atZone(zoneId).toLocalDate())
     private lateinit var navController: NavController
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        setHasOptionsMenu(true)
+        return inflater.inflate(R.layout.calendar_fragment, container, false)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = view.findNavController()
