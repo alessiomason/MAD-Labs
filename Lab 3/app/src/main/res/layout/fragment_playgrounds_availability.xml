@@ -5,10 +5,10 @@
     android:layout_height="match_parent">
 
     <Spinner
-        android:id="@+id/dropdown_menu"
+        android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:spinnerMode="dropdown"
+        android:spinnerMode="dialog"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/calendar_with_titles"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/dropdown_menu"
+        app:layout_constraintTop_toBottomOf="@+id/spinner"
         app:layout_constraintBottom_toBottomOf="@id/test"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

@@ -4,11 +4,9 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import it.polito.mad.playgroundsreservations.database.*
 import kotlinx.coroutines.launch
-import java.util.Date
 
 class ReservationsViewModel(application: Application): AndroidViewModel(application) {
     private val reservationsDao: ReservationsDao
@@ -70,21 +68,8 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
         return reservationsDao.getReservationsBySport(sport)
     }
 
-    fun getReservedPlaygrounds(sport: Sports, date: Date): MutableLiveData<MutableList<ReservedPlayground>> {
-        val reservedPlaygrounds = MutableLiveData<MutableList<ReservedPlayground>>(mutableListOf())
-
-        val playgroundsBySport = playgroundsDao.getPlaygroundsBySport(sport)
-        playgroundsBySport.observe(getApplication()) { playgrounds ->
-            for (playground in playgrounds) {
-                val reservations = reservationsDao.getReservationsByPlayground(playground.id)
-                reservations.observe(getApplication()) { reservationsList ->
-                    val reservedPlayground = ReservedPlayground(playground, reservationsList)
-                    reservedPlaygrounds.value?.add(reservedPlayground)
-                }
-            }
-        }
-
-        return reservedPlaygrounds
+    fun getReservedPlaygrounds(sport: Sports): LiveData<Map<Reservation, Playground>> {
+        return reservationsDao.getReservedPlaygroundsBySport(sport)
     }
 
     fun getUserReservations(userId: Int): LiveData<List<Reservation>> {

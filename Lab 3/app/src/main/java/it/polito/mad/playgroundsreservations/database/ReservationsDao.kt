@@ -18,6 +18,9 @@ interface ReservationsDao {
     @Query("SELECT * FROM reservations WHERE userId = :userId")
     fun getUserReservations(userId: Int): LiveData<List<Reservation>>
 
+    @Query("SELECT * FROM reservations r, playgrounds p WHERE p.sport = :sport AND r.playgroundId = p.id")
+    fun getReservedPlaygroundsBySport(sport: Sports): LiveData<Map<Reservation, Playground>>
+
     @Insert(onConflict = ABORT)
     suspend fun save(reservation: Reservation)
 
