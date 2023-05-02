@@ -22,6 +22,8 @@ import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
 import java.time.Instant
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -94,7 +96,10 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 
         override fun bind(r: Reservation?, pos: Int, onTap: (Int) -> Unit) {
             r!! // abstract class requires nullable reservation, but for this class a reservation has to be passed
-            titleTextView.text = view.context.getString(R.string.personal_reservation_box_title, r.time.toLocalDate(), r.time.toLocalTime())
+            titleTextView.text = view.context.getString(
+                R.string.personal_reservation_box_title,
+                r.time.toLocalDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
+                r.time.toLocalTime())
 
             val sportText = when (r.sport) {
                 Sports.TENNIS -> R.string.sport_tennis
