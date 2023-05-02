@@ -83,7 +83,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/time_icon"
+                        android:src="@drawable/time_calendar"
                         android:paddingEnd="5dp"
                         android:layout_gravity="center"
                         app:tint="@color/primary" />
@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:hint="Time"
+                        android:hint="Date"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
 

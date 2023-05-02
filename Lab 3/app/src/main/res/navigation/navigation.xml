@@ -44,6 +44,9 @@
         <argument
             android:name="resId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_editReservationFragment_to_calendarFragment"
+            app:destination="@id/calendarFragment" />
     </fragment>
     <fragment
         android:id="@+id/playgroundsAvailabilityFragment"

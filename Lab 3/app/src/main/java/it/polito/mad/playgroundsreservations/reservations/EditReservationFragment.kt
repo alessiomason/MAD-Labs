@@ -2,7 +2,6 @@ package it.polito.mad.playgroundsreservations.reservations
 
 import android.os.Bundle
 import android.util.Log
-import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,11 +12,11 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.ImageView
-import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
@@ -39,6 +38,7 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
     }
 
     private val args by navArgs<EditReservationFragmentArgs>()
+    private val reservationsViewModel by viewModels<ReservationsViewModel>();
     val zoneId = ZoneId.of("UTC+02:00")
     var aus = 0
     var hours = mutableListOf<String>()
@@ -156,7 +156,9 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
                 spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                         val selectedItem = parent.getItemAtPosition(position).toString()
+                        myReservation.time = myReservation.time.withHour(selectedItem.split(':')[0].toInt())
                         Log.d("AAA", selectedItem.toString())
+                        Log.d("BBB", myReservation.time.toString())
                         oraTotale=selectedItem.split(':')[0].toInt()
                         Log.d("Ora totale: ",oraTotale.toString());
                         esci=false
@@ -190,50 +192,52 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
                     }
                 }
 
+                spinnerDuration.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        val selectedItem = parent.getItemAtPosition(position).toString()
+                        myReservation.duration = Duration.ofHours(selectedItem.split(' ')[0].toLong())
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        TODO("Not yet implemented")
+                    }
+
+                }
+
+
             }
         }
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_edit_profile, menu)
+        inflater.inflate(R.menu.menu_save_edit_reservation, menu)
         super.onCreateOptionsMenu(menu!!, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val navController= view?.findNavController()
+        var action=EditReservationFragmentDirections.actionEditReservationFragmentToCalendarFragment()
         // Handle presses on the action bar menu items
         when (item.itemId) {
-            R.id.save_profile -> {
-                var spinnerHourValue= view?.findViewById<Spinner>(R.id.spinnerViewHours);
-                var spinnerDurationValue=view?.findViewById<Spinner>(R.id.spinnerDuration);
+            R.id.save_edit_reservation -> {
+                // var spinnerHourValue= view?.findViewById<Spinner>(R.id.spinnerViewHours);
+                // var spinnerDurationValue=view?.findViewById<Spinner>(R.id.spinnerDuration);
                 var chkEquipment=view?.findViewById<CheckBox>(R.id.rentingEquipment);
 
-                if (spinnerDurationValue != null) {
-                    if (spinnerDurationValue.selectedItem=="" || spinnerDurationValue.selectedItem==null) {
-                        print("Errore");
-                    }
-                }
-                else
-                {
-
-                    if (spinnerDurationValue != null) {
-                        if(myReservation.duration.toString()!=spinnerDurationValue.selectedItem.toString()) {
-                            myReservation.duration= spinnerDurationValue.selectedItem as Duration
-                        }
-                    }
-                    if (chkEquipment != null) {
-                        if (chkEquipment.isSelected!=myReservation.rentingEquipment)
-                            myReservation.rentingEquipment=!myReservation.rentingEquipment
-                    }
-                    if (spinnerDurationValue != null) {
-                        if(spinnerDurationValue.selectedItem.toString()!=myReservation.time.hour.toString())
-                            myReservation.time.hour=spinnerDurationValue.selectedItem.toString().toInt()
-
-                    }
+                if (chkEquipment != null) {
+                    myReservation.rentingEquipment=myReservation.rentingEquipment.not()
                 }
 
+                reservationsViewModel.update(myReservation)
 
-                return true
+                navController?.navigate(action)
+
             }
             }
             return super.onOptionsItemSelected(item)

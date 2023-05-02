@@ -74,7 +74,7 @@ class ReservationsActivity: AppCompatActivity() {
                     playgroundId = playgroundsList.find { it.sport == Sports.VOLLEYBALL }?.id ?: 0,
                     sport = Sports.VOLLEYBALL,
                     time = ZonedDateTime.of(2023, 5, 26, 14, 0, 0, 0, zoneId),
-                    duration = Duration.ofHours(6)
+                    duration = Duration.ofHours(3)
                 )
 
                 val reservations = listOf(

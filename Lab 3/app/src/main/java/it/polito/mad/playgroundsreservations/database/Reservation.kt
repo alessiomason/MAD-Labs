@@ -16,7 +16,7 @@ data class Reservation (
     val userId: Int,
     val playgroundId: Int,
     val sport: Sports,
-    val time: ZonedDateTime,
+    var time: ZonedDateTime,
     var duration: Duration,
     var rentingEquipment: Boolean = false
 )
