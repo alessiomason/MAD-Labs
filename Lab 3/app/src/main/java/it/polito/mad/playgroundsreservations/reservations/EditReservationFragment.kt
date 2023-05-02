@@ -204,6 +204,35 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_profile -> {
+                var spinnerHourValue= view?.findViewById<Spinner>(R.id.spinnerViewHours);
+                var spinnerDurationValue=view?.findViewById<Spinner>(R.id.spinnerDuration);
+                var chkEquipment=view?.findViewById<CheckBox>(R.id.rentingEquipment);
+
+                if (spinnerDurationValue != null) {
+                    if (spinnerDurationValue.selectedItem=="" || spinnerDurationValue.selectedItem==null) {
+                        print("Errore");
+                    }
+                }
+                else
+                {
+
+                    if (spinnerDurationValue != null) {
+                        if(myReservation.duration.toString()!=spinnerDurationValue.selectedItem.toString()) {
+                            myReservation.duration= spinnerDurationValue.selectedItem as Duration
+                        }
+                    }
+                    if (chkEquipment != null) {
+                        if (chkEquipment.isSelected!=myReservation.rentingEquipment)
+                            myReservation.rentingEquipment=!myReservation.rentingEquipment
+                    }
+                    if (spinnerDurationValue != null) {
+                        if(spinnerDurationValue.selectedItem.toString()!=myReservation.time.hour.toString())
+                            myReservation.time.hour=spinnerDurationValue.selectedItem.toString().toInt()
+
+                    }
+                }
+
+
                 return true
             }
             }
