@@ -32,9 +32,12 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+
+private val zoneId = ZoneId.systemDefault()
+private var tappedDay = MutableLiveData(Instant.now().atZone(zoneId).toLocalDate())
+
 class CalendarFragment: Fragment(R.layout.calendar_fragment) {
-    private val zoneId = ZoneId.systemDefault()
-    private var tappedDay = MutableLiveData(Instant.now().atZone(zoneId).toLocalDate())
+
     private lateinit var navController: NavController
 
     override fun onCreateView(
@@ -158,7 +161,8 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
             val plusTextView = view.findViewById<TextView>(R.id.reservation_box_plus)
             plusTextView.setOnClickListener {
                 // TODO navigate
-                val action = CalendarFragmentDirections.actionCalendarFragmentToAddReservationFragment()
+                val action = CalendarFragmentDirections.actionCalendarFragmentToAddReservationFragment(
+                    tappedDay.value.toString())
                 nav.navigate(action)
             }
         }

@@ -14,8 +14,8 @@ data class Reservation (
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val userId: Int,
-    val playgroundId: Int,
-    val sport: Sports,
+    var playgroundId: Int,
+    var sport: Sports,
     var time: ZonedDateTime,
     var duration: Duration,
     var rentingEquipment: Boolean = false

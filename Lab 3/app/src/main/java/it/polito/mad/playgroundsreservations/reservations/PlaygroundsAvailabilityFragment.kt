@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -151,12 +152,16 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
                 }
             }
         }
-
+        val navController= view?.findNavController()
         // NEW RESERVATION BUTTON
         val button = view.findViewById<Button>(R.id.reserve_new_playground_button)
         button.setOnClickListener {
             // navigate passando
-            selectedDate.value
+            val action = PlaygroundsAvailabilityFragmentDirections.actionPlaygroundsAvailabilityFragmentToAddReservationFragment(selectedDate.value.toString())
+            if (navController != null) {
+                navController.navigate(action)
+            }
+
             // come default della data di nuova prenotazione
         }
     }
