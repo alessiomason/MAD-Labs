@@ -84,7 +84,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                             myReservation.time.month.toString() + " " +
                             myReservation.time.dayOfMonth.toString()
 
-                view.findViewById<TextView>(R.id.durationInfo).text = "Duration: " + myReservation.duration.toHours().toString() + "h"
+                view.findViewById<TextView>(R.id.durationInfo).text = resources.getString(R.string.duration) + ": "+ myReservation.duration.toHours().toString() + "h"
 
                 view.findViewById<CheckBox>(R.id.rentingEquipment).isChecked = myReservation.rentingEquipment
                 val image = view.findViewById<ImageView>(R.id.reservationImage)

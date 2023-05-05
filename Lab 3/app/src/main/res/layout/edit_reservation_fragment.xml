@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Name"
+                    android:text="@string/playground_name"
                     />
 
                 <LinearLayout
@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:hint="Sport"
+                        android:hint="@string/sport_type"
                         android:enabled="false"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@android:color/secondary_text_light"
@@ -126,7 +126,7 @@
                         android:id="@+id/rentingEquipment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Renting Equipment"
+                        android:hint="@string/renting_equipment"
                         android:checked="false"
                         android:enabled="true"
                         />

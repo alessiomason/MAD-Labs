@@ -43,4 +43,17 @@
     <string name="new_reservation">Inserisci una nuova prenotazione</string>
     <string name="cancel_reservation">Cancella</string>
     <string name="modify_reservation">Modifica</string>
+
+    <!-- ADAPTATION LAB3 ITALIAN -->
+    <string name="home_title">Prenotazione dei campi schermata iniziale</string>
+    <string name="reservation_activity">Reservations Activity</string>
+    <string name="show_profile_activity">Mostra Profile Activity</string>
+    <string name="add_reservation">Aggiungi Reservation</string>
+    <string name="renting_equipment">Noleggio attrezzature</string>
+    <string name="playground_name">Nome Playground</string>
+    <string name="sport_type">Tipo Sport</string>
+    <string name="add_button">+</string>
+    <string name="date">Data</string>
+    <string name="duration">Durata</string>
+    <string name="switch_title">Cambia</string>
 </resources>
