@@ -52,6 +52,9 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
 
         val reservationsViewModel by viewModels<ReservationsViewModel>()
 
+        // ACTIVITY TITLE
+        activity?.title = activity?.resources?.getString(R.string.playgrounds_availability)
+
         // SPINNER
         val spinner = view.findViewById<Spinner>(R.id.spinner)
         activity?.let { activity ->
@@ -194,16 +197,10 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
         private val durationTextView = view.findViewById<TextView>(R.id.reservation_box_duration)
         private val playgroundTextView = view.findViewById<TextView>(R.id.reservation_box_playground)
 
-        fun bind(rp: Pair<Reservation, Playground>, pos: Int, onTap: (Int) -> Unit) {
+        fun bind(rp: Pair<Reservation, Playground>) {
             titleTextView.text = view.context.getString(R.string.reservation_box_title, rp.first.time.toLocalTime())
             durationTextView.text = view.context.getString(R.string.reservation_box_duration, rp.first.duration.toHours())
             playgroundTextView.text = view.context.getString(R.string.reservation_box_playground_name, rp.second.name)
-
-            super.itemView.setOnClickListener { onTap(pos) }
-        }
-
-        fun unbind() {
-            super.itemView.setOnClickListener(null)
         }
     }
 
@@ -223,11 +220,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
         }
 
         override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-            holder.bind(reservedPlaygroundsList[position], position) { }
-        }
-
-        override fun onViewRecycled(holder: ItemViewHolder) {
-            holder.unbind()
+            holder.bind(reservedPlaygroundsList[position])
         }
 
         override fun getItemViewType(position: Int): Int {

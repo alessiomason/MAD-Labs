@@ -40,19 +40,20 @@
     <string name="reservation_box_duration">Duration: %1$d hours</string>
     <string name="reservation_box_playground_name">Playground: %1$s</string>
     <string name="new_reservation">Make a new reservation</string>
-    <string name="cancel_reservation">Delete</string>
-    <string name="modify_reservation">Edit</string>
-
-    <!-- ADAPTATION LAB3 ENGLISH -->
+    <string name="cancel_reservation">Delete reservation</string>
+    <string name="modify_reservation">Edit reservation</string>
     <string name="home_title">Playgrounds Reservation home screen</string>
     <string name="reservation_activity">Reservations Activity</string>
     <string name="show_profile_activity">Show Profile Activity</string>
-    <string name="add_reservation">Add Reservation</string>
-    <string name="renting_equipment">Renting Equipment</string>
-    <string name="playground_name">Playground Name</string>
+    <string name="add_reservation">Add a reservation</string>
+    <string name="reservation">Prenotazione</string>
+    <string name="renting_equipment">Renting equipment</string>
+    <string name="playground_name">Playground name</string>
     <string name="sport_type">Sport type</string>
     <string name="add_button">+</string>
     <string name="date">Date</string>
     <string name="duration">Duration</string>
     <string name="switch_title">Switch</string>
+    <string name="my_reservations">My reservations</string>
+    <string name="playgrounds_availability">Playgrounds availability</string>
 </resources>

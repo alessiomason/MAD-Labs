@@ -56,6 +56,9 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         val reservations = reservationsViewModel.getUserReservations(1)
         val playgrounds = reservationsViewModel.playgrounds
 
+        // ACTIVITY TITLE
+        activity?.title = activity?.resources?.getString(R.string.my_reservations)
+
         //Initialize CustomCalendarView from layout
         val calendarView = view.findViewById<View>(R.id.calendar_view) as CustomCalendarView
         //Initialize calendar with date

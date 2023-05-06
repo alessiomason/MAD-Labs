@@ -58,8 +58,10 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
         val reservations = reservationsViewModel.getUserReservations(1)
         val playgrounds = reservationsViewModel.playgrounds
 
-        var arrayOccupated = mutableListOf<String>();
+        val arrayOccupated = mutableListOf<String>();
 
+        // ACTIVITY TITLE
+        activity?.title = activity?.resources?.getString(R.string.modify_reservation)
 
         var myPlayground = Playground(
             id = 0,

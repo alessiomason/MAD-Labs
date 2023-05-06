@@ -60,6 +60,9 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
         val reservations = reservationsViewModel.getUserReservations(1)
         val playgrounds = reservationsViewModel.playgrounds
 
+        // ACTIVITY TITLE
+        activity?.title = activity?.resources?.getString(R.string.add_reservation)
+
         playgrounds.observe(viewLifecycleOwner) {
             it.forEach { p ->
                 playgroundList.add(p)

@@ -51,9 +51,8 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         val reservations = reservationsViewModel.getUserReservations(1)
         val playgrounds = reservationsViewModel.playgrounds
 
-         //  view.findViewById<TextView>(R.id.singleReservationTextView).text = "Single reservation " + args.reservationId
-
-
+        // ACTIVITY TITLE
+        activity?.title = activity?.resources?.getString(R.string.reservation)
 
         var myPlayground = Playground(
             id = 0,
