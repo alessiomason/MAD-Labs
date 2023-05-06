@@ -32,24 +32,10 @@
             android:layout_height="wrap_content"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:src="@drawable/arrow_drop_down_circle" />
+            android:src="@drawable/arrow_drop_down_circle"
+            android:contentDescription="@null"/>
 
     </LinearLayout>
-
-    <!--
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dialog"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="@color/secondaryVariant"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/calendar_with_titles"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-        -->
 
     <LinearLayout
         android:id="@+id/calendar_with_titles"

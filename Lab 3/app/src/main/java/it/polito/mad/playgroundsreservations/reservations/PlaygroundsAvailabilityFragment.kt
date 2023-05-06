@@ -2,7 +2,6 @@ package it.polito.mad.playgroundsreservations.reservations
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -140,29 +139,21 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
             reservedPlaygrounds = reservationsViewModel.getReservedPlaygrounds(sport)
 
             reservedPlaygrounds.observe(viewLifecycleOwner) { reservedPlaygroundsMap ->
-                Log.d("reservedPlaygrounds", reservedPlaygroundsMap.toString())
                 selectedDate.observe(viewLifecycleOwner) { selectedDateValue ->
                     val displayedReservedPlaygrounds = reservedPlaygroundsMap.filter {
-                        //it.key.time.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate() == selectedDate
-                        Log.d("it.time", it.key.time.toLocalDate().toString())
-                        Log.d("selectedDate", selectedDateValue.toString())
                         it.key.time.toLocalDate() == selectedDateValue
                     }
                     recyclerView.adapter = MyAdapter(displayedReservedPlaygrounds)
                 }
             }
         }
-        val navController= view?.findNavController()
+
         // NEW RESERVATION BUTTON
         val button = view.findViewById<Button>(R.id.reserve_new_playground_button)
+        val navController = view.findNavController()
         button.setOnClickListener {
-            // navigate passando
             val action = PlaygroundsAvailabilityFragmentDirections.actionPlaygroundsAvailabilityFragmentToAddReservationFragment(selectedDate.value.toString())
-            if (navController != null) {
-                navController.navigate(action)
-            }
-
-            // come default della data di nuova prenotazione
+            navController.navigate(action)
         }
     }
 
@@ -183,7 +174,6 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
             view.setOnClickListener {
                 // show date clicked
                 val currentSelection = selectedDate.value
-                Log.d("selectedDate", selectedDate.value.toString())
                 selectedDate.postValue(day.date)
                 weekCalendarView.notifyDateChanged(day.date)
                 if (currentSelection != null) {
