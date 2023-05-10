@@ -16,7 +16,7 @@ class MainActivity: AppCompatActivity() {
 
         val buttonReservations = findViewById<Button>(R.id.homeButtonReservations)
         buttonReservations.setOnClickListener {
-            val intent = Intent(this, TestComposeActivity::class.java)
+            val intent = Intent(this, ReservationsActivity::class.java)
             startActivity(intent)
         }
 
