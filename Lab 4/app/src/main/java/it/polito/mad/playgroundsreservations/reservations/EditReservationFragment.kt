@@ -118,7 +118,14 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
                            duration
                         )
                     }
-                val sportName = myReservation.sport.toString().replaceFirstChar { c -> c.uppercase() }
+                val sportName = when (myReservation.sport) {
+                    Sports.BASKETBALL -> resources.getString(R.string.sport_basketball)
+                    Sports.TENNIS -> resources.getString(R.string.sport_tennis)
+                    Sports.FOOTBALL -> resources.getString(R.string.sport_football)
+                    Sports.VOLLEYBALL -> resources.getString(R.string.sport_volleyball)
+                    Sports.GOLF -> resources.getString(R.string.sport_golf)
+                }
+
                 view.findViewById<TextView>(R.id.sportName).text = sportName
                 view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name
                 view.findViewById<CheckBox>(R.id.rentingEquipment).isChecked =

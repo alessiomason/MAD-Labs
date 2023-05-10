@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.toLowerCase
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -21,9 +23,13 @@ import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
 import org.w3c.dom.Text
+import java.text.DateFormat
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
 
 
 class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
@@ -75,13 +81,19 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                          myPlayground = p
                     }
                 }
-                val sportName = myReservation.sport.toString().replaceFirstChar { c -> c.uppercase() }
+
+                val sportName = when (myReservation.sport) {
+                    Sports.BASKETBALL -> resources.getString(R.string.sport_basketball)
+                    Sports.TENNIS -> resources.getString(R.string.sport_tennis)
+                    Sports.FOOTBALL -> resources.getString(R.string.sport_football)
+                    Sports.VOLLEYBALL -> resources.getString(R.string.sport_volleyball)
+                    Sports.GOLF -> resources.getString(R.string.sport_golf)
+                }
+
                 view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name
                 view.findViewById<TextView>(R.id.sportName).text = sportName
-                view.findViewById<TextView>(R.id.timeInfo).text =
-                    myReservation.time.year.toString() + " " +
-                            myReservation.time.month.toString() + " " +
-                            myReservation.time.dayOfMonth.toString()
+
+                view.findViewById<TextView>(R.id.timeInfo).text = myReservation.time.toLocalDate().format(DateTimeFormatter.ofLocalizedDate((FormatStyle.LONG)))
 
                 view.findViewById<TextView>(R.id.durationInfo).text = resources.getString(R.string.duration) + ": "+ myReservation.duration.toHours().toString() + "h"
 
