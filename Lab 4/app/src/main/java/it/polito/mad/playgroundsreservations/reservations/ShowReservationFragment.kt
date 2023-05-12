@@ -9,6 +9,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
@@ -28,6 +29,7 @@ import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import android.content.Intent
 import java.time.format.FormatStyle
 import java.util.Locale
 
@@ -56,6 +58,8 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         val reservationsViewModel by viewModels<ReservationsViewModel>()
         val reservations = reservationsViewModel.getUserReservations(1)
         val playgrounds = reservationsViewModel.playgrounds
+
+
 
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.reservation)
@@ -88,6 +92,14 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     Sports.FOOTBALL -> resources.getString(R.string.sport_football)
                     Sports.VOLLEYBALL -> resources.getString(R.string.sport_volleyball)
                     Sports.GOLF -> resources.getString(R.string.sport_golf)
+                }
+
+                val btnRateCourt=  view.findViewById<Button>(R.id.btnRateCourt)
+                btnRateCourt.setOnClickListener {
+                    // Azione da eseguire quando il pulsante viene cliccato
+                    val intent = Intent(activity?.applicationContext, RatingPlaygrounds::class.java)
+                    intent.putExtra("myReservationId", myReservation.id)
+                    startActivity(intent)
                 }
 
                 view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name

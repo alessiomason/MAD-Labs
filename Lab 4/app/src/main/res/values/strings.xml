@@ -57,4 +57,5 @@
     <string name="my_reservations">My reservations</string>
     <string name="playgrounds_availability">Playgrounds availability</string>
     <string name="title_activity_test_compose">TestComposeActivity</string>
+    <string name="title_activity_rating_playgrounds">RatingPlaygrounds</string>
 </resources>

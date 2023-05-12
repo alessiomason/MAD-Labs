@@ -136,6 +136,12 @@
                         android:enabled="false"
                         />
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnRateCourt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rate Court" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

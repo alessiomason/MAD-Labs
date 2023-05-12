@@ -201,7 +201,6 @@
                         android:hint="@string/location"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
-
                 <TextView
                     android:id="@+id/textMySports"
                     android:layout_width="match_parent"
@@ -401,6 +400,7 @@
 
             </LinearLayout>
         </ScrollView>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

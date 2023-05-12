@@ -6,8 +6,10 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.View.*
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +45,12 @@ class ShowProfileActivity: AppCompatActivity() {
         ratingBarView = findViewById(R.id.ratingBar)
         userProfileImageView = findViewById(R.id.imageUserProfile)
         ratingBarView.setIsIndicator(true)
+
+
+
+// Inserisci qui il tuo codice di caricamento...
+
+       // progressBar.visibility = View.GONE
     }
 
     override fun onResume() {
