@@ -88,7 +88,7 @@
         android:name="it.polito.mad.playgroundsreservations.reservations.RatingPlaygrounds"
         android:label="RatingPlaygrounds" >
         <argument
-            android:name="reservationId"
+            android:name="playgroundId"
             app:argType="integer" />
     </fragment>
 </navigation>

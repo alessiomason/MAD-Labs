@@ -19,7 +19,9 @@ import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,16 +37,21 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Playground
+import it.polito.mad.playgroundsreservations.database.Sports
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 
 class RatingPlaygrounds : Fragment() {
-    private val args by navArgs<ShowReservationFragmentArgs>()
+    private val args by navArgs<RatingPlaygroundsArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // ACTIVITY TITLE
+        activity?.title = "Rate court"//activity?.resources?.getString(R.string.reservation)
+
         return ComposeView(requireContext()).apply {
             setContent {
                 PlaygroundsReservationsTheme {
@@ -53,7 +60,7 @@ class RatingPlaygrounds : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        RatingPlaygroundsScreen(args.reservationId)
+                        RatingPlaygroundsScreen(args.playgroundId)
                     }
                 }
             }
@@ -62,24 +69,38 @@ class RatingPlaygrounds : Fragment() {
 }
 
 @Composable
-fun RatingPlaygroundsScreen(id: Int?) {
-    var rating by remember {
-        mutableStateOf(0)
-    }
+fun RatingPlaygroundsScreen(playgroundId: Int) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
-    val reservations = reservationsViewModel.getUserReservations(1)
-    //reservations.observe()
-    reservations.value;
+    val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
+    reservationsViewModel.getPlayground(playgroundId, playground)
 
+    if (playground.value == null)
+        Text("Loading")
+    else
+        RatingPlaygroundsScreenContent(playground = playground.value!!)
+}
 
-    var id = R.drawable.football_pitch;
+@Composable
+fun RatingPlaygroundsScreenContent(playground: Playground) {
+    var rating by remember { mutableStateOf(0) }
+    val image = when (playground.sport) {
+        Sports.TENNIS -> R.drawable.tennis_court
+        Sports.BASKETBALL -> R.drawable.basketball_court
+        Sports.FOOTBALL -> R.drawable.football_pitch
+        Sports.VOLLEYBALL -> R.drawable.volleyball_court
+        Sports.GOLF -> R.drawable.golf_field
+    }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(text = playground.name)
+        Text(text = playground.address)
+        Text(text = playground.sport.toString())
         Image(
-            painter = painterResource(id = id),
+            painter = painterResource(id = image),
             contentDescription = null,
             modifier = Modifier.size(200.dp)
         )
@@ -109,7 +130,14 @@ fun RatingBar(rating: Int, onRatingChanged: (Int) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun MyScreenPreview() {
+    val myPlayground = Playground(
+        id = 1,
+        name = "Playground name",
+        address = "Playground address",
+        sport = Sports.VOLLEYBALL
+    )
+
     PlaygroundsReservationsTheme {
-        //MyScreen(id, sport =)
+        RatingPlaygroundsScreenContent(playground = myPlayground)
     }
 }

@@ -15,6 +15,9 @@ interface PlaygroundsDao {
     @Query("SELECT * FROM playgrounds WHERE sport = :sport")
     fun getPlaygroundsBySport(sport: Sports): LiveData<List<Playground>>
 
+    @Query("SELECT * FROM playgrounds WHERE id = :id")
+    suspend fun getPlayground(id: Int): Playground
+
     @Insert(onConflict = ABORT)
     suspend fun save(playground: Playground)
 }

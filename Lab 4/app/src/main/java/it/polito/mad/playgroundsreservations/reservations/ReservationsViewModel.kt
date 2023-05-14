@@ -2,6 +2,7 @@ package it.polito.mad.playgroundsreservations.reservations
 
 import android.app.Application
 import android.content.Context
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -74,6 +75,12 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
 
     fun getUserReservations(userId: Int): LiveData<List<Reservation>> {
         return reservationsDao.getUserReservations(userId)
+    }
+
+    fun getPlayground(playgroundId: Int, playgroundState: MutableState<Playground?>) {
+        viewModelScope.launch {
+            playgroundState.value = playgroundsDao.getPlayground(playgroundId)
+        }
     }
 
     fun save(reservation: Reservation) {
