@@ -46,7 +46,7 @@
     <string name="reservation_activity">Reservations Activity</string>
     <string name="show_profile_activity">Show Profile Activity</string>
     <string name="add_reservation">Add a reservation</string>
-    <string name="reservation">Prenotazione</string>
+    <string name="reservation">Reservation</string>
     <string name="renting_equipment">Renting equipment</string>
     <string name="playground_name">Playground name</string>
     <string name="sport_type">Sport type</string>
@@ -56,6 +56,11 @@
     <string name="switch_title">Switch</string>
     <string name="my_reservations">My reservations</string>
     <string name="playgrounds_availability">Playgrounds availability</string>
+    <string name="delete_reservation_title">Reservation cancellation</string>
+    <string name="delete_reservation_message">Are you sure you want to cancel the reservation?</string>
+    <string name="delete_reservation_cancel_button">Cancel</string>
+    <string name="delete_reservation_delete_button">Delete</string>
+    <string name="rate_court">Rate Court</string>
     <string name="title_activity_test_compose">TestComposeActivity</string>
     <string name="title_activity_rating_playgrounds">RatingPlaygrounds</string>
 </resources>

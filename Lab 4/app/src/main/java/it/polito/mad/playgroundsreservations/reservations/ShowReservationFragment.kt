@@ -131,11 +131,11 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         return when (item.itemId) {
             R.id.cancelReservation -> {
                 AlertDialog.Builder(context)
-                    .setTitle("Cancellazione prenotazione")
-                    .setMessage("Sei sicuro di voler cancellare la prenotazione?") // Specifying a listener allows you to take an action before dismissing the dialog.
+                    .setTitle(resources.getString(R.string.delete_reservation_title))
+                    .setMessage(resources.getString(R.string.delete_reservation_message)) // Specifying a listener allows you to take an action before dismissing the dialog.
                     // The dialog is automatically dismissed when a dialog button is clicked.
                     .setPositiveButton(
-                        "cancella"
+                        resources.getString(R.string.delete_reservation_delete_button)
                     ) { _, _ ->
                         val fragmentManager = requireFragmentManager()
                         fragmentManager.popBackStack()
@@ -143,7 +143,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                         reservationsViewModel.delete(myReservation)
                         navController?.navigate(action)
                     } // A null listener allows the button to dismiss the dialog and take no further action.
-                    .setNegativeButton("annulla", null)
+                    .setNegativeButton(R.string.delete_reservation_cancel_button, null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show()
                 true
