@@ -33,11 +33,10 @@ import android.content.Intent
 import java.time.format.FormatStyle
 import java.util.Locale
 
-
 class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
     private val args by navArgs<ShowReservationFragmentArgs>()
     private val reservationsViewModel by viewModels<ReservationsViewModel>();
-    val zoneId = ZoneId.of("UTC+02:00")
+    private val zoneId = ZoneId.of("UTC+02:00")
     var myReservation = Reservation(
         userId = 0,
         playgroundId = 0,
@@ -58,7 +57,6 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         val reservationsViewModel by viewModels<ReservationsViewModel>()
         val reservations = reservationsViewModel.getUserReservations(1)
         val playgrounds = reservationsViewModel.playgrounds
-
 
 
         // ACTIVITY TITLE
@@ -94,12 +92,11 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     Sports.GOLF -> resources.getString(R.string.sport_golf)
                 }
 
-                val btnRateCourt=  view.findViewById<Button>(R.id.btnRateCourt)
+                val btnRateCourt = view.findViewById<Button>(R.id.btnRateCourt)
                 btnRateCourt.setOnClickListener {
-                    // Azione da eseguire quando il pulsante viene cliccato
-                    val intent = Intent(activity?.applicationContext, RatingPlaygrounds::class.java)
-                    intent.putExtra("myReservationId", myReservation.id)
-                    startActivity(intent)
+                    val navController = view.findNavController()
+                    val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId)
+                    navController.navigate(action)
                 }
 
                 view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name
@@ -111,23 +108,20 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
 
                 view.findViewById<CheckBox>(R.id.rentingEquipment).isChecked = myReservation.rentingEquipment
                 val image = view.findViewById<ImageView>(R.id.reservationImage)
-                if (myReservation.sport == Sports.TENNIS) {
-                    image.setImageResource(R.drawable.tennis_court)
-                } else if (myReservation.sport == Sports.FOOTBALL){
-                    image.setImageResource(R.drawable.football_pitch)
-                } else if (myReservation.sport == Sports.GOLF){
-                    image.setImageResource(R.drawable.golf_field)
-                } else if (myReservation.sport == Sports.VOLLEYBALL) {
-                    image.setImageResource(R.drawable.volleyball_court)
-                } else if (myReservation.sport == Sports.BASKETBALL) {
-                    image.setImageResource(R.drawable.basketball_court)
+
+                when (myReservation.sport) {
+                    Sports.TENNIS -> image.setImageResource(R.drawable.tennis_court)
+                    Sports.BASKETBALL -> image.setImageResource(R.drawable.basketball_court)
+                    Sports.FOOTBALL -> image.setImageResource(R.drawable.football_pitch)
+                    Sports.VOLLEYBALL -> image.setImageResource(R.drawable.volleyball_court)
+                    Sports.GOLF -> image.setImageResource(R.drawable.golf_field)
                 }
             }
         }
      }
    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
        inflater.inflate(R.menu.menu_edit_reservation, menu)
-       super.onCreateOptionsMenu(menu!!, inflater)
+       super.onCreateOptionsMenu(menu, inflater)
    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -142,17 +136,12 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     // The dialog is automatically dismissed when a dialog button is clicked.
                     .setPositiveButton(
                         "cancella"
-                    ) { dialog, which ->
+                    ) { _, _ ->
                         val fragmentManager = requireFragmentManager()
                         fragmentManager.popBackStack()
                         // Continue with delete operation
                         reservationsViewModel.delete(myReservation)
-                        if (navController != null) {
-                            navController.navigate(action)
-                        }
-
-
-
+                        navController?.navigate(action)
                     } // A null listener allows the button to dismiss the dialog and take no further action.
                     .setNegativeButton("annulla", null)
                     .setIcon(android.R.drawable.ic_dialog_alert)

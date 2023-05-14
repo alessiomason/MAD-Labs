@@ -25,11 +25,6 @@
             android:label="@string/title_activity_rating_playgrounds"
             android:theme="@style/Theme.PlaygroundsReservations" />
         <activity
-            android:name=".reservations.TestComposeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_test_compose"
-            android:theme="@style/Theme.PlaygroundsReservations" />
-        <activity
             android:name=".profile.ShowProfileActivity"
             android:exported="false" />
         <activity

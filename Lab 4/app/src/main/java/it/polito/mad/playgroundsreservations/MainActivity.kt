@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import it.polito.mad.playgroundsreservations.database.Database
 import it.polito.mad.playgroundsreservations.profile.ShowProfileActivity
 import it.polito.mad.playgroundsreservations.reservations.ReservationsActivity
-import it.polito.mad.playgroundsreservations.reservations.TestComposeActivity
 
 class MainActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
