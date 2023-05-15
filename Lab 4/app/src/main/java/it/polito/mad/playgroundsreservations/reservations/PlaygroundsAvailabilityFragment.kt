@@ -61,7 +61,17 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
             ArrayAdapter(
                 activity.applicationContext,
                 R.layout.spinner_item,
-                sports.map { it.name.substring(0 until 1).uppercase() + it.name.substring(1).lowercase() }
+                sports.map {
+                    resources.getString(
+                        when (it) {
+                            Sports.TENNIS -> R.string.sport_tennis
+                            Sports.BASKETBALL -> R.string.sport_basketball
+                            Sports.FOOTBALL -> R.string.sport_football
+                            Sports.VOLLEYBALL -> R.string.sport_volleyball
+                            Sports.GOLF -> R.string.sport_golf
+                        }
+                    )
+                }
             ).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinner.adapter = adapter
