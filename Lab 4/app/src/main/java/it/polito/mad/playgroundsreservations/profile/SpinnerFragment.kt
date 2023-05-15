@@ -31,7 +31,6 @@ import java.util.Date
 import java.util.Locale
 
 class SpinnerFragment: Fragment(R.layout.spinner_fragment) {
-
     private lateinit var navController: NavController
 
     override fun onCreateView(
@@ -46,7 +45,5 @@ class SpinnerFragment: Fragment(R.layout.spinner_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = view.findNavController()
-        // ACTIVITY TITLE
-
     }
 }

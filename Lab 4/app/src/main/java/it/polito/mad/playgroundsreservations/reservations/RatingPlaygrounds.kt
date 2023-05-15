@@ -50,7 +50,7 @@ class RatingPlaygrounds : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // ACTIVITY TITLE
-        activity?.title = "Rate court"//activity?.resources?.getString(R.string.reservation)
+        activity?.title = activity?.resources?.getString(R.string.rate_court)
 
         return ComposeView(requireContext()).apply {
             setContent {

@@ -41,6 +41,8 @@ class EditProfileActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
+        this.title = resources?.getString(R.string.edit_profile)
+
         nameView = findViewById(R.id.editTextFullName)
         nicknameView = findViewById(R.id.editTextNickname)
         ageView = findViewById(R.id.editTextAge)

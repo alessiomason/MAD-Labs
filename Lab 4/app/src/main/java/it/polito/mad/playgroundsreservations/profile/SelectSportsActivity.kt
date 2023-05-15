@@ -19,6 +19,7 @@ class SelectSportsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_sports)
+        this.title = resources?.getString(R.string.my_sports)
 
         tennisCb = findViewById(R.id.checkBoxTennis)
         basketballCb = findViewById(R.id.checkBoxBasketball)

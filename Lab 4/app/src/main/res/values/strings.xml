@@ -14,7 +14,8 @@
     <string name="football_pitch_description">11 external pitch</string>
 
     <!-- PROFILE -->
-    <string name="user_profile">User profile</string>
+    <string name="user_profile">My profile</string>
+    <string name="edit_profile">Edit profile</string>
     <string name="full_name">Full Name</string>
     <string name="nickname">Nickname</string>
     <string name="bio">Bio</string>

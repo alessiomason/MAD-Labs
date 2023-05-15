@@ -35,6 +35,8 @@ class ShowProfileActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_profile)
+        this.title = resources?.getString(R.string.user_profile)
+
         nameView = findViewById(R.id.textFullName)
         nicknameView = findViewById(R.id.textNickname)
         ageView = findViewById(R.id.textAge)
