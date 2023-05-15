@@ -1,5 +1,20 @@
 <resources>
     <string name="app_name">Playgrounds Reservations</string>
+
+    <!-- SPORTS -->
+    <string name="sport_basketball">Basketball</string>
+    <string name="sport_football">Football</string>
+    <string name="sport_volleyball">Volleyball</string>
+    <string name="sport_golf">Golf</string>
+    <string name="tennis_court">Tennis court</string>
+    <string name="tennis_court_description">Hard surface</string>
+    <string name="basketball_court">Basketball court</string>
+    <string name="basketball_court_description">Internal court</string>
+    <string name="football_pitch">Football pitch</string>
+    <string name="football_pitch_description">11 external pitch</string>
+
+    <!-- PROFILE -->
+    <string name="user_profile">User profile</string>
     <string name="full_name">Full Name</string>
     <string name="nickname">Nickname</string>
     <string name="bio">Bio</string>
@@ -14,10 +29,6 @@
     <string name="my_sports">My sports</string>
     <string name="my_courts">My courts</string>
     <string name="sport_tennis">Tennis</string>
-    <string name="sport_basketball">Basketball</string>
-    <string name="sport_football">Football</string>
-    <string name="sport_volleyball">Volleyball</string>
-    <string name="sport_golf">Golf</string>
     <string name="sport_empty">No sports selected yet</string>
     <string name="add_sport">Add/Edit</string>
     <string name="modify_profile">Modify</string>
@@ -27,12 +38,6 @@
     <string name="save_sport">Save selected sports</string>
     <string name="select_your_sports">Select your sports</string>
     <string name="my_rating">My rating</string>
-    <string name="tennis_court">Tennis court</string>
-    <string name="tennis_court_description">Hard surface</string>
-    <string name="basketball_court">Basketball court</string>
-    <string name="basketball_court_description">Internal court</string>
-    <string name="football_pitch">Football pitch</string>
-    <string name="football_pitch_description">11 external pitch</string>
 
     <!-- RESERVATIONS -->
     <string name="reservation_box_title">Reservation at %1$s</string>
@@ -61,6 +66,7 @@
     <string name="delete_reservation_cancel_button">Cancel</string>
     <string name="delete_reservation_delete_button">Delete</string>
     <string name="rate_court">Rate Court</string>
+
     <string name="title_activity_test_compose">TestComposeActivity</string>
     <string name="title_activity_rating_playgrounds">RatingPlaygrounds</string>
 </resources>

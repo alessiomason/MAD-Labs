@@ -1,5 +1,6 @@
 package it.polito.mad.playgroundsreservations.reservations
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -24,6 +25,7 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
+import it.polito.mad.playgroundsreservations.profile.ShowProfileActivity
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -101,17 +103,24 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_switch_view_calendar, menu)
-        super.onCreateOptionsMenu(menu!!, inflater)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController= view?.findNavController()
-        var action = CalendarFragmentDirections.actionCalendarFragmentToPlaygroundsAvailabilityFragment()
+        val navController = view?.findNavController()
+
         // Handle presses on the action bar menu items
         when (item.itemId) {
+            R.id.user_profile -> {
+                val intent = Intent(activity?.applicationContext, ShowProfileActivity::class.java)
+                startActivity(intent)
+            }
             R.id.switch_calendar -> {
+                val action = CalendarFragmentDirections.actionCalendarFragmentToPlaygroundsAvailabilityFragment()
                 navController?.navigate(action)
             }
         }

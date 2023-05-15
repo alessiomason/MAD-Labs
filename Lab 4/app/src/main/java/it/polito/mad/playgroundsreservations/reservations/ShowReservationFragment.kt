@@ -119,11 +119,14 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
             }
         }
      }
+
+   @Deprecated("Deprecated in Java")
    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
        inflater.inflate(R.menu.menu_edit_reservation, menu)
        super.onCreateOptionsMenu(menu, inflater)
    }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController= view?.findNavController()
         var action=ShowReservationFragmentDirections.actionShowReservationFragmentToCalendarFragment()
