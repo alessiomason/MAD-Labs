@@ -14,6 +14,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -68,6 +69,9 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 reservationsList.forEach { r ->
                     if (r.id == args.reservationId) {
                         myReservation = r
+
+                        // invalidate the menu to see whether editing and canceling is still possible
+                        invalidateOptionsMenu(activity)
                     }
                 }
 
@@ -138,8 +142,19 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
 
    @Deprecated("Deprecated in Java")
    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-       inflater.inflate(R.menu.menu_edit_reservation, menu)
        super.onCreateOptionsMenu(menu, inflater)
+       inflater.inflate(R.menu.menu_edit_reservation, menu)
+
+       val editMenuItem = menu.findItem(R.id.editReservation)
+       val cancelMenuItem = menu.findItem(R.id.cancelReservation)
+
+       // don't allow editing and canceling for past reservations
+       if (myReservation.time.isBefore(Instant.now().atZone(myReservation.time.zone))) {
+           editMenuItem.isEnabled = false
+           editMenuItem.isVisible = false
+           cancelMenuItem.isEnabled = false
+           cancelMenuItem.isVisible = false
+       }
    }
 
     @Deprecated("Deprecated in Java")
