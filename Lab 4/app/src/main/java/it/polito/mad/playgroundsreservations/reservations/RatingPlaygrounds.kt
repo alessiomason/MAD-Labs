@@ -3,7 +3,6 @@ package it.polito.mad.playgroundsreservations.reservations
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import androidx.navigation.compose.rememberNavController
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -18,9 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -48,6 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.R
@@ -75,7 +71,7 @@ class RatingPlaygrounds : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        RatingPlaygroundsScreen(args.playgroundId, args.reservationId)
+                        RatingPlaygroundsScreen(args.playgroundId, args.reservationId, findNavController())
                     }
                 }
             }
@@ -84,7 +80,7 @@ class RatingPlaygrounds : Fragment() {
 }
 
 @Composable
-fun RatingPlaygroundsScreen(playgroundId: Int,reservationId:Int) {
+fun RatingPlaygroundsScreen(playgroundId: Int, reservationId:Int, navController: NavController) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
 
     val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
@@ -93,14 +89,13 @@ fun RatingPlaygroundsScreen(playgroundId: Int,reservationId:Int) {
     if (playground.value == null)
         Text("Loading")
     else
-        RatingPlaygroundsScreenContent(playground = playground.value!!,reservationId=reservationId)
+        RatingPlaygroundsScreenContent(playground = playground.value!!, reservationId=reservationId, navController = navController)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RatingPlaygroundsScreenContent(playground: Playground,reservationId: Int) {
+fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, navController: NavController) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
-    val navController = rememberNavController()
 
     var rating by remember { mutableStateOf(0) }
     var text by remember { mutableStateOf("") }
@@ -152,10 +147,9 @@ fun RatingPlaygroundsScreenContent(playground: Playground,reservationId: Int) {
         Button(
             onClick = {
                 val playgroundRating=PlaygroundRating(playgroundId = playground.id, reservationId = reservationId , rating = rating, description = text);
-                // val action = RatingPlaygroundsDirections.actionRatingPlaygroundsToShowReservationFragment(reservationId)
                 reservationsViewModel.savePlaygroundRating(playgroundRating)
-                // navController.navigate(action)
-
+                val action = RatingPlaygroundsDirections.actionRatingPlaygroundsToShowReservationFragment(reservationId)
+                navController.navigate(action)
             },
             content = { Text(stringResource(id =R.string.save_rating)) }
         )
@@ -190,6 +184,6 @@ fun MyScreenPreview() {
     )
 
     PlaygroundsReservationsTheme {
-        RatingPlaygroundsScreenContent(playground = myPlayground, reservationId = 1)
+        //RatingPlaygroundsScreenContent(playground = myPlayground, reservationId = 1)
     }
 }
