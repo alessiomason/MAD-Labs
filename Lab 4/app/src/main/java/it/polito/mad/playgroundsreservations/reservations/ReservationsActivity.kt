@@ -37,35 +37,40 @@ class ReservationsActivity: AppCompatActivity() {
                     playgroundId = playgroundsList.find { it.sport == Sports.BASKETBALL }?.id ?: 0,
                     sport = Sports.BASKETBALL,
                     time = ZonedDateTime.of(now.year, now.monthValue, now.dayOfMonth, now.hour, 0, 0, 0, zoneId),
-                    duration = Duration.ofHours(2)
+                    duration = Duration.ofHours(2),
+                    rentingEquipment = true
                 )
                 val reservationGOLF = Reservation(
                     userId = 1,
                     playgroundId = playgroundsList.find { it.sport == Sports.GOLF }?.id ?: 0,
                     sport = Sports.GOLF,
                     time = ZonedDateTime.of(2023, 5, 10, 23, 0, 0, 0, zoneId),
-                    duration = Duration.ofHours(1)
+                    duration = Duration.ofHours(1),
+                    rentingEquipment = false
                 )
                 val reservationTENNIS = Reservation(
                     userId = 1,
                     playgroundId = playgroundsList.find { it.sport == Sports.TENNIS }?.id ?: 0,
                     sport = Sports.TENNIS,
                     time = ZonedDateTime.of(2023, 5, 22, 8, 0, 0, 0, zoneId),
-                    duration = Duration.ofHours(3)
+                    duration = Duration.ofHours(3),
+                    rentingEquipment = false
                 )
                 val reservationVOLLEYBALL = Reservation(
                     userId = 1,
                     playgroundId = playgroundsList.find { it.sport == Sports.VOLLEYBALL }?.id ?: 0,
                     sport = Sports.VOLLEYBALL,
                     time = ZonedDateTime.of(2023, 5, 26, 22, 0, 0, 0, zoneId),
-                    duration = Duration.ofHours(1)
+                    duration = Duration.ofHours(1),
+                    rentingEquipment = false
                 )
                 val reservationSameDay = Reservation(
                     userId = 1,
                     playgroundId = playgroundsList.find { it.sport == Sports.GOLF }?.id ?: 0,
                     sport = Sports.GOLF,
                     time = ZonedDateTime.of(2023, 5, 22, 14, 0, 0, 0, zoneId),
-                    duration = Duration.ofHours(2)
+                    duration = Duration.ofHours(2),
+                    rentingEquipment = true
                 )
 
                 val reservationSameDaySameSport = Reservation(
@@ -73,7 +78,8 @@ class ReservationsActivity: AppCompatActivity() {
                     playgroundId = playgroundsList.find { it.sport == Sports.VOLLEYBALL }?.id ?: 0,
                     sport = Sports.VOLLEYBALL,
                     time = ZonedDateTime.of(2023, 5, 26, 14, 0, 0, 0, zoneId),
-                    duration = Duration.ofHours(3)
+                    duration = Duration.ofHours(3),
+                    rentingEquipment = false
                 )
 
                 val reservations = listOf(

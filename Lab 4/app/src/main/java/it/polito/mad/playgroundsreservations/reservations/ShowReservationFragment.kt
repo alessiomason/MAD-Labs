@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -103,27 +104,33 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     }
                 }
 
+                val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
+                ratingBar.setIsIndicator(true)
+
                 val rating = reservationsViewModel.getPlaygroundAverageRating(myPlayground.id)
                 rating.observe(viewLifecycleOwner) {
-                    it
+                    ratingBar.rating = it.toFloat()
                 }
 
                 view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name
                 view.findViewById<TextView>(R.id.sportName).text = sportName
 
-                view.findViewById<TextView>(R.id.timeInfo).text = myReservation.time.toLocalDate().format(DateTimeFormatter.ofLocalizedDate((FormatStyle.LONG)))
+                view.findViewById<TextView>(R.id.timeInfo).text = myReservation.time.toLocalDate().format(DateTimeFormatter.ofLocalizedDate((FormatStyle.FULL))) + " - " +
+                        myReservation.time.toLocalTime().format(DateTimeFormatter.ofLocalizedTime((FormatStyle.SHORT)))
+
 
                 view.findViewById<TextView>(R.id.durationInfo).text = resources.getString(R.string.duration) + ": "+ myReservation.duration.toHours().toString() + "h"
 
                 view.findViewById<CheckBox>(R.id.rentingEquipment).isChecked = myReservation.rentingEquipment
                 val image = view.findViewById<ImageView>(R.id.reservationImage)
+                val sportIcon = view.findViewById<ImageView>(R.id.sportNameIcon)
 
                 when (myReservation.sport) {
-                    Sports.TENNIS -> image.setImageResource(R.drawable.tennis_court)
-                    Sports.BASKETBALL -> image.setImageResource(R.drawable.basketball_court)
-                    Sports.FOOTBALL -> image.setImageResource(R.drawable.football_pitch)
-                    Sports.VOLLEYBALL -> image.setImageResource(R.drawable.volleyball_court)
-                    Sports.GOLF -> image.setImageResource(R.drawable.golf_field)
+                    Sports.TENNIS -> { image.setImageResource(R.drawable.tennis_court); sportIcon.setImageResource(R.drawable.tennis_ball) }
+                    Sports.BASKETBALL -> { image.setImageResource(R.drawable.basketball_court); sportIcon.setImageResource(R.drawable.basketball_ball) }
+                    Sports.FOOTBALL -> { image.setImageResource(R.drawable.football_pitch); sportIcon.setImageResource(R.drawable.football_ball) }
+                    Sports.VOLLEYBALL -> { image.setImageResource(R.drawable.volleyball_court); sportIcon.setImageResource(R.drawable.volleyball_ball) }
+                    Sports.GOLF -> { image.setImageResource(R.drawable.golf_field); sportIcon.setImageResource(R.drawable.golf_ball) }
                 }
             }
         }
