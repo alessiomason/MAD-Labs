@@ -62,13 +62,13 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="2dp"
                     android:paddingEnd="5dp"
-                    android:src="@drawable/generic_court_icon"
+                    android:src="@drawable/court_generic_icon"
                     app:tint="@color/primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="5dp"
                     android:text="@string/add_reservation_court"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@android:color/secondary_text_light" />
@@ -77,12 +77,13 @@
                     android:id="@+id/playgroundList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp" />
+                    android:layout_marginTop="5dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -123,7 +124,7 @@
                     android:id="@+id/viewHour"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginBottom="5dp"
                     android:paddingTop="5dp"
                     android:text="@string/date"
@@ -134,6 +135,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="-7dp"
                 android:orientation="horizontal">
 
                 <ImageView
