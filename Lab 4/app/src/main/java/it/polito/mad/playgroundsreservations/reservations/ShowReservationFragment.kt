@@ -1,20 +1,19 @@
 package it.polito.mad.playgroundsreservations.reservations
 
 import android.app.AlertDialog
+import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.toLowerCase
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -23,21 +22,18 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
-import org.w3c.dom.Text
-import java.text.DateFormat
 import java.time.Duration
+import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import android.content.Intent
 import java.time.format.FormatStyle
-import java.util.Locale
 
 class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
     private val args by navArgs<ShowReservationFragmentArgs>()
-    private val reservationsViewModel by viewModels<ReservationsViewModel>();
+    private val reservationsViewModel by viewModels<ReservationsViewModel>()
     private val zoneId = ZoneId.of("UTC+02:00")
-    var myReservation = Reservation(
+    private var myReservation = Reservation(
         userId = 0,
         playgroundId = 0,
         sport = Sports.VOLLEYBALL,
@@ -58,7 +54,6 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         val reservations = reservationsViewModel.getUserReservations(1)
         val playgrounds = reservationsViewModel.playgrounds
 
-
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.reservation)
 
@@ -69,16 +64,15 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
             sport = Sports.VOLLEYBALL
         )
 
-        reservations.observe(viewLifecycleOwner) {
-                it.forEach { r ->
+        reservations.observe(viewLifecycleOwner) { reservationsList ->
+                reservationsList.forEach { r ->
                     if (r.id == args.reservationId) {
                         myReservation = r
                     }
                 }
-            Log.d("MY_RES", myReservation.toString())
 
-            playgrounds.observe(viewLifecycleOwner) {
-                it.forEach { p ->
+            playgrounds.observe(viewLifecycleOwner) { playgroundsList ->
+                playgroundsList.forEach { p ->
                     if (p.id == myReservation.playgroundId) {
                          myPlayground = p
                     }
@@ -93,10 +87,15 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 }
 
                 val btnRateCourt = view.findViewById<Button>(R.id.btnRateCourt)
-                btnRateCourt.setOnClickListener {
-                    val navController = view.findNavController()
-                    val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId)
-                    navController.navigate(action)
+                // display rate court button only for past reservations
+                if (myReservation.time.isBefore(Instant.now().atZone(myReservation.time.zone))) {
+                    btnRateCourt.setOnClickListener {
+                        val navController = view.findNavController()
+                        val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId)
+                        navController.navigate(action)
+                    }
+                } else {
+                    btnRateCourt.visibility = GONE
                 }
 
                 view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name
