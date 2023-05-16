@@ -8,9 +8,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
@@ -125,7 +125,13 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
 
                 view.findViewById<TextView>(R.id.durationInfo).text = resources.getString(R.string.duration) + ": "+ myReservation.duration.toHours().toString() + "h"
 
-                view.findViewById<CheckBox>(R.id.rentingEquipment).isChecked = myReservation.rentingEquipment
+                if (myReservation.rentingEquipment) {
+                    view.findViewById<ImageView>(R.id.rentingEquipmentIconTrue).visibility = VISIBLE
+                    view.findViewById<ImageView>(R.id.rentingEquipmentIconFalse).visibility = GONE
+                } else {
+                    view.findViewById<ImageView>(R.id.rentingEquipmentIconTrue).visibility = GONE
+                    view.findViewById<ImageView>(R.id.rentingEquipmentIconFalse).visibility = VISIBLE
+                }
                 val image = view.findViewById<ImageView>(R.id.reservationImage)
                 val sportIcon = view.findViewById<ImageView>(R.id.sportNameIcon)
 
