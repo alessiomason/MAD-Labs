@@ -231,7 +231,7 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController= view?.findNavController()
-        var action=EditReservationFragmentDirections.actionEditReservationFragmentToCalendarFragment()
+        var action=EditReservationFragmentDirections.actionEditReservationFragmentToShowReservationFragment(myReservation.id)
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_edit_reservation -> {
@@ -240,7 +240,7 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
                 var chkEquipment=view?.findViewById<CheckBox>(R.id.rentingEquipment);
 
                 if (chkEquipment != null) {
-                    myReservation.rentingEquipment=myReservation.rentingEquipment.not()
+                    myReservation.rentingEquipment=chkEquipment.isChecked
                 }
 
                 reservationsViewModel.updateReservation(myReservation)
