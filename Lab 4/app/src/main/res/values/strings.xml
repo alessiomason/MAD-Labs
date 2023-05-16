@@ -67,7 +67,8 @@
     <string name="delete_reservation_cancel_button">Cancel</string>
     <string name="delete_reservation_delete_button">Delete</string>
     <string name="rate_court">Rate Court</string>
-
+    <string name="edit_reservation_hours">Hours: </string>
+    <string name="edit_reservation_duration">Duration: </string>
     <string name="title_activity_test_compose">TestComposeActivity</string>
     <string name="title_activity_rating_playgrounds">RatingPlaygrounds</string>
 </resources>
