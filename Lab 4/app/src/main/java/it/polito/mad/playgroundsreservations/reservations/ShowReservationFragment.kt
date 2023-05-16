@@ -86,15 +86,21 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 }
 
                 val btnRateCourt = view.findViewById<Button>(R.id.btnRateCourt)
-                // display rate court button only for past reservations
-                if (myReservation.time.plus(myReservation.duration).isBefore(Instant.now().atZone(myReservation.time.zone))) {
-                    btnRateCourt.setOnClickListener {
-                        val navController = view.findNavController()
-                        val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId)
-                        navController.navigate(action)
+                // display rate court button only for past reservations and if not already rated
+                val previousRatingForReservation = reservationsViewModel.getRatingByReservation(myReservation.id)
+
+                previousRatingForReservation.observe(viewLifecycleOwner) { rating ->
+                    if (myReservation.time.plus(myReservation.duration).isBefore(Instant.now().atZone(myReservation.time.zone))
+                        && rating == null
+                    ) {
+                        btnRateCourt.setOnClickListener {
+                            val navController = view.findNavController()
+                            val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId)
+                            navController.navigate(action)
+                        }
+                    } else {
+                        btnRateCourt.visibility = GONE
                     }
-                } else {
-                    btnRateCourt.visibility = GONE
                 }
 
                 val rating = reservationsViewModel.getPlaygroundAverageRating(myPlayground.id)

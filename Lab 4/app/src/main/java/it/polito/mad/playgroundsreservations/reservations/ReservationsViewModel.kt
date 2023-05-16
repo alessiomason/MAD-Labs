@@ -62,6 +62,7 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
                     val id = playgroundsDao.save(p)
                     val rating = PlaygroundRating(
                         playgroundId = id.toInt(),
+                        reservationId = 0,
                         rating = (0..5).random(),
                         description = ""
                     )
@@ -94,6 +95,10 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
 
     fun getPlaygroundAverageRating(playgroundId: Int): LiveData<Double> {
         return playgroundsDao.getPlaygroundAverageRating(playgroundId)
+    }
+
+    fun getRatingByReservation(reservationId: Int): LiveData<PlaygroundRating?> {
+        return playgroundRatingsDao.getRatingByReservation(reservationId)
     }
 
     fun saveReservation(reservation: Reservation) {
