@@ -5,21 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -28,9 +34,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -80,9 +89,11 @@ fun RatingPlaygroundsScreen(playgroundId: Int) {
         RatingPlaygroundsScreenContent(playground = playground.value!!)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RatingPlaygroundsScreenContent(playground: Playground) {
     var rating by remember { mutableStateOf(0) }
+    var text by remember { mutableStateOf("") }
     val image = when (playground.sport) {
         Sports.TENNIS -> R.drawable.tennis_court
         Sports.BASKETBALL -> R.drawable.basketball_court
@@ -92,23 +103,43 @@ fun RatingPlaygroundsScreenContent(playground: Playground) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp), // Aggiunto padding
+        verticalArrangement = Arrangement.Top, // Modificato l'allineamento verticale
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = playground.name)
+        Text(text = playground.name, fontWeight = FontWeight.Bold, modifier = Modifier.padding(end = 8.dp))
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .clip(CircleShape) // Applica il clipping circolare al contenitore Box
+                .border(1.dp, Color.Black, CircleShape) // Aggiungi un bordo al cerchio
+        ) {
+            Image(
+                painter = painterResource(id = image),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize() // L'immagine occupa l'intero spazio disponibile nel contenitore Box
+            )
+        }
+
         Text(text = playground.address)
         Text(text = playground.sport.toString())
-        Image(
-            painter = painterResource(id = image),
-            contentDescription = null,
-            modifier = Modifier.size(200.dp)
-        )
         Spacer(modifier = Modifier.height(16.dp))
-        RatingBar(rating = rating, onRatingChanged = { newRating -> rating = newRating })
+        Row(
+            verticalAlignment = Alignment.CenterVertically, // Allineamento verticale
+            modifier = Modifier.padding(bottom = 16.dp) // Aggiunto padding inferiore
+        ) {
+            Text(text = "Rating:", fontWeight = FontWeight.Bold, modifier = Modifier.padding(end = 8.dp)) // Aggiunta label
+            RatingBar(rating = rating, onRatingChanged = { newRating -> rating = newRating })
+        }
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("Aggiungi una descrizione(facoltativa)") }
+        )
     }
 }
-
 @Composable
 fun RatingBar(rating: Int, onRatingChanged: (Int) -> Unit) {
     Row {
