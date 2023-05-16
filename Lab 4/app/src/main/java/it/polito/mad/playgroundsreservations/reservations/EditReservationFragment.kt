@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -126,22 +127,38 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
                     Sports.GOLF -> resources.getString(R.string.sport_golf)
                 }
 
+                val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
+                ratingBar.setIsIndicator(true)
+
+                val rating = reservationsViewModel.getPlaygroundAverageRating(myPlayground.id)
+                rating.observe(viewLifecycleOwner) {
+                    ratingBar.rating = it.toFloat()
+                }
+
                 view.findViewById<TextView>(R.id.sportName).text = sportName
                 view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name
                 view.findViewById<CheckBox>(R.id.rentingEquipment).isChecked =
                     myReservation.rentingEquipment
                 view.findViewById<CheckBox>(R.id.rentingEquipment).isChecked = myReservation.rentingEquipment
+
                 val image = view.findViewById<ImageView>(R.id.reservationImage)
+                val sportIcon = view.findViewById<ImageView>(R.id.sportNameIcon)
+
                 if (myReservation.sport == Sports.TENNIS) {
                     image.setImageResource(R.drawable.tennis_court)
+                    sportIcon.setImageResource(R.drawable.tennis_ball)
                 } else if (myReservation.sport == Sports.FOOTBALL){
                     image.setImageResource(R.drawable.football_pitch)
+                    sportIcon.setImageResource(R.drawable.football_ball)
                 } else if (myReservation.sport == Sports.GOLF){
                     image.setImageResource(R.drawable.golf_field)
+                    sportIcon.setImageResource(R.drawable.golf_ball)
                 } else if (myReservation.sport == Sports.VOLLEYBALL) {
                     image.setImageResource(R.drawable.volleyball_court)
+                    sportIcon.setImageResource(R.drawable.volleyball_ball)
                 } else if (myReservation.sport == Sports.BASKETBALL) {
                     image.setImageResource(R.drawable.basketball_court)
+                    sportIcon.setImageResource(R.drawable.basketball_ball)
                 }
 
                 val spinner = view.findViewById<Spinner>(R.id.spinnerViewHours)
