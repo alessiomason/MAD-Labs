@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.View.*
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -57,7 +56,6 @@ class ShowProfileActivity: AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val flagChipEmpty = true;
         val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
         val gson = Gson()
         profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)

@@ -57,7 +57,7 @@
 
                 <EditText
                     android:id="@+id/editTextFullName"
-                    android:inputType="text"
+                    android:inputType="textPersonName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
@@ -82,7 +82,7 @@
 
                     <EditText
                         android:id="@+id/editTextNickname"
-                        android:inputType="text"
+                        android:inputType="textNoSuggestions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
@@ -110,7 +110,7 @@
                         android:id="@+id/editTextBio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:minHeight="48dp"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
@@ -226,7 +226,7 @@
 
                     <EditText
                         android:id="@+id/editTextLocation"
-                        android:inputType="text"
+                        android:inputType="textPostalAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="48dp"
