@@ -75,7 +75,7 @@ class RatingPlaygrounds : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        RatingPlaygroundsScreen(args.playgroundId,args.reservationId)
+                        RatingPlaygroundsScreen(args.playgroundId, args.reservationId)
                     }
                 }
             }
@@ -86,6 +86,7 @@ class RatingPlaygrounds : Fragment() {
 @Composable
 fun RatingPlaygroundsScreen(playgroundId: Int,reservationId:Int) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
+
     val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
     reservationsViewModel.getPlayground(playgroundId, playground)
 
@@ -98,6 +99,9 @@ fun RatingPlaygroundsScreen(playgroundId: Int,reservationId:Int) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RatingPlaygroundsScreenContent(playground: Playground,reservationId: Int) {
+    val reservationsViewModel: ReservationsViewModel = viewModel()
+    val navController = rememberNavController()
+
     var rating by remember { mutableStateOf(0) }
     var text by remember { mutableStateOf("") }
     val context=LocalContext.current;
@@ -147,12 +151,10 @@ fun RatingPlaygroundsScreenContent(playground: Playground,reservationId: Int) {
         )
         Button(
             onClick = {
-
-                      val playgroundRating=PlaygroundRating(playgroundId = playground.id, reservationId =reservationId , rating = rating, description = text);
-            //    val navController = rememberNavController()
-              //  val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId,myReservation.id)
-                //navController.navigate(action)
-
+                val playgroundRating=PlaygroundRating(playgroundId = playground.id, reservationId = reservationId , rating = rating, description = text);
+                // val action = RatingPlaygroundsDirections.actionRatingPlaygroundsToShowReservationFragment(reservationId)
+                reservationsViewModel.savePlaygroundRating(playgroundRating)
+                // navController.navigate(action)
 
             },
             content = { Text(stringResource(id =R.string.save_rating)) }
