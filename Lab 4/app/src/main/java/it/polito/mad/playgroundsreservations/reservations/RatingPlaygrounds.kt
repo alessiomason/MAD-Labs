@@ -114,12 +114,12 @@ fun RatingBar(rating: Int, onRatingChanged: (Int) -> Unit) {
     Row {
         for (i in 1..5) {
             val drawable = if (i <= rating) {
-                Icons.Filled.Star
+                R.drawable.baseline_star_24
             } else {
-                Icons.Outlined.Star
+               R.drawable.baseline_star_border_24
             }
-            Icon(
-                painter = rememberVectorPainter(drawable),
+            Image(
+                painter = painterResource(drawable),
                 contentDescription = null,
                 modifier = Modifier.clickable { onRatingChanged(i) }
             )
