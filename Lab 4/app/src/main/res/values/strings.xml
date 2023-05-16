@@ -74,4 +74,5 @@
     <string name="rating_label">Rating:</string>
     <string name="title_activity_test_compose">TestComposeActivity</string>
     <string name="title_activity_rating_playgrounds">RatingPlaygrounds</string>
+    <string name="save_rating">Save Rating</string>
 </resources>

@@ -111,5 +111,11 @@
         <argument
             android:name="playgroundId"
             app:argType="integer" />
+        <argument
+            android:name="reservationId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_ratingPlaygrounds_to_showReservationFragment"
+            app:destination="@id/showReservationFragment" />
     </fragment>
 </navigation>

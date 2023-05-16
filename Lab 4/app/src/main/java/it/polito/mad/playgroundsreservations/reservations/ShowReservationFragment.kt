@@ -100,7 +100,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     ) {
                         btnRateCourt.setOnClickListener {
                             val navController = view.findNavController()
-                            val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId)
+                            val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId,myReservation.id)
                             navController.navigate(action)
                         }
                     } else {

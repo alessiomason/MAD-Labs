@@ -3,6 +3,7 @@ package it.polito.mad.playgroundsreservations.reservations
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.navigation.compose.rememberNavController
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,9 +48,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
+import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Sports
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 
@@ -70,7 +75,7 @@ class RatingPlaygrounds : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        RatingPlaygroundsScreen(args.playgroundId)
+                        RatingPlaygroundsScreen(args.playgroundId,args.reservationId)
                     }
                 }
             }
@@ -79,7 +84,7 @@ class RatingPlaygrounds : Fragment() {
 }
 
 @Composable
-fun RatingPlaygroundsScreen(playgroundId: Int) {
+fun RatingPlaygroundsScreen(playgroundId: Int,reservationId:Int) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
     val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
     reservationsViewModel.getPlayground(playgroundId, playground)
@@ -87,14 +92,15 @@ fun RatingPlaygroundsScreen(playgroundId: Int) {
     if (playground.value == null)
         Text("Loading")
     else
-        RatingPlaygroundsScreenContent(playground = playground.value!!)
+        RatingPlaygroundsScreenContent(playground = playground.value!!,reservationId=reservationId)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RatingPlaygroundsScreenContent(playground: Playground) {
+fun RatingPlaygroundsScreenContent(playground: Playground,reservationId: Int) {
     var rating by remember { mutableStateOf(0) }
     var text by remember { mutableStateOf("") }
+    val context=LocalContext.current;
     val image = when (playground.sport) {
         Sports.TENNIS -> R.drawable.tennis_court
         Sports.BASKETBALL -> R.drawable.basketball_court
@@ -139,6 +145,18 @@ fun RatingPlaygroundsScreenContent(playground: Playground) {
             onValueChange = { text = it },
             label = { Text(text = stringResource(id = R.string.optional_description_rating)) }
         )
+        Button(
+            onClick = {
+
+                      val playgroundRating=PlaygroundRating(playgroundId = playground.id, reservationId =reservationId , rating = rating, description = text);
+            //    val navController = rememberNavController()
+              //  val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId,myReservation.id)
+                //navController.navigate(action)
+
+
+            },
+            content = { Text(stringResource(id =R.string.save_rating)) }
+        )
     }
 }
 @Composable
@@ -170,6 +188,6 @@ fun MyScreenPreview() {
     )
 
     PlaygroundsReservationsTheme {
-        RatingPlaygroundsScreenContent(playground = myPlayground)
+        RatingPlaygroundsScreenContent(playground = myPlayground, reservationId = 1)
     }
 }
