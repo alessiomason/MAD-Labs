@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -130,13 +131,13 @@ fun RatingPlaygroundsScreenContent(playground: Playground) {
             verticalAlignment = Alignment.CenterVertically, // Allineamento verticale
             modifier = Modifier.padding(bottom = 16.dp) // Aggiunto padding inferiore
         ) {
-            Text(text = "Rating:", fontWeight = FontWeight.Bold, modifier = Modifier.padding(end = 8.dp)) // Aggiunta label
+            Text(text = stringResource(id = R.string.rating_label), fontWeight = FontWeight.Bold, modifier = Modifier.padding(end = 8.dp)) // Aggiunta label
             RatingBar(rating = rating, onRatingChanged = { newRating -> rating = newRating })
         }
         TextField(
             value = text,
             onValueChange = { text = it },
-            label = { Text("Aggiungi una descrizione(facoltativa)") }
+            label = { Text(text = stringResource(id = R.string.optional_description_rating)) }
         )
     }
 }
