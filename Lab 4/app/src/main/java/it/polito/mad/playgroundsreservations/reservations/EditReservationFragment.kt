@@ -243,7 +243,7 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
                     myReservation.rentingEquipment=myReservation.rentingEquipment.not()
                 }
 
-                reservationsViewModel.update(myReservation)
+                reservationsViewModel.updateReservation(myReservation)
 
                 navController?.navigate(action)
 

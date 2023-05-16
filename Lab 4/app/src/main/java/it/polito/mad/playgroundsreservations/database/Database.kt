@@ -6,12 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import java.io.File
 
-@androidx.room.Database(entities = [Reservation::class, Playground::class, User::class], version = 10, exportSchema = true)
+@androidx.room.Database(
+    entities = [Reservation::class, Playground::class, PlaygroundRating::class, User::class],
+    version = 11,
+    exportSchema = true
+)
 @androidx.room.TypeConverters(TypeConverters::class)
 abstract class Database: RoomDatabase() {
     abstract fun reservationsDao(): ReservationsDao
     abstract fun userDao(): UserDao
     abstract fun playgroundsDao(): PlaygroundsDao
+    abstract fun playgroundRatingsDao(): PlaygroundRatingsDao
 
     companion object {
         @Volatile

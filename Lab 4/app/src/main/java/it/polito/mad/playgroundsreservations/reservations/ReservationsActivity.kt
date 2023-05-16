@@ -1,14 +1,13 @@
 package it.polito.mad.playgroundsreservations.reservations
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import it.polito.mad.playgroundsreservations.R
-import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
 import java.time.Duration
+import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -23,6 +22,8 @@ class ReservationsActivity: AppCompatActivity() {
         if (reservationsViewModel.dbUpdated) {
             reservationsViewModel.playgrounds.observe(this) { playgroundsList ->
                 val zoneId = ZoneId.of("UTC+02:00")
+                val now = Instant.now().atZone(zoneId)
+
                 val reservationFOOTBALL = Reservation(
                     userId = 1,
                     playgroundId = playgroundsList.find { it.sport == Sports.FOOTBALL }?.id ?: 0,
@@ -33,10 +34,9 @@ class ReservationsActivity: AppCompatActivity() {
                 )
                 val reservationBASKETBALL = Reservation(
                     userId = 1,
-                    playgroundId = playgroundsList.find { it.sport == Sports.BASKETBALL }?.id
-                        ?: 0,
+                    playgroundId = playgroundsList.find { it.sport == Sports.BASKETBALL }?.id ?: 0,
                     sport = Sports.BASKETBALL,
-                    time = ZonedDateTime.of(2023, 5, 1, 11, 0, 0, 0, zoneId),
+                    time = ZonedDateTime.of(now.year, now.monthValue, now.dayOfMonth, now.hour, 0, 0, 0, zoneId),
                     duration = Duration.ofHours(2)
                 )
                 val reservationGOLF = Reservation(
@@ -55,8 +55,7 @@ class ReservationsActivity: AppCompatActivity() {
                 )
                 val reservationVOLLEYBALL = Reservation(
                     userId = 1,
-                    playgroundId = playgroundsList.find { it.sport == Sports.VOLLEYBALL }?.id
-                        ?: 0,
+                    playgroundId = playgroundsList.find { it.sport == Sports.VOLLEYBALL }?.id ?: 0,
                     sport = Sports.VOLLEYBALL,
                     time = ZonedDateTime.of(2023, 5, 26, 22, 0, 0, 0, zoneId),
                     duration = Duration.ofHours(1)
@@ -87,7 +86,7 @@ class ReservationsActivity: AppCompatActivity() {
                     reservationSameDaySameSport
                 )
                 reservations.forEach { reservation ->
-                    reservationsViewModel.save(reservation)
+                    reservationsViewModel.saveReservation(reservation)
                 }
             }
         }

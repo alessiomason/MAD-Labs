@@ -143,7 +143,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
             titleTextView.text = view.context.getString(
                 R.string.personal_reservation_box_title,
                 r.time.toLocalDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
-                r.time.toLocalTime())
+                r.time.toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)))
 
             val sportText = when (r.sport) {
                 Sports.TENNIS -> R.string.sport_tennis

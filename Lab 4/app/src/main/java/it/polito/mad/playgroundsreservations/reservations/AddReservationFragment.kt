@@ -17,12 +17,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.room.util.foreignKeyCheck
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sports
-import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -238,7 +236,7 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
                     myReservation.rentingEquipment=myReservation.rentingEquipment.not()
                 }
                 Log.d("AO", myReservation.toString())
-                reservationsViewModel.save(myReservation)
+                reservationsViewModel.saveReservation(myReservation)
 
                 navController?.navigate(action)
 

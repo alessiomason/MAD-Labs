@@ -1,7 +1,6 @@
 package it.polito.mad.playgroundsreservations.reservations
 
 import android.app.AlertDialog
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -88,7 +87,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
 
                 val btnRateCourt = view.findViewById<Button>(R.id.btnRateCourt)
                 // display rate court button only for past reservations
-                if (myReservation.time.isBefore(Instant.now().atZone(myReservation.time.zone))) {
+                if (myReservation.time.plus(myReservation.duration).isBefore(Instant.now().atZone(myReservation.time.zone))) {
                     btnRateCourt.setOnClickListener {
                         val navController = view.findNavController()
                         val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId)
@@ -96,6 +95,11 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     }
                 } else {
                     btnRateCourt.visibility = GONE
+                }
+
+                val rating = reservationsViewModel.getPlaygroundAverageRating(myPlayground.id)
+                rating.observe(viewLifecycleOwner) {
+                    it
                 }
 
                 view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name
@@ -142,7 +146,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                         val fragmentManager = requireFragmentManager()
                         fragmentManager.popBackStack()
                         // Continue with delete operation
-                        reservationsViewModel.delete(myReservation)
+                        reservationsViewModel.deleteReservation(myReservation)
                         navController?.navigate(action)
                     } // A null listener allows the button to dismiss the dialog and take no further action.
                     .setNegativeButton(R.string.delete_reservation_cancel_button, null)

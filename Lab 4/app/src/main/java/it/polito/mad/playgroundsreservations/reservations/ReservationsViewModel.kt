@@ -13,6 +13,7 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
     private val reservationsDao: ReservationsDao
     private val userDao: UserDao
     private val playgroundsDao: PlaygroundsDao
+    private val playgroundRatingsDao: PlaygroundRatingsDao
     val dbUpdated: Boolean
 
     init {
@@ -20,6 +21,7 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
         reservationsDao = db.reservationsDao()
         userDao = db.userDao()
         playgroundsDao = db.playgroundsDao()
+        playgroundRatingsDao = db.playgroundRatingsDao()
 
         val sharedPref = application.getSharedPreferences("dbPreferences", Context.MODE_PRIVATE)
         val savedDbVersion = sharedPref.getInt("dbVersion", 0)
@@ -54,9 +56,16 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
                 address = "Sports Center Avenue",
                 sport = Sports.GOLF))
 
+
             playgroundsList.forEach { p ->
                 viewModelScope.launch {
-                    playgroundsDao.save(p)
+                    val id = playgroundsDao.save(p)
+                    val rating = PlaygroundRating(
+                        playgroundId = id.toInt(),
+                        rating = (0..5).random(),
+                        description = ""
+                    )
+                    playgroundRatingsDao.save(rating)
                 }
             }
         }
@@ -83,21 +92,31 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
         }
     }
 
-    fun save(reservation: Reservation) {
+    fun getPlaygroundAverageRating(playgroundId: Int): LiveData<Double> {
+        return playgroundsDao.getPlaygroundAverageRating(playgroundId)
+    }
+
+    fun saveReservation(reservation: Reservation) {
         viewModelScope.launch {
             reservationsDao.save(reservation)
         }
     }
 
-    fun update(reservation: Reservation) {
+    fun updateReservation(reservation: Reservation) {
         viewModelScope.launch {
             reservationsDao.update(reservation)
         }
     }
 
-    fun delete(reservation: Reservation) {
+    fun deleteReservation(reservation: Reservation) {
         viewModelScope.launch {
             reservationsDao.delete(reservation)
+        }
+    }
+
+    fun savePlaygroundRating(playgroundRating: PlaygroundRating) {
+        viewModelScope.launch {
+            playgroundRatingsDao.save(playgroundRating)
         }
     }
 }

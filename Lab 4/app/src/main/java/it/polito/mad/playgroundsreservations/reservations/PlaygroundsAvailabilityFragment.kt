@@ -36,6 +36,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -208,7 +209,10 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
         private val playgroundTextView = view.findViewById<TextView>(R.id.reservation_box_playground)
 
         fun bind(rp: Pair<Reservation, Playground>) {
-            titleTextView.text = view.context.getString(R.string.reservation_box_title, rp.first.time.toLocalTime())
+            titleTextView.text = view.context.getString(
+                R.string.reservation_box_title,
+                rp.first.time.toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+            )
             durationTextView.text = view.context.getString(R.string.reservation_box_duration, rp.first.duration.toHours())
             playgroundTextView.text = view.context.getString(R.string.reservation_box_playground_name, rp.second.name)
         }
