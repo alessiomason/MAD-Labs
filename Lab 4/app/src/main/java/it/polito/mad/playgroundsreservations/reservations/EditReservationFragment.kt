@@ -44,6 +44,7 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
     var aus = 0
     var hours = mutableListOf<String>()
     var duration = mutableListOf<String>()
+
     var myReservation = Reservation(
         userId = 0,
         playgroundId = 0,
@@ -174,7 +175,20 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
                 }
 
                 val spinnerDuration=view.findViewById<Spinner>(R.id.spinnerDuration)
+                var selId=0;
+                for(j in 1 .. myReservation.duration.toHours().toInt())
+                    duration.add(j.toString()+" h")
+
+                if(myReservation.duration.toHours().toInt()==1)
+                    selId=0;
+                else if (myReservation.duration.toHours().toInt()==2)
+                    selId=1;
+                else
+                    selId=2;
+
                 spinnerDuration.adapter=durationAdapter
+                spinnerDuration.setSelection(selId)
+                var a=duration.size
 
                 var i=0
                 var oraTotale=0
@@ -262,7 +276,9 @@ class EditReservationFragment: Fragment(R.layout.edit_reservation_fragment) {
 
                 reservationsViewModel.updateReservation(myReservation)
 
-                navController?.navigate(action)
+               // navController?.navigate(action)
+                requireActivity().onBackPressed() // Chiudi il fragment attuale
+                true
 
             }
             }
