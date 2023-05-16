@@ -15,10 +15,10 @@ interface ReservationsDao {
     @Query("SELECT * FROM reservations WHERE playgroundID = :playgroundId")
     fun getReservationsByPlayground(playgroundId: Int): LiveData<List<Reservation>>
 
-    @Query("SELECT * FROM reservations WHERE userId = :userId")
+    @Query("SELECT * FROM reservations WHERE userId = :userId ORDER BY time, duration")
     fun getUserReservations(userId: Int): LiveData<List<Reservation>>
 
-    @Query("SELECT * FROM reservations r, playgrounds p WHERE p.sport = :sport AND r.playgroundId = p.id ORDER BY p.name, r.time, r.duration")
+    @Query("SELECT * FROM reservations r, playgrounds p WHERE p.sport = :sport AND r.playgroundId = p.id ORDER BY r.time, r.duration")
     fun getReservedPlaygroundsBySport(sport: Sports): LiveData<Map<Reservation, Playground>>
 
     @Insert(onConflict = ABORT)
