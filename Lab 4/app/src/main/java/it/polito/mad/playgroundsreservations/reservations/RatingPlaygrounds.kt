@@ -148,8 +148,9 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, n
             onClick = {
                 val playgroundRating=PlaygroundRating(playgroundId = playground.id, reservationId = reservationId , rating = rating, description = text);
                 reservationsViewModel.savePlaygroundRating(playgroundRating)
-                val action = RatingPlaygroundsDirections.actionRatingPlaygroundsToShowReservationFragment(reservationId)
-                navController.navigate(action)
+                // val action = RatingPlaygroundsDirections.actionRatingPlaygroundsToShowReservationFragment(reservationId)
+                // navController.navigate(action)
+                navController.popBackStack()
             },
             content = { Text(stringResource(id =R.string.save_rating)) }
         )
