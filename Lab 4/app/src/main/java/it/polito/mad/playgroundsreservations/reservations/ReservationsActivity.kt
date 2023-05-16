@@ -23,6 +23,8 @@ class ReservationsActivity: AppCompatActivity() {
             reservationsViewModel.playgrounds.observe(this) { playgroundsList ->
                 val zoneId = ZoneId.of("UTC+02:00")
                 val now = Instant.now().atZone(zoneId)
+                val pastNow = Instant.now().atZone(zoneId).minusDays(1)
+                val futureNow = Instant.now().atZone(zoneId).plusDays(1)
 
                 val reservationFOOTBALL = Reservation(
                     userId = 1,
@@ -81,6 +83,22 @@ class ReservationsActivity: AppCompatActivity() {
                     duration = Duration.ofHours(3),
                     rentingEquipment = false
                 )
+                val reservationTENNISPast = Reservation(
+                    userId = 1,
+                    playgroundId = playgroundsList.find { it.sport == Sports.TENNIS }?.id ?: 0,
+                    sport = Sports.TENNIS,
+                    time = ZonedDateTime.of(pastNow.year, pastNow.monthValue, pastNow.dayOfMonth, pastNow.hour, 0, 0, 0, zoneId),
+                    duration = Duration.ofHours(2),
+                    rentingEquipment = true
+                )
+                val reservationFOOTBALLFuture = Reservation(
+                    userId = 1,
+                    playgroundId = playgroundsList.find { it.sport == Sports.FOOTBALL }?.id ?: 0,
+                    sport = Sports.FOOTBALL,
+                    time = ZonedDateTime.of(futureNow.year, futureNow.monthValue, futureNow.dayOfMonth, futureNow.hour, 0, 0, 0, zoneId),
+                    duration = Duration.ofHours(2),
+                    rentingEquipment = true
+                )
 
                 val reservations = listOf(
                     reservationFOOTBALL,
@@ -89,7 +107,9 @@ class ReservationsActivity: AppCompatActivity() {
                     reservationTENNIS,
                     reservationVOLLEYBALL,
                     reservationSameDay,
-                    reservationSameDaySameSport
+                    reservationSameDaySameSport,
+                    reservationTENNISPast,
+                    reservationFOOTBALLFuture
                 )
                 reservations.forEach { reservation ->
                     reservationsViewModel.saveReservation(reservation)
