@@ -143,15 +143,32 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <CheckBox
+                    <ImageView
+                        android:id="@+id/rentingEquipmentIconTrue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/check_icon"
+                        android:paddingEnd="5dp"
+                        android:layout_gravity="center"
+                        app:tint="@color/primary" />
+
+                    <ImageView
+                        android:id="@+id/rentingEquipmentIconFalse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/cross_circle_icon"
+                        android:paddingEnd="5dp"
+                        android:layout_gravity="center"
+                        app:tint="@color/primary" />
+
+                    <TextView
                         android:id="@+id/rentingEquipment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="-5dp"
-                        android:enabled="false"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/renting_equipment"
+                        android:textColor="@android:color/secondary_text_light"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
 

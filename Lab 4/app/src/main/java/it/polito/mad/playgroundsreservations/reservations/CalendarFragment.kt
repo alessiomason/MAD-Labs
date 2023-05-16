@@ -34,7 +34,6 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-
 private val zoneId = ZoneId.systemDefault()
 private var tappedDay = MutableLiveData(Instant.now().atZone(zoneId).toLocalDate())
 

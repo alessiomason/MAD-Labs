@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
+import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -75,6 +77,14 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
                     )
                 }
 
+
+            val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
+            ratingBar.setIsIndicator(true)
+
+            val image = view.findViewById<ImageView>(R.id.reservationImage)
+            val sportIcon = view.findViewById<ImageView>(R.id.sportNameIcon)
+            val sportName = view.findViewById<TextView>(R.id.sportName)
+
             val spinner = view.findViewById<Spinner>(R.id.playgroundList)
             spinner.adapter = adapter
             val spinnerHour = view.findViewById<Spinner>(R.id.spinnerDuration)
@@ -92,6 +102,34 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
                     val playgroundId = playgroundList.get(position).id
                     myReservation.playgroundId = playgroundId
                     myReservation.sport = playgroundList.get(position).sport
+
+                    val rating = reservationsViewModel.getPlaygroundAverageRating(playgroundId)
+                    rating.observe(viewLifecycleOwner) {
+                        ratingBar.rating = it.toFloat()
+                    }
+
+                    if (myReservation.sport == Sports.TENNIS) {
+                        image.setImageResource(R.drawable.tennis_court)
+                        sportIcon.setImageResource(R.drawable.tennis_ball)
+                        sportName.setText(R.string.sport_tennis)
+                    } else if (myReservation.sport == Sports.FOOTBALL){
+                        image.setImageResource(R.drawable.football_pitch)
+                        sportIcon.setImageResource(R.drawable.football_ball)
+                        sportName.setText(R.string.sport_football)
+                    } else if (myReservation.sport == Sports.GOLF){
+                        image.setImageResource(R.drawable.golf_field)
+                        sportIcon.setImageResource(R.drawable.golf_ball)
+                        sportName.setText(R.string.sport_golf)
+                    } else if (myReservation.sport == Sports.VOLLEYBALL) {
+                        image.setImageResource(R.drawable.volleyball_court)
+                        sportIcon.setImageResource(R.drawable.volleyball_ball)
+                        sportName.setText(R.string.sport_volleyball)
+                    } else if (myReservation.sport == Sports.BASKETBALL) {
+                        image.setImageResource(R.drawable.basketball_court)
+                        sportIcon.setImageResource(R.drawable.basketball_ball)
+                        sportName.setText(R.string.sport_basketball)
+                    }
+
                     reservations.observe(viewLifecycleOwner) {
                         it.forEach { r ->
                             if (r.playgroundId == playgroundId &&
@@ -169,7 +207,6 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
                                     }
                                     if (i == 4)
                                         i = 3;
-                                    Log.d("BOH", i.toString());
                                     duration.removeAll(duration)
                                     for (j in 1..i)
                                         duration.add(j.toString() + " h")
@@ -233,9 +270,8 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
                 var chkEquipment=view?.findViewById<CheckBox>(R.id.rentingEquipment);
 
                 if (chkEquipment != null) {
-                    myReservation.rentingEquipment=myReservation.rentingEquipment.not()
+                    myReservation.rentingEquipment=chkEquipment.isChecked
                 }
-                Log.d("AO", myReservation.toString())
                 reservationsViewModel.saveReservation(myReservation)
 
                 navController?.navigate(action)

@@ -70,6 +70,7 @@
     <string name="rate_court">Vota il campo</string>
     <string name="edit_reservation_hours">Orario: </string>
     <string name="edit_reservation_duration">Durata: </string>
+    <string name="add_reservation_court">Campo: </string>
     <string name="title_activity_test_compose">TestComposeActivity</string>
     <string name="title_activity_rating_playgrounds">RatingPlaygrounds</string>
 </resources>

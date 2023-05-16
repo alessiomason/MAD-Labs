@@ -69,6 +69,7 @@
     <string name="rate_court">Rate Court</string>
     <string name="edit_reservation_hours">Hours: </string>
     <string name="edit_reservation_duration">Duration: </string>
+    <string name="add_reservation_court">Court: </string>
     <string name="title_activity_test_compose">TestComposeActivity</string>
     <string name="title_activity_rating_playgrounds">RatingPlaygrounds</string>
 </resources>
