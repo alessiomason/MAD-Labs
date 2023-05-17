@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -136,7 +137,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         private val sportTextView = view.findViewById<TextView>(R.id.personal_reservation_box_sport)
         private val durationTextView = view.findViewById<TextView>(R.id.personal_reservation_box_duration)
         private val playgroundTextView = view.findViewById<TextView>(R.id.personal_reservation_box_playground)
-
+        private val sportIcon = view.findViewById<ImageView>(R.id.personal_reservation_box_sport_icon)
         override fun bind(r: Reservation?, pos: Int, onTap: (Int) -> Unit) {
             r!! // abstract class requires nullable reservation, but for this class a reservation has to be passed
             titleTextView.text = view.context.getString(
@@ -151,7 +152,17 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
                 Sports.VOLLEYBALL -> R.string.sport_volleyball
                 Sports.GOLF -> R.string.sport_golf
             }
+
+            val sportIconId = when (r.sport) {
+                Sports.TENNIS -> R.drawable.tennis_ball
+                Sports.BASKETBALL -> R.drawable.basketball_ball
+                Sports.FOOTBALL -> R.drawable.football_ball
+                Sports.VOLLEYBALL -> R.drawable.volleyball_ball
+                Sports.GOLF -> R.drawable.golf_ball
+            }
+
             sportTextView.text = view.context.getString(sportText)
+            sportIcon.setImageResource(sportIconId)
 
             durationTextView.text = view.context.getString(R.string.reservation_box_duration, r.duration.toHours())
             playgroundTextView.text = view.context.getString(
@@ -171,7 +182,6 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         override fun bind(r: Reservation?, pos: Int, onTap: (Int) -> Unit) {
             val plusTextView = view.findViewById<TextView>(R.id.reservation_box_plus)
             plusTextView.setOnClickListener {
-                // TODO navigate
                 val action = CalendarFragmentDirections.actionCalendarFragmentToAddReservationFragment(
                     tappedDay.value.toString())
                 nav.navigate(action)

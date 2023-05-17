@@ -67,7 +67,7 @@
     <string name="delete_reservation_cancel_button">Cancel</string>
     <string name="delete_reservation_delete_button">Delete</string>
     <string name="rate_court">Rate Court</string>
-    <string name="edit_reservation_hours">Hours: </string>
+    <string name="edit_reservation_hours">Time: </string>
     <string name="edit_reservation_duration">Duration: </string>
     <string name="add_reservation_court">Court: </string>
     <string name="optional_description_rating">Add a description (optional)</string>
