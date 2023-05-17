@@ -52,7 +52,7 @@ import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Sports
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 
-class RatingPlaygrounds : Fragment() {
+class RatingPlaygrounds: Fragment() {
     private val args by navArgs<RatingPlaygroundsArgs>()
 
     override fun onCreateView(
@@ -71,7 +71,9 @@ class RatingPlaygrounds : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        RatingPlaygroundsScreen(args.playgroundId, args.reservationId, findNavController())
+                        RatingPlaygroundsScreen(args.playgroundId, args.reservationId) {
+                            findNavController().popBackStack()
+                        }
                     }
                 }
             }
@@ -80,7 +82,7 @@ class RatingPlaygrounds : Fragment() {
 }
 
 @Composable
-fun RatingPlaygroundsScreen(playgroundId: Int, reservationId:Int, navController: NavController) {
+fun RatingPlaygroundsScreen(playgroundId: Int, reservationId:Int, onNavigate: () -> Unit) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
 
     val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
@@ -89,12 +91,12 @@ fun RatingPlaygroundsScreen(playgroundId: Int, reservationId:Int, navController:
     if (playground.value == null)
         Text("Loading")
     else
-        RatingPlaygroundsScreenContent(playground = playground.value!!, reservationId=reservationId, navController = navController)
+        RatingPlaygroundsScreenContent(playground = playground.value!!, reservationId = reservationId, onNavigate)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, navController: NavController) {
+fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, onNavigate: () -> Unit) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
 
     var rating by remember { mutableStateOf(0) }
@@ -148,9 +150,7 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, n
             onClick = {
                 val playgroundRating=PlaygroundRating(playgroundId = playground.id, reservationId = reservationId , rating = rating, description = text);
                 reservationsViewModel.savePlaygroundRating(playgroundRating)
-                // val action = RatingPlaygroundsDirections.actionRatingPlaygroundsToShowReservationFragment(reservationId)
-                // navController.navigate(action)
-                navController.popBackStack()
+                onNavigate()
             },
             content = { Text(stringResource(id =R.string.save_rating)) }
         )
@@ -185,6 +185,6 @@ fun MyScreenPreview() {
     )
 
     PlaygroundsReservationsTheme {
-        //RatingPlaygroundsScreenContent(playground = myPlayground, reservationId = 1)
+        RatingPlaygroundsScreenContent(playground = myPlayground, reservationId = 1) { }
     }
 }

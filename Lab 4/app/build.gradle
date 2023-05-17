@@ -91,7 +91,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'com.github.npanigrahy:Custom-Calendar-View:v1.1'
-    def compose_version = "1.1.0-beta02"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
     implementation "androidx.activity:activity-compose:1.7.1"
 }
