@@ -164,7 +164,12 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
             sportTextView.text = view.context.getString(sportText)
             sportIcon.setImageResource(sportIconId)
 
-            durationTextView.text = view.context.getString(R.string.reservation_box_duration, r.duration.toHours())
+            if (r.duration.toHours().toInt() == 1 ){
+                durationTextView.text = view.context.getString(R.string.reservation_box_duration_single_hour, r.duration.toHours())
+            } else if (r.duration.toHours().toInt() == 2 ||  r.duration.toHours().toInt() == 3){
+                durationTextView.text = view.context.getString(R.string.reservation_box_duration, r.duration.toHours())
+            }
+
             playgroundTextView.text = view.context.getString(
                 R.string.reservation_box_playground_name,
                 playgrounds.find { it.id == r.playgroundId }?.name ?: ""

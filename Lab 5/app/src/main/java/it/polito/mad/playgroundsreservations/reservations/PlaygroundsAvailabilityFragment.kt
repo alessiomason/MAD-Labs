@@ -213,7 +213,12 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
                 R.string.reservation_box_title,
                 rp.first.time.toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
             )
-            durationTextView.text = view.context.getString(R.string.reservation_box_duration, rp.first.duration.toHours())
+            if (rp.first.duration.toHours().toInt() == 1) {
+                durationTextView.text = view.context.getString(R.string.reservation_box_duration_single_hour, rp.first.duration.toHours())
+            } else if (rp.first.duration.toHours().toInt() == 2 || rp.first.duration.toHours().toInt() == 3) {
+                durationTextView.text = view.context.getString(R.string.reservation_box_duration, rp.first.duration.toHours())
+            }
+
             playgroundTextView.text = view.context.getString(R.string.reservation_box_playground_name, rp.second.name)
         }
     }

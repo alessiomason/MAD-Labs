@@ -45,6 +45,7 @@
     <string name="reservation_box_title">Prenotazione alle ore %1$s</string>
     <string name="personal_reservation_box_title">Prenotazione per il giorno %1$s alle ore %2$s</string>
     <string name="reservation_box_duration">Durata: %1$d ore</string>
+    <string name="reservation_box_duration_single_hour">Durata: %1$d ora</string>
     <string name="reservation_box_playground_name">Campo: %1$s</string>
     <string name="new_reservation">Inserisci una nuova prenotazione</string>
     <string name="cancel_reservation">Cancella la prenotazione</string>
