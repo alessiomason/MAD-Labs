@@ -7,9 +7,11 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -185,11 +187,18 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 
     class DefaultViewHolder(private val view: View, val nav: NavController): MyViewHolder(view) {
         override fun bind(r: Reservation?, pos: Int, onTap: (Int) -> Unit) {
+            val plusTextViewLayout = view.findViewById<LinearLayout>(R.id.layout_reservation_box_plus)
             val plusTextView = view.findViewById<TextView>(R.id.reservation_box_plus)
-            plusTextView.setOnClickListener {
-                val action = CalendarFragmentDirections.actionCalendarFragmentToAddReservationFragment(
-                    tappedDay.value.toString())
-                nav.navigate(action)
+            if (tappedDay.value?.isBefore(Instant.now().atZone(zoneId).toLocalDate()) == true) {
+                // You can't add a reservation in the past
+                plusTextViewLayout.visibility = GONE
+                plusTextView.visibility = GONE
+            } else {
+                plusTextView.setOnClickListener {
+                    val action = CalendarFragmentDirections.actionCalendarFragmentToAddReservationFragment(
+                        tappedDay.value.toString())
+                    nav.navigate(action)
+                }
             }
         }
 
