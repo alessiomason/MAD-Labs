@@ -15,7 +15,7 @@ interface PlaygroundRatingsDao {
     fun getRatingByReservation(reservationId: Int): LiveData<PlaygroundRating?>
 
     @Query("SELECT * FROM playgrounds_ratings WHERE playgroundId = :playgroundId ")
-    fun getRatingsByPlaygroundId(playgroundId: Int): LiveData<PlaygroundRating?>
+    fun getRatingsByPlaygroundId(playgroundId: Int): LiveData<List<PlaygroundRating?>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun save(rating: PlaygroundRating)

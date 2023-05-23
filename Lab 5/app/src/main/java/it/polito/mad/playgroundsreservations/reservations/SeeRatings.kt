@@ -17,14 +17,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -78,30 +82,53 @@ fun SeeRatingsScreen(playgroundId: Int, navController: NavController) {
 
     //var ratings: MutableState<PlaygroundRating?> = remember { mutableStateOf(null) }
     var ratings=reservationsViewModel.getRatingsByPlaygroundId(playgroundId);
+
+    val ratingsList = remember { mutableStateListOf<PlaygroundRating>() }
+    // Osserva il LiveData
+    LaunchedEffect(ratings) {
+        ratings.observeForever { rating ->
+            rating?.let {
+                for(el in it)
+                    el?.let { it1 -> ratingsList.add(it1) }
+            }
+        }
+    }
+
+
     //reservationsViewModel.get
     // reservationsViewModel.getPlaygroundRatings(playgroundId)
 
     if (ratings == null)
         Text("Loading")
     else
-        Prova(paramValue = playgroundId,ratings);
+        Prova(paramValue = playgroundId,ratingsList);
     //SeeRatingsScreenContent(playgroundId = , navController = )
        // SeeRatingsScreenContent(playground = playground.value!!, reservationId = 3, navController)
 }
 
 @Composable
-fun Prova(paramValue:Int, ratings: LiveData<PlaygroundRating?>) {
+fun Prova(paramValue:Int, ratingList:SnapshotStateList<PlaygroundRating>) {
+// Esegui l'osservazione quando ratings cambia
+        // Puoi fare qualcosa con i nuovi valori di ratingsState qui
 
-    LazyColumn {
-  //      items(ratings) { item ->
-    //        ListItemComponent(item)
+    for (item in ratingList)
+    {
+        ListItemComponent(item = item)
+    }
+}
+   /* LazyColumn {
+       items(ratingsList) { item ->
+           ListItemComponent(item)
         }
 
-}
+    */
+
+
 @Composable
 fun ListItemComponent(item: PlaygroundRating) {
     var isExpanded by remember { mutableStateOf(false) }
     val starCount = item.rating
+    var i=1;
 
     Column(
         modifier = Modifier
@@ -112,12 +139,14 @@ fun ListItemComponent(item: PlaygroundRating) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "ciao",
+           /* Text(
+                text = "Rating"+i.toString(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 modifier = Modifier.weight(1f)
             )
+            */
+
 
             repeat(5) { index ->
                 Icon(
@@ -129,17 +158,17 @@ fun ListItemComponent(item: PlaygroundRating) {
                 )
             }
 
-         /*   if (item.hasButton) {
+            if (item.description!="") {
                 IconButton(onClick = { isExpanded = !isExpanded }) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_expand),
+                        painter = painterResource(R.drawable.basketball_ball),
                         contentDescription = null
                     )
                 }
             }
 
 
-          */
+
         }
 
         if (isExpanded) {
