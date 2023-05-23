@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     app:startDestination="@id/calendarFragment">
 
@@ -117,5 +118,17 @@
         <action
             android:id="@+id/action_ratingPlaygrounds_to_showReservationFragment"
             app:destination="@id/showReservationFragment" />
+        <action
+            android:id="@+id/action_ratingPlaygrounds_to_seeRatings"
+            app:destination="@id/seeRatings" />
+    </fragment>
+    <fragment
+        android:id="@+id/seeRatings"
+        android:name="it.polito.mad.playgroundsreservations.reservations.SeeRatings"
+        android:label="fragment_see_ratings"
+        tools:layout="@layout/fragment_see_ratings" >
+        <argument
+            android:name="playgroundId"
+            app:argType="integer" />
     </fragment>
 </navigation>

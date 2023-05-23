@@ -77,4 +77,5 @@
     <string name="title_activity_test_compose">TestComposeActivity</string>
     <string name="title_activity_rating_playgrounds">RatingPlaygrounds</string>
     <string name="save_rating">Salva Rating</string>
+    <string name="see_ratings">Guarda i ratings</string>
 </resources>

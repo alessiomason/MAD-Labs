@@ -92,9 +92,7 @@ class RatingPlaygrounds: Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        RatingPlaygroundsScreen(args.playgroundId, args.reservationId) {
-                            findNavController().popBackStack()
-                        }
+                        RatingPlaygroundsScreen(args.playgroundId, args.reservationId,  findNavController())
                     }
                 }
             }
@@ -103,7 +101,7 @@ class RatingPlaygrounds: Fragment() {
 }
 
 @Composable
-fun RatingPlaygroundsScreen(playgroundId: Int, reservationId:Int, onNavigate: () -> Unit) {
+fun RatingPlaygroundsScreen(playgroundId: Int, reservationId:Int, navController:NavController) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
 
     val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
@@ -112,12 +110,12 @@ fun RatingPlaygroundsScreen(playgroundId: Int, reservationId:Int, onNavigate: ()
     if (playground.value == null)
         Text("Loading")
     else
-        RatingPlaygroundsScreenContent(playground = playground.value!!, reservationId = reservationId, onNavigate)
+        RatingPlaygroundsScreenContent(playground = playground.value!!, reservationId = reservationId, navController)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, onNavigate: () -> Unit) {
+fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, navController: NavController) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
 
     var rating by remember { mutableStateOf(0) }
@@ -207,9 +205,20 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, o
             onClick = {
                 val playgroundRating=PlaygroundRating(playgroundId = playground.id, reservationId = reservationId , rating = rating, description = text);
                 reservationsViewModel.savePlaygroundRating(playgroundRating)
-                onNavigate()
+                navController.popBackStack()
             },
             content = { Text(stringResource(id =R.string.save_rating).toUpperCase(), color = Color.White) },
+            colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.primary)),
+            modifier = Modifier.padding(top = 8.dp)
+        )
+        Button(
+            onClick = {
+               // val playgroundRating=PlaygroundRating(playgroundId = playground.id, reservationId = reservationId , rating = rating, description = text);
+                //reservationsViewModel.savePlaygroundRating(playgroundRating)
+                var action=RatingPlaygroundsDirections.actionRatingPlaygroundsToSeeRatings(playground.id)
+                navController.navigate(action)
+            },
+            content = { Text(stringResource(id =R.string.see_ratings).toUpperCase(), color = Color.White) },
             colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.primary)),
             modifier = Modifier.padding(top = 8.dp)
         )

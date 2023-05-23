@@ -100,6 +100,10 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
     fun getRatingByReservation(reservationId: Int): LiveData<PlaygroundRating?> {
         return playgroundRatingsDao.getRatingByReservation(reservationId)
     }
+    fun getRatingsByPlaygroundId(playgroundId: Int): LiveData<PlaygroundRating?>
+    {
+        return playgroundRatingsDao.getRatingsByPlaygroundId(playgroundId)
+    }
 
     fun saveReservation(reservation: Reservation) {
         viewModelScope.launch {
