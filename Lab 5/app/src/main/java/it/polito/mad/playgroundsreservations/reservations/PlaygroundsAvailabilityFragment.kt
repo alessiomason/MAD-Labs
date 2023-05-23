@@ -18,6 +18,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.GONE
+import androidx.recyclerview.widget.RecyclerView.VISIBLE
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
@@ -52,6 +54,8 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
         super.onViewCreated(view, savedInstanceState)
 
         val reservationsViewModel by viewModels<ReservationsViewModel>()
+        // NEW RESERVATION BUTTON
+        val button = view.findViewById<Button>(R.id.reserve_new_playground_button)
 
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.playgrounds_availability)
@@ -109,6 +113,12 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
                 if (data.date == selectedDate.value) {
                     container.textView.setTextColor(Color.WHITE)
                     container.textView.setBackgroundResource(R.drawable.rounded_shape)
+                    if (data.date.isBefore(LocalDate.now())){
+                        button.visibility = GONE
+                    } else {
+                        button.visibility = VISIBLE
+                    }
+
                 } else {
                     container.textView.setTextColor(Color.BLACK)
                     container.textView.background = null
@@ -162,8 +172,6 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
             }
         }
 
-        // NEW RESERVATION BUTTON
-        val button = view.findViewById<Button>(R.id.reserve_new_playground_button)
         val navController = view.findNavController()
         button.setOnClickListener {
             val action = PlaygroundsAvailabilityFragmentDirections.actionPlaygroundsAvailabilityFragmentToAddReservationFragment(selectedDate.value.toString())
