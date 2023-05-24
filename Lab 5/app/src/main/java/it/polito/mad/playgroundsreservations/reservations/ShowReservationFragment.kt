@@ -108,18 +108,18 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                         }
                     } else {
                         btnRateCourt.visibility = GONE
-                        myReviewLayout.visibility = VISIBLE
-                        val myRatingBar = view.findViewById<RatingBar>(R.id.myReviewScore)
-                        myRatingBar.setIsIndicator(true)
-                        myRatingBar.rating = rating?.rating?.toFloat()!!
-                        val myDescription = view.findViewById<TextView>(R.id.myReviewDescription)
-                        if (rating.description == "") {
-                            myDescription.text = resources.getString(R.string.optional_description_entered)
-                        } else {
-                            myDescription.text = "\"" + rating.description + "\""
-
+                        if (rating != null) {
+                            myReviewLayout.visibility = VISIBLE
+                            val myRatingBar = view.findViewById<RatingBar>(R.id.myReviewScore)
+                            myRatingBar.setIsIndicator(true)
+                            myRatingBar.rating = rating?.rating?.toFloat()!!
+                            val myDescription = view.findViewById<TextView>(R.id.myReviewDescription)
+                            if (rating.description == "") {
+                                myDescription.text = resources.getString(R.string.optional_description_entered)
+                            } else {
+                                myDescription.text = "\"" + rating.description + "\""
+                            }
                         }
-
                     }
                 }
 

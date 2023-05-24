@@ -118,7 +118,7 @@ fun RatingPlaygroundsScreen(playgroundId: Int, reservationId:Int, navController:
 fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, navController: NavController) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
 
-    var rating by remember { mutableStateOf(0) }
+    var rating by remember { mutableStateOf(1) }
     var text by remember { mutableStateOf("") }
     var iconId by remember { mutableStateOf(0) }
     var sportNameId by remember { mutableStateOf(0) }
