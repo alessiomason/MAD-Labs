@@ -14,6 +14,10 @@
     <string name="basketball_court_description">Superficie interna in parquet</string>
     <string name="football_pitch">Campo da calcio</string>
     <string name="football_pitch_description">Campo erba sintetico a 11</string>
+    <string name="volleyball_court">Campo da pallavolo</string>
+    <string name="volleyball_court_description">Superficie interna in parquet</string>
+    <string name="golf_court">Campo da golf</string>
+    <string name="golf_court_description">Struttura esterna</string>
 
     <!-- PROFILE -->
     <string name="user_profile">Il mio profilo</string>

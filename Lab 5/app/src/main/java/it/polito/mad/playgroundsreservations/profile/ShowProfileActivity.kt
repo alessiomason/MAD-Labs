@@ -11,11 +11,14 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Sports
+import it.polito.mad.playgroundsreservations.reservations.ReservationsViewModel
 import java.io.FileInputStream
 
 class ShowProfileActivity: AppCompatActivity() {
@@ -70,6 +73,53 @@ class ShowProfileActivity: AppCompatActivity() {
         if (profile.location != null) locationView.text = profile.location
         if (profile.rating != null) ratingBarView.rating = profile.rating!!
         selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
+
+        val reservationViewModel by viewModels<ReservationsViewModel>()
+        val playgrounds = reservationViewModel.playgrounds
+
+        playgrounds.observe(this) { itemList ->
+            itemList?.let {items ->
+                for (item in items) {
+                    if (item.sport == Sports.BASKETBALL) {
+                        val textView = findViewById<TextView>(R.id.my_court_basketball_title)
+                        textView.text = item.name
+                        val imageView = findViewById<ImageView>(R.id.my_court_basketball_image)
+                        imageView.setImageResource(R.drawable.basketball_court)
+                        val addressView = findViewById<TextView>(R.id.my_court_basketball_address)
+                        addressView.text = item.address
+                    } else if (item.sport == Sports.VOLLEYBALL) {
+                        val textView = findViewById<TextView>(R.id.my_court_volleyball_title)
+                        textView.text = item.name
+                        val imageView = findViewById<ImageView>(R.id.my_court_volleyball_image)
+                        imageView.setImageResource(R.drawable.volleyball_court)
+                        val addressView = findViewById<TextView>(R.id.my_court_volleyball_address)
+                        addressView.text = item.address
+                    } else if (item.sport == Sports.GOLF) {
+                        val textView = findViewById<TextView>(R.id.my_court_golf_title)
+                        textView.text = item.name
+                        val imageView = findViewById<ImageView>(R.id.my_court_golf_image)
+                        imageView.setImageResource(R.drawable.golf_field)
+                        val addressView = findViewById<TextView>(R.id.my_court_golf_address)
+                        addressView.text = item.address
+                    } else if (item.sport == Sports.TENNIS) {
+                        val textView = findViewById<TextView>(R.id.my_court_tennis_title)
+                        textView.text = item.name
+                        val imageView = findViewById<ImageView>(R.id.my_court_tennis_image)
+                        imageView.setImageResource(R.drawable.tennis_court)
+                        val addressView = findViewById<TextView>(R.id.my_court_tennis_address)
+                        addressView.text = item.address
+                    } else if (item.sport == Sports.FOOTBALL) {
+                        val textView = findViewById<TextView>(R.id.my_court_football_title)
+                        textView.text = item.name
+                        val imageView = findViewById<ImageView>(R.id.my_court_football_image)
+                        imageView.setImageResource(R.drawable.football_pitch)
+                        val addressView = findViewById<TextView>(R.id.my_court_football_address)
+                        addressView.text = item.address
+                    }
+                }
+            }
+        }
+
 
         val emptyChip = findViewById<Chip>(R.id.chipEmpty)
         emptyChip.visibility = VISIBLE

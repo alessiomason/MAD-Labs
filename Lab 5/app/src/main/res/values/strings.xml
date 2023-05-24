@@ -12,6 +12,10 @@
     <string name="basketball_court_description">Internal court</string>
     <string name="football_pitch">Football pitch</string>
     <string name="football_pitch_description">11 external pitch</string>
+    <string name="volleyball_court">Volleyball court</string>
+    <string name="volleyball_court_description">Internal court</string>
+    <string name="golf_court">Golf court</string>
+    <string name="golf_court_description">External field</string>
 
     <!-- PROFILE -->
     <string name="user_profile">My profile</string>

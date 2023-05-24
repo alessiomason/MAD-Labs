@@ -300,8 +300,9 @@
                         android:orientation="horizontal" >
 
                         <LinearLayout
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/my_court_tennis"
+                            android:layout_width="180dp"
+                            android:layout_height="180dp"
                             android:layout_marginTop="10dp"
                             android:background="@drawable/rounded_shape"
                             android:orientation="vertical"
@@ -309,6 +310,7 @@
                             android:layout_marginEnd="5dp" >
 
                             <TextView
+                                android:id="@+id/my_court_tennis_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/tennis_court"
@@ -317,11 +319,13 @@
                                 android:paddingBottom="10dp" />
 
                             <ImageView
+                                android:id="@+id/my_court_tennis_image"
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
                                 android:src="@drawable/tennis_court" />
 
                             <TextView
+                                android:id="@+id/my_court_tennis_address"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/tennis_court_description"
@@ -332,15 +336,17 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/my_court_basketball"
+                            android:layout_width="180dp"
+                            android:layout_height="180dp"
                             android:layout_marginTop="10dp"
                             android:background="@drawable/rounded_shape"
                             android:orientation="vertical"
                             android:padding="10dp"
-                            android:layout_marginHorizontal="5dp" >
+                            android:layout_marginEnd="5dp" >
 
                             <TextView
+                                android:id="@+id/my_court_basketball_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/basketball_court"
@@ -349,11 +355,13 @@
                                 android:paddingBottom="10dp" />
 
                             <ImageView
+                                android:id="@+id/my_court_basketball_image"
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
-                                android:src="@drawable/volleyball_court" />
+                                android:src="@drawable/basketball_court" />
 
                             <TextView
+                                android:id="@+id/my_court_basketball_address"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/basketball_court_description"
@@ -364,15 +372,17 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/my_court_football"
+                            android:layout_width="180dp"
+                            android:layout_height="180dp"
                             android:layout_marginTop="10dp"
                             android:background="@drawable/rounded_shape"
                             android:orientation="vertical"
                             android:padding="10dp"
-                            android:layout_marginStart="5dp" >
+                            android:layout_marginEnd="5dp" >
 
                             <TextView
+                                android:id="@+id/my_court_football_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/football_pitch"
@@ -381,14 +391,88 @@
                                 android:paddingBottom="10dp" />
 
                             <ImageView
+                                android:id="@+id/my_court_football_image"
                                 android:layout_width="match_parent"
                                 android:layout_height="100dp"
                                 android:src="@drawable/football_pitch" />
 
                             <TextView
+                                android:id="@+id/my_court_football_address"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/football_pitch_description"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textColor="@color/white"
+                                android:paddingTop="10dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/my_court_volleyball"
+                            android:layout_width="180dp"
+                            android:layout_height="180dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/rounded_shape"
+                            android:orientation="vertical"
+                            android:padding="10dp"
+                            android:layout_marginEnd="5dp" >
+
+                            <TextView
+                                android:id="@+id/my_court_volleyball_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/volleyball_court"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/white"
+                                android:paddingBottom="10dp" />
+
+                            <ImageView
+                                android:id="@+id/my_court_volleyball_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:src="@drawable/volleyball_court" />
+
+                            <TextView
+                                android:id="@+id/my_court_volleyball_address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/volleyball_court_description"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textColor="@color/white"
+                                android:paddingTop="10dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/my_court_golf"
+                            android:layout_width="180dp"
+                            android:layout_height="180dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/rounded_shape"
+                            android:orientation="vertical"
+                            android:padding="10dp"
+                            android:layout_marginEnd="5dp" >
+
+                            <TextView
+                                android:id="@+id/my_court_golf_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/golf_court"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/white"
+                                android:paddingBottom="10dp" />
+
+                            <ImageView
+                                android:id="@+id/my_court_golf_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:src="@drawable/golf_field" />
+
+                            <TextView
+                                android:id="@+id/my_court_golf_address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/golf_court_description"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                 android:textColor="@color/white"
                                 android:paddingTop="10dp" />
