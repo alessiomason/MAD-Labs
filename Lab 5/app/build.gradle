@@ -10,7 +10,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "it.polito.mad.playgroundsreservationss"
+        applicationId "it.polito.mad.playgroundsreservations"
         minSdk 26
         targetSdk 33
         versionCode 1

@@ -12,6 +12,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.app.ActivityCompat.invalidateOptionsMenu
@@ -91,6 +92,8 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 }
 
                 val btnRateCourt = view.findViewById<Button>(R.id.btnRateCourt)
+                val myReviewLayout = view.findViewById<LinearLayout>(R.id.myReviewLayout)
+                myReviewLayout.visibility = GONE
                 // display rate court button only for past reservations and if not already rated
                 val previousRatingForReservation = reservationsViewModel.getRatingByReservation(myReservation.id)
 
@@ -105,6 +108,18 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                         }
                     } else {
                         btnRateCourt.visibility = GONE
+                        myReviewLayout.visibility = VISIBLE
+                        val myRatingBar = view.findViewById<RatingBar>(R.id.myReviewScore)
+                        myRatingBar.setIsIndicator(true)
+                        myRatingBar.rating = rating?.rating?.toFloat()!!
+                        val myDescription = view.findViewById<TextView>(R.id.myReviewDescription)
+                        if (rating.description == "") {
+                            myDescription.text = resources.getString(R.string.optional_description_entered)
+                        } else {
+                            myDescription.text = "\"" + rating.description + "\""
+
+                        }
+
                     }
                 }
 
