@@ -98,6 +98,7 @@ class EditProfileActivity: AppCompatActivity() {
         addChip.setOnClickListener {
             val intent = Intent(this, SelectSportsActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
         }
     }
 
@@ -127,6 +128,14 @@ class EditProfileActivity: AppCompatActivity() {
             userProfileImageView.setImageBitmap(BitmapFactory.decodeStream(inputStream))
             parcelFileDescriptor.close()
         }
+    }
+
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
     }
 
     override fun onCreateContextMenu(
@@ -269,6 +278,7 @@ class EditProfileActivity: AppCompatActivity() {
         when (item.itemId) {
             R.id.save_profile -> {
                 finish()
+                overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
                 val sharedPref = this.getSharedPreferences(
                     "profile",
                     Context.MODE_PRIVATE

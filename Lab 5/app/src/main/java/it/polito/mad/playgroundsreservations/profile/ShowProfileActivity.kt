@@ -8,11 +8,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View.*
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.fadeOut
 import androidx.core.net.toUri
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
@@ -160,6 +160,14 @@ class ShowProfileActivity: AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu to use in the action bar
         val inflater = menuInflater
@@ -167,12 +175,11 @@ class ShowProfileActivity: AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.modify_profile -> {
                 val intent = Intent(this, EditProfileActivity::class.java)
-                // start your next activity
                 startActivity(intent)
+                overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
                 return true
             }
         }

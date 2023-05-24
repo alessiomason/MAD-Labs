@@ -16,12 +16,14 @@ class MainActivity: AppCompatActivity() {
         buttonReservations.setOnClickListener {
             val intent = Intent(this, ReservationsActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
         }
 
         val buttonProfile = findViewById<Button>(R.id.homeButtonProfile)
         buttonProfile.setOnClickListener {
             val intent = Intent(this, ShowProfileActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
         }
     }
 }

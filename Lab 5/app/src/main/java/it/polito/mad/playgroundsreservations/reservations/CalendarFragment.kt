@@ -120,6 +120,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
             R.id.user_profile -> {
                 val intent = Intent(activity?.applicationContext, ShowProfileActivity::class.java)
                 startActivity(intent)
+                activity?.overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
             }
             R.id.switch_calendar -> {
                 val action = CalendarFragmentDirections.actionCalendarFragmentToPlaygroundsAvailabilityFragment()

@@ -48,6 +48,7 @@ class SelectSportsActivity : AppCompatActivity() {
             selectedSports.golf = golfCb.isChecked
 
             finish()
+            overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
 
             with(sharedPref.edit()) {
                 val selectedSportsJson = gson.toJson(selectedSports)
@@ -55,5 +56,13 @@ class SelectSportsActivity : AppCompatActivity() {
                 apply()
             }
         }
+    }
+
+    @Deprecated("Deprecated in Java",
+        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
+    )
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
     }
 }
