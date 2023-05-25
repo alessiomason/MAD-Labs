@@ -63,7 +63,7 @@ class ReservationsViewModel(application: Application): AndroidViewModel(applicat
                     val rating = PlaygroundRating(
                         playgroundId = id.toInt(),
                         reservationId = 0,
-                        rating = (1..5).random(),
+                        rating = (1..5).random().toFloat(),
                         description = ""
                     )
                     playgroundRatingsDao.save(rating)

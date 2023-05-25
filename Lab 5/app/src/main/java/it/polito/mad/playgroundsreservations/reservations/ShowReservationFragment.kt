@@ -112,7 +112,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                             myReviewLayout.visibility = VISIBLE
                             val myRatingBar = view.findViewById<RatingBar>(R.id.myReviewScore)
                             myRatingBar.setIsIndicator(true)
-                            myRatingBar.rating = rating?.rating?.toFloat()!!
+                            myRatingBar.rating = rating.rating
                             val myDescription = view.findViewById<TextView>(R.id.myReviewDescription)
                             if (rating.description == "") {
                                 myDescription.text = resources.getString(R.string.optional_description_entered)

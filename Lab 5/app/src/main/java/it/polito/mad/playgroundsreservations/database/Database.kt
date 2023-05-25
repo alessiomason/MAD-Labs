@@ -8,7 +8,7 @@ import java.io.File
 
 @androidx.room.Database(
     entities = [Reservation::class, Playground::class, PlaygroundRating::class, User::class],
-    version = 12,
+    version = 13,
     exportSchema = true
 )
 @androidx.room.TypeConverters(TypeConverters::class)

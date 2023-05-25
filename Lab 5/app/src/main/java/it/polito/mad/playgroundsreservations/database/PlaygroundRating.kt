@@ -9,6 +9,6 @@ data class PlaygroundRating(
     val id: Int = 0,
     val playgroundId: Int,
     val reservationId: Int,
-    val rating: Int,
+    val rating: Float,
     val description: String
 )

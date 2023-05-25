@@ -1,14 +1,11 @@
 package it.polito.mad.playgroundsreservations.reservations
 
-import android.icu.number.Scale
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,16 +16,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -42,24 +36,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ScaleFactor
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toUpperCase
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
@@ -72,6 +57,9 @@ import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Sports
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import com.smarttoolfactory.ratingbar.RatingBar
 
 class RatingPlaygrounds: Fragment() {
     private val args by navArgs<RatingPlaygroundsArgs>()
@@ -118,11 +106,10 @@ fun RatingPlaygroundsScreen(playgroundId: Int, reservationId:Int, navController:
 fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, navController: NavController) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
 
-    var rating by remember { mutableStateOf(1) }
+    var rating by remember { mutableStateOf(1f) }
     var text by remember { mutableStateOf("") }
     var iconId by remember { mutableStateOf(0) }
     var sportNameId by remember { mutableStateOf(0) }
-    val context=LocalContext.current;
     val image = when (playground.sport) {
         Sports.TENNIS -> R.drawable.tennis_court
         Sports.BASKETBALL -> R.drawable.basketball_court
@@ -193,7 +180,17 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, n
             modifier = Modifier.padding(bottom = 16.dp)
         ) {
             Text(text = stringResource(id = R.string.rating_label), fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.padding(end = 8.dp))
-            RatingBar(rating = rating, onRatingChanged = { newRating -> rating = newRating })
+            RatingBar(
+                rating = rating,
+                space = 2.dp,
+                imageVectorEmpty = ImageVector.vectorResource(id = R.drawable.bordered_star),
+                imageVectorFFilled = ImageVector.vectorResource(id = R.drawable.filled_star),
+                tintEmpty = Color(0xff00668b),
+                tintFilled = Color(0xff00668b),
+                itemSize = 36.dp
+            ) {
+                rating = it
+            }
         }
         TextField(
             value = text,
@@ -203,11 +200,11 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, n
         )
         Button(
             onClick = {
-                val playgroundRating=PlaygroundRating(playgroundId = playground.id, reservationId = reservationId , rating = rating, description = text);
+                val playgroundRating = PlaygroundRating(playgroundId = playground.id, reservationId = reservationId , rating = rating, description = text);
                 reservationsViewModel.savePlaygroundRating(playgroundRating)
                 navController.popBackStack()
             },
-            content = { Text(stringResource(id =R.string.save_rating).toUpperCase(), color = Color.White) },
+            content = { Text(stringResource(id =R.string.save_rating).uppercase(), color = Color.White) },
             colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.primary)),
             modifier = Modifier.padding(top = 8.dp)
         )
@@ -215,29 +212,12 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, n
             onClick = {
                // val playgroundRating=PlaygroundRating(playgroundId = playground.id, reservationId = reservationId , rating = rating, description = text);
                 //reservationsViewModel.savePlaygroundRating(playgroundRating)
-                var action=RatingPlaygroundsDirections.actionRatingPlaygroundsToSeeRatings(playground.id)
+                val action = RatingPlaygroundsDirections.actionRatingPlaygroundsToSeeRatings(playground.id)
                 navController.navigate(action)
             },
-            content = { Text(stringResource(id =R.string.see_ratings).toUpperCase(), color = Color.White) },
+            content = { Text(stringResource(id =R.string.see_ratings).uppercase(), color = Color.White) },
             colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.primary)),
             modifier = Modifier.padding(top = 8.dp)
         )
-    }
-}
-@Composable
-fun RatingBar(rating: Int, onRatingChanged: (Int) -> Unit) {
-    Row {
-        for (i in 1..5) {
-            val drawable = if (i <= rating) {
-                R.drawable.baseline_star_24
-            } else {
-               R.drawable.baseline_star_border_24
-            }
-            Image(
-                painter = painterResource(drawable),
-                contentDescription = null,
-                modifier = Modifier.clickable { onRatingChanged(i) }
-            )
-        }
     }
 }
