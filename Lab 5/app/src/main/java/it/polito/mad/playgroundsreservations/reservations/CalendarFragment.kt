@@ -9,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -27,7 +26,7 @@ import com.stacktips.view.DayView
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
-import it.polito.mad.playgroundsreservations.database.Sports
+import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.profile.ShowProfileActivity
 import java.time.Instant
 import java.time.ZoneId
@@ -37,11 +36,10 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-private val zoneId = ZoneId.systemDefault()
+val zoneId = ZoneId.systemDefault()
 private var tappedDay = MutableLiveData(Instant.now().atZone(zoneId).toLocalDate())
 
 class CalendarFragment: Fragment(R.layout.calendar_fragment) {
-
     private lateinit var navController: NavController
 
     override fun onCreateView(
@@ -57,7 +55,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         navController = view.findNavController()
 
         val reservationsViewModel by viewModels<ReservationsViewModel>()
-        val reservations = reservationsViewModel.getUserReservations(1)
+        val reservations = reservationsViewModel.getUserReservations(Global.userId)
         val playgrounds = reservationsViewModel.playgrounds
 
         // ACTIVITY TITLE
@@ -149,19 +147,19 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
                 r.time.toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)))
 
             val sportText = when (r.sport) {
-                Sports.TENNIS -> R.string.sport_tennis
-                Sports.BASKETBALL -> R.string.sport_basketball
-                Sports.FOOTBALL -> R.string.sport_football
-                Sports.VOLLEYBALL -> R.string.sport_volleyball
-                Sports.GOLF -> R.string.sport_golf
+                Sport.TENNIS -> R.string.sport_tennis
+                Sport.BASKETBALL -> R.string.sport_basketball
+                Sport.FOOTBALL -> R.string.sport_football
+                Sport.VOLLEYBALL -> R.string.sport_volleyball
+                Sport.GOLF -> R.string.sport_golf
             }
 
             val sportIconId = when (r.sport) {
-                Sports.TENNIS -> R.drawable.tennis_ball
-                Sports.BASKETBALL -> R.drawable.basketball_ball
-                Sports.FOOTBALL -> R.drawable.football_ball
-                Sports.VOLLEYBALL -> R.drawable.volleyball_ball
-                Sports.GOLF -> R.drawable.golf_ball
+                Sport.TENNIS -> R.drawable.tennis_ball
+                Sport.BASKETBALL -> R.drawable.basketball_ball
+                Sport.FOOTBALL -> R.drawable.football_ball
+                Sport.VOLLEYBALL -> R.drawable.volleyball_ball
+                Sport.GOLF -> R.drawable.golf_ball
             }
 
             sportTextView.text = view.context.getString(sportText)
@@ -175,7 +173,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 
             playgroundTextView.text = view.context.getString(
                 R.string.reservation_box_playground_name,
-                playgrounds.find { it.id == r.playgroundId }?.name ?: ""
+                playgrounds.find { it.id == r.playgroundId.id }?.name ?: ""
             )
 
             super.itemView.setOnClickListener { onTap(pos) }
@@ -186,7 +184,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         }
     }
 
-    class DefaultViewHolder(private val view: View, val nav: NavController): MyViewHolder(view) {
+    class DefaultViewHolder(private val view: View, private val nav: NavController): MyViewHolder(view) {
         override fun bind(r: Reservation?, pos: Int, onTap: (Int) -> Unit) {
             val plusTextViewLayout = view.findViewById<LinearLayout>(R.id.layout_reservation_box_plus)
             val plusTextView = view.findViewById<TextView>(R.id.reservation_box_plus)
@@ -248,7 +246,7 @@ private class DisabledColorDecorator(val reservations: List<Reservation>) : DayD
 
     override fun decorate(dayView: DayView) {
         var occurrences = 0
-        var previousSport = Sports.BASKETBALL
+        var previousSport = Sport.BASKETBALL
         val sortedReservations = reservations.sortedBy { it.time } // sorted by day of reservation
 
         for (r in sortedReservations.indices) { // index iteration, so I can have access to previous index
@@ -265,15 +263,15 @@ private class DisabledColorDecorator(val reservations: List<Reservation>) : DayD
                         dayView.setBackgroundResource(R.color.MULTIPLE_COLOR)
                     occurrences--
                 }
-                else if (sortedReservations[r].sport == Sports.TENNIS) {
+                else if (sortedReservations[r].sport == Sport.TENNIS) {
                     dayView.setBackgroundResource(R.color.TENNIS_COLOR)
-                } else if (sortedReservations[r].sport == Sports.BASKETBALL) {
+                } else if (sortedReservations[r].sport == Sport.BASKETBALL) {
                     dayView.setBackgroundResource(R.color.BASKETBALL_COLOR)
-                } else if (sortedReservations[r].sport == Sports.FOOTBALL) {
+                } else if (sortedReservations[r].sport == Sport.FOOTBALL) {
                     dayView.setBackgroundResource(R.color.FOOTBALL_COLOR)
-                } else if (sortedReservations[r].sport == Sports.VOLLEYBALL) {
+                } else if (sortedReservations[r].sport == Sport.VOLLEYBALL) {
                     dayView.setBackgroundResource(R.color.VOLLEYBALL_COLOR)
-                } else if (sortedReservations[r].sport == Sports.GOLF) {
+                } else if (sortedReservations[r].sport == Sport.GOLF) {
                     dayView.setBackgroundResource(R.color.GOLF_COLOR)
                 }
             }

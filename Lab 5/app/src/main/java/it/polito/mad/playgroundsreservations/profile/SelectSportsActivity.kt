@@ -1,10 +1,10 @@
 package it.polito.mad.playgroundsreservations.profile
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
 

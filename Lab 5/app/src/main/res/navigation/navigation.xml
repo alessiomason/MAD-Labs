@@ -37,7 +37,7 @@
         android:label="ShowReservationFragment" >
         <argument
             android:name="reservationId"
-            app:argType="integer" />
+            app:argType="string" />
         <action
             android:id="@+id/action_showReservationFragment_to_calendarFragment"
             app:destination="@id/calendarFragment"
@@ -81,7 +81,7 @@
         android:label="EditReservationFragment">
         <argument
             android:name="resId"
-            app:argType="integer" />
+            app:argType="string" />
         <action
             android:id="@+id/action_editReservationFragment_to_calendarFragment"
             app:destination="@id/calendarFragment"
@@ -111,10 +111,10 @@
         android:label="RatingPlaygrounds" >
         <argument
             android:name="playgroundId"
-            app:argType="integer" />
+            app:argType="string" />
         <argument
             android:name="reservationId"
-            app:argType="integer" />
+            app:argType="string" />
         <action
             android:id="@+id/action_ratingPlaygrounds_to_showReservationFragment"
             app:destination="@id/showReservationFragment" />
@@ -129,6 +129,6 @@
         tools:layout="@layout/fragment_see_ratings" >
         <argument
             android:name="playgroundId"
-            app:argType="integer" />
+            app:argType="string" />
     </fragment>
 </navigation>

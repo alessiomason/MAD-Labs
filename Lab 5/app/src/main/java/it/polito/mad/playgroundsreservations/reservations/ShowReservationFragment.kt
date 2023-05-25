@@ -23,25 +23,16 @@ import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
-import it.polito.mad.playgroundsreservations.database.Sports
-import java.time.Duration
+import it.polito.mad.playgroundsreservations.database.Sport
 import java.time.Instant
-import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
     private val args by navArgs<ShowReservationFragmentArgs>()
     private val reservationsViewModel by viewModels<ReservationsViewModel>()
-    private val zoneId = ZoneId.of("UTC+02:00")
-    private var myReservation = Reservation(
-        userId = 0,
-        playgroundId = 0,
-        sport = Sports.VOLLEYBALL,
-        time = ZonedDateTime.of(2023, 5, 26, 14, 0, 0, 0, zoneId),
-        duration = Duration.ofHours(1)
-    )
+    private lateinit var myReservation: Reservation
+    private lateinit var myPlayground: Playground
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,18 +44,11 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val reservationsViewModel by viewModels<ReservationsViewModel>()
-        val reservations = reservationsViewModel.getUserReservations(1)
+        val reservations = reservationsViewModel.getUserReservations(Global.userId)
         val playgrounds = reservationsViewModel.playgrounds
 
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.reservation)
-
-        var myPlayground = Playground(
-            id = 0,
-            name = "temp",
-            address = "",
-            sport = Sports.VOLLEYBALL
-        )
 
         reservations.observe(viewLifecycleOwner) { reservationsList ->
                 reservationsList.forEach { r ->
@@ -78,17 +62,17 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
 
             playgrounds.observe(viewLifecycleOwner) { playgroundsList ->
                 playgroundsList.forEach { p ->
-                    if (p.id == myReservation.playgroundId) {
+                    if (p.id == myReservation.playgroundId.id) {
                          myPlayground = p
                     }
                 }
 
                 val sportName = when (myReservation.sport) {
-                    Sports.BASKETBALL -> resources.getString(R.string.sport_basketball)
-                    Sports.TENNIS -> resources.getString(R.string.sport_tennis)
-                    Sports.FOOTBALL -> resources.getString(R.string.sport_football)
-                    Sports.VOLLEYBALL -> resources.getString(R.string.sport_volleyball)
-                    Sports.GOLF -> resources.getString(R.string.sport_golf)
+                    Sport.BASKETBALL -> resources.getString(R.string.sport_basketball)
+                    Sport.TENNIS -> resources.getString(R.string.sport_tennis)
+                    Sport.FOOTBALL -> resources.getString(R.string.sport_football)
+                    Sport.VOLLEYBALL -> resources.getString(R.string.sport_volleyball)
+                    Sport.GOLF -> resources.getString(R.string.sport_golf)
                 }
 
                 val btnRateCourt = view.findViewById<Button>(R.id.btnRateCourt)
@@ -103,7 +87,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     ) {
                         btnRateCourt.setOnClickListener {
                             val navController = view.findNavController()
-                            val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId,myReservation.id)
+                            val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId.id, myReservation.id)
                             navController.navigate(action)
                         }
                     } else {
@@ -126,10 +110,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
                 ratingBar.setIsIndicator(true)
 
-                val rating = reservationsViewModel.getPlaygroundAverageRating(myPlayground.id)
-                rating.observe(viewLifecycleOwner) {
-                    ratingBar.rating = it.toFloat()
-                }
+                ratingBar.rating = myPlayground.averageRating ?: (0.0).toFloat()
 
                 view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name
                 view.findViewById<TextView>(R.id.sportName).text = sportName
@@ -151,11 +132,11 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 val sportIcon = view.findViewById<ImageView>(R.id.sportNameIcon)
 
                 when (myReservation.sport) {
-                    Sports.TENNIS -> { image.setImageResource(R.drawable.tennis_court); sportIcon.setImageResource(R.drawable.tennis_ball) }
-                    Sports.BASKETBALL -> { image.setImageResource(R.drawable.basketball_court); sportIcon.setImageResource(R.drawable.basketball_ball) }
-                    Sports.FOOTBALL -> { image.setImageResource(R.drawable.football_pitch); sportIcon.setImageResource(R.drawable.football_ball) }
-                    Sports.VOLLEYBALL -> { image.setImageResource(R.drawable.volleyball_court); sportIcon.setImageResource(R.drawable.volleyball_ball) }
-                    Sports.GOLF -> { image.setImageResource(R.drawable.golf_field); sportIcon.setImageResource(R.drawable.golf_ball) }
+                    Sport.TENNIS -> { image.setImageResource(R.drawable.tennis_court); sportIcon.setImageResource(R.drawable.tennis_ball) }
+                    Sport.BASKETBALL -> { image.setImageResource(R.drawable.basketball_court); sportIcon.setImageResource(R.drawable.basketball_ball) }
+                    Sport.FOOTBALL -> { image.setImageResource(R.drawable.football_pitch); sportIcon.setImageResource(R.drawable.football_ball) }
+                    Sport.VOLLEYBALL -> { image.setImageResource(R.drawable.volleyball_court); sportIcon.setImageResource(R.drawable.volleyball_ball) }
+                    Sport.GOLF -> { image.setImageResource(R.drawable.golf_field); sportIcon.setImageResource(R.drawable.golf_ball) }
                 }
             }
         }
@@ -170,7 +151,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
        val cancelMenuItem = menu.findItem(R.id.cancelReservation)
 
        // don't allow editing and canceling for past reservations
-       if (myReservation.time.isBefore(Instant.now().atZone(myReservation.time.zone))) {
+       if (this::myReservation.isInitialized && myReservation.time.isBefore(Instant.now().atZone(myReservation.time.zone))) {
            editMenuItem.isEnabled = false
            editMenuItem.isVisible = false
            cancelMenuItem.isEnabled = false

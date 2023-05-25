@@ -1,7 +1,6 @@
 package it.polito.mad.playgroundsreservations.reservations
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -56,70 +54,65 @@ class SeeRatings : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        // RatingPlaygroundsScreen(args.playgroundId, args.reservationId, findNavController())
-                            SeeRatingsScreen(playgroundId = args.playgroundId, navController =findNavController() )
-                            //Prova(paramValue)
-                        }
+                        SeeRatingsScreen(
+                            playgroundId = args.playgroundId,
+                            navController = findNavController()
+                        )
                     }
                 }
             }
         }
     }
+}
 
 
 @Composable
-fun SeeRatingsScreen(playgroundId: Int, navController: NavController) {
+fun SeeRatingsScreen(playgroundId: String, navController: NavController) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
-
-    //var ratings: MutableState<PlaygroundRating?> = remember { mutableStateOf(null) }
-    var ratings=reservationsViewModel.getRatingsByPlaygroundId(playgroundId);
+    /*
+    val ratings = reservationsViewModel.getRatingsByPlaygroundId(playgroundId)
 
     val ratingsList = remember { mutableStateListOf<PlaygroundRating>() }
-    // Osserva il LiveData
     LaunchedEffect(ratings) {
         ratings.observeForever { rating ->
             rating?.let {
-                for(el in it)
+                for (el in it)
                     el?.let { it1 -> ratingsList.add(it1) }
             }
         }
     }
 
-
-    //reservationsViewModel.get
-    // reservationsViewModel.getPlaygroundRatings(playgroundId)
-
     if (ratings == null)
         Text("Loading")
     else
-        Prova(paramValue = playgroundId,ratingsList);
+        Prova(paramValue = playgroundId, ratingsList)
+     */
     //SeeRatingsScreenContent(playgroundId = , navController = )
-       // SeeRatingsScreenContent(playground = playground.value!!, reservationId = 3, navController)
+    // SeeRatingsScreenContent(playground = playground.value!!, reservationId = 3, navController)
 }
 
 @Composable
-fun Prova(paramValue:Int, ratingList:SnapshotStateList<PlaygroundRating>) {
+fun Prova(paramValue: String, ratingList: SnapshotStateList<PlaygroundRating>) {
 // Esegui l'osservazione quando ratings cambia
-        // Puoi fare qualcosa con i nuovi valori di ratingsState qui
+    // Puoi fare qualcosa con i nuovi valori di ratingsState qui
 
-    for (item in ratingList)
-    {
+    for (item in ratingList) {
         ListItemComponent(item = item)
     }
 }
-   /* LazyColumn {
-       items(ratingsList) { item ->
-           ListItemComponent(item)
-        }
+/* LazyColumn {
+    items(ratingsList) { item ->
+        ListItemComponent(item)
+     }
 
-    */
+ */
 
 
 @Composable
 fun ListItemComponent(item: PlaygroundRating) {
     var isExpanded by remember { mutableStateOf(false) }
     val starCount = item.rating
-    var i=1;
+    var i = 1;
 
     Column(
         modifier = Modifier
@@ -130,13 +123,13 @@ fun ListItemComponent(item: PlaygroundRating) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-           /* Text(
-                text = "Rating"+i.toString(),
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                modifier = Modifier.weight(1f)
-            )
-            */
+            /* Text(
+                 text = "Rating"+i.toString(),
+                 fontWeight = FontWeight.Bold,
+                 fontSize = 18.sp,
+                 modifier = Modifier.weight(1f)
+             )
+             */
 
 
             repeat(5) { index ->
@@ -149,7 +142,7 @@ fun ListItemComponent(item: PlaygroundRating) {
                 )
             }
 
-            if (item.description!="") {
+            if (item.description != "") {
                 IconButton(onClick = { isExpanded = !isExpanded }) {
                     Icon(
                         painter = painterResource(R.drawable.basketball_ball),
@@ -157,7 +150,6 @@ fun ListItemComponent(item: PlaygroundRating) {
                     )
                 }
             }
-
 
 
         }
@@ -170,4 +162,3 @@ fun ListItemComponent(item: PlaygroundRating) {
         }
     }
 }
-

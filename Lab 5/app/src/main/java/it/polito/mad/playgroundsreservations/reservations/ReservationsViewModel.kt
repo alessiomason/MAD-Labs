@@ -1,131 +1,234 @@
 package it.polito.mad.playgroundsreservations.reservations
 
 import android.app.Application
-import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
-import it.polito.mad.playgroundsreservations.database.*
-import kotlinx.coroutines.launch
+import androidx.lifecycle.MutableLiveData
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import it.polito.mad.playgroundsreservations.database.Playground
+import it.polito.mad.playgroundsreservations.database.PlaygroundRating
+import it.polito.mad.playgroundsreservations.database.Reservation
+import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.database.toPlayground
+import it.polito.mad.playgroundsreservations.database.toPlaygroundRating
+import it.polito.mad.playgroundsreservations.database.toReservation
+import java.util.Date
 
-class ReservationsViewModel(application: Application): AndroidViewModel(application) {
-    private val reservationsDao: ReservationsDao
-    private val userDao: UserDao
-    private val playgroundsDao: PlaygroundsDao
-    private val playgroundRatingsDao: PlaygroundRatingsDao
-    val dbUpdated: Boolean
+// AGGIUNGERE controlli di conflitti fatti dal db in precedenza
+// CAMBIARE value!! con controllo != null
+
+class ReservationsViewModel(application: Application) : AndroidViewModel(application) {
+    companion object {
+        const val TAG = "VIEW_MODEL"
+        const val usersCollectionPath = "users"
+        const val playgroundsCollectionPath = "playgrounds"
+        const val reservationsCollectionPath = "reservations"
+        const val playgroundsRatingsCollectionPath = "playgrounds_ratings"
+    }
+
+    private val db = Firebase.firestore
+
+    val playgrounds = MutableLiveData<List<Playground>>()
+    val reservations = MutableLiveData<List<Reservation>>()
 
     init {
-        val db = Database.getDatabase(application.applicationContext)
-        reservationsDao = db.reservationsDao()
-        userDao = db.userDao()
-        playgroundsDao = db.playgroundsDao()
-        playgroundRatingsDao = db.playgroundRatingsDao()
+        // set listener for playgrounds
+        db.collection(playgroundsCollectionPath)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read playgrounds.", error)
+                    playgrounds.value = emptyList()
+                    return@addSnapshotListener
+                }
 
-        val sharedPref = application.getSharedPreferences("dbPreferences", Context.MODE_PRIVATE)
-        val savedDbVersion = sharedPref.getInt("dbVersion", 0)
-        val currentDbVersion = db.openHelper.readableDatabase.version
-        dbUpdated = savedDbVersion > currentDbVersion || savedDbVersion == 0
+                val playgroundsList = mutableListOf<Playground>()
+                for (doc in value!!) {
+                    val playground = doc.toPlayground()
+                    playgroundsList.add(playground)
+                }
 
-        if (dbUpdated) {
-            with(sharedPref.edit()) {
-                putInt("dbVersion", currentDbVersion)
-                apply()
+                playgrounds.value = playgroundsList
             }
 
-            val playgroundsList = mutableListOf<Playground>()
-            playgroundsList.add(Playground(
-                name = "Tennis Center",
-                address = "Sports Center Avenue",
-                sport = Sports.TENNIS))
-            playgroundsList.add(Playground(
-                name = "Basketball Center",
-                address = "Sports Center Avenue",
-                sport = Sports.BASKETBALL))
-            playgroundsList.add(Playground(
-                name = "Football Center",
-                address = "Sports Center Avenue",
-                sport = Sports.FOOTBALL))
-            playgroundsList.add(Playground(
-                name = "Volleyball Center",
-                address = "Sports Center Avenue",
-                sport = Sports.VOLLEYBALL))
-            playgroundsList.add(Playground(
-                name = "Golf Center",
-                address = "Sports Center Avenue",
-                sport = Sports.GOLF))
+        // set listener for reservations
+        db.collection(reservationsCollectionPath)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read reservations.", error)
+                    reservations.value = emptyList()
+                    return@addSnapshotListener
+                }
 
+                val reservationsList = mutableListOf<Reservation>()
+                for (doc in value!!) {
+                    val reservation = doc.toReservation()
+                    reservationsList.add(reservation)
+                }
 
-            playgroundsList.forEach { p ->
-                viewModelScope.launch {
-                    val id = playgroundsDao.save(p)
-                    val rating = PlaygroundRating(
-                        playgroundId = id.toInt(),
-                        reservationId = 0,
-                        rating = (1..5).random().toFloat(),
-                        description = ""
-                    )
-                    playgroundRatingsDao.save(rating)
+                reservations.value = reservationsList
+            }
+    }
+
+    fun getUserReference(userId: String): DocumentReference {
+        return db.collection(usersCollectionPath)
+            .document(userId)
+    }
+
+    fun getPlaygroundReference(playgroundId: String): DocumentReference {
+        return db.collection(playgroundsCollectionPath)
+            .document(playgroundId)
+    }
+
+    fun getReservationReference(reservationId: String): DocumentReference {
+        return db.collection(reservationsCollectionPath)
+            .document(reservationId)
+    }
+
+    fun getReservedPlaygrounds(sport: Sport): LiveData<Map<Reservation, Playground>> {
+        val reservedPlaygrounds = MutableLiveData<Map<Reservation, Playground>>()
+
+        db.collection(reservationsCollectionPath)
+            .whereEqualTo("sport", sport.name.lowercase())
+            .orderBy("time")
+            .orderBy("duration")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read reserved playgrounds.", error)
+                    reservedPlaygrounds.value = emptyMap()
+                    return@addSnapshotListener
+                }
+
+                val reservedPlaygroundsMap = mutableMapOf<Reservation, Playground>()
+                for (doc in value!!) {
+                    val reservation = doc.toReservation()
+
+                    reservation.playgroundId.get()
+                        .addOnSuccessListener {
+                            val playground = it.toPlayground()
+                            reservedPlaygroundsMap[reservation] = playground
+                            reservedPlaygrounds.value = reservedPlaygroundsMap
+                        }
                 }
             }
-        }
+
+        return reservedPlaygrounds
     }
 
-    val playgrounds = playgroundsDao.getAllPlaygrounds()
-    val reservations = reservationsDao.getAllReservations()
+    fun getUserReservations(userId: String): LiveData<List<Reservation>> {
+        val userReservations = MutableLiveData<List<Reservation>>()
 
-    fun getReservationsBySport(sport: Sports): LiveData<List<Reservation>> {
-        return reservationsDao.getReservationsBySport(sport)
+        val userReference = db.collection(usersCollectionPath)
+            .document(userId)
+
+        db.collection(reservationsCollectionPath)
+            .whereEqualTo("userId", userReference)
+            .orderBy("time")
+            .orderBy("duration")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read user reservations.", error)
+                    userReservations.value = emptyList()
+                    return@addSnapshotListener
+                }
+
+                val userReservationsList = mutableListOf<Reservation>()
+                for (doc in value!!) {
+                    val reservation = doc.toReservation()
+                    userReservationsList.add(reservation)
+                }
+
+                userReservations.value = userReservationsList
+            }
+
+        return userReservations
     }
 
-    fun getReservedPlaygrounds(sport: Sports): LiveData<Map<Reservation, Playground>> {
-        return reservationsDao.getReservedPlaygroundsBySport(sport)
+    fun getPlayground(playgroundId: String, playgroundState: MutableState<Playground?>) {
+        db.collection(playgroundsCollectionPath)
+            .document(playgroundId)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read playground.", error)
+                    playgroundState.value = null
+                    return@addSnapshotListener
+                }
+
+                playgroundState.value = value!!.toPlayground()
+            }
     }
 
-    fun getUserReservations(userId: Int): LiveData<List<Reservation>> {
-        return reservationsDao.getUserReservations(userId)
-    }
+    fun getRatingByReservation(reservationId: String): LiveData<PlaygroundRating?> {
+        val playgroundRating = MutableLiveData<PlaygroundRating?>()
 
-    fun getPlayground(playgroundId: Int, playgroundState: MutableState<Playground?>) {
-        viewModelScope.launch {
-            playgroundState.value = playgroundsDao.getPlayground(playgroundId)
-        }
-    }
+        val reservationReference = db.collection(reservationsCollectionPath)
+            .document(reservationId)
 
-    fun getPlaygroundAverageRating(playgroundId: Int): LiveData<Double> {
-        return playgroundsDao.getPlaygroundAverageRating(playgroundId)
-    }
+        db.collection(playgroundsRatingsCollectionPath)
+            .whereEqualTo("reservationId", reservationReference)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read user reservations.", error)
+                    playgroundRating.value = null
+                    return@addSnapshotListener
+                }
 
-    fun getRatingByReservation(reservationId: Int): LiveData<PlaygroundRating?> {
-        return playgroundRatingsDao.getRatingByReservation(reservationId)
-    }
-    fun getRatingsByPlaygroundId(playgroundId: Int): LiveData<List<PlaygroundRating?>>
-    {
-        return playgroundRatingsDao.getRatingsByPlaygroundId(playgroundId)
+                if (value?.isEmpty == false)
+                    playgroundRating.value = value.first().toPlaygroundRating()
+                else
+                    playgroundRating.value = null
+            }
+
+        return playgroundRating
     }
 
     fun saveReservation(reservation: Reservation) {
-        viewModelScope.launch {
-            reservationsDao.save(reservation)
-        }
+        val r = hashMapOf(
+            "userId" to reservation.userId,
+            "playgroundId" to reservation.playgroundId,
+            "sport" to reservation.sport.name.lowercase(),
+            "time" to Timestamp(Date.from(reservation.time.toInstant())),
+            "duration" to reservation.duration.toHours(),
+            "rentingEquipment" to reservation.rentingEquipment
+        )
+
+        db.collection(reservationsCollectionPath).add(r)
     }
 
     fun updateReservation(reservation: Reservation) {
-        viewModelScope.launch {
-            reservationsDao.update(reservation)
-        }
+        val r = hashMapOf(
+            "id" to reservation.id,
+            "userId" to reservation.userId,
+            "playgroundId" to reservation.playgroundId,
+            "sport" to reservation.sport.name.lowercase(),
+            "time" to Timestamp(Date.from(reservation.time.toInstant())),
+            "duration" to reservation.duration.toHours(),
+            "rentingEquipment" to reservation.rentingEquipment
+        )
+
+        db.collection(reservationsCollectionPath)
+            .document(reservation.id)
+            .set(r)
     }
 
     fun deleteReservation(reservation: Reservation) {
-        viewModelScope.launch {
-            reservationsDao.delete(reservation)
-        }
+        db.collection(reservationsCollectionPath)
+            .document(reservation.id)
+            .delete()
     }
 
     fun savePlaygroundRating(playgroundRating: PlaygroundRating) {
-        viewModelScope.launch {
-            playgroundRatingsDao.save(playgroundRating)
-        }
+        val pr = hashMapOf(
+            "playgroundId" to playgroundRating.playgroundId,
+            "reservationId" to playgroundRating.reservationId,
+            "rating" to playgroundRating.rating,
+            "description" to playgroundRating.description
+        )
+
+        db.collection(playgroundsRatingsCollectionPath).add(pr)
     }
 }

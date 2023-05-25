@@ -6,18 +6,18 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.fadeOut
 import androidx.core.net.toUri
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
-import it.polito.mad.playgroundsreservations.database.Sports
+import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ReservationsViewModel
 import java.io.FileInputStream
 
@@ -80,35 +80,35 @@ class ShowProfileActivity: AppCompatActivity() {
         playgrounds.observe(this) { itemList ->
             itemList?.let {items ->
                 for (item in items) {
-                    if (item.sport == Sports.BASKETBALL) {
+                    if (item.sport == Sport.BASKETBALL) {
                         val textView = findViewById<TextView>(R.id.my_court_basketball_title)
                         textView.text = item.name
                         val imageView = findViewById<ImageView>(R.id.my_court_basketball_image)
                         imageView.setImageResource(R.drawable.basketball_court)
                         val addressView = findViewById<TextView>(R.id.my_court_basketball_address)
                         addressView.text = item.address
-                    } else if (item.sport == Sports.VOLLEYBALL) {
+                    } else if (item.sport == Sport.VOLLEYBALL) {
                         val textView = findViewById<TextView>(R.id.my_court_volleyball_title)
                         textView.text = item.name
                         val imageView = findViewById<ImageView>(R.id.my_court_volleyball_image)
                         imageView.setImageResource(R.drawable.volleyball_court)
                         val addressView = findViewById<TextView>(R.id.my_court_volleyball_address)
                         addressView.text = item.address
-                    } else if (item.sport == Sports.GOLF) {
+                    } else if (item.sport == Sport.GOLF) {
                         val textView = findViewById<TextView>(R.id.my_court_golf_title)
                         textView.text = item.name
                         val imageView = findViewById<ImageView>(R.id.my_court_golf_image)
                         imageView.setImageResource(R.drawable.golf_field)
                         val addressView = findViewById<TextView>(R.id.my_court_golf_address)
                         addressView.text = item.address
-                    } else if (item.sport == Sports.TENNIS) {
+                    } else if (item.sport == Sport.TENNIS) {
                         val textView = findViewById<TextView>(R.id.my_court_tennis_title)
                         textView.text = item.name
                         val imageView = findViewById<ImageView>(R.id.my_court_tennis_image)
                         imageView.setImageResource(R.drawable.tennis_court)
                         val addressView = findViewById<TextView>(R.id.my_court_tennis_address)
                         addressView.text = item.address
-                    } else if (item.sport == Sports.FOOTBALL) {
+                    } else if (item.sport == Sport.FOOTBALL) {
                         val textView = findViewById<TextView>(R.id.my_court_football_title)
                         textView.text = item.name
                         val imageView = findViewById<ImageView>(R.id.my_court_football_image)

@@ -33,10 +33,9 @@ import com.kizitonwose.calendar.view.WeekHeaderFooterBinder
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
-import it.polito.mad.playgroundsreservations.database.Sports
+import it.polito.mad.playgroundsreservations.database.Sport
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.time.format.TextStyle
@@ -44,9 +43,9 @@ import java.util.Locale
 
 class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_availability), AdapterView.OnItemSelectedListener {
 
-    val sports = Sports.values()
+    private val sports = Sport.values()
     private lateinit var weekCalendarView: WeekCalendarView
-    private var selectedSport = MutableLiveData(Sports.TENNIS)
+    private var selectedSport = MutableLiveData(Sport.TENNIS)
     private var selectedDate = MutableLiveData(LocalDate.now())
     private lateinit var reservedPlaygrounds: LiveData<Map<Reservation, Playground>>
 
@@ -69,11 +68,11 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
                 sports.map {
                     resources.getString(
                         when (it) {
-                            Sports.TENNIS -> R.string.sport_tennis
-                            Sports.BASKETBALL -> R.string.sport_basketball
-                            Sports.FOOTBALL -> R.string.sport_football
-                            Sports.VOLLEYBALL -> R.string.sport_volleyball
-                            Sports.GOLF -> R.string.sport_golf
+                            Sport.TENNIS -> R.string.sport_tennis
+                            Sport.BASKETBALL -> R.string.sport_basketball
+                            Sport.FOOTBALL -> R.string.sport_football
+                            Sport.VOLLEYBALL -> R.string.sport_volleyball
+                            Sport.GOLF -> R.string.sport_golf
                         }
                     )
                 }
@@ -189,7 +188,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
 
     // CALENDAR CLASSES
     inner class DayViewContainer(view: View): ViewContainer(view) {
-        val textView = view.findViewById<TextView>(R.id.calendarDayText)
+        val textView: TextView = view.findViewById(R.id.calendarDayText)
         lateinit var day: WeekDay
 
         init {

@@ -22,28 +22,29 @@ import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
-import it.polito.mad.playgroundsreservations.database.Sports
+import it.polito.mad.playgroundsreservations.database.Sport
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
+class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
+
     private val args by navArgs<AddReservationFragmentArgs>()
     private val reservationsViewModel by viewModels<ReservationsViewModel>()
-    val zoneId = ZoneId.of("UTC+02:00")
+    val zoneId: ZoneId = ZoneId.of("UTC+02:00")
     var playgroundList = mutableListOf<Playground>()
     var arrayOccupated = mutableListOf<String>()
-    var duration = mutableListOf<String>()
+    var durationsList = mutableListOf<String>()
     var aus = 0
     var hours = mutableListOf<String>()
-    var myReservation = Reservation(
-        userId = 1,
-        playgroundId = 0,
-        sport = Sports.VOLLEYBALL,
-        time = ZonedDateTime.of(2023, 5, 26, 14, 0, 0, 0, zoneId),
-        duration = Duration.ofHours(1),
-        rentingEquipment = false
-    )
+
+    object MyReservation {
+        var playgroundId = ""
+        var sport = Sport.VOLLEYBALL
+        var time: ZonedDateTime = ZonedDateTime.of(2023, 5, 26, 14, 0, 0, 0, zoneId)
+        var duration: Duration = Duration.ofHours(1)
+        var rentingEquipment = false
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +58,7 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val reservations = reservationsViewModel.getUserReservations(1)
+        val reservations = reservationsViewModel.getUserReservations(Global.userId)
         val playgrounds = reservationsViewModel.playgrounds
 
         // ACTIVITY TITLE
@@ -97,52 +98,54 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
                     position: Int,
                     id: Long
                 ) {
-                    val selectedItem = parent.getItemAtPosition(position).toString()
                     hours.removeAll(hours)
-                    val playgroundId = playgroundList.get(position).id
-                    myReservation.playgroundId = playgroundId
-                    myReservation.sport = playgroundList.get(position).sport
+                    val playground = playgroundList[position]
+                    MyReservation.playgroundId = playground.id
+                    MyReservation.sport = playgroundList[position].sport
 
-                    val rating = reservationsViewModel.getPlaygroundAverageRating(playgroundId)
-                    rating.observe(viewLifecycleOwner) {
-                        ratingBar.rating = it.toFloat()
-                    }
+                    ratingBar.rating = playground.averageRating ?: (0.0).toFloat()
 
-                    if (myReservation.sport == Sports.TENNIS) {
-                        image.setImageResource(R.drawable.tennis_court)
-                        sportIcon.setImageResource(R.drawable.tennis_ball)
-                        sportName.setText(R.string.sport_tennis)
-                    } else if (myReservation.sport == Sports.FOOTBALL){
-                        image.setImageResource(R.drawable.football_pitch)
-                        sportIcon.setImageResource(R.drawable.football_ball)
-                        sportName.setText(R.string.sport_football)
-                    } else if (myReservation.sport == Sports.GOLF){
-                        image.setImageResource(R.drawable.golf_field)
-                        sportIcon.setImageResource(R.drawable.golf_ball)
-                        sportName.setText(R.string.sport_golf)
-                    } else if (myReservation.sport == Sports.VOLLEYBALL) {
-                        image.setImageResource(R.drawable.volleyball_court)
-                        sportIcon.setImageResource(R.drawable.volleyball_ball)
-                        sportName.setText(R.string.sport_volleyball)
-                    } else if (myReservation.sport == Sports.BASKETBALL) {
-                        image.setImageResource(R.drawable.basketball_court)
-                        sportIcon.setImageResource(R.drawable.basketball_ball)
-                        sportName.setText(R.string.sport_basketball)
+                    when (MyReservation.sport) {
+                        Sport.TENNIS ->  {
+                            image.setImageResource(R.drawable.tennis_court)
+                            sportIcon.setImageResource(R.drawable.tennis_ball)
+                            sportName.setText(R.string.sport_tennis)
+                        }
+                        Sport.FOOTBALL -> {
+                            image.setImageResource(R.drawable.football_pitch)
+                            sportIcon.setImageResource(R.drawable.football_ball)
+                            sportName.setText(R.string.sport_football)
+                        }
+                        Sport.GOLF -> {
+                            image.setImageResource(R.drawable.golf_field)
+                            sportIcon.setImageResource(R.drawable.golf_ball)
+                            sportName.setText(R.string.sport_golf)
+                        }
+                        Sport.VOLLEYBALL -> {
+                            image.setImageResource(R.drawable.volleyball_court)
+                            sportIcon.setImageResource(R.drawable.volleyball_ball)
+                            sportName.setText(R.string.sport_volleyball)
+                        }
+                        Sport.BASKETBALL -> {
+                            image.setImageResource(R.drawable.basketball_court)
+                            sportIcon.setImageResource(R.drawable.basketball_ball)
+                            sportName.setText(R.string.sport_basketball)
+                        }
                     }
 
                     reservations.observe(viewLifecycleOwner) {
                         it.forEach { r ->
-                            if (r.playgroundId == playgroundId &&
+                            if (r.playgroundId.path == playground.id &&
                                 r.time.year == args.dateOfReservation.split("-")[0].toInt() &&
                                 r.time.month.value == args.dateOfReservation.split("-")[1].toInt() &&
                                 r.time.dayOfMonth == args.dateOfReservation.split("-")[2].toInt()
                             ) {
                                 // same day, same field
-                                arrayOccupated.add(r.time.hour.toString() + ":00");
+                                arrayOccupated.add(r.time.hour.toString() + ":00")
                                 aus = r.time.hour
                                 for (i in 1 until r.duration.toHours()) {
                                     arrayOccupated.add((aus + 1).toString() + ":00")
-                                    aus = aus + 1
+                                    aus += 1
                                 }
                                 Log.d("C", arrayOccupated.toString())
                             }
@@ -151,7 +154,7 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
                         for (hour in 8..24) {
                             hours.add("$hour:00")
                         }
-                        hours.removeAll(arrayOccupated);
+                        hours.removeAll(arrayOccupated)
                         Log.d("listaFinale", hours.toString())
 
                         val adapterHours =
@@ -170,13 +173,13 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
                                 ArrayAdapter(
                                     it.applicationContext,
                                     android.R.layout.simple_spinner_dropdown_item,
-                                    duration
+                                    durationsList
                                 )
                             }
                         spinnerDuration.adapter = durationAdapter
-                        var i = 0
-                        var oraTotale = 0
-                        var esci = false;
+                        var i: Int
+                        var oraTotale: Int
+                        var esci: Boolean
                         spinnerHour.onItemSelectedListener =
                             object : AdapterView.OnItemSelectedListener {
                                 override fun onItemSelected(
@@ -186,35 +189,31 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
                                     id: Long
                                 ) {
                                     val selectedItem = parent.getItemAtPosition(position).toString()
-                                    myReservation.time = ZonedDateTime.of(
+                                    MyReservation.time = ZonedDateTime.of(
                                         args.dateOfReservation.split("-")[0].toInt(),
                                         args.dateOfReservation.split("-")[1].toInt(),
                                         args.dateOfReservation.split("-")[2].toInt(), 14, 0, 0, 0, zoneId)
-                                    myReservation.time =
-                                        myReservation.time.withHour(selectedItem.split(':')[0].toInt())
+                                    MyReservation.time =
+                                        MyReservation.time.withHour(selectedItem.split(':')[0].toInt())
                                     oraTotale = selectedItem.split(':')[0].toInt()
-                                    Log.d("Ora totale: ", oraTotale.toString());
+                                    Log.d("Ora totale: ", oraTotale.toString())
                                     esci = false
-                                    i = 0;
+                                    i = 0
                                     while (i != 4 && oraTotale < 24 && !esci) {
-                                        i = i + 1
+                                        i += 1
                                         if (parent.getItemAtPosition((position + i)).toString()
                                                 .split(":")[0].toInt() == oraTotale + 1
                                         ) {
-                                            oraTotale = oraTotale + 1
+                                            oraTotale += 1
                                         } else
-                                            esci = true;
+                                            esci = true
                                     }
                                     if (i == 4)
-                                        i = 3;
-                                    duration.removeAll(duration)
+                                        i = 3
+                                    durationsList.removeAll(durationsList)
                                     for (j in 1..i)
-                                        duration.add(j.toString() + " h")
-                                    if (durationAdapter != null) {
-                                        durationAdapter.notifyDataSetChanged()
-                                    }
-
-
+                                        durationsList.add("$j h")
+                                    durationAdapter?.notifyDataSetChanged()
                                 }
 
                                 override fun onNothingSelected(parent: AdapterView<*>) {
@@ -232,7 +231,7 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
                                     id: Long
                                 ) {
                                     val selectedItem = parent.getItemAtPosition(position).toString()
-                                    myReservation.duration =
+                                    MyReservation.duration =
                                         Duration.ofHours(selectedItem.split(' ')[0].toLong())
                                 }
 
@@ -256,23 +255,33 @@ class AddReservationFragment : Fragment(R.layout.add_reservation_fragment) {
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_save_edit_reservation, menu)
-        super.onCreateOptionsMenu(menu!!, inflater)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController= view?.findNavController()
-        var action = AddReservationFragmentDirections.actionAddReservationFragmentToCalendarFragment()
+        val action = AddReservationFragmentDirections.actionAddReservationFragmentToCalendarFragment()
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_edit_reservation -> {
                 // var spinnerHourValue= view?.findViewById<Spinner>(R.id.spinnerViewHours);
                 // var spinnerDurationValue=view?.findViewById<Spinner>(R.id.spinnerDuration);
-                var chkEquipment=view?.findViewById<CheckBox>(R.id.rentingEquipment);
+                val chkEquipment=view?.findViewById<CheckBox>(R.id.rentingEquipment)
 
                 if (chkEquipment != null) {
-                    myReservation.rentingEquipment=chkEquipment.isChecked
+                    MyReservation.rentingEquipment=chkEquipment.isChecked
                 }
-                reservationsViewModel.saveReservation(myReservation)
+
+                val newReservation = Reservation(
+                    "",
+                    reservationsViewModel.getUserReference(Global.userId),
+                    reservationsViewModel.getPlaygroundReference(MyReservation.playgroundId),
+                    MyReservation.sport,
+                    MyReservation.time,
+                    MyReservation.duration
+                )
+
+                reservationsViewModel.saveReservation(newReservation)
 
                 navController?.navigate(action)
 

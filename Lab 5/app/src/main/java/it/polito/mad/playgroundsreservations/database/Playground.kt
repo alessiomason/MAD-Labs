@@ -1,13 +1,20 @@
 package it.polito.mad.playgroundsreservations.database
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.google.firebase.firestore.DocumentSnapshot
 
-@Entity(tableName = "playgrounds")
 data class Playground(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: String,
     val name: String,
     val address: String,
-    val sport: Sports
+    val sport: Sport,
+    val averageRating: Float? = null
 )
+
+fun DocumentSnapshot.toPlayground(): Playground {
+    val name = this.get("name", String::class.java)
+    val address = this.get("address", String::class.java)
+    val sport = this.get("sport", String::class.java)!!.toSport()
+    val averageRating = this.get("averageRating", Float::class.java)
+
+    return Playground(id,name ?: "", address ?: "", sport, averageRating)
+}

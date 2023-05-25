@@ -37,11 +37,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,14 +54,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.smarttoolfactory.ratingbar.RatingBar
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
-import it.polito.mad.playgroundsreservations.database.Sports
+import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
-import com.smarttoolfactory.ratingbar.RatingBar
 
 class RatingPlaygrounds: Fragment() {
     private val args by navArgs<RatingPlaygroundsArgs>()
@@ -89,7 +89,7 @@ class RatingPlaygrounds: Fragment() {
 }
 
 @Composable
-fun RatingPlaygroundsScreen(playgroundId: Int, reservationId:Int, navController:NavController) {
+fun RatingPlaygroundsScreen(playgroundId: String, reservationId: String, navController: NavController) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
 
     val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
@@ -103,7 +103,7 @@ fun RatingPlaygroundsScreen(playgroundId: Int, reservationId:Int, navController:
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, navController: NavController) {
+fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: String, navController: NavController) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
 
     var rating by remember { mutableStateOf(1f) }
@@ -111,11 +111,11 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, n
     var iconId by remember { mutableStateOf(0) }
     var sportNameId by remember { mutableStateOf(0) }
     val image = when (playground.sport) {
-        Sports.TENNIS -> R.drawable.tennis_court
-        Sports.BASKETBALL -> R.drawable.basketball_court
-        Sports.FOOTBALL -> R.drawable.football_pitch
-        Sports.VOLLEYBALL -> R.drawable.volleyball_court
-        Sports.GOLF -> R.drawable.golf_field
+        Sport.TENNIS -> R.drawable.tennis_court
+        Sport.BASKETBALL -> R.drawable.basketball_court
+        Sport.FOOTBALL -> R.drawable.football_pitch
+        Sport.VOLLEYBALL -> R.drawable.volleyball_court
+        Sport.GOLF -> R.drawable.golf_field
     }
 
     Column(
@@ -146,19 +146,19 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, n
         Row(verticalAlignment = Alignment.CenterVertically) {
 
             sportNameId = when (playground.sport) {
-                Sports.TENNIS -> R.string.sport_tennis
-                Sports.BASKETBALL -> R.string.sport_basketball
-                Sports.FOOTBALL -> R.string.sport_football
-                Sports.VOLLEYBALL -> R.string.sport_volleyball
-                Sports.GOLF -> R.string.sport_golf
+                Sport.TENNIS -> R.string.sport_tennis
+                Sport.BASKETBALL -> R.string.sport_basketball
+                Sport.FOOTBALL -> R.string.sport_football
+                Sport.VOLLEYBALL -> R.string.sport_volleyball
+                Sport.GOLF -> R.string.sport_golf
             }
 
             iconId = when (playground.sport) {
-                Sports.TENNIS -> R.drawable.tennis_ball
-                Sports.BASKETBALL -> R.drawable.basketball_ball
-                Sports.FOOTBALL -> R.drawable.football_ball
-                Sports.VOLLEYBALL -> R.drawable.volleyball_ball
-                Sports.GOLF -> R.drawable.golf_ball
+                Sport.TENNIS -> R.drawable.tennis_ball
+                Sport.BASKETBALL -> R.drawable.basketball_ball
+                Sport.FOOTBALL -> R.drawable.football_ball
+                Sport.VOLLEYBALL -> R.drawable.volleyball_ball
+                Sport.GOLF -> R.drawable.golf_ball
             }
 
             Icon(
@@ -200,7 +200,13 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: Int, n
         )
         Button(
             onClick = {
-                val playgroundRating = PlaygroundRating(playgroundId = playground.id, reservationId = reservationId , rating = rating, description = text);
+                val playgroundRating = PlaygroundRating(
+                    "",
+                    playgroundId = reservationsViewModel.getPlaygroundReference(playground.id),
+                    reservationId = reservationsViewModel.getReservationReference(reservationId),
+                    rating = rating,
+                    description = text
+                )
                 reservationsViewModel.savePlaygroundRating(playgroundRating)
                 navController.popBackStack()
             },
