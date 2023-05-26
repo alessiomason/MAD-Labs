@@ -3,6 +3,7 @@ package it.polito.mad.playgroundsreservations.reservations
 import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -162,7 +163,7 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
             }
     }
 
-    fun getRatingByReservation(reservationId: String): LiveData<PlaygroundRating?> {
+    fun getRatingByReservation(reservationId: String,): LiveData<PlaygroundRating?> {
         val playgroundRating = MutableLiveData<PlaygroundRating?>()
 
         val reservationReference = db.collection(reservationsCollectionPath)
@@ -230,5 +231,27 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
         )
 
         db.collection(playgroundsRatingsCollectionPath).add(pr)
+    }
+
+    fun getRatingsByPlaygroundId(playgroundId: String,ratingsState: MutableState<List<PlaygroundRating>>)
+    {
+        val playgroundReference = db.collection(playgroundsCollectionPath)
+            .document(playgroundId)
+
+        db.collection(playgroundsRatingsCollectionPath)
+            .whereEqualTo("playgroundId", playgroundReference)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read playground rating.", error)
+                    return@addSnapshotListener
+                }
+                var lista=mutableListOf<PlaygroundRating>()
+                for(doc in value!!)
+                {
+                    lista.add(doc.toPlaygroundRating())
+                }
+                ratingsState.value=lista
+
+            }
     }
 }
