@@ -135,7 +135,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
                     reservations.observe(viewLifecycleOwner) {
                         it.forEach { r ->
-                            if (r.playgroundId.path == playground.id &&
+                            if (r.playgroundId.path.split('/')[1] == playground.id &&
                                 r.time.year == args.dateOfReservation.split("-")[0].toInt() &&
                                 r.time.month.value == args.dateOfReservation.split("-")[1].toInt() &&
                                 r.time.dayOfMonth == args.dateOfReservation.split("-")[2].toInt()
