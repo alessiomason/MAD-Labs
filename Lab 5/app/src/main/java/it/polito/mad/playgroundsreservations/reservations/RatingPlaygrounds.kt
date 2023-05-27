@@ -214,6 +214,7 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: String
             colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.primary)),
             modifier = Modifier.padding(top = 8.dp)
         )
+        /*
         Button(
             onClick = {
                // val playgroundRating=PlaygroundRating(playgroundId = playground.id, reservationId = reservationId , rating = rating, description = text);
@@ -224,6 +225,6 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: String
             content = { Text(stringResource(id =R.string.see_ratings).uppercase(), color = Color.White) },
             colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.primary)),
             modifier = Modifier.padding(top = 8.dp)
-        )
+        ) */
     }
 }

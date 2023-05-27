@@ -1,5 +1,6 @@
 package it.polito.mad.playgroundsreservations.reservations
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.RatingBar
@@ -60,7 +62,9 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
         val reservations = reservationsViewModel.getUserReservations(Global.userId)
         val playgrounds = reservationsViewModel.playgrounds
-
+        playgroundList.removeAll(playgroundList)
+        val sharedPreferences = requireContext().getSharedPreferences("AddPref", Context.MODE_PRIVATE)
+        val navController = view.findNavController()
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.add_reservation)
 
@@ -82,6 +86,8 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
             val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
             ratingBar.setIsIndicator(true)
 
+            val seeRatingButton = view.findViewById<Button>(R.id.btnSeeRatings)
+
             val image = view.findViewById<ImageView>(R.id.reservationImage)
             val sportIcon = view.findViewById<ImageView>(R.id.sportNameIcon)
             val sportName = view.findViewById<TextView>(R.id.sportName)
@@ -102,6 +108,11 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                     val playground = playgroundList[position]
                     MyReservation.playgroundId = playground.id
                     MyReservation.sport = playgroundList[position].sport
+
+                    val editor = sharedPreferences.edit()
+                    editor.putString("playgroundSelected", playground.id)
+                    editor.apply()
+                    // MyReservation.playgroundId = sharedPreferences.getString("playgroundSelected", "").toString()
 
                     ratingBar.rating = playground.averageRating ?: (0.0).toFloat()
 
@@ -134,6 +145,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                     }
 
                     reservations.observe(viewLifecycleOwner) {
+                        arrayOccupated.removeAll(arrayOccupated)
                         it.forEach { r ->
                             if (r.playgroundId.path.split('/')[1] == playground.id &&
                                 r.time.year == args.dateOfReservation.split("-")[0].toInt() &&
@@ -240,6 +252,10 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                                 }
 
                             }
+                    }
+                    seeRatingButton.setOnClickListener {
+                        val action = AddReservationFragmentDirections.actionAddReservationFragmentToSeeRatings(playground.id)
+                        navController.navigate(action)
                     }
                 }
 
