@@ -205,7 +205,8 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: String
                     playgroundId = reservationsViewModel.getPlaygroundReference(playground.id),
                     reservationId = reservationsViewModel.getReservationReference(reservationId),
                     rating = rating,
-                    description = text
+                    description = text,
+                    username = "mariorossi"
                 )
                 reservationsViewModel.savePlaygroundRating(playgroundRating)
                 navController.popBackStack()

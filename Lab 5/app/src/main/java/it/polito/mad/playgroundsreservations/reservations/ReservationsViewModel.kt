@@ -3,7 +3,6 @@ package it.polito.mad.playgroundsreservations.reservations
 import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -227,7 +226,8 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
             "playgroundId" to playgroundRating.playgroundId,
             "reservationId" to playgroundRating.reservationId,
             "rating" to playgroundRating.rating,
-            "description" to playgroundRating.description
+            "description" to playgroundRating.description,
+            "username" to playgroundRating.username
         )
 
         db.collection(playgroundsRatingsCollectionPath).add(pr)

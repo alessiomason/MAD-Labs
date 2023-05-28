@@ -188,30 +188,20 @@ fun SeeRatingsScreenContent(playground: Playground, ratingList: MutableState<Lis
 
 @Composable
 fun ListItemComponent(item: PlaygroundRating) {
-    var isExpanded by remember { mutableStateOf(false) }
+    // var isExpanded by remember { mutableStateOf(false) }
     var starCount = item.rating
-    var i = 1;
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .clickable { if (item.description != "") isExpanded = !isExpanded },
+            .padding(16.dp),
+            // .clickable { if (item.description != "") isExpanded = !isExpanded },
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            /* Text(
-                 text = "Rating"+i.toString(),
-                 fontWeight = FontWeight.Bold,
-                 fontSize = 18.sp,
-                 modifier = Modifier.weight(1f)
-             )
-             */
-
-
             RatingBar(
                 rating = starCount,
                 space = 2.dp,
@@ -224,7 +214,7 @@ fun ListItemComponent(item: PlaygroundRating) {
             ) {
                 starCount = it
             }
-            IconButton(onClick = { isExpanded = !isExpanded }) {
+            /* IconButton(onClick = { isExpanded = !isExpanded }) {
                 val res: Int = if (isExpanded)
                     R.drawable.baseline_arrow_circle_up_24
                 else
@@ -233,20 +223,20 @@ fun ListItemComponent(item: PlaygroundRating) {
                         painter = painterResource(res),
                         contentDescription = null
                     )
-                }
+                } */
         }
 
-        if (isExpanded) {
+        // if (isExpanded) {
             val descriptionText = if (item.description == "") {
-                stringResource(id = R.string.optional_description_entered)
+                "${stringResource(id = R.string.optional_description_entered)} - @${item.username}"
             } else {
-                "\"" + item.description + "\""
+                "\"${item.description}\" - @${item.username}"
             }
             Text(
                 text = descriptionText,
                 modifier = Modifier.padding(top = 8.dp),
                 style = TextStyle(fontStyle = FontStyle.Italic)
             )
-        }
+        // }
     }
 }
