@@ -14,9 +14,12 @@ import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.database.toPlayground
 import it.polito.mad.playgroundsreservations.database.toPlaygroundRating
 import it.polito.mad.playgroundsreservations.database.toReservation
+import it.polito.mad.playgroundsreservations.database.toUser
+import it.polito.mad.playgroundsreservations.profile.Gender
 import java.util.Date
 
 // AGGIUNGERE controlli di conflitti fatti dal db in precedenza
@@ -276,5 +279,41 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
                 ratingPlaygrounds.value = listOfRatings
             }
         return ratingPlaygrounds
+    }
+
+    fun getUserInfo(userId: String): LiveData<User?> {
+        val userInfo = MutableLiveData<User?>()
+
+        db.collection(usersCollectionPath)
+            .document(userId)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read user info.", error)
+                    userInfo.value = null
+                    return@addSnapshotListener
+                }
+                userInfo.value = value!!.toUser()
+            }
+
+        return userInfo
+    }
+
+    fun updateUserInfo(user: User) {
+        val u = hashMapOf(
+            "id" to user.id,
+            "username" to user.username,
+            "firstName" to user.firstName,
+            "lastName" to user.lastName,
+            "bio" to user.bio,
+            "gender" to user.gender,
+            "phone" to user.phone,
+            "location" to user.location,
+            "rating" to user.rating,
+            "dateOfBirth" to user.dateOfBirth
+        )
+
+        db.collection(usersCollectionPath)
+            .document(user.id)
+            .set(u)
     }
 }

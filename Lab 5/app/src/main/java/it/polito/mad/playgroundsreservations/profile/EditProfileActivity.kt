@@ -15,12 +15,16 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RatingBar
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.User
+import it.polito.mad.playgroundsreservations.reservations.Global
+import it.polito.mad.playgroundsreservations.reservations.ReservationsViewModel
 import java.io.*
 
 class EditProfileActivity: AppCompatActivity() {
@@ -60,9 +64,11 @@ class EditProfileActivity: AppCompatActivity() {
             userProfileImageView.showContextMenu()
         }
 
+        val reservationViewModel by viewModels<ReservationsViewModel>()
         val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
         val gson = Gson()
         profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)
+        /*
         if (profile.name != null) nameView.setText(profile.name)
         if (profile.nickname != null) nicknameView.setText(profile.nickname)
         if (profile.age != null) ageView.setText(profile.age.toString())
@@ -91,7 +97,44 @@ class EditProfileActivity: AppCompatActivity() {
         }
         if (profile.phone != null) phoneView.setText(profile.phone)
         if (profile.location != null) locationView.setText(profile.location)
-        if (profile.rating != null) ratingBarView.rating = profile.rating!!
+        if (profile.rating != null) ratingBarView.rating = profile.rating!! */
+
+        val user = reservationViewModel.getUserInfo(Global.userId)
+        user.observe(this) { user ->
+            if (user != null) {
+                nameView.setText("${user.firstName} ${user.lastName}")
+                nicknameView.setText(user.username)
+                bioView.setText(user.bio)
+                when (user.gender) {
+                    Gender.MALE -> {
+                        genderMaleRadioButton.isChecked = true
+                        genderFemaleRadioButton.isChecked = false
+                        genderOtherRadioButton.isChecked = false
+                    }
+                    Gender.FEMALE -> {
+                        genderMaleRadioButton.isChecked = false
+                        genderFemaleRadioButton.isChecked = true
+                        genderOtherRadioButton.isChecked = false
+                    }
+                    Gender.OTHER -> {
+                        genderMaleRadioButton.isChecked = false
+                        genderFemaleRadioButton.isChecked = false
+                        genderOtherRadioButton.isChecked = true
+                    }
+                    null -> {
+                        genderMaleRadioButton.isChecked = false
+                        genderFemaleRadioButton.isChecked = false
+                        genderOtherRadioButton.isChecked = false
+                    }
+                }
+                // ageView.setText(resources.getString(R.string.years, calculateAge(user.dateOfBirth).toString()))
+                ageView.setText(resources.getString(R.string.years, user.dateOfBirth))
+                phoneView.setText(user.phone)
+                locationView.setText(user.location)
+                ratingBarView.rating = user.rating
+            }
+        }
+
 
         // set onClick for Add new sports button
         val addChip = findViewById<Chip>(R.id.chipAdd)
@@ -214,10 +257,11 @@ class EditProfileActivity: AppCompatActivity() {
         return null
     }
 
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString("name", nameView.text.toString())
+        /* outState.putString("name", nameView.text.toString())
         outState.putString("nickname", nicknameView.text.toString())
         outState.putString("bio", bioView.text.toString())
         if (ageView.text.toString() != "") outState.putInt("age", ageView.text.toString().toInt())
@@ -228,13 +272,14 @@ class EditProfileActivity: AppCompatActivity() {
         outState.putChar("gender", gender)
         outState.putString("phone", phoneView.text.toString())
         outState.putString("location", locationView.text.toString())
-        outState.putFloat("rating", ratingBarView.rating)
+        outState.putFloat("rating", ratingBarView.rating) */
         outState.putString("userProfileImageUriString", profile.userProfileImageUriString)
     }
 
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        nameView.setText(savedInstanceState.getString("name"))
+        /* nameView.setText(savedInstanceState.getString("name"))
         nicknameView.setText(savedInstanceState.getString("nickname"))
         bioView.setText(savedInstanceState.getString("bio"))
         ageView.setText(savedInstanceState.getInt("age").toString())
@@ -262,9 +307,10 @@ class EditProfileActivity: AppCompatActivity() {
         }
         phoneView.setText(savedInstanceState.getString("phone"))
         locationView.setText(savedInstanceState.getString("location"))
-        ratingBarView.rating = savedInstanceState.getFloat("rating")
+        ratingBarView.rating = savedInstanceState.getFloat("rating") */
         profile.userProfileImageUriString = savedInstanceState.getString("userProfileImageUriString")
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu to use in the action bar
@@ -274,6 +320,7 @@ class EditProfileActivity: AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val reservationViewModel by viewModels<ReservationsViewModel>()
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_profile -> {
@@ -284,7 +331,7 @@ class EditProfileActivity: AppCompatActivity() {
                     Context.MODE_PRIVATE
                 ) ?: return true
                 with(sharedPref.edit()) {
-                    profile.name = nameView.text.toString()
+                    /* profile.name = nameView.text.toString()
                     profile.nickname = nicknameView.text.toString()
                     profile.age = ageView.text.toString().toIntOrNull()
                     profile.bio = bioView.text.toString()
@@ -296,13 +343,35 @@ class EditProfileActivity: AppCompatActivity() {
                         profile.gender = Gender.OTHER
                     profile.phone = phoneView.text.toString()
                     profile.location = locationView.text.toString()
-                    profile.rating = ratingBarView.rating
+                    profile.rating = ratingBarView.rating */
 
                     val gson = Gson()
                     val profileJson = gson.toJson(profile)
                     putString("profile", profileJson)
                     apply()
                 }
+                var gender: Gender = Gender.MALE
+                if (genderMaleRadioButton.isChecked) {
+                    gender = Gender.MALE
+                } else if (genderFemaleRadioButton.isChecked) {
+                    gender = Gender.FEMALE
+                } else if (genderOtherRadioButton.isChecked) {
+                    gender = Gender.OTHER
+                }
+                val user = User(
+                    id = Global.userId,
+                    username = nicknameView.text.toString(),
+                    firstName = nameView.text.split(" ")[0],
+                    lastName = nameView.text.split(" ")[1],
+                    bio = bioView.text.toString(),
+                    gender = gender,
+                    phone = phoneView.text.toString(),
+                    location = locationView.text.toString(),
+                    rating = ratingBarView.rating,
+                    // dateBirth da modificare con la data
+                    dateOfBirth = ageView.text.split(" ")[0]
+                )
+                reservationViewModel.updateUserInfo(user)
                 return true
             }
         }

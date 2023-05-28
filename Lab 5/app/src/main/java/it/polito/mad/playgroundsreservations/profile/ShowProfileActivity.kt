@@ -18,8 +18,10 @@ import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.reservations.Global
 import it.polito.mad.playgroundsreservations.reservations.ReservationsViewModel
 import java.io.FileInputStream
+import java.util.Calendar
 
 class ShowProfileActivity: AppCompatActivity() {
     private lateinit var profile: Profile
@@ -62,6 +64,7 @@ class ShowProfileActivity: AppCompatActivity() {
         val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
         val gson = Gson()
         profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)
+        /*
         if (profile.name != null) nameView.text = profile.name
         if (profile.nickname != null) nicknameView.text = profile.nickname
         if (profile.age != null) ageView.text = resources.getString(R.string.years, profile.age.toString())
@@ -72,10 +75,33 @@ class ShowProfileActivity: AppCompatActivity() {
         if (profile.phone != null) phoneView.text = profile.phone
         if (profile.location != null) locationView.text = profile.location
         if (profile.rating != null) ratingBarView.rating = profile.rating!!
+        */
         selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
 
         val reservationViewModel by viewModels<ReservationsViewModel>()
         val playgrounds = reservationViewModel.playgrounds
+
+
+        val user = reservationViewModel.getUserInfo(Global.userId)
+        user.observe(this) { user ->
+            if (user != null) {
+                nameView.text = "${user.firstName} ${user.lastName}"
+                nicknameView.text = user.username
+                bioView.text = user.bio
+                if (user.gender == Gender.MALE){
+                    genderView.text = resources.getString(R.string.genderMale)
+                } else if (user.gender == Gender.FEMALE) {
+                    genderView.text = resources.getString(R.string.genderFemale)
+                } else if (user.gender == Gender.OTHER) {
+                    genderView.text = resources.getString(R.string.genderOther)
+                }
+                // ageView.text = resources.getString(R.string.years, calculateAge(user.dateOfBirth).toString())
+                ageView.text = resources.getString(R.string.years, user.dateOfBirth)
+                phoneView.text = user.phone
+                locationView.text = user.location
+                ratingBarView.rating = user.rating
+            }
+        }
 
         playgrounds.observe(this) { itemList ->
             itemList?.let {items ->
@@ -188,3 +214,21 @@ class ShowProfileActivity: AppCompatActivity() {
 
 
 }
+
+/*
+fun calculateAge(dateOfBirth: String): Int {
+
+    val dateParts = dateOfBirth.split("/")
+    val yearBirth = dateParts[0].toInt()
+    val monthBirth = dateParts[1].toInt()
+    val dayBirth = dateParts[2].toInt()
+    val currentDate = Calendar.getInstance()
+    val currentYear = currentDate.get(Calendar.YEAR)
+    val currentMonth = currentDate.get(Calendar.MONTH) + 1  // I mesi in Calendar vanno da 0 a 11, quindi aggiungi 1
+    val currentDay = currentDate.get(Calendar.DAY_OF_MONTH)
+    var age = currentYear - yearBirth
+    if (currentMonth < monthBirth || (currentMonth == monthBirth && currentDay < dayBirth))
+        age--
+
+    return age
+} */
