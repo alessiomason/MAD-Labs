@@ -2,28 +2,83 @@ package it.polito.mad.playgroundsreservations
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import it.polito.mad.playgroundsreservations.profile.ShowProfileActivity
+import com.firebase.ui.auth.AuthMethodPickerLayout
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.firebase.auth.FirebaseAuth
 import it.polito.mad.playgroundsreservations.reservations.ReservationsActivity
 
+
+class Global {
+    companion object {
+        var userId: String? = null
+    }
+}
+
 class MainActivity: AppCompatActivity() {
+    private val signInLauncher = registerForActivityResult(
+        FirebaseAuthUIActivityResultContract(),
+    ) { res ->
+        this.onSignInResult(res)
+    }
+
+    private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
+        val response = result.idpResponse
+        if (result.resultCode == RESULT_OK) {
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user != null)   // Successfully signed in
+                Global.userId = user.uid
+            findViewById<TextView>(R.id.textView).text = Global.userId
+            // create user in Firestore
+            // redirect to Reservation Activity
+        } else {
+            // Sign in failed. If response is null the user canceled the
+            // sign-in flow using the back button. Otherwise check
+            // response.getError().getErrorCode() and handle the error.
+            if (response != null)
+                Log.d("LOGIN ERROR", response.error.toString())
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val buttonReservations = findViewById<Button>(R.id.homeButtonReservations)
-        buttonReservations.setOnClickListener {
+        val playgroundsAvailabilityButton = findViewById<Button>(R.id.playgroundsAvailabilityButton)
+        playgroundsAvailabilityButton.setOnClickListener {
             val intent = Intent(this, ReservationsActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
         }
 
-        val buttonProfile = findViewById<Button>(R.id.homeButtonProfile)
-        buttonProfile.setOnClickListener {
-            val intent = Intent(this, ShowProfileActivity::class.java)
-            startActivity(intent)
-            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
+        val loginButton = findViewById<Button>(R.id.loginButton)
+        loginButton.setOnClickListener {
+            // Choose authentication providers
+            val providers = arrayListOf(
+                AuthUI.IdpConfig.EmailBuilder().build(),
+                AuthUI.IdpConfig.GoogleBuilder().build()
+            )
+
+            val customLayout = AuthMethodPickerLayout.Builder(R.layout.login_layout)
+                .setEmailButtonId(R.id.loginEmail)
+                .setGoogleButtonId(R.id.loginGoogle)
+                .build()
+
+            // Create and launch sign-in intent
+            val signInIntent = AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setLogo(R.drawable.volleyball_court)
+                .setTheme(R.style.Theme_PlaygroundsReservations)
+                .setAuthMethodPickerLayout(customLayout)
+                .build()
+
+            signInLauncher.launch(signInIntent)
         }
     }
 }

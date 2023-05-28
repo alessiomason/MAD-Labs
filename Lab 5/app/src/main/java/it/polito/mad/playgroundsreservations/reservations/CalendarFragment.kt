@@ -23,6 +23,7 @@ import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
 import com.stacktips.view.DayView
+import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
@@ -55,7 +56,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         navController = view.findNavController()
 
         val reservationsViewModel by viewModels<ReservationsViewModel>()
-        val reservations = reservationsViewModel.getUserReservations(Global.userId)
+        val reservations = reservationsViewModel.getUserReservations(Global.userId!!)
         val playgrounds = reservationsViewModel.playgrounds
 
         // ACTIVITY TITLE

@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
@@ -60,7 +61,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val reservations = reservationsViewModel.getUserReservations(Global.userId)
+        val reservations = reservationsViewModel.getUserReservations(Global.userId!!)
         val playgrounds = reservationsViewModel.playgrounds
         playgroundList.removeAll(playgroundList)
         val sharedPreferences = requireContext().getSharedPreferences("AddPref", Context.MODE_PRIVATE)
@@ -290,7 +291,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
                 val newReservation = Reservation(
                     "",
-                    reservationsViewModel.getUserReference(Global.userId),
+                    reservationsViewModel.getUserReference(Global.userId!!),
                     reservationsViewModel.getPlaygroundReference(MyReservation.playgroundId),
                     MyReservation.sport,
                     MyReservation.time,
