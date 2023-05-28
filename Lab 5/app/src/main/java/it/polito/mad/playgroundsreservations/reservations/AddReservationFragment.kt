@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -23,6 +25,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
+import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
 import java.time.Duration
@@ -87,6 +90,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
             ratingBar.setIsIndicator(true)
 
             val seeRatingButton = view.findViewById<Button>(R.id.btnSeeRatings)
+            val noRatingsTextView = view.findViewById<TextView>(R.id.noRatingsTextView)
 
             val image = view.findViewById<ImageView>(R.id.reservationImage)
             val sportIcon = view.findViewById<ImageView>(R.id.sportNameIcon)
@@ -114,7 +118,19 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                     editor.apply()
                     // MyReservation.playgroundId = sharedPreferences.getString("playgroundSelected", "").toString()
 
-                    ratingBar.rating = playground.averageRating ?: (0.0).toFloat()
+
+                    var totalRating = 0.0f
+                    val ratingBarValue = reservationsViewModel.getRatingsByPlaygroundIdFragment(playground.id)
+                    ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
+                        if (ratingPlaygroundsList.isEmpty()){
+                            ratingBar.rating = (0.0).toFloat()
+                        } else {
+                            ratingPlaygroundsList.forEach { r ->
+                                totalRating += r?.rating!!
+                            }
+                            ratingBar.rating = totalRating / ratingPlaygroundsList.size
+                        }
+                    }
 
                     when (MyReservation.sport) {
                         Sport.TENNIS ->  {
@@ -253,9 +269,25 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
                             }
                     }
-                    seeRatingButton.setOnClickListener {
-                        val action = AddReservationFragmentDirections.actionAddReservationFragmentToSeeRatings(playground.id)
-                        navController.navigate(action)
+
+                    ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
+                        val ratingSinglePlaygroundList = mutableListOf<PlaygroundRating>()
+                        ratingPlaygroundsList.forEach { r ->
+                            if (r?.playgroundId?.id == playground.id) {
+                                ratingSinglePlaygroundList.add(r)
+                            }
+                        }
+                        if (ratingSinglePlaygroundList.isEmpty()){
+                            seeRatingButton.visibility = GONE
+                            noRatingsTextView.visibility = VISIBLE
+                        } else {
+                            noRatingsTextView.visibility = GONE
+                            seeRatingButton.visibility = VISIBLE
+                            seeRatingButton.setOnClickListener {
+                                val action = AddReservationFragmentDirections.actionAddReservationFragmentToSeeRatings(playground.id)
+                                navController.navigate(action)
+                            }
+                        }
                     }
                 }
 

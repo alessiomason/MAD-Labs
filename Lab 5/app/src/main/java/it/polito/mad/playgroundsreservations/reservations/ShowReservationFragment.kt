@@ -110,7 +110,18 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
                 ratingBar.setIsIndicator(true)
 
-                ratingBar.rating = myPlayground.averageRating ?: (0.0).toFloat()
+                var totalRating = 0.0f
+                val ratingBarValue = reservationsViewModel.getRatingsByPlaygroundIdFragment(myPlayground.id)
+                ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
+                    if (ratingPlaygroundsList.isEmpty()){
+                        ratingBar.rating = (0.0).toFloat()
+                    } else {
+                        ratingPlaygroundsList.forEach { r ->
+                            totalRating += r?.rating!!
+                        }
+                        ratingBar.rating = totalRating / ratingPlaygroundsList.size
+                    }
+                }
 
                 view.findViewById<TextView>(R.id.playgroundName).text = myPlayground.name
                 view.findViewById<TextView>(R.id.sportName).text = sportName

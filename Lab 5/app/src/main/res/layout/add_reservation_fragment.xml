@@ -213,6 +213,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/see_ratings" />
 
+            <TextView
+                android:id="@+id/noRatingsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/bordered_box"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/no_ratings_yet"
+                android:textColor="@android:color/primary_text_light" />
+
         </LinearLayout>
     </ScrollView>
     </LinearLayout>

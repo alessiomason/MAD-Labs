@@ -163,7 +163,7 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
             }
     }
 
-    fun getRatingByReservation(reservationId: String,): LiveData<PlaygroundRating?> {
+    fun getRatingByReservation(reservationId: String): LiveData<PlaygroundRating?> {
         val playgroundRating = MutableLiveData<PlaygroundRating?>()
 
         val reservationReference = db.collection(reservationsCollectionPath)
@@ -251,7 +251,30 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
                     lista.add(doc.toPlaygroundRating())
                 }
                 ratingsState.value=lista
-
             }
+    }
+
+    fun getRatingsByPlaygroundIdFragment(playgroundId: String): LiveData<List<PlaygroundRating?>> {
+
+        val ratingPlaygrounds = MutableLiveData<List<PlaygroundRating?>>()
+
+        val playgroundReference = db.collection(playgroundsCollectionPath)
+            .document(playgroundId)
+
+        db.collection(playgroundsRatingsCollectionPath)
+            .whereEqualTo("playgroundId", playgroundReference)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read playground rating.", error)
+                    return@addSnapshotListener
+                }
+                val listOfRatings=mutableListOf<PlaygroundRating>()
+                for(doc in value!!) {
+                    val rating = doc.toPlaygroundRating()
+                    listOfRatings.add(rating)
+                }
+                ratingPlaygrounds.value = listOfRatings
+            }
+        return ratingPlaygrounds
     }
 }

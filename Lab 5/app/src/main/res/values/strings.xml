@@ -83,6 +83,8 @@
     <string name="see_ratings">See ratings</string>
     <string name="optional_description_entered">No optional description entered</string>
     <string name="my_review_title">MY REVIEW:</string>
+    <string name="no_ratings_yet">NO RATINGS HAVE BEEN LEFT YET</string>
+    <string name="ratings_playground">Ratings</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
