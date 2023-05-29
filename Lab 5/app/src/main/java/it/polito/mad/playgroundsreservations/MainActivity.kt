@@ -12,7 +12,7 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
 import it.polito.mad.playgroundsreservations.reservations.ReservationsActivity
-import it.polito.mad.playgroundsreservations.reservations.ReservationsViewModel
+import it.polito.mad.playgroundsreservations.reservations.ViewModel
 
 
 class Global {
@@ -22,7 +22,7 @@ class Global {
 }
 
 class MainActivity: AppCompatActivity() {
-    private val reservationsViewModel by viewModels<ReservationsViewModel>()
+    private val viewModel by viewModels<ViewModel>()
 
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract(),
@@ -36,7 +36,7 @@ class MainActivity: AppCompatActivity() {
             val user = FirebaseAuth.getInstance().currentUser
             if (user != null) {   // Successfully signed in
                 Global.userId = user.uid
-                reservationsViewModel.createUserIfNotExists(user.uid, user.displayName)
+                viewModel.createUserIfNotExists(user.uid, user.displayName)
 
                 val intent = Intent(this, ReservationsActivity::class.java)
                 startActivity(intent)

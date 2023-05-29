@@ -20,13 +20,12 @@ import it.polito.mad.playgroundsreservations.database.toPlayground
 import it.polito.mad.playgroundsreservations.database.toPlaygroundRating
 import it.polito.mad.playgroundsreservations.database.toReservation
 import it.polito.mad.playgroundsreservations.database.toUser
-import it.polito.mad.playgroundsreservations.profile.Gender
 import java.util.Date
 
 // AGGIUNGERE controlli di conflitti fatti dal db in precedenza
 // CAMBIARE value!! con controllo != null
 
-class ReservationsViewModel(application: Application) : AndroidViewModel(application) {
+class ViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
         const val TAG = "VIEW_MODEL"
         const val usersCollectionPath = "users"

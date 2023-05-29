@@ -90,10 +90,10 @@ class RatingPlaygrounds: Fragment() {
 
 @Composable
 fun RatingPlaygroundsScreen(playgroundId: String, reservationId: String, navController: NavController) {
-    val reservationsViewModel: ReservationsViewModel = viewModel()
+    val viewModel: ViewModel = viewModel()
 
     val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
-    reservationsViewModel.getPlayground(playgroundId, playground)
+    viewModel.getPlayground(playgroundId, playground)
 
     if (playground.value == null)
         Text("Loading")
@@ -104,7 +104,7 @@ fun RatingPlaygroundsScreen(playgroundId: String, reservationId: String, navCont
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: String, navController: NavController) {
-    val reservationsViewModel: ReservationsViewModel = viewModel()
+    val viewModel: ViewModel = viewModel()
 
     var rating by remember { mutableStateOf(1f) }
     var text by remember { mutableStateOf("") }
@@ -202,13 +202,13 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: String
             onClick = {
                 val playgroundRating = PlaygroundRating(
                     "",
-                    playgroundId = reservationsViewModel.getPlaygroundReference(playground.id),
-                    reservationId = reservationsViewModel.getReservationReference(reservationId),
+                    playgroundId = viewModel.getPlaygroundReference(playground.id),
+                    reservationId = viewModel.getReservationReference(reservationId),
                     rating = rating,
                     description = text,
                     username = "mariorossi"
                 )
-                reservationsViewModel.savePlaygroundRating(playgroundRating)
+                viewModel.savePlaygroundRating(playgroundRating)
                 navController.popBackStack()
             },
             content = { Text(stringResource(id =R.string.save_rating).uppercase(), color = Color.White) },

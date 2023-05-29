@@ -31,7 +31,7 @@ import java.time.format.FormatStyle
 
 class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
     private val args by navArgs<ShowReservationFragmentArgs>()
-    private val reservationsViewModel by viewModels<ReservationsViewModel>()
+    private val viewModel by viewModels<ViewModel>()
     private lateinit var myReservation: Reservation
     private lateinit var myPlayground: Playground
 
@@ -44,9 +44,9 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val reservationsViewModel by viewModels<ReservationsViewModel>()
-        val reservations = reservationsViewModel.getUserReservations(Global.userId!!)
-        val playgrounds = reservationsViewModel.playgrounds
+        val viewModel by viewModels<ViewModel>()
+        val reservations = viewModel.getUserReservations(Global.userId!!)
+        val playgrounds = viewModel.playgrounds
 
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.reservation)
@@ -80,7 +80,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 val myReviewLayout = view.findViewById<LinearLayout>(R.id.myReviewLayout)
                 myReviewLayout.visibility = GONE
                 // display rate court button only for past reservations and if not already rated
-                val previousRatingForReservation = reservationsViewModel.getRatingByReservation(myReservation.id)
+                val previousRatingForReservation = viewModel.getRatingByReservation(myReservation.id)
 
                 previousRatingForReservation.observe(viewLifecycleOwner) { rating ->
                     if (myReservation.time.plus(myReservation.duration).isBefore(Instant.now().atZone(myReservation.time.zone))
@@ -112,7 +112,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 ratingBar.setIsIndicator(true)
 
                 var totalRating = 0.0f
-                val ratingBarValue = reservationsViewModel.getRatingsByPlaygroundIdFragment(myPlayground.id)
+                val ratingBarValue = viewModel.getRatingsByPlaygroundIdFragment(myPlayground.id)
                 ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
                     if (ratingPlaygroundsList.isEmpty()){
                         ratingBar.rating = (0.0).toFloat()
@@ -188,7 +188,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                         val fragmentManager = requireFragmentManager()
                         fragmentManager.popBackStack()
                         // Continue with delete operation
-                        reservationsViewModel.deleteReservation(myReservation)
+                        viewModel.deleteReservation(myReservation)
                         navController?.navigate(action)
                     } // A null listener allows the button to dismiss the dialog and take no further action.
                     .setNegativeButton(R.string.delete_reservation_cancel_button, null)
