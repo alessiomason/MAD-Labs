@@ -4,14 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,12 +34,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -38,7 +55,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.smarttoolfactory.ratingbar.RatingBar
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
+import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 
 class SeeRatings : Fragment() {
@@ -49,7 +68,7 @@ class SeeRatings : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // ACTIVITY TITLE
-        activity?.title = activity?.resources?.getString(R.string.rate_court)
+        activity?.title = activity?.resources?.getString(R.string.ratings_playground)
 
         return ComposeView(requireContext()).apply {
             setContent {
@@ -75,67 +94,113 @@ class SeeRatings : Fragment() {
 fun SeeRatingsScreen(playgroundId: String, navController: NavController) {
     val reservationsViewModel: ReservationsViewModel = viewModel()
 
+    val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
     val ratingsList = remember { mutableStateOf(listOf<PlaygroundRating>()) }
-    reservationsViewModel.getRatingsByPlaygroundId(playgroundId,ratingsList)
+    // Get all ratings of the playground
+    reservationsViewModel.getRatingsByPlaygroundId(playgroundId, ratingsList)
+    // Get all info about that playground
+    reservationsViewModel.getPlayground(playgroundId, playground)
 
 
-
-    if (ratingsList==null)
+    if (playground.value == null)
         Text("Loading")
     else
-        Prova(paramValue = playgroundId, ratingsList)
-    //SeeRatingsScreenContent(playgroundId = , navController = )
-    // SeeRatingsScreenContent(playground = playground.value!!, reservationId = 3, navController)
+        SeeRatingsScreenContent(playground = playground.value!!, ratingsList)
 }
 
 @Composable
-fun Prova(paramValue: String, ratingList: MutableState<List<PlaygroundRating>>) {
-// Esegui l'osservazione quando ratings cambia
-    // Puoi fare qualcosa con i nuovi valori di ratingsState qui
-    //Text(text = ratingList.toString())
-    LazyColumn{
-        items(ratingList.value){item: PlaygroundRating ->
-            ListItemComponent(item = item)
+fun SeeRatingsScreenContent(playground: Playground, ratingList: MutableState<List<PlaygroundRating>>) {
+
+    var iconId by remember { mutableStateOf(0) }
+    var sportNameId by remember { mutableStateOf(0) }
+    val image = when (playground.sport) {
+        Sport.TENNIS -> R.drawable.tennis_court
+        Sport.BASKETBALL -> R.drawable.basketball_court
+        Sport.FOOTBALL -> R.drawable.football_pitch
+        Sport.VOLLEYBALL -> R.drawable.volleyball_court
+        Sport.GOLF -> R.drawable.golf_field
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = playground.name, fontWeight = FontWeight.Normal, fontSize = 32.sp, textAlign = TextAlign.Center, modifier = Modifier.padding(bottom = 16.dp))
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .clip(CircleShape)
+                .border(1.dp, Color.Black, CircleShape)
+        ){
+            Image(
+                painter = painterResource(id = image),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds
+            )
+        }
+        Text(text = playground.address, fontWeight = FontWeight.Normal, fontSize = 20.sp, textAlign = TextAlign.Center, modifier = Modifier
+            .padding(bottom = 8.dp)
+            .padding(top = 8.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+
+            sportNameId = when (playground.sport) {
+                Sport.TENNIS -> R.string.sport_tennis
+                Sport.BASKETBALL -> R.string.sport_basketball
+                Sport.FOOTBALL -> R.string.sport_football
+                Sport.VOLLEYBALL -> R.string.sport_volleyball
+                Sport.GOLF -> R.string.sport_golf
+            }
+
+            iconId = when (playground.sport) {
+                Sport.TENNIS -> R.drawable.tennis_ball
+                Sport.BASKETBALL -> R.drawable.basketball_ball
+                Sport.FOOTBALL -> R.drawable.football_ball
+                Sport.VOLLEYBALL -> R.drawable.volleyball_ball
+                Sport.GOLF -> R.drawable.golf_ball
+            }
+
+            Icon(
+                painter = painterResource(id = iconId),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier.size(24.dp)
+            )
+            Text(text = stringResource(id = sportNameId), Modifier.padding(start = 8.dp), style = TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 20.sp
+            )
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyColumn{
+            items(ratingList.value){item: PlaygroundRating ->
+                ListItemComponent(item = item)
+            }
         }
     }
-   /* for (item in ratingList.value) {
-        ListItemComponent(item = item)
-    }
 
-    */
 }
-/* LazyColumn {
-    items(ratingsList) { item ->
-        ListItemComponent(item)
-     }
-
- */
 
 
 @Composable
 fun ListItemComponent(item: PlaygroundRating) {
-    var isExpanded by remember { mutableStateOf(false) }
+    // var isExpanded by remember { mutableStateOf(false) }
     var starCount = item.rating
-    var i = 1;
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .clickable { if (item.description != "") isExpanded = !isExpanded }
+            .padding(16.dp),
+            // .clickable { if (item.description != "") isExpanded = !isExpanded },
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            /* Text(
-                 text = "Rating"+i.toString(),
-                 fontWeight = FontWeight.Bold,
-                 fontSize = 18.sp,
-                 modifier = Modifier.weight(1f)
-             )
-             */
-
-
             RatingBar(
                 rating = starCount,
                 space = 2.dp,
@@ -148,29 +213,29 @@ fun ListItemComponent(item: PlaygroundRating) {
             ) {
                 starCount = it
             }
-            if (item.description != "") {
-                IconButton(onClick = { isExpanded = !isExpanded }) {
-                    var res:Int
-                    if (isExpanded==true)
-                        res = R.drawable.arrow_circle_up
-                    else
-                        res=R.drawable.arrow_circle_down
-
-                    Icon(
-                            painter = painterResource(res),
+            /* IconButton(onClick = { isExpanded = !isExpanded }) {
+                val res: Int = if (isExpanded)
+                    R.drawable.baseline_arrow_circle_up_24
+                else
+                    R.drawable.baseline_arrow_circle_down_24
+                Icon(
+                        painter = painterResource(res),
                         contentDescription = null
                     )
-                }
+                } */
+        }
+
+        // if (isExpanded) {
+            val descriptionText = if (item.description == "") {
+                "${stringResource(id = R.string.optional_description_entered)} - @${item.username}"
+            } else {
+                "\"${item.description}\" - @${item.username}"
             }
-
-
-        }
-
-        if (isExpanded) {
             Text(
-                text = item.description,
-                modifier = Modifier.padding(top = 8.dp)
+                text = descriptionText,
+                modifier = Modifier.padding(top = 8.dp),
+                style = TextStyle(fontStyle = FontStyle.Italic)
             )
-        }
+        // }
     }
 }

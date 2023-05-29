@@ -88,6 +88,8 @@
     <string name="see_ratings">Guarda i ratings</string>
     <string name="optional_description_entered">Nessuna descrizione opzionale inserita</string>
     <string name="my_review_title">LA MIA VALUTAZIONE:</string>
+    <string name="no_ratings_yet">NON È STATO ANCORA LASCIATO ALCUN RATING</string>
+    <string name="ratings_playground">Valutazioni</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

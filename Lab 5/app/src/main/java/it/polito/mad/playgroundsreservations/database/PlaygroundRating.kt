@@ -8,7 +8,8 @@ data class PlaygroundRating(
     val playgroundId: DocumentReference,
     val reservationId: DocumentReference,
     val rating: Float,
-    val description: String
+    val description: String,
+    val username: String
 )
 
 fun DocumentSnapshot.toPlaygroundRating(): PlaygroundRating {
@@ -16,6 +17,7 @@ fun DocumentSnapshot.toPlaygroundRating(): PlaygroundRating {
     val reservationId = this.get("reservationId", DocumentReference::class.java)!!
     val rating = this.get("rating", Float::class.java)!!
     val description = this.get("description", String::class.java)
+    val username = this.get("username", String::class.java)!!
 
-    return PlaygroundRating(id, playgroundId, reservationId, rating, description ?: "")
+    return PlaygroundRating(id, playgroundId, reservationId, rating, description ?: "", username)
 }

@@ -14,9 +14,12 @@ import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.database.toPlayground
 import it.polito.mad.playgroundsreservations.database.toPlaygroundRating
 import it.polito.mad.playgroundsreservations.database.toReservation
+import it.polito.mad.playgroundsreservations.database.toUser
+import it.polito.mad.playgroundsreservations.profile.Gender
 import java.util.Date
 
 // AGGIUNGERE controlli di conflitti fatti dal db in precedenza
@@ -162,7 +165,7 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
             }
     }
 
-    fun getRatingByReservation(reservationId: String,): LiveData<PlaygroundRating?> {
+    fun getRatingByReservation(reservationId: String): LiveData<PlaygroundRating?> {
         val playgroundRating = MutableLiveData<PlaygroundRating?>()
 
         val reservationReference = db.collection(reservationsCollectionPath)
@@ -226,7 +229,8 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
             "playgroundId" to playgroundRating.playgroundId,
             "reservationId" to playgroundRating.reservationId,
             "rating" to playgroundRating.rating,
-            "description" to playgroundRating.description
+            "description" to playgroundRating.description,
+            "username" to playgroundRating.username
         )
 
         db.collection(playgroundsRatingsCollectionPath).add(pr)
@@ -266,5 +270,65 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
                     db.collection(usersCollectionPath).add(newUser)
                 }
             }
+    }
+
+    fun getRatingsByPlaygroundIdFragment(playgroundId: String): LiveData<List<PlaygroundRating?>> {
+
+        val ratingPlaygrounds = MutableLiveData<List<PlaygroundRating?>>()
+
+        val playgroundReference = db.collection(playgroundsCollectionPath)
+            .document(playgroundId)
+
+        db.collection(playgroundsRatingsCollectionPath)
+            .whereEqualTo("playgroundId", playgroundReference)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read playground rating.", error)
+                    return@addSnapshotListener
+                }
+                val listOfRatings=mutableListOf<PlaygroundRating>()
+                for(doc in value!!) {
+                    val rating = doc.toPlaygroundRating()
+                    listOfRatings.add(rating)
+                }
+                ratingPlaygrounds.value = listOfRatings
+            }
+        return ratingPlaygrounds
+    }
+
+    fun getUserInfo(userId: String): LiveData<User?> {
+        val userInfo = MutableLiveData<User?>()
+
+        db.collection(usersCollectionPath)
+            .document(userId)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read user info.", error)
+                    userInfo.value = null
+                    return@addSnapshotListener
+                }
+                userInfo.value = value!!.toUser()
+            }
+
+        return userInfo
+    }
+
+    fun updateUserInfo(user: User) {
+        val u = hashMapOf(
+            "id" to user.id,
+            "username" to user.username,
+            "firstName" to user.firstName,
+            "lastName" to user.lastName,
+            "bio" to user.bio,
+            "gender" to user.gender,
+            "phone" to user.phone,
+            "location" to user.location,
+            "rating" to user.rating,
+            "dateOfBirth" to user.dateOfBirth
+        )
+
+        db.collection(usersCollectionPath)
+            .document(user.id)
+            .set(u)
     }
 }
