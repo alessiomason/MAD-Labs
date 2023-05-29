@@ -20,7 +20,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stacktips.view.CalendarListener
@@ -68,7 +67,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 
         // TUTORIAL
         val overlay = view.findViewById<ConstraintLayout>(R.id.calendar_fragment_overlay)
-        val alreadyShownTutorial = viewModel.getTutorialShown()
+        val alreadyShownTutorial = viewModel.tutorialShown
 
         alreadyShownTutorial.observe(viewLifecycleOwner) {
             if (it == true) {
@@ -77,7 +76,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
                 overlay.visibility = VISIBLE
                 view.findViewById<Button>(R.id.ok_button).setOnClickListener {
                     overlay.visibility = GONE
-                    viewModel.tutorialShown()
+                    viewModel.tutorialHasBeenShown()
                 }
             }
         }

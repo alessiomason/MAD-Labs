@@ -19,7 +19,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.User
@@ -28,7 +31,6 @@ import java.io.*
 import it.polito.mad.playgroundsreservations.Global
 
 class EditProfileActivity: AppCompatActivity() {
-    private lateinit var profile: Profile
     private lateinit var selectedSports: SelectedSports
     private lateinit var nameView: EditText
     private lateinit var nicknameView: EditText
@@ -41,6 +43,7 @@ class EditProfileActivity: AppCompatActivity() {
     private lateinit var locationView: EditText
     private lateinit var ratingBarView: RatingBar
     private lateinit var userProfileImageView: ImageView
+    private var userProfileImageUriString = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,9 +68,6 @@ class EditProfileActivity: AppCompatActivity() {
         }
 
         val viewModel by viewModels<ViewModel>()
-        val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
-        val gson = Gson()
-        profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)
 
         viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
             if (user != null) {
@@ -101,6 +101,14 @@ class EditProfileActivity: AppCompatActivity() {
                 phoneView.setText(user.phone)
                 locationView.setText(user.location)
                 ratingBarView.rating = user.rating
+
+
+                val storageReference = Firebase.storage.reference.child("profileImages/${user.id}")
+
+                Glide.with(this)
+                    .load(storageReference)
+                    .placeholder(R.drawable.user_profile)
+                    .into(userProfileImageView)
             }
         }
 
@@ -131,15 +139,6 @@ class EditProfileActivity: AppCompatActivity() {
         if (selectedSports.volleyball) volleyballChip.visibility = View.VISIBLE else volleyballChip.visibility = View.GONE
         val golfChip = findViewById<Chip>(R.id.chipGolf)
         if (selectedSports.golf) golfChip.visibility = View.VISIBLE else golfChip.visibility = View.GONE
-
-        if (profile.userProfileImageUriString != null) {
-            val parcelFileDescriptor =
-                contentResolver.openFileDescriptor(profile.userProfileImageUriString!!.toUri(), "r", null) ?: return
-
-            val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-            userProfileImageView.setImageBitmap(BitmapFactory.decodeStream(inputStream))
-            parcelFileDescriptor.close()
-        }
     }
 
     @Deprecated("Deprecated in Java",
@@ -186,7 +185,7 @@ class EditProfileActivity: AppCompatActivity() {
         values.put(MediaStore.Images.Media.TITLE, "New User Profile Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
         val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-        profile.userProfileImageUriString = imageUri.toString()
+        userProfileImageUriString = imageUri.toString()
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
@@ -203,13 +202,18 @@ class EditProfileActivity: AppCompatActivity() {
         var bitmap: Bitmap? = null
 
         if (requestCode == IMAGE_CAPTURE_CODE && resultCode == Activity.RESULT_OK) {
-            bitmap = uriToBitmap(profile.userProfileImageUriString!!.toUri())
+            bitmap = uriToBitmap(userProfileImageUriString.toUri())
         } else if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
-            profile.userProfileImageUriString = data.data.toString()
-            bitmap = uriToBitmap(profile.userProfileImageUriString!!.toUri())
+            userProfileImageUriString = data.data.toString()
+            bitmap = uriToBitmap(userProfileImageUriString.toUri())
         }
 
-        userProfileImageView.setImageBitmap(bitmap)
+        if (bitmap != null) {
+            userProfileImageView.setImageBitmap(bitmap)
+        }
+
+        val profileImageRef = Firebase.storage.reference.child("profileImages/${Global.userId}")
+        profileImageRef.putFile(userProfileImageUriString.toUri())
     }
 
     // takes URI of the image and returns bitmap
@@ -229,14 +233,14 @@ class EditProfileActivity: AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString("userProfileImageUriString", profile.userProfileImageUriString)
+        outState.putString("userProfileImageUriString", userProfileImageUriString)
     }
 
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
-        profile.userProfileImageUriString = savedInstanceState.getString("userProfileImageUriString")
+        userProfileImageUriString = savedInstanceState.getString("userProfileImageUriString") ?: ""
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -247,23 +251,14 @@ class EditProfileActivity: AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val reservationViewModel by viewModels<ViewModel>()
+        val viewModel by viewModels<ViewModel>()
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_profile -> {
                 finish()
                 overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
-                val sharedPref = this.getSharedPreferences(
-                    "profile",
-                    Context.MODE_PRIVATE
-                ) ?: return true
-                with(sharedPref.edit()) {
-                    val gson = Gson()
-                    val profileJson = gson.toJson(profile)
-                    putString("profile", profileJson)
-                    apply()
-                }
-                var gender: Gender = Gender.MALE
+
+                var gender: Gender? = null
                 if (genderMaleRadioButton.isChecked) {
                     gender = Gender.MALE
                 } else if (genderFemaleRadioButton.isChecked) {
@@ -271,6 +266,7 @@ class EditProfileActivity: AppCompatActivity() {
                 } else if (genderOtherRadioButton.isChecked) {
                     gender = Gender.OTHER
                 }
+
                 val user = User(
                     id = Global.userId!!,
                     username = nicknameView.text.toString(),
@@ -281,9 +277,11 @@ class EditProfileActivity: AppCompatActivity() {
                     location = locationView.text.toString(),
                     rating = ratingBarView.rating,
                     // dateBirth da modificare con la data
-                    dateOfBirth = ageView.text.split(" ")[0]
+                    dateOfBirth = ageView.text.split(" ")[0],
+                    alreadyShownTutorial = true     // if user sees this screen has already gone through tutorial
                 )
-                reservationViewModel.updateUserInfo(user)
+
+                viewModel.updateUserInfo(user)
                 return true
             }
         }

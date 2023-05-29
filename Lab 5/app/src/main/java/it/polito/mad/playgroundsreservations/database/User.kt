@@ -13,7 +13,8 @@ data class User(
     var gender: Gender?,
     var phone: String,
     var location: String,
-    var rating: Float = 0.0f
+    var rating: Float = 0.0f,
+    var alreadyShownTutorial: Boolean = false
 )
 
 fun DocumentSnapshot.toUser(): User {
@@ -25,6 +26,7 @@ fun DocumentSnapshot.toUser(): User {
     val location = this.get("location", String::class.java)
     val dateOfBirth = this.get("dateOfBirth", String::class.java)
     val rating = this.get("rating", Float::class.java)
+    val alreadyShownTutorial = this.get("alreadyShownTutorial", Boolean::class.java)
 
     return User(
         id,
@@ -36,5 +38,6 @@ fun DocumentSnapshot.toUser(): User {
         phone ?: "",
         location ?: "",
         rating ?: (0.0).toFloat(),
+        alreadyShownTutorial ?: false
     )
 }

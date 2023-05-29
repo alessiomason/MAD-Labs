@@ -2,7 +2,6 @@ package it.polito.mad.playgroundsreservations.profile
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,21 +13,26 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
-import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Registry
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.module.AppGlideModule
+import com.firebase.ui.storage.images.FirebaseImageLoader
 import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
-import it.polito.mad.playgroundsreservations.R
-import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.MainActivity
-import it.polito.mad.playgroundsreservations.reservations.ReservationsActivity
+import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
-import java.io.FileInputStream
+import java.io.InputStream
+
 
 class ShowProfileActivity: AppCompatActivity() {
-    private lateinit var profile: Profile
     private lateinit var selectedSports: SelectedSports
     private lateinit var nameView: TextView
     private lateinit var nicknameView: TextView
@@ -71,7 +75,6 @@ class ShowProfileActivity: AppCompatActivity() {
         super.onResume()
         val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
         val gson = Gson()
-        profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)
         selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
 
         val viewModel by viewModels<ViewModel>()
@@ -94,52 +97,67 @@ class ShowProfileActivity: AppCompatActivity() {
                 phoneView.text = user.phone
                 locationView.text = user.location
                 ratingBarView.rating = user.rating
+
+
+                val storageReference = Firebase.storage.reference.child("profileImages/${user.id}")
+
+                Glide.with(this)
+                    .load(storageReference)
+                    .placeholder(R.drawable.user_profile)
+                    .into(userProfileImageView)
             }
         }
 
         playgrounds.observe(this) { itemList ->
             itemList?.let {items ->
                 for (item in items) {
-                    if (item.sport == Sport.BASKETBALL) {
-                        val textView = findViewById<TextView>(R.id.my_court_basketball_title)
-                        textView.text = item.name
-                        val imageView = findViewById<ImageView>(R.id.my_court_basketball_image)
-                        imageView.setImageResource(R.drawable.basketball_court)
-                        val addressView = findViewById<TextView>(R.id.my_court_basketball_address)
-                        addressView.text = item.address
-                    } else if (item.sport == Sport.VOLLEYBALL) {
-                        val textView = findViewById<TextView>(R.id.my_court_volleyball_title)
-                        textView.text = item.name
-                        val imageView = findViewById<ImageView>(R.id.my_court_volleyball_image)
-                        imageView.setImageResource(R.drawable.volleyball_court)
-                        val addressView = findViewById<TextView>(R.id.my_court_volleyball_address)
-                        addressView.text = item.address
-                    } else if (item.sport == Sport.GOLF) {
-                        val textView = findViewById<TextView>(R.id.my_court_golf_title)
-                        textView.text = item.name
-                        val imageView = findViewById<ImageView>(R.id.my_court_golf_image)
-                        imageView.setImageResource(R.drawable.golf_field)
-                        val addressView = findViewById<TextView>(R.id.my_court_golf_address)
-                        addressView.text = item.address
-                    } else if (item.sport == Sport.TENNIS) {
-                        val textView = findViewById<TextView>(R.id.my_court_tennis_title)
-                        textView.text = item.name
-                        val imageView = findViewById<ImageView>(R.id.my_court_tennis_image)
-                        imageView.setImageResource(R.drawable.tennis_court)
-                        val addressView = findViewById<TextView>(R.id.my_court_tennis_address)
-                        addressView.text = item.address
-                    } else if (item.sport == Sport.FOOTBALL) {
-                        val textView = findViewById<TextView>(R.id.my_court_football_title)
-                        textView.text = item.name
-                        val imageView = findViewById<ImageView>(R.id.my_court_football_image)
-                        imageView.setImageResource(R.drawable.football_pitch)
-                        val addressView = findViewById<TextView>(R.id.my_court_football_address)
-                        addressView.text = item.address
+                    when (item.sport) {
+                        Sport.BASKETBALL -> {
+                            val textView = findViewById<TextView>(R.id.my_court_basketball_title)
+                            textView.text = item.name
+                            val imageView = findViewById<ImageView>(R.id.my_court_basketball_image)
+                            imageView.setImageResource(R.drawable.basketball_court)
+                            val addressView =
+                                findViewById<TextView>(R.id.my_court_basketball_address)
+                            addressView.text = item.address
+                        }
+                        Sport.VOLLEYBALL -> {
+                            val textView = findViewById<TextView>(R.id.my_court_volleyball_title)
+                            textView.text = item.name
+                            val imageView = findViewById<ImageView>(R.id.my_court_volleyball_image)
+                            imageView.setImageResource(R.drawable.volleyball_court)
+                            val addressView =
+                                findViewById<TextView>(R.id.my_court_volleyball_address)
+                            addressView.text = item.address
+                        }
+                        Sport.GOLF -> {
+                            val textView = findViewById<TextView>(R.id.my_court_golf_title)
+                            textView.text = item.name
+                            val imageView = findViewById<ImageView>(R.id.my_court_golf_image)
+                            imageView.setImageResource(R.drawable.golf_field)
+                            val addressView = findViewById<TextView>(R.id.my_court_golf_address)
+                            addressView.text = item.address
+                        }
+                        Sport.TENNIS -> {
+                            val textView = findViewById<TextView>(R.id.my_court_tennis_title)
+                            textView.text = item.name
+                            val imageView = findViewById<ImageView>(R.id.my_court_tennis_image)
+                            imageView.setImageResource(R.drawable.tennis_court)
+                            val addressView = findViewById<TextView>(R.id.my_court_tennis_address)
+                            addressView.text = item.address
+                        }
+                        Sport.FOOTBALL -> {
+                            val textView = findViewById<TextView>(R.id.my_court_football_title)
+                            textView.text = item.name
+                            val imageView = findViewById<ImageView>(R.id.my_court_football_image)
+                            imageView.setImageResource(R.drawable.football_pitch)
+                            val addressView = findViewById<TextView>(R.id.my_court_football_address)
+                            addressView.text = item.address
+                        }
                     }
                 }
             }
         }
-
 
         val emptyChip = findViewById<Chip>(R.id.chipEmpty)
         emptyChip.visibility = VISIBLE
@@ -169,15 +187,15 @@ class ShowProfileActivity: AppCompatActivity() {
             emptyChip.visibility = GONE
         } else golfChip.visibility = GONE
 
+        /*
+        val parcelFileDescriptor =
+            contentResolver.openFileDescriptor(profile.userProfileImageUriString!!.toUri(), "r", null) ?: return
 
-        if (profile.userProfileImageUriString != null) {
-            val parcelFileDescriptor =
-                contentResolver.openFileDescriptor(profile.userProfileImageUriString!!.toUri(), "r", null) ?: return
-
-            val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-            userProfileImageView.setImageBitmap(BitmapFactory.decodeStream(inputStream))
-            parcelFileDescriptor.close()
-        }
+        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
+        userProfileImageView.setImageBitmap(BitmapFactory.decodeStream(inputStream))
+        parcelFileDescriptor.close()
+        */
+        // Reference to an image file in Cloud Storage
     }
 
     @Deprecated("Deprecated in Java",
@@ -207,6 +225,18 @@ class ShowProfileActivity: AppCompatActivity() {
     }
 
 
+}
+
+// class to download images from the Firebase storage
+@GlideModule
+class MyAppGlideModule: AppGlideModule() {
+    override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
+        // Register FirebaseImageLoader to handle StorageReference
+        registry.append(
+            StorageReference::class.java, InputStream::class.java,
+            FirebaseImageLoader.Factory()
+        )
+    }
 }
 
 /*

@@ -38,6 +38,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
 
     val playgrounds = MutableLiveData<List<Playground>>()
     val reservations = MutableLiveData<List<Reservation>>()
+    val tutorialShown = MutableLiveData<Boolean?>()
 
     init {
         // set listener for playgrounds
@@ -74,6 +75,19 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 reservations.value = reservationsList
+            }
+
+        // set listener for tutorialShown
+        db.collection(usersCollectionPath)
+            .document(Global.userId!!)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read the tutorial data.", error)
+                    tutorialShown.value = false
+                    return@addSnapshotListener
+                }
+
+                tutorialShown.value = value!!.getBoolean("alreadyShownTutorial")
             }
     }
 
@@ -315,25 +329,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         return userInfo
     }
 
-    fun getTutorialShown(): LiveData<Boolean?> {
-        val tutorialShown = MutableLiveData<Boolean?>()
-
-        db.collection(usersCollectionPath)
-            .document(Global.userId!!)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Log.w(TAG, "Failed to read the tutorial data.", error)
-                    tutorialShown.value = false
-                    return@addSnapshotListener
-                }
-
-                tutorialShown.value = value!!.getBoolean("alreadyShownTutorial")
-            }
-
-        return tutorialShown
-    }
-
-    fun tutorialShown() {
+    fun tutorialHasBeenShown() {
         db.collection(usersCollectionPath)
             .document(Global.userId!!)
             .update("alreadyShownTutorial", true)
@@ -341,15 +337,15 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
 
     fun updateUserInfo(user: User) {
         val u = hashMapOf(
-            "id" to user.id,
             "username" to user.username,
             "fullName" to user.fullName,
             "bio" to user.bio,
-            "gender" to user.gender,
+            "dateOfBirth" to user.dateOfBirth,
+            "gender" to user.gender?.name?.lowercase(),
             "phone" to user.phone,
             "location" to user.location,
             "rating" to user.rating,
-            "dateOfBirth" to user.dateOfBirth
+            "alreadyShownTutorial" to user.alreadyShownTutorial
         )
 
         db.collection(usersCollectionPath)
