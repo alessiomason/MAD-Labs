@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,11 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -93,14 +89,14 @@ class SeeRatings : Fragment() {
 
 @Composable
 fun SeeRatingsScreen(playgroundId: String, navController: NavController) {
-    val reservationsViewModel: ReservationsViewModel = viewModel()
+    val viewModel: ViewModel = viewModel()
 
     val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
     val ratingsList = remember { mutableStateOf(listOf<PlaygroundRating>()) }
     // Get all ratings of the playground
-    reservationsViewModel.getRatingsByPlaygroundId(playgroundId, ratingsList)
+    viewModel.getRatingsByPlaygroundId(playgroundId, ratingsList)
     // Get all info about that playground
-    reservationsViewModel.getPlayground(playgroundId, playground)
+    viewModel.getPlayground(playgroundId, playground)
 
 
     if (playground.value == null)

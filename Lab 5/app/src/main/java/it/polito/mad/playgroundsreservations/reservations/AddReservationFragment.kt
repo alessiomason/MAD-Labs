@@ -36,7 +36,7 @@ import java.time.ZonedDateTime
 class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
     private val args by navArgs<AddReservationFragmentArgs>()
-    private val reservationsViewModel by viewModels<ReservationsViewModel>()
+    private val viewModel by viewModels<ViewModel>()
     val zoneId: ZoneId = ZoneId.of("UTC+02:00")
     var playgroundList = mutableListOf<Playground>()
     var arrayOccupated = mutableListOf<String>()
@@ -64,8 +64,8 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val reservations = reservationsViewModel.getUserReservations(Global.userId!!)
-        val playgrounds = reservationsViewModel.playgrounds
+        val reservations = viewModel.getUserReservations(Global.userId!!)
+        val playgrounds = viewModel.playgrounds
         playgroundList.removeAll(playgroundList)
         val sharedPreferences = requireContext().getSharedPreferences("AddPref", Context.MODE_PRIVATE)
         val navController = view.findNavController()
@@ -121,7 +121,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
 
                     var totalRating = 0.0f
-                    val ratingBarValue = reservationsViewModel.getRatingsByPlaygroundIdFragment(playground.id)
+                    val ratingBarValue = viewModel.getRatingsByPlaygroundIdFragment(playground.id)
                     ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
                         if (ratingPlaygroundsList.isEmpty()){
                             ratingBar.rating = (0.0).toFloat()
@@ -323,14 +323,14 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
                 val newReservation = Reservation(
                     "",
-                    reservationsViewModel.getUserReference(Global.userId!!),
-                    reservationsViewModel.getPlaygroundReference(MyReservation.playgroundId),
+                    viewModel.getUserReference(Global.userId!!),
+                    viewModel.getPlaygroundReference(MyReservation.playgroundId),
                     MyReservation.sport,
                     MyReservation.time,
                     MyReservation.duration
                 )
 
-                reservationsViewModel.saveReservation(newReservation)
+                viewModel.saveReservation(newReservation)
 
                 navController?.navigate(action)
 

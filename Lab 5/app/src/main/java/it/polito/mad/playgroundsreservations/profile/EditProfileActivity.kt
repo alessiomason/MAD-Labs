@@ -23,7 +23,7 @@ import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.User
-import it.polito.mad.playgroundsreservations.reservations.ReservationsViewModel
+import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.io.*
 import it.polito.mad.playgroundsreservations.Global
 
@@ -64,7 +64,7 @@ class EditProfileActivity: AppCompatActivity() {
             userProfileImageView.showContextMenu()
         }
 
-        val reservationViewModel by viewModels<ReservationsViewModel>()
+        val reservationViewModel by viewModels<ViewModel>()
         val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
         val gson = Gson()
         profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)
@@ -320,7 +320,7 @@ class EditProfileActivity: AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val reservationViewModel by viewModels<ReservationsViewModel>()
+        val reservationViewModel by viewModels<ViewModel>()
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_profile -> {

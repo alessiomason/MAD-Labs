@@ -37,7 +37,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
     }
 
     private val args by navArgs<EditReservationFragmentArgs>()
-    private val reservationsViewModel by viewModels<ReservationsViewModel>()
+    private val viewModel by viewModels<ViewModel>()
     private var aus = 0
     private var hours = mutableListOf<String>()
     var durationsList = mutableListOf<String>()
@@ -48,9 +48,9 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val reservationsViewModel by viewModels<ReservationsViewModel>()
-        val reservations = reservationsViewModel.getUserReservations(Global.userId!!)
-        val playgrounds = reservationsViewModel.playgrounds
+        val viewModel by viewModels<ViewModel>()
+        val reservations = viewModel.getUserReservations(Global.userId!!)
+        val playgrounds = viewModel.playgrounds
 
         val arrayOccupated = mutableListOf<String>()
 
@@ -116,7 +116,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
                 ratingBar.setIsIndicator(true)
 
                 var totalRating = 0.0f
-                val ratingBarValue = reservationsViewModel.getRatingsByPlaygroundIdFragment(myPlayground.id)
+                val ratingBarValue = viewModel.getRatingsByPlaygroundIdFragment(myPlayground.id)
                 ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
                     if (ratingPlaygroundsList.isEmpty()){
                         ratingBar.rating = (0.0).toFloat()
@@ -267,7 +267,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
                     myReservation.rentingEquipment = chkEquipment.isChecked
                 }
 
-                reservationsViewModel.updateReservation(myReservation)
+                viewModel.updateReservation(myReservation)
 
                 navController?.popBackStack()
                 //requireActivity().onBackPressed()

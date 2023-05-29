@@ -52,7 +52,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val reservationsViewModel by viewModels<ReservationsViewModel>()
+        val viewModel by viewModels<ViewModel>()
         // NEW RESERVATION BUTTON
         val button = view.findViewById<Button>(R.id.reserve_new_playground_button)
 
@@ -159,7 +159,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
 
         selectedSport.observe(viewLifecycleOwner) { sport ->
-            reservedPlaygrounds = reservationsViewModel.getReservedPlaygrounds(sport)
+            reservedPlaygrounds = viewModel.getReservedPlaygrounds(sport)
 
             reservedPlaygrounds.observe(viewLifecycleOwner) { reservedPlaygroundsMap ->
                 selectedDate.observe(viewLifecycleOwner) { selectedDateValue ->

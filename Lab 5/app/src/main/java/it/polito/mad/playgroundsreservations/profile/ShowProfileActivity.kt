@@ -19,9 +19,8 @@ import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.Global
-import it.polito.mad.playgroundsreservations.reservations.ReservationsViewModel
+import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.io.FileInputStream
-import java.util.Calendar
 
 class ShowProfileActivity: AppCompatActivity() {
     private lateinit var profile: Profile
@@ -78,7 +77,7 @@ class ShowProfileActivity: AppCompatActivity() {
         */
         selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
 
-        val reservationViewModel by viewModels<ReservationsViewModel>()
+        val reservationViewModel by viewModels<ViewModel>()
         val playgrounds = reservationViewModel.playgrounds
 
 

@@ -58,22 +58,22 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         super.onViewCreated(view, savedInstanceState)
         navController = view.findNavController()
 
-        val reservationsViewModel by viewModels<ReservationsViewModel>()
-        val reservations = reservationsViewModel.getUserReservations(Global.userId!!)
-        val playgrounds = reservationsViewModel.playgrounds
+        val viewModel by viewModels<ViewModel>()
+        val reservations = viewModel.getUserReservations(Global.userId!!)
+        val playgrounds = viewModel.playgrounds
 
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.my_reservations)
 
         // TUTORIAL
         val overlay = view.findViewById<ConstraintLayout>(R.id.calendar_fragment_overlay)
-        val alreadyShownTutorial = reservationsViewModel.getTutorialShown()
+        val alreadyShownTutorial = viewModel.getTutorialShown()
 
         alreadyShownTutorial.observe(viewLifecycleOwner) {
             if (it == true) {
                 overlay.visibility = GONE
             } else {
-                reservationsViewModel.tutorialShown()
+                viewModel.tutorialShown()
                 overlay.visibility = VISIBLE
                 view.findViewById<Button>(R.id.ok_button).setOnClickListener {
                     overlay.visibility = GONE
