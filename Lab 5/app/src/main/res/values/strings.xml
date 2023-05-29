@@ -18,10 +18,11 @@
     <string name="golf_court_description">External field</string>
 
     <!-- HOME SCREEN -->
+    <string name="home_title">Welcome!</string>
+    <string name="home_subtitle">Explore the playgrounds availability or login to discover all the features!</string>
     <string name="show_playgrounds_availability">Explore playgrounds availability</string>
     <string name="login">Login</string>
-    <string name="login_email">Login with email</string>
-    <string name="login_google">Login with Google</string>
+    <string name="login_email">Sign in with email</string>
 
     <!-- PROFILE -->
     <string name="user_profile">My profile</string>
@@ -59,7 +60,6 @@
     <string name="new_reservation">Make a new reservation</string>
     <string name="cancel_reservation">Delete reservation</string>
     <string name="modify_reservation">Edit reservation</string>
-    <string name="home_title">Playgrounds Reservation home screen</string>
     <string name="add_reservation">Add a reservation</string>
     <string name="reservation">Reservation</string>
     <string name="renting_equipment">Renting equipment</string>

@@ -7,6 +7,7 @@
     <ImageView
         android:id="@+id/loginLogo"
         android:layout_width="wrap_content"
+        android:maxHeight="200dp"
         android:layout_height="wrap_content"
         android:paddingHorizontal="30dp"
         android:layout_marginVertical="30dp"
@@ -14,26 +15,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/volleyball_court"
-        android:adjustViewBounds="true" />
+        android:src="@drawable/logo"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="no" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/loginEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="20dp"
         android:text="@string/login_email"
+        android:drawableStart="@drawable/email_icon"
+        android:drawablePadding="10dp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/primary"
         app:layout_constraintBottom_toTopOf="@+id/loginGoogle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginLogo" />
 
-    <Button
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/loginGoogle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="20dp"
-        android:text="@string/login_google"
+        android:backgroundTint="@color/primary"
         app:layout_constraintBottom_toTopOf="@+id/spacer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,4 +53,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,10 +20,11 @@
     <string name="golf_court_description">Struttura esterna</string>
 
     <!-- HOME SCREEN -->
+    <string name="home_title">Benvenuto!</string>
+    <string name="home_subtitle">Esplora la disponibilità dei campi o accedi per scoprire tutte le funzionalita!</string>
     <string name="show_playgrounds_availability">Esplora la disponibilità dei campi</string>
     <string name="login">Login</string>
-    <string name="login_email">Login with email</string>
-    <string name="login_google">Login with Google</string>
+    <string name="login_email">Accedi con la tua email</string>
 
     <!-- PROFILE -->
     <string name="user_profile">Il mio profilo</string>
@@ -60,7 +61,6 @@
     <string name="new_reservation">Inserisci una nuova prenotazione</string>
     <string name="cancel_reservation">Cancella la prenotazione</string>
     <string name="modify_reservation">Modifica la prenotazione</string>
-    <string name="home_title">Prenotazione dei campi schermata iniziale</string>
     <string name="add_reservation">Aggiungi una prenotazione</string>
     <string name="reservation">Prenotazione</string>
     <string name="renting_equipment">Noleggio attrezzature</string>
