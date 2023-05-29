@@ -263,11 +263,12 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
             .addOnSuccessListener {
                 if (!it.exists()) {
                     val newUser = hashMapOf(
-                        "id" to id,
                         "firstName" to (displayName ?: "")
                     )
 
-                    db.collection(usersCollectionPath).add(newUser)
+                    db.collection(usersCollectionPath)
+                        .document(id)
+                        .set(newUser)
                 }
             }
     }

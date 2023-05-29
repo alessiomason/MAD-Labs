@@ -18,16 +18,25 @@ data class User(
 )
 
 fun DocumentSnapshot.toUser(): User {
-    val username = this.get("username", String::class.java)!!
-    val firstName = this.get("firstName", String::class.java)!!
-    val lastName = this.get("lastName", String::class.java)!!
-    val bio = this.get("bio", String::class.java)!!
-    val gender = this.get("gender", String::class.java)!!.toGender()
-    val phone = this.get("phone", String::class.java)!!
-    val location = this.get("location", String::class.java)!!
-    val dateOfBirth = this.get("dateOfBirth", String::class.java)!!
-    val rating = this.get("rating", Float::class.java)!!
+    val username = this.get("username", String::class.java)
+    val firstName = this.get("firstName", String::class.java)
+    val lastName = this.get("lastName", String::class.java)
+    val bio = this.get("bio", String::class.java)
+    val gender = this.get("gender", String::class.java)?.toGender()
+    val phone = this.get("phone", String::class.java)
+    val location = this.get("location", String::class.java)
+    val dateOfBirth = this.get("dateOfBirth", String::class.java)
+    val rating = this.get("rating", Float::class.java)
 
-    return User(id, username, firstName, lastName, bio, gender, phone, location, rating, dateOfBirth)
+    return User(id,
+        username ?: "",
+        firstName ?: "",
+        lastName ?: "",
+        bio,
+        gender,
+        phone,
+        location,
+        rating ?: (0.0).toFloat(),
+        dateOfBirth ?: "")
 
 }
