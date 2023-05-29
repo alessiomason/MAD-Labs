@@ -64,45 +64,14 @@ class EditProfileActivity: AppCompatActivity() {
             userProfileImageView.showContextMenu()
         }
 
-        val reservationViewModel by viewModels<ViewModel>()
+        val viewModel by viewModels<ViewModel>()
         val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
         val gson = Gson()
         profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)
-        /*
-        if (profile.name != null) nameView.setText(profile.name)
-        if (profile.nickname != null) nicknameView.setText(profile.nickname)
-        if (profile.age != null) ageView.setText(profile.age.toString())
-        if (profile.bio != null) bioView.setText(profile.bio)
-        when (profile.gender) {
-            Gender.MALE -> {
-                genderMaleRadioButton.isChecked = true
-                genderFemaleRadioButton.isChecked = false
-                genderOtherRadioButton.isChecked = false
-            }
-            Gender.FEMALE -> {
-                genderMaleRadioButton.isChecked = false
-                genderFemaleRadioButton.isChecked = true
-                genderOtherRadioButton.isChecked = false
-            }
-            Gender.OTHER -> {
-                genderMaleRadioButton.isChecked = false
-                genderFemaleRadioButton.isChecked = false
-                genderOtherRadioButton.isChecked = true
-            }
-            null -> {
-                genderMaleRadioButton.isChecked = false
-                genderFemaleRadioButton.isChecked = false
-                genderOtherRadioButton.isChecked = false
-            }
-        }
-        if (profile.phone != null) phoneView.setText(profile.phone)
-        if (profile.location != null) locationView.setText(profile.location)
-        if (profile.rating != null) ratingBarView.rating = profile.rating!! */
 
-        val user = reservationViewModel.getUserInfo(Global.userId!!)
-        user.observe(this) { user ->
+        viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
             if (user != null) {
-                nameView.setText("${user.firstName} ${user.lastName}")
+                nameView.setText(user.fullName)
                 nicknameView.setText(user.username)
                 bioView.setText(user.bio)
                 when (user.gender) {
@@ -257,60 +226,18 @@ class EditProfileActivity: AppCompatActivity() {
         return null
     }
 
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        /* outState.putString("name", nameView.text.toString())
-        outState.putString("nickname", nicknameView.text.toString())
-        outState.putString("bio", bioView.text.toString())
-        if (ageView.text.toString() != "") outState.putInt("age", ageView.text.toString().toInt())
-        var gender = '/'
-        if (genderMaleRadioButton.isChecked) gender = 'M'
-        else if (genderFemaleRadioButton.isChecked) gender = 'F'
-        else if (genderOtherRadioButton.isChecked) gender = 'O'
-        outState.putChar("gender", gender)
-        outState.putString("phone", phoneView.text.toString())
-        outState.putString("location", locationView.text.toString())
-        outState.putFloat("rating", ratingBarView.rating) */
         outState.putString("userProfileImageUriString", profile.userProfileImageUriString)
     }
 
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        /* nameView.setText(savedInstanceState.getString("name"))
-        nicknameView.setText(savedInstanceState.getString("nickname"))
-        bioView.setText(savedInstanceState.getString("bio"))
-        ageView.setText(savedInstanceState.getInt("age").toString())
-        when (savedInstanceState.getChar("gender")) {
-            'M' -> {
-                genderMaleRadioButton.isChecked = true
-                genderFemaleRadioButton.isChecked = false
-                genderOtherRadioButton.isChecked = false
-            }
-            'F' -> {
-                genderMaleRadioButton.isChecked = false
-                genderFemaleRadioButton.isChecked = true
-                genderOtherRadioButton.isChecked = false
-            }
-            'O' -> {
-                genderMaleRadioButton.isChecked = false
-                genderFemaleRadioButton.isChecked = false
-                genderOtherRadioButton.isChecked = true
-            }
-            else -> {
-                genderMaleRadioButton.isChecked = false
-                genderFemaleRadioButton.isChecked = false
-                genderOtherRadioButton.isChecked = false
-            }
-        }
-        phoneView.setText(savedInstanceState.getString("phone"))
-        locationView.setText(savedInstanceState.getString("location"))
-        ratingBarView.rating = savedInstanceState.getFloat("rating") */
+
         profile.userProfileImageUriString = savedInstanceState.getString("userProfileImageUriString")
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu to use in the action bar
@@ -331,20 +258,6 @@ class EditProfileActivity: AppCompatActivity() {
                     Context.MODE_PRIVATE
                 ) ?: return true
                 with(sharedPref.edit()) {
-                    /* profile.name = nameView.text.toString()
-                    profile.nickname = nicknameView.text.toString()
-                    profile.age = ageView.text.toString().toIntOrNull()
-                    profile.bio = bioView.text.toString()
-                    if (genderMaleRadioButton.isChecked)
-                        profile.gender = Gender.MALE
-                    else if (genderFemaleRadioButton.isChecked)
-                        profile.gender = Gender.FEMALE
-                    else if (genderOtherRadioButton.isChecked)
-                        profile.gender = Gender.OTHER
-                    profile.phone = phoneView.text.toString()
-                    profile.location = locationView.text.toString()
-                    profile.rating = ratingBarView.rating */
-
                     val gson = Gson()
                     val profileJson = gson.toJson(profile)
                     putString("profile", profileJson)
@@ -361,8 +274,7 @@ class EditProfileActivity: AppCompatActivity() {
                 val user = User(
                     id = Global.userId!!,
                     username = nicknameView.text.toString(),
-                    firstName = nameView.text.split(" ")[0],
-                    lastName = nameView.text.split(" ")[1],
+                    fullName = nameView.text.toString(),
                     bio = bioView.text.toString(),
                     gender = gender,
                     phone = phoneView.text.toString(),

@@ -73,10 +73,10 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
             if (it == true) {
                 overlay.visibility = GONE
             } else {
-                viewModel.tutorialShown()
                 overlay.visibility = VISIBLE
                 view.findViewById<Button>(R.id.ok_button).setOnClickListener {
                     overlay.visibility = GONE
+                    viewModel.tutorialShown()
                 }
             }
         }

@@ -57,6 +57,7 @@
     <string name="save_sport">Salva gli sport selezionati</string>
     <string name="select_your_sports">Seleziona i tuoi sport</string>
     <string name="my_rating">La mia valutazione</string>
+    <string name="logout">Logout</string>
 
     <!-- RESERVATIONS -->
     <string name="reservation_box_title">Prenotazione alle ore %1$s</string>

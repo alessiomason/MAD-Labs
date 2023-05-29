@@ -7,20 +7,18 @@ import it.polito.mad.playgroundsreservations.profile.toGender
 data class User(
     val id: String,
     val username: String,
-    var firstName: String,
-    var lastName: String,
-    var bio: String?,
+    var fullName: String,
+    var bio: String,
+    var dateOfBirth: String,
     var gender: Gender?,
-    var phone: String?,
-    var location: String?,
-    var rating: Float = 0.0f,
-    var dateOfBirth: String
+    var phone: String,
+    var location: String,
+    var rating: Float = 0.0f
 )
 
 fun DocumentSnapshot.toUser(): User {
     val username = this.get("username", String::class.java)
-    val firstName = this.get("firstName", String::class.java)
-    val lastName = this.get("lastName", String::class.java)
+    val fullName = this.get("fullName", String::class.java)
     val bio = this.get("bio", String::class.java)
     val gender = this.get("gender", String::class.java)?.toGender()
     val phone = this.get("phone", String::class.java)
@@ -28,14 +26,15 @@ fun DocumentSnapshot.toUser(): User {
     val dateOfBirth = this.get("dateOfBirth", String::class.java)
     val rating = this.get("rating", Float::class.java)
 
-    return User(id,
+    return User(
+        id,
         username ?: "",
-        firstName ?: "",
-        lastName ?: "",
-        bio,
+        fullName ?: "",
+        bio ?: "",
+        dateOfBirth ?: "",
         gender,
-        phone,
-        location,
+        phone ?: "",
+        location ?: "",
         rating ?: (0.0).toFloat(),
-        dateOfBirth ?: "")
+    )
 }

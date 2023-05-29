@@ -8,13 +8,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.navigation.findNavController
 import com.google.android.material.chip.Chip
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Sport
@@ -51,11 +54,10 @@ class ShowProfileActivity: AppCompatActivity() {
         userProfileImageView = findViewById(R.id.imageUserProfile)
         ratingBarView.setIsIndicator(true)
 
-
-
-// Inserisci qui il tuo codice di caricamento...
-
-       // progressBar.visibility = View.GONE
+        findViewById<Button>(R.id.logout_button).setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            Global.userId = null
+        }
     }
 
     override fun onResume() {
@@ -63,37 +65,23 @@ class ShowProfileActivity: AppCompatActivity() {
         val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
         val gson = Gson()
         profile = gson.fromJson(sharedPref.getString("profile", "{}"), Profile::class.java)
-        /*
-        if (profile.name != null) nameView.text = profile.name
-        if (profile.nickname != null) nicknameView.text = profile.nickname
-        if (profile.age != null) ageView.text = resources.getString(R.string.years, profile.age.toString())
-        if (profile.bio != null) bioView.text = profile.bio
-        if (profile.gender == Gender.MALE) genderView.text = resources.getString(R.string.genderMale)
-        if (profile.gender == Gender.FEMALE) genderView.text = resources.getString(R.string.genderFemale)
-        if (profile.gender == Gender.OTHER) genderView.text = resources.getString(R.string.genderOther)
-        if (profile.phone != null) phoneView.text = profile.phone
-        if (profile.location != null) locationView.text = profile.location
-        if (profile.rating != null) ratingBarView.rating = profile.rating!!
-        */
         selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
 
-        val reservationViewModel by viewModels<ViewModel>()
-        val playgrounds = reservationViewModel.playgrounds
+        val viewModel by viewModels<ViewModel>()
+        val playgrounds = viewModel.playgrounds
 
-
-        val user = reservationViewModel.getUserInfo(Global.userId!!)
-        user.observe(this) { user ->
+        viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
             if (user != null) {
-                nameView.text = "${user.firstName} ${user.lastName}"
+                nameView.text = user.fullName
                 nicknameView.text = user.username
                 bioView.text = user.bio
-                if (user.gender == Gender.MALE){
-                    genderView.text = resources.getString(R.string.genderMale)
-                } else if (user.gender == Gender.FEMALE) {
-                    genderView.text = resources.getString(R.string.genderFemale)
-                } else if (user.gender == Gender.OTHER) {
-                    genderView.text = resources.getString(R.string.genderOther)
+                genderView.text = when (user.gender) {
+                    Gender.MALE -> resources.getString(R.string.genderMale)
+                    Gender.FEMALE -> resources.getString(R.string.genderFemale)
+                    Gender.OTHER -> resources.getString(R.string.genderOther)
+                    null -> ""
                 }
+
                 // ageView.text = resources.getString(R.string.years, calculateAge(user.dateOfBirth).toString())
                 ageView.text = resources.getString(R.string.years, user.dateOfBirth)
                 phoneView.text = user.phone

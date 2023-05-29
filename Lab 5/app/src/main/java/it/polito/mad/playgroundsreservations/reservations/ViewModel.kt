@@ -343,8 +343,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         val u = hashMapOf(
             "id" to user.id,
             "username" to user.username,
-            "firstName" to user.firstName,
-            "lastName" to user.lastName,
+            "fullName" to user.fullName,
             "bio" to user.bio,
             "gender" to user.gender,
             "phone" to user.phone,
