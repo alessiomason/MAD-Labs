@@ -21,10 +21,16 @@
 
     <!-- HOME SCREEN -->
     <string name="home_title">Benvenuto!</string>
-    <string name="home_subtitle">Esplora la disponibilità dei campi o accedi per scoprire tutte le funzionalita!</string>
+    <string name="home_subtitle">Esplora la disponibilità dei campi o accedi per scoprire tutte le funzionalità!</string>
     <string name="show_playgrounds_availability">Esplora la disponibilità dei campi (non funziona)</string>
     <string name="login">Login</string>
     <string name="login_email">Accedi con la tua email</string>
+
+    <!-- CALENDAR FRAGMENT TUTORIAL -->
+    <string name="cal_frag_options_menu_tutorial">Accedi al tuo profilo personale ed esplora la disponibilità dei campi</string>
+    <string name="cal_frag_calendar_tutorial">Visualizza le tue prenotazioni</string>
+    <string name="cal_frag_reservations_list_tutorial">Seleziona un giorno nel calendario: le tue prenotazioni per il giorno appariranno qui</string>
+    <string name="tutorial_ok">Ok</string>
 
     <!-- PROFILE -->
     <string name="user_profile">Il mio profilo</string>

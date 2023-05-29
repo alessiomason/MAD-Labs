@@ -10,6 +10,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Reservation
@@ -308,10 +309,35 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
                     userInfo.value = null
                     return@addSnapshotListener
                 }
+
                 userInfo.value = value!!.toUser()
             }
 
         return userInfo
+    }
+
+    fun getTutorialShown(): LiveData<Boolean?> {
+        val tutorialShown = MutableLiveData<Boolean?>()
+
+        db.collection(usersCollectionPath)
+            .document(Global.userId!!)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read the tutorial data.", error)
+                    tutorialShown.value = false
+                    return@addSnapshotListener
+                }
+
+                tutorialShown.value = value!!.getBoolean("alreadyShownTutorial")
+            }
+
+        return tutorialShown
+    }
+
+    fun tutorialShown() {
+        db.collection(usersCollectionPath)
+            .document(Global.userId!!)
+            .update("alreadyShownTutorial", true)
     }
 
     fun updateUserInfo(user: User) {

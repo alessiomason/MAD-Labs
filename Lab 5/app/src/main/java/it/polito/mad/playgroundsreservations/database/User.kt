@@ -38,5 +38,4 @@ fun DocumentSnapshot.toUser(): User {
         location,
         rating ?: (0.0).toFloat(),
         dateOfBirth ?: "")
-
 }

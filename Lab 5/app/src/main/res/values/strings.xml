@@ -24,6 +24,12 @@
     <string name="login">Login</string>
     <string name="login_email">Sign in with email</string>
 
+    <!-- CALENDAR FRAGMENT TUTORIAL -->
+    <string name="cal_frag_options_menu_tutorial">Access your personal profile and explore the playgrounds availability</string>
+    <string name="cal_frag_calendar_tutorial">Explore your reservations</string>
+    <string name="cal_frag_reservations_list_tutorial">Select a day in the calendar: all your reservations for the day will appear here</string>
+    <string name="tutorial_ok">Ok</string>
+
     <!-- PROFILE -->
     <string name="user_profile">My profile</string>
     <string name="edit_profile">Edit profile</string>

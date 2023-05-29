@@ -21,8 +21,9 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/loginEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80dp"
         android:layout_marginVertical="20dp"
         android:text="@string/login_email"
         android:drawableStart="@drawable/email_icon"
@@ -36,8 +37,10 @@
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/loginGoogle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        app:buttonSize="wide"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80dp"
         android:layout_marginVertical="20dp"
         android:backgroundTint="@color/primary"
         app:layout_constraintBottom_toTopOf="@+id/spacer"

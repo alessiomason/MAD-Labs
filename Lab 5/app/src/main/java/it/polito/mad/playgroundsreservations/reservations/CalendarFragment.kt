@@ -8,10 +8,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -61,6 +64,22 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.my_reservations)
+
+        // TUTORIAL
+        val overlay = view.findViewById<ConstraintLayout>(R.id.calendar_fragment_overlay)
+        val alreadyShownTutorial = reservationsViewModel.getTutorialShown()
+
+        alreadyShownTutorial.observe(viewLifecycleOwner) {
+            if (it == true) {
+                overlay.visibility = GONE
+            } else {
+                reservationsViewModel.tutorialShown()
+                overlay.visibility = VISIBLE
+                view.findViewById<Button>(R.id.ok_button).setOnClickListener {
+                    overlay.visibility = GONE
+                }
+            }
+        }
 
         //Initialize CustomCalendarView from layout
         val calendarView = view.findViewById<View>(R.id.calendar_view) as CustomCalendarView
