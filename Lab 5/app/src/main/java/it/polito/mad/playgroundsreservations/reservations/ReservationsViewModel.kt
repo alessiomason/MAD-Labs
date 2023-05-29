@@ -3,7 +3,6 @@ package it.polito.mad.playgroundsreservations.reservations
 import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -233,8 +232,7 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
         db.collection(playgroundsRatingsCollectionPath).add(pr)
     }
 
-    fun getRatingsByPlaygroundId(playgroundId: String,ratingsState: MutableState<List<PlaygroundRating>>)
-    {
+    fun getRatingsByPlaygroundId(playgroundId: String,ratingsState: MutableState<List<PlaygroundRating>>) {
         val playgroundReference = db.collection(playgroundsCollectionPath)
             .document(playgroundId)
 
@@ -242,16 +240,31 @@ class ReservationsViewModel(application: Application) : AndroidViewModel(applica
             .whereEqualTo("playgroundId", playgroundReference)
             .addSnapshotListener { value, error ->
                 if (error != null) {
-                    Log.w(TAG, "Failed to read playground rating.", error)
+                    Log.w(TAG, "Failed to read playground ratings.", error)
                     return@addSnapshotListener
                 }
-                var lista=mutableListOf<PlaygroundRating>()
-                for(doc in value!!)
-                {
-                    lista.add(doc.toPlaygroundRating())
-                }
-                ratingsState.value=lista
 
+                val list = mutableListOf<PlaygroundRating>()
+                for(doc in value!!)
+                    list.add(doc.toPlaygroundRating())
+
+                ratingsState.value = list
+            }
+    }
+
+    fun createUserIfNotExists(id: String, displayName: String?) {
+        db.collection(usersCollectionPath)
+            .document(id)
+            .get()
+            .addOnSuccessListener {
+                if (!it.exists()) {
+                    val newUser = hashMapOf(
+                        "id" to id,
+                        "firstName" to (displayName ?: "")
+                    )
+
+                    db.collection(usersCollectionPath).add(newUser)
+                }
             }
     }
 }

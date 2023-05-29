@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
@@ -12,6 +12,7 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
 import it.polito.mad.playgroundsreservations.reservations.ReservationsActivity
+import it.polito.mad.playgroundsreservations.reservations.ReservationsViewModel
 
 
 class Global {
@@ -21,6 +22,8 @@ class Global {
 }
 
 class MainActivity: AppCompatActivity() {
+    private val reservationsViewModel by viewModels<ReservationsViewModel>()
+
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract(),
     ) { res ->
@@ -31,11 +34,14 @@ class MainActivity: AppCompatActivity() {
         val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
             val user = FirebaseAuth.getInstance().currentUser
-            if (user != null)   // Successfully signed in
+            if (user != null) {   // Successfully signed in
                 Global.userId = user.uid
-            findViewById<TextView>(R.id.textView).text = Global.userId
-            // create user in Firestore
-            // redirect to Reservation Activity
+                reservationsViewModel.createUserIfNotExists(user.uid, user.displayName)
+
+                val intent = Intent(this, ReservationsActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
+            }
         } else {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
