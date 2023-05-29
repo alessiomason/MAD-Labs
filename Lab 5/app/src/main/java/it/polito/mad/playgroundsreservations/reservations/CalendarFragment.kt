@@ -20,6 +20,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stacktips.view.CalendarListener
@@ -40,7 +41,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-val zoneId = ZoneId.systemDefault()
+val zoneId: ZoneId = ZoneId.systemDefault()
 private var tappedDay = MutableLiveData(Instant.now().atZone(zoneId).toLocalDate())
 
 class CalendarFragment: Fragment(R.layout.calendar_fragment) {
@@ -121,6 +122,15 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         }
 
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // needed check if the user logs out and then presses Back,
+        // as the Profile activity was terminated but not this one
+        if (Global.userId == null)
+            activity?.finish()
     }
 
     @Deprecated("Deprecated in Java")

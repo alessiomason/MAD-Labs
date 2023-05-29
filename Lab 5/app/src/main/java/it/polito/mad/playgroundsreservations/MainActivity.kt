@@ -41,6 +41,7 @@ class MainActivity: AppCompatActivity() {
                 val intent = Intent(this, ReservationsActivity::class.java)
                 startActivity(intent)
                 overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
+                finish()
             }
         } else {
             // Sign in failed. If response is null the user canceled the
@@ -54,6 +55,17 @@ class MainActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val user = FirebaseAuth.getInstance().currentUser
+
+        if (user != null) {
+            Global.userId = user.uid
+
+            val intent = Intent(this, ReservationsActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
+            finish()
+        }
 
         val playgroundsAvailabilityButton = findViewById<Button>(R.id.playgroundsAvailabilityButton)
         playgroundsAvailabilityButton.setOnClickListener {

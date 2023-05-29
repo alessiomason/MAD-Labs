@@ -22,6 +22,8 @@ import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.Global
+import it.polito.mad.playgroundsreservations.MainActivity
+import it.polito.mad.playgroundsreservations.reservations.ReservationsActivity
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.io.FileInputStream
 
@@ -57,6 +59,11 @@ class ShowProfileActivity: AppCompatActivity() {
         findViewById<Button>(R.id.logout_button).setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             Global.userId = null
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
+            finish()
         }
     }
 
