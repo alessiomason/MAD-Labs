@@ -18,7 +18,7 @@ import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Sport
-import it.polito.mad.playgroundsreservations.reservations.Global
+import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.reservations.ReservationsViewModel
 import java.io.FileInputStream
 import java.util.Calendar
@@ -82,7 +82,7 @@ class ShowProfileActivity: AppCompatActivity() {
         val playgrounds = reservationViewModel.playgrounds
 
 
-        val user = reservationViewModel.getUserInfo(Global.userId)
+        val user = reservationViewModel.getUserInfo(Global.userId!!)
         user.observe(this) { user ->
             if (user != null) {
                 nameView.text = "${user.firstName} ${user.lastName}"

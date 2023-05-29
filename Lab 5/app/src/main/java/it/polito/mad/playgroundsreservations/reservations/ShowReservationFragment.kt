@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
@@ -44,7 +45,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val reservationsViewModel by viewModels<ReservationsViewModel>()
-        val reservations = reservationsViewModel.getUserReservations(Global.userId)
+        val reservations = reservationsViewModel.getUserReservations(Global.userId!!)
         val playgrounds = reservationsViewModel.playgrounds
 
         // ACTIVITY TITLE

@@ -11,31 +11,31 @@
         android:text="@string/home_title"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintBottom_toTopOf="@+id/homeButtonReservations"
+        app:layout_constraintBottom_toTopOf="@+id/playgroundsAvailabilityButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/homeButtonReservations"
+        android:id="@+id/playgroundsAvailabilityButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/reservation_activity"
-        app:layout_constraintBottom_toTopOf="@+id/homeButtonProfile"
+        android:text="@string/show_playgrounds_availability"
+        app:layout_constraintBottom_toTopOf="@+id/loginButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/homeButtonProfile"
+        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/show_profile_activity"
+        android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeButtonReservations" />
+        app:layout_constraintTop_toBottomOf="@+id/playgroundsAvailabilityButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

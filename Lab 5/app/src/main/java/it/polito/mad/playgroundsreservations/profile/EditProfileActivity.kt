@@ -23,9 +23,9 @@ import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.User
-import it.polito.mad.playgroundsreservations.reservations.Global
 import it.polito.mad.playgroundsreservations.reservations.ReservationsViewModel
 import java.io.*
+import it.polito.mad.playgroundsreservations.Global
 
 class EditProfileActivity: AppCompatActivity() {
     private lateinit var profile: Profile
@@ -99,7 +99,7 @@ class EditProfileActivity: AppCompatActivity() {
         if (profile.location != null) locationView.setText(profile.location)
         if (profile.rating != null) ratingBarView.rating = profile.rating!! */
 
-        val user = reservationViewModel.getUserInfo(Global.userId)
+        val user = reservationViewModel.getUserInfo(Global.userId!!)
         user.observe(this) { user ->
             if (user != null) {
                 nameView.setText("${user.firstName} ${user.lastName}")
@@ -359,7 +359,7 @@ class EditProfileActivity: AppCompatActivity() {
                     gender = Gender.OTHER
                 }
                 val user = User(
-                    id = Global.userId,
+                    id = Global.userId!!,
                     username = nicknameView.text.toString(),
                     firstName = nameView.text.split(" ")[0],
                     lastName = nameView.text.split(" ")[1],
