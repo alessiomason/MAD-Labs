@@ -31,9 +31,13 @@ import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.profile.SpinnerFragment
+import java.text.SimpleDateFormat
 import java.time.Duration
+import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.util.Calendar
+import java.util.Date
 
 class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
@@ -171,6 +175,16 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
                     reservations.observe(viewLifecycleOwner) {
                         arrayOccupated.removeAll(arrayOccupated)
+                        val formatter=SimpleDateFormat("yyyy-MM-dd")
+                        val formatterDate=formatter.format(Date.from(Instant.now()))
+                        if(args.dateOfReservation==formatterDate)
+                        {
+                           var ora= Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                            for(i in 8..ora)
+                            {
+                                    arrayOccupated.add(i.toString()+":00")
+                            }
+                        }
                         it.forEach { r ->
                             if (r.playgroundId.path.split('/')[1] == playground.id &&
                                 r.time.year == args.dateOfReservation.split("-")[0].toInt() &&
