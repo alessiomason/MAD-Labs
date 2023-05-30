@@ -35,7 +35,6 @@ import java.io.InputStream
 
 
 class ShowProfileActivity: AppCompatActivity() {
-    private lateinit var selectedSports: SelectedSports
     private lateinit var nameView: TextView
     private lateinit var ageView: TextView
     private lateinit var bioView: TextView
@@ -73,9 +72,6 @@ class ShowProfileActivity: AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
-        val gson = Gson()
-        selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
 
         val viewModel by viewModels<ViewModel>()
         val playgrounds = viewModel.playgrounds
@@ -97,7 +93,12 @@ class ShowProfileActivity: AppCompatActivity() {
                     null -> ""
                 }
 
-                ageView.text = resources.getString(R.string.years, user.age)
+                if (user.age != null) {
+                    ageView.text = resources.getString(R.string.years, user.age)
+                } else {
+                    ageView.text = resources.getString(R.string.age)
+                }
+
                 phoneView.text = user.phone
                 locationView.text = user.location
                 ratingBarView.rating = user.rating
@@ -234,21 +235,3 @@ class MyAppGlideModule: AppGlideModule() {
         )
     }
 }
-
-/*
-fun calculateAge(dateOfBirth: String): Int {
-
-    val dateParts = dateOfBirth.split("/")
-    val yearBirth = dateParts[0].toInt()
-    val monthBirth = dateParts[1].toInt()
-    val dayBirth = dateParts[2].toInt()
-    val currentDate = Calendar.getInstance()
-    val currentYear = currentDate.get(Calendar.YEAR)
-    val currentMonth = currentDate.get(Calendar.MONTH) + 1  // I mesi in Calendar vanno da 0 a 11, quindi aggiungi 1
-    val currentDay = currentDate.get(Calendar.DAY_OF_MONTH)
-    var age = currentYear - yearBirth
-    if (currentMonth < monthBirth || (currentMonth == monthBirth && currentDay < dayBirth))
-        age--
-
-    return age
-} */

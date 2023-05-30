@@ -69,11 +69,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -186,10 +181,11 @@
                         android:id="@+id/editTextPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone"
                         android:minHeight="48dp"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
+                        android:inputType="phone"
+                        android:autofillHints="phone"
                         android:hint="@string/phone"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
@@ -209,12 +205,13 @@
 
                     <EditText
                         android:id="@+id/editTextLocation"
-                        android:inputType="textPostalAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="48dp"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
+                        android:inputType="textPostalAddress"
+                        android:autofillHints="postalAddress"
                         android:hint="@string/location"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>

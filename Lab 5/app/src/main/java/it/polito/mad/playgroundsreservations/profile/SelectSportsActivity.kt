@@ -1,19 +1,16 @@
 package it.polito.mad.playgroundsreservations.profile
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 
 class SelectSportsActivity : AppCompatActivity() {
-    private lateinit var selectedSports: SelectedSports
     private lateinit var tennisCb: CheckBox
     private lateinit var basketballCb: CheckBox
     private lateinit var footballCb: CheckBox

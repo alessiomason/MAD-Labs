@@ -84,11 +84,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -106,6 +101,7 @@
                     android:minHeight="48dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
+                    android:inputType="text"
                     android:hint="@string/bio"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </LinearLayout>
@@ -202,6 +198,8 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
+                    android:inputType="phone"
+                    android:autofillHints="phone"
                     android:hint="@string/phone"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </LinearLayout>
@@ -226,6 +224,8 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
+                    android:inputType="textPostalAddress"
+                    android:autofillHints="postalAddress"
                     android:hint="@string/location"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </LinearLayout>

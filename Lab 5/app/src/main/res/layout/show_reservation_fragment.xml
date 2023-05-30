@@ -181,7 +181,6 @@
                     android:text="@string/rate_court" />
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/myReviewLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

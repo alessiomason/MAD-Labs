@@ -175,13 +175,11 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
                     reservations.observe(viewLifecycleOwner) {
                         arrayOccupated.removeAll(arrayOccupated)
-                        val formatter=SimpleDateFormat("yyyy-MM-dd")
+                        val formatter = SimpleDateFormat("yyyy-MM-dd")
                         val formatterDate=formatter.format(Date.from(Instant.now()))
-                        if(args.dateOfReservation==formatterDate)
-                        {
-                           var ora= Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                            for(i in 8..ora)
-                            {
+                        if (args.dateOfReservation==formatterDate) {
+                           val ora= Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+                            for(i in 8..ora) {
                                     arrayOccupated.add(i.toString()+":00")
                             }
                         }

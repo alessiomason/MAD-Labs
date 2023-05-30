@@ -2,12 +2,9 @@ package it.polito.mad.playgroundsreservations.database
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
-import java.time.Duration
-import java.time.Instant
 import java.time.LocalDate
 import java.time.Period
 import java.time.ZoneId
-import java.util.Date
 
 data class User(
     val id: String,
