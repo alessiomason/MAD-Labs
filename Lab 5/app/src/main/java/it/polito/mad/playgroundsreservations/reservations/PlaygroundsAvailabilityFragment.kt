@@ -12,6 +12,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -34,6 +35,7 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.profile.SpinnerFragment
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -55,6 +57,11 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
         val viewModel by viewModels<ViewModel>()
         // NEW RESERVATION BUTTON
         val button = view.findViewById<Button>(R.id.reserve_new_playground_button)
+
+        val loading = view.findViewById<FragmentContainerView>(R.id.loadingPlaygroundAvailabilityFragment)
+        val fragmentManager = childFragmentManager
+        fragmentManager.beginTransaction().replace(R.id.loadingPlaygroundAvailabilityFragment, SpinnerFragment()).commit()
+        loading.visibility = VISIBLE
 
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.playgrounds_availability)
@@ -163,6 +170,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
 
             reservedPlaygrounds.observe(viewLifecycleOwner) { reservedPlaygroundsMap ->
                 selectedDate.observe(viewLifecycleOwner) { selectedDateValue ->
+                    loading.visibility = GONE
                     val displayedReservedPlaygrounds = reservedPlaygroundsMap.filter {
                         it.key.time.toLocalDate() == selectedDateValue
                     }

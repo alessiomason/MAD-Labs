@@ -49,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -97,7 +98,7 @@ fun RatingPlaygroundsScreen(playgroundId: String, reservationId: String, navCont
     viewModel.getPlayground(playgroundId, playground)
 
     if (playground.value == null)
-        Text("Loading")
+        MyLoadingRatingPlaygrounds()
     else
         RatingPlaygroundsScreenContent(playground = playground.value!!, reservationId = reservationId, navController)
 }
@@ -229,4 +230,13 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: String
             modifier = Modifier.padding(top = 8.dp)
         ) */
     }
+}
+
+@Composable
+fun MyLoadingRatingPlaygrounds() {
+    AndroidView(
+        factory = { context ->
+            LayoutInflater.from(context).inflate(R.layout.spinner_fragment, null)
+        }
+    )
 }

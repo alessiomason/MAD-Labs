@@ -15,6 +15,7 @@ import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -23,6 +24,7 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.profile.SpinnerFragment
 import java.time.Duration
 
 class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
@@ -53,6 +55,11 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
         val playgrounds = viewModel.playgrounds
         val arrayOccupated = mutableListOf<String>()
 
+        val loading = view.findViewById<FragmentContainerView>(R.id.loadingEditReservationFragment)
+        val fragmentManager = childFragmentManager
+        fragmentManager.beginTransaction().replace(R.id.loadingEditReservationFragment, SpinnerFragment()).commit()
+        loading.visibility = View.VISIBLE
+
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.modify_reservation)
 
@@ -77,6 +84,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
                 it.forEach { p ->
                     if (p.id == myReservation.playgroundId.id) {
                         myPlayground = p
+                        loading.visibility = View.GONE
                     }
                 }
 
