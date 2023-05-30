@@ -86,7 +86,7 @@ class EditProfileActivity: AppCompatActivity() {
         viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
             if (user != null) {
                 nameView.setText(user.fullName)
-                nicknameView.setText(user.username)
+               // nicknameView.setText(user.username)
                 bioView.setText(user.bio)
                 when (user.gender) {
                     Gender.MALE -> {
@@ -281,7 +281,7 @@ class EditProfileActivity: AppCompatActivity() {
                     if (it != null) {
                         val user = User(
                             id = Global.userId!!,
-                            username = nicknameView.text.toString(),
+                        //    username = nicknameView.text.toString(),
                             fullName = nameView.text.toString(),
                             bio = bioView.text.toString(),
                             gender = gender,

@@ -337,7 +337,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
 
     fun updateUserInfo(user: User) {
         val u = hashMapOf(
-            "username" to user.username,
+           // "username" to user.username,
             "fullName" to user.fullName,
             "bio" to user.bio,
             "dateOfBirth" to user.dateOfBirth,

@@ -4,7 +4,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 
 data class User(
     val id: String,
-    val username: String,
+    //val username: String,
     var fullName: String,
     var bio: String,
     var dateOfBirth: String,
@@ -18,7 +18,7 @@ data class User(
 
 fun DocumentSnapshot.toUser(): User {
 
-    val username = this.get("username", String::class.java)
+  //  val username = this.get("username", String::class.java)
     val fullName = this.get("fullName", String::class.java)
     val bio = this.get("bio", String::class.java)
     val gender = this.get("gender", String::class.java)?.toGender()
@@ -33,7 +33,7 @@ fun DocumentSnapshot.toUser(): User {
 
     return User(
         id,
-        username ?: "",
+      //  username ?: "",
         fullName ?: "",
         bio ?: "",
         dateOfBirth ?: "",

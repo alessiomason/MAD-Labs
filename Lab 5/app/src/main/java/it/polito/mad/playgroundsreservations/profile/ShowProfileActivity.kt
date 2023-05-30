@@ -84,7 +84,7 @@ class ShowProfileActivity: AppCompatActivity() {
         viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
             if (user != null) {
                 nameView.text = user.fullName
-                nicknameView.text = user.username
+              //  nicknameView.text = user.username
                 bioView.text = user.bio
                 genderView.text = when (user.gender) {
                     Gender.MALE -> resources.getString(R.string.genderMale)
