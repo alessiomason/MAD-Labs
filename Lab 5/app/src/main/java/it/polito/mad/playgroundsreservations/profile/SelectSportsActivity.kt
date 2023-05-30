@@ -45,6 +45,8 @@ class SelectSportsActivity : AppCompatActivity() {
 
                 val saveButton = findViewById<Button>(R.id.saveSportsButton)
                 saveButton.setOnClickListener {
+                    user.selectedSports = mutableSetOf()
+
                     if (tennisCb.isChecked)
                         user.selectedSports.add(Sport.TENNIS)
                     if (basketballCb.isChecked)
