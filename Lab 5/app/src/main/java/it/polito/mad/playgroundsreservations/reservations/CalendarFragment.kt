@@ -74,6 +74,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         val loading = view.findViewById<FragmentContainerView>(R.id.loadingCalendarFragment)
         val fragmentManager = childFragmentManager
         fragmentManager.beginTransaction().replace(R.id.loadingCalendarFragment, SpinnerFragment()).commit()
+        loading.visibility = VISIBLE
 
         alreadyShownTutorial.observe(viewLifecycleOwner) {
             if (it == true) {
@@ -94,14 +95,10 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         val decorators: MutableList<DayDecorator> = ArrayList()
 
         reservations.observe(viewLifecycleOwner) {
-            if (it.isEmpty()){
-                loading.visibility = VISIBLE
-            } else {
-                loading.visibility = GONE
-                decorators.add(DisabledColorDecorator(it))
-                calendarView.decorators = decorators
-                calendarView.refreshCalendar(currentCalendar)
-            }
+            decorators.add(DisabledColorDecorator(it))
+            calendarView.decorators = decorators
+            calendarView.refreshCalendar(currentCalendar)
+            loading.visibility = GONE
         }
 
         //Show Monday as first date of week
