@@ -20,6 +20,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.fragment.app.FragmentContainerView
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.firebase.ktx.Firebase
@@ -84,11 +85,14 @@ class EditProfileActivity: AppCompatActivity() {
         super.onResume()
 
         val viewModel by viewModels<ViewModel>()
-       // nameView.isClickable=false;
-        //nameView.isFocusable=false
+        val loading = findViewById<FragmentContainerView>(R.id.loadingEditProfileFragment)
+        val fragmentManager = supportFragmentManager
+        fragmentManager.beginTransaction().replace(R.id.loadingEditProfileFragment, SpinnerFragment()).commit()
+        loading.visibility = View.VISIBLE
 
         viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
             if (user != null) {
+                loading.visibility = View.GONE
                 nameView.setText(user.fullName)
                // nicknameView.setText(user.username)
                 bioView.setText(user.bio)
