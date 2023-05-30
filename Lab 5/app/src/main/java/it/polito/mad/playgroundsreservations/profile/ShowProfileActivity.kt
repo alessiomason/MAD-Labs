@@ -27,6 +27,7 @@ import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.MainActivity
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Gender
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.io.InputStream

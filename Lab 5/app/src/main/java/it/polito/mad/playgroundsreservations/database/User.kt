@@ -1,8 +1,6 @@
 package it.polito.mad.playgroundsreservations.database
 
 import com.google.firebase.firestore.DocumentSnapshot
-import it.polito.mad.playgroundsreservations.profile.Gender
-import it.polito.mad.playgroundsreservations.profile.toGender
 
 data class User(
     val id: String,

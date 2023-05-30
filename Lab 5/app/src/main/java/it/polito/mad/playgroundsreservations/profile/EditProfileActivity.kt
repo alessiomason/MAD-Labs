@@ -29,6 +29,7 @@ import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.io.*
 import it.polito.mad.playgroundsreservations.Global
+import it.polito.mad.playgroundsreservations.database.Gender
 
 class EditProfileActivity: AppCompatActivity() {
     private lateinit var selectedSports: SelectedSports
