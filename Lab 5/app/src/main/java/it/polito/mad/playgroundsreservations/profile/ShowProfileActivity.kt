@@ -51,7 +51,7 @@ class ShowProfileActivity: AppCompatActivity() {
         this.title = resources?.getString(R.string.user_profile)
 
         nameView = findViewById(R.id.textFullName)
-        nicknameView = findViewById(R.id.textNickname)
+      //  nicknameView = findViewById(R.id.textNickname)
         ageView = findViewById(R.id.textAge)
         bioView = findViewById(R.id.textBio)
         genderView = findViewById(R.id.textGender)
