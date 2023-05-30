@@ -53,6 +53,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         val loading = view.findViewById<FragmentContainerView>(R.id.loadingShowReservationFragment)
         val fragmentManager = childFragmentManager
         fragmentManager.beginTransaction().replace(R.id.loadingShowReservationFragment, SpinnerFragment()).commit()
+        loading.visibility = VISIBLE
 
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.reservation)
@@ -69,10 +70,8 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
             playgrounds.observe(viewLifecycleOwner) { playgroundsList ->
                 playgroundsList.forEach { p ->
                     if (p.id == myReservation.playgroundId.id) {
-                         myPlayground = p
+                        myPlayground = p
                         loading.visibility = GONE
-                    } else {
-                        loading.visibility = VISIBLE
                     }
                 }
 
