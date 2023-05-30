@@ -18,6 +18,7 @@ import it.polito.mad.playgroundsreservations.reservations.ViewModel
 class Global {
     companion object {
         var userId: String? = null
+        var fullName: String? = null
     }
 }
 
@@ -36,6 +37,7 @@ class MainActivity: AppCompatActivity() {
             val user = FirebaseAuth.getInstance().currentUser
             if (user != null) {   // Successfully signed in
                 Global.userId = user.uid
+                    Global.fullName = user.displayName
                 viewModel.createUserIfNotExists(user.uid, user.displayName)
 
                 val intent = Intent(this, ReservationsActivity::class.java)
@@ -60,6 +62,7 @@ class MainActivity: AppCompatActivity() {
 
         if (user != null) {
             Global.userId = user.uid
+            Global.fullName = user.displayName
 
             val intent = Intent(this, ReservationsActivity::class.java)
             startActivity(intent)

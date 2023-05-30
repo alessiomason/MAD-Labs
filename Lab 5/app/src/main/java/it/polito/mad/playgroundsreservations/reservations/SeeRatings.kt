@@ -99,7 +99,7 @@ fun SeeRatingsScreen(playgroundId: String, navController: NavController) {
     viewModel.getPlayground(playgroundId, playground)
 
 
-    if (playground.value == null)
+    if (playground.value == null && ratingsList.value.isEmpty())
         Text("Loading")
     else
         SeeRatingsScreenContent(playground = playground.value!!, ratingsList)
@@ -224,9 +224,9 @@ fun ListItemComponent(item: PlaygroundRating) {
 
         // if (isExpanded) {
             val descriptionText = if (item.description == "") {
-                "${stringResource(id = R.string.optional_description_entered)} - @${item.username}"
+                "${stringResource(id = R.string.optional_description_entered)} - ${item.fullName}"
             } else {
-                "\"${item.description}\" - @${item.username}"
+                "\"${item.description}\" - ${item.fullName}"
             }
             Text(
                 text = descriptionText,

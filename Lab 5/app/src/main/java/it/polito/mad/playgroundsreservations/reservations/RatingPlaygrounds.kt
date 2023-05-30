@@ -55,6 +55,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.smarttoolfactory.ratingbar.RatingBar
+import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
@@ -206,7 +207,7 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: String
                     reservationId = viewModel.getReservationReference(reservationId),
                     rating = rating,
                     description = text,
-                    username = "mariorossi"
+                    fullName = Global.fullName ?: ""
                 )
                 viewModel.savePlaygroundRating(playgroundRating)
                 navController.popBackStack()

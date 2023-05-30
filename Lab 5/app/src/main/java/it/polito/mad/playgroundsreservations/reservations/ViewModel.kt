@@ -244,7 +244,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             "reservationId" to playgroundRating.reservationId,
             "rating" to playgroundRating.rating,
             "description" to playgroundRating.description,
-            "username" to playgroundRating.username
+            "fullName" to playgroundRating.fullName
         )
 
         db.collection(playgroundsRatingsCollectionPath).add(pr)
@@ -277,7 +277,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             .addOnSuccessListener {
                 if (!it.exists()) {
                     val newUser = hashMapOf(
-                        "firstName" to (displayName ?: "")
+                        "fullName" to (displayName ?: "")
                     )
 
                     db.collection(usersCollectionPath)
