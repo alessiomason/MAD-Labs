@@ -13,6 +13,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentContainerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
@@ -81,9 +82,14 @@ class ShowProfileActivity: AppCompatActivity() {
         val viewModel by viewModels<ViewModel>()
         val playgrounds = viewModel.playgrounds
 
+        val loading = findViewById<FragmentContainerView>(R.id.loadingShowProfileFragment)
+        val fragmentManager = supportFragmentManager
+        fragmentManager.beginTransaction().replace(R.id.loadingShowProfileFragment, SpinnerFragment()).commit()
+        loading.visibility = VISIBLE
 
         viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
             if (user != null) {
+                loading.visibility = GONE
                 nameView.text = user.fullName
               //  nicknameView.text = user.username
                 bioView.text = user.bio
