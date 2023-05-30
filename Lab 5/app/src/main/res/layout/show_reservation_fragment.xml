@@ -177,6 +177,7 @@
                     android:id="@+id/btnRateCourt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:text="@string/rate_court" />
 
                 <LinearLayout
@@ -185,6 +186,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bordered_box"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <TextView
@@ -225,9 +227,21 @@
 
                 </LinearLayout>
 
-
             </LinearLayout>
         </ScrollView>
+
     </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/loadingShowReservationFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/spinner_fragment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,6 +17,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -25,6 +26,7 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.profile.SpinnerFragment
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -48,6 +50,10 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         val reservations = viewModel.getUserReservations(Global.userId!!)
         val playgrounds = viewModel.playgrounds
 
+        val loading = view.findViewById<FragmentContainerView>(R.id.loadingShowReservationFragment)
+        val fragmentManager = childFragmentManager
+        fragmentManager.beginTransaction().replace(R.id.loadingShowReservationFragment, SpinnerFragment()).commit()
+
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.reservation)
 
@@ -55,7 +61,6 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 reservationsList.forEach { r ->
                     if (r.id == args.reservationId) {
                         myReservation = r
-
                         // invalidate the menu to see whether editing and canceling is still possible
                         invalidateOptionsMenu(activity)
                     }
@@ -65,6 +70,9 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 playgroundsList.forEach { p ->
                     if (p.id == myReservation.playgroundId.id) {
                          myPlayground = p
+                        loading.visibility = GONE
+                    } else {
+                        loading.visibility = VISIBLE
                     }
                 }
 
@@ -78,7 +86,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
 
                 val btnRateCourt = view.findViewById<Button>(R.id.btnRateCourt)
                 val myReviewLayout = view.findViewById<LinearLayout>(R.id.myReviewLayout)
-                myReviewLayout.visibility = GONE
+                // myReviewLayout.visibility = GONE
                 // display rate court button only for past reservations and if not already rated
                 val previousRatingForReservation = viewModel.getRatingByReservation(myReservation.id)
 
@@ -86,6 +94,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     if (myReservation.time.plus(myReservation.duration).isBefore(Instant.now().atZone(myReservation.time.zone))
                         && rating == null
                     ) {
+                        btnRateCourt.visibility = VISIBLE
                         btnRateCourt.setOnClickListener {
                             val navController = view.findNavController()
                             val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId.id, myReservation.id)

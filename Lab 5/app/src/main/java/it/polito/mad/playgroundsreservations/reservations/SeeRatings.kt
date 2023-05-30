@@ -45,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -100,7 +101,7 @@ fun SeeRatingsScreen(playgroundId: String, navController: NavController) {
 
 
     if (playground.value == null && ratingsList.value.isEmpty())
-        Text("Loading")
+        MyLoadingSeeRatings()
     else
         SeeRatingsScreenContent(playground = playground.value!!, ratingsList)
 }
@@ -235,4 +236,13 @@ fun ListItemComponent(item: PlaygroundRating) {
             )
         // }
     }
+}
+
+@Composable
+fun MyLoadingSeeRatings() {
+    AndroidView(
+        factory = { context ->
+            LayoutInflater.from(context).inflate(R.layout.spinner_fragment, null)
+        }
+    )
 }

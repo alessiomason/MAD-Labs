@@ -16,6 +16,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
@@ -32,6 +33,7 @@ import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.profile.ShowProfileActivity
+import it.polito.mad.playgroundsreservations.profile.SpinnerFragment
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -69,6 +71,10 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         val overlay = view.findViewById<ConstraintLayout>(R.id.calendar_fragment_overlay)
         val alreadyShownTutorial = viewModel.tutorialShown
 
+        val loading = view.findViewById<FragmentContainerView>(R.id.loadingCalendarFragment)
+        val fragmentManager = childFragmentManager
+        fragmentManager.beginTransaction().replace(R.id.loadingCalendarFragment, SpinnerFragment()).commit()
+
         alreadyShownTutorial.observe(viewLifecycleOwner) {
             if (it == true) {
                 overlay.visibility = GONE
@@ -88,9 +94,14 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         val decorators: MutableList<DayDecorator> = ArrayList()
 
         reservations.observe(viewLifecycleOwner) {
-            decorators.add(DisabledColorDecorator(it))
-            calendarView.decorators = decorators
-            calendarView.refreshCalendar(currentCalendar)
+            if (it.isEmpty()){
+                loading.visibility = VISIBLE
+            } else {
+                loading.visibility = GONE
+                decorators.add(DisabledColorDecorator(it))
+                calendarView.decorators = decorators
+                calendarView.refreshCalendar(currentCalendar)
+            }
         }
 
         //Show Monday as first date of week

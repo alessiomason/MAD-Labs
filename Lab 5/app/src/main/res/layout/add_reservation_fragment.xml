@@ -211,6 +211,7 @@
                 android:id="@+id/btnSeeRatings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="@string/see_ratings" />
 
             <TextView
@@ -221,10 +222,24 @@
                 android:background="@drawable/bordered_box"
                 android:gravity="center"
                 android:padding="8dp"
+                android:visibility="gone"
                 android:text="@string/no_ratings_yet"
                 android:textColor="@android:color/primary_text_light" />
 
         </LinearLayout>
     </ScrollView>
     </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/loadingAddReservationFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/spinner_fragment" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

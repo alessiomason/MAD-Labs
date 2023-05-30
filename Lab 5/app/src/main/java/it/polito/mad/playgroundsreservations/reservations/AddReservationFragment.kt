@@ -20,6 +20,7 @@ import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -29,6 +30,7 @@ import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.profile.SpinnerFragment
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -66,6 +68,12 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
         val reservations = viewModel.getUserReservations(Global.userId!!)
         val playgrounds = viewModel.playgrounds
+
+        val loading = view.findViewById<FragmentContainerView>(R.id.loadingAddReservationFragment)
+        val fragmentManager = childFragmentManager
+        fragmentManager.beginTransaction().replace(R.id.loadingAddReservationFragment, SpinnerFragment()).commit()
+        loading.visibility = VISIBLE
+
         playgroundList.removeAll(playgroundList)
         val sharedPreferences = requireContext().getSharedPreferences("AddPref", Context.MODE_PRIVATE)
         val navController = view.findNavController()
@@ -272,6 +280,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                     }
 
                     ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
+                        loading.visibility = GONE
                         val ratingSinglePlaygroundList = mutableListOf<PlaygroundRating>()
                         ratingPlaygroundsList.forEach { r ->
                             if (r?.playgroundId?.id == playground.id) {
