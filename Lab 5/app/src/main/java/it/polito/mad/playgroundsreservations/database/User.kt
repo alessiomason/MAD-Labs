@@ -12,10 +12,12 @@ data class User(
     var phone: String,
     var location: String,
     var rating: Float = 0.0f,
+    var selectedSports: MutableSet<Sport> = mutableSetOf(),
     var alreadyShownTutorial: Boolean = false
 )
 
 fun DocumentSnapshot.toUser(): User {
+
     val username = this.get("username", String::class.java)
     val fullName = this.get("fullName", String::class.java)
     val bio = this.get("bio", String::class.java)
@@ -24,7 +26,10 @@ fun DocumentSnapshot.toUser(): User {
     val location = this.get("location", String::class.java)
     val dateOfBirth = this.get("dateOfBirth", String::class.java)
     val rating = this.get("rating", Float::class.java)
+    val selectedSportsStrings = this.get("selectedSports") as? List<String>
     val alreadyShownTutorial = this.get("alreadyShownTutorial", Boolean::class.java)
+
+    val selectedSports = selectedSportsStrings?.map { it.toSport() }?.toMutableSet() ?: mutableSetOf()
 
     return User(
         id,
@@ -36,6 +41,7 @@ fun DocumentSnapshot.toUser(): User {
         phone ?: "",
         location ?: "",
         rating ?: (0.0).toFloat(),
+        selectedSports,
         alreadyShownTutorial ?: false
     )
 }

@@ -30,6 +30,7 @@ import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.io.*
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.database.Gender
+import it.polito.mad.playgroundsreservations.database.Sport
 
 class EditProfileActivity: AppCompatActivity() {
     private lateinit var selectedSports: SelectedSports
@@ -68,6 +69,18 @@ class EditProfileActivity: AppCompatActivity() {
             userProfileImageView.showContextMenu()
         }
 
+        // set onClick for Add new sports button
+        val addChip = findViewById<Chip>(R.id.chipAdd)
+        addChip.setOnClickListener {
+            val intent = Intent(this, SelectSportsActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
         val viewModel by viewModels<ViewModel>()
 
         viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
@@ -103,6 +116,30 @@ class EditProfileActivity: AppCompatActivity() {
                 locationView.setText(user.location)
                 ratingBarView.rating = user.rating
 
+                val tennisChip = findViewById<Chip>(R.id.chipTennis)
+                if (user.selectedSports.contains(Sport.TENNIS))
+                    tennisChip.visibility = View.VISIBLE
+                else tennisChip.visibility = View.GONE
+
+                val basketballChip = findViewById<Chip>(R.id.chipBasketball)
+                if (user.selectedSports.contains(Sport.BASKETBALL))
+                    basketballChip.visibility = View.VISIBLE
+                else basketballChip.visibility = View.GONE
+
+                val footballChip = findViewById<Chip>(R.id.chipFootball)
+                if (user.selectedSports.contains(Sport.FOOTBALL))
+                    footballChip.visibility = View.VISIBLE
+                else footballChip.visibility = View.GONE
+
+                val volleyballChip = findViewById<Chip>(R.id.chipVolleyball)
+                if (user.selectedSports.contains(Sport.VOLLEYBALL))
+                    volleyballChip.visibility = View.VISIBLE
+                else volleyballChip.visibility = View.GONE
+
+                val golfChip = findViewById<Chip>(R.id.chipGolf)
+                if (user.selectedSports.contains(Sport.GOLF))
+                    golfChip.visibility = View.VISIBLE
+                else golfChip.visibility = View.GONE
 
                 val storageReference = Firebase.storage.reference.child("profileImages/${user.id}")
 
@@ -112,34 +149,6 @@ class EditProfileActivity: AppCompatActivity() {
                     .into(userProfileImageView)
             }
         }
-
-
-        // set onClick for Add new sports button
-        val addChip = findViewById<Chip>(R.id.chipAdd)
-        addChip.setOnClickListener {
-            val intent = Intent(this, SelectSportsActivity::class.java)
-            startActivity(intent)
-            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
-        val gson = Gson()
-        selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
-
-        val tennisChip = findViewById<Chip>(R.id.chipTennis)
-        if (selectedSports.tennis) tennisChip.visibility = View.VISIBLE else tennisChip.visibility = View.GONE
-        val basketballChip = findViewById<Chip>(R.id.chipBasketball)
-        if (selectedSports.basketball) basketballChip.visibility = View.VISIBLE else basketballChip.visibility = View.GONE
-        val footballChip = findViewById<Chip>(R.id.chipFootball)
-        if (selectedSports.football) footballChip.visibility = View.VISIBLE else footballChip.visibility = View.GONE
-        val volleyballChip = findViewById<Chip>(R.id.chipVolleyball)
-        if (selectedSports.volleyball) volleyballChip.visibility = View.VISIBLE else volleyballChip.visibility = View.GONE
-        val golfChip = findViewById<Chip>(R.id.chipGolf)
-        if (selectedSports.golf) golfChip.visibility = View.VISIBLE else golfChip.visibility = View.GONE
     }
 
     @Deprecated("Deprecated in Java",
@@ -253,7 +262,7 @@ class EditProfileActivity: AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val viewModel by viewModels<ViewModel>()
-        // Handle presses on the action bar menu items
+
         when (item.itemId) {
             R.id.save_profile -> {
                 finish()
@@ -268,21 +277,27 @@ class EditProfileActivity: AppCompatActivity() {
                     gender = Gender.OTHER
                 }
 
-                val user = User(
-                    id = Global.userId!!,
-                    username = nicknameView.text.toString(),
-                    fullName = nameView.text.toString(),
-                    bio = bioView.text.toString(),
-                    gender = gender,
-                    phone = phoneView.text.toString(),
-                    location = locationView.text.toString(),
-                    rating = ratingBarView.rating,
-                    // dateBirth da modificare con la data
-                    dateOfBirth = ageView.text.split(" ")[0],
-                    alreadyShownTutorial = true     // if user sees this screen has already gone through tutorial
-                )
+                viewModel.getUserInfo(Global.userId!!).observe(this) {
+                    if (it != null) {
+                        val user = User(
+                            id = Global.userId!!,
+                            username = nicknameView.text.toString(),
+                            fullName = nameView.text.toString(),
+                            bio = bioView.text.toString(),
+                            gender = gender,
+                            phone = phoneView.text.toString(),
+                            location = locationView.text.toString(),
+                            rating = ratingBarView.rating,
+                            // dateBirth da modificare con la data
+                            dateOfBirth = ageView.text.split(" ")[0],
+                            selectedSports = it.selectedSports,
+                            alreadyShownTutorial = it.alreadyShownTutorial
+                        )
 
-                viewModel.updateUserInfo(user)
+                        viewModel.updateUserInfo(user)
+                    }
+                }
+
                 return true
             }
         }

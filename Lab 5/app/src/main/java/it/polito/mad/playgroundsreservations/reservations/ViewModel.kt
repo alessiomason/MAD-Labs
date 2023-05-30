@@ -345,6 +345,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             "phone" to user.phone,
             "location" to user.location,
             "rating" to user.rating,
+            "selectedSports" to user.selectedSports.map { it.name.lowercase() } .toList(),
             "alreadyShownTutorial" to user.alreadyShownTutorial
         )
 

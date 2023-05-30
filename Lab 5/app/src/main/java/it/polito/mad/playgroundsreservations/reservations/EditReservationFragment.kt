@@ -51,7 +51,6 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
         val viewModel by viewModels<ViewModel>()
         val reservations = viewModel.getUserReservations(Global.userId!!)
         val playgrounds = viewModel.playgrounds
-
         val arrayOccupated = mutableListOf<String>()
 
         // ACTIVITY TITLE
@@ -239,10 +238,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
                         override fun onNothingSelected(parent: AdapterView<*>?) {
                             TODO("Not yet implemented")
                         }
-
                     }
-
-
             }
         }
 
@@ -256,11 +252,8 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController = view?.findNavController()
 
-        // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_edit_reservation -> {
-                // var spinnerHourValue= view?.findViewById<Spinner>(R.id.spinnerViewHours);
-                // var spinnerDurationValue=view?.findViewById<Spinner>(R.id.spinnerDuration);
                 val chkEquipment = view?.findViewById<CheckBox>(R.id.rentingEquipment)
 
                 if (chkEquipment != null) {
@@ -270,8 +263,6 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
                 viewModel.updateReservation(myReservation)
 
                 navController?.popBackStack()
-                //requireActivity().onBackPressed()
-
             }
         }
         return super.onOptionsItemSelected(item)

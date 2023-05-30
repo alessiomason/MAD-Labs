@@ -99,6 +99,38 @@ class ShowProfileActivity: AppCompatActivity() {
                 locationView.text = user.location
                 ratingBarView.rating = user.rating
 
+                val emptyChip = findViewById<Chip>(R.id.chipEmpty)
+                emptyChip.visibility = VISIBLE
+
+                val tennisChip = findViewById<Chip>(R.id.chipTennis)
+                if (user.selectedSports.contains(Sport.TENNIS)) {
+                    tennisChip.visibility = VISIBLE
+                    emptyChip.visibility = GONE
+                } else tennisChip.visibility = GONE
+
+                val basketballChip = findViewById<Chip>(R.id.chipBasketball)
+                if (user.selectedSports.contains(Sport.BASKETBALL)) {
+                    basketballChip.visibility = VISIBLE
+                    emptyChip.visibility = GONE
+                } else basketballChip.visibility = GONE
+
+                val footballChip = findViewById<Chip>(R.id.chipFootball)
+                if (user.selectedSports.contains(Sport.FOOTBALL)) {
+                    footballChip.visibility = VISIBLE
+                    emptyChip.visibility = GONE
+                } else footballChip.visibility = GONE
+
+                val volleyballChip = findViewById<Chip>(R.id.chipVolleyball)
+                if (user.selectedSports.contains(Sport.VOLLEYBALL)) {
+                    volleyballChip.visibility = VISIBLE
+                    emptyChip.visibility = GONE
+                } else volleyballChip.visibility = GONE
+
+                val golfChip = findViewById<Chip>(R.id.chipGolf)
+                if (user.selectedSports.contains(Sport.GOLF)) {
+                    golfChip.visibility = VISIBLE
+                    emptyChip.visibility = GONE
+                } else golfChip.visibility = GONE
 
                 val storageReference = Firebase.storage.reference.child("profileImages/${user.id}")
 
@@ -159,44 +191,6 @@ class ShowProfileActivity: AppCompatActivity() {
                 }
             }
         }
-
-        val emptyChip = findViewById<Chip>(R.id.chipEmpty)
-        emptyChip.visibility = VISIBLE
-        val tennisChip = findViewById<Chip>(R.id.chipTennis)
-        if (selectedSports.tennis) {
-            tennisChip.visibility = VISIBLE
-            emptyChip.visibility = GONE
-        } else tennisChip.visibility = GONE
-        val basketballChip = findViewById<Chip>(R.id.chipBasketball)
-        if (selectedSports.basketball) {
-            basketballChip.visibility = VISIBLE
-            emptyChip.visibility = GONE
-        } else basketballChip.visibility = GONE
-        val footballChip = findViewById<Chip>(R.id.chipFootball)
-        if (selectedSports.football) {
-            footballChip.visibility = VISIBLE
-            emptyChip.visibility = GONE
-        } else footballChip.visibility = GONE
-        val volleyballChip = findViewById<Chip>(R.id.chipVolleyball)
-        if (selectedSports.volleyball) {
-            volleyballChip.visibility = VISIBLE
-            emptyChip.visibility = GONE
-        } else volleyballChip.visibility = GONE
-        val golfChip = findViewById<Chip>(R.id.chipGolf)
-        if (selectedSports.golf) {
-            golfChip.visibility = VISIBLE
-            emptyChip.visibility = GONE
-        } else golfChip.visibility = GONE
-
-        /*
-        val parcelFileDescriptor =
-            contentResolver.openFileDescriptor(profile.userProfileImageUriString!!.toUri(), "r", null) ?: return
-
-        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        userProfileImageView.setImageBitmap(BitmapFactory.decodeStream(inputStream))
-        parcelFileDescriptor.close()
-        */
-        // Reference to an image file in Cloud Storage
     }
 
     @Deprecated("Deprecated in Java",
@@ -224,8 +218,6 @@ class ShowProfileActivity: AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-
 }
 
 // class to download images from the Firebase storage

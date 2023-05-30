@@ -4,9 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
+import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.reservations.ViewModel
 
 class SelectSportsActivity : AppCompatActivity() {
     private lateinit var selectedSports: SelectedSports
@@ -27,33 +31,36 @@ class SelectSportsActivity : AppCompatActivity() {
         volleyballCb = findViewById(R.id.checkBoxVolleyball)
         golfCb = findViewById(R.id.checkBoxGolf)
 
-        val sharedPref = this.getSharedPreferences("profile", Context.MODE_PRIVATE)
-        val gson = Gson()
-        selectedSports = gson.fromJson(sharedPref.getString("selectedSports", "{}"), SelectedSports::class.java)
+        val viewModel by viewModels<ViewModel>()
 
-        tennisCb.isChecked = selectedSports.tennis
-        basketballCb.isChecked = selectedSports.basketball
-        footballCb.isChecked = selectedSports.football
-        volleyballCb.isChecked = selectedSports.volleyball
-        golfCb.isChecked = selectedSports.golf
+        val userInfo = viewModel.getUserInfo(Global.userId!!)
 
-        // set onClick for save button
-        val saveButton = findViewById<Button>(R.id.saveSportsButton)
-        saveButton.setOnClickListener {
-            // save selected sports
-            selectedSports.tennis = tennisCb.isChecked
-            selectedSports.basketball = basketballCb.isChecked
-            selectedSports.football = footballCb.isChecked
-            selectedSports.volleyball = volleyballCb.isChecked
-            selectedSports.golf = golfCb.isChecked
+        userInfo.observe(this) { user ->
+            if (user != null) {
+                tennisCb.isChecked = user.selectedSports.contains(Sport.TENNIS) == true
+                basketballCb.isChecked = user.selectedSports.contains(Sport.BASKETBALL) == true
+                footballCb.isChecked = user.selectedSports.contains(Sport.FOOTBALL) == true
+                volleyballCb.isChecked = user.selectedSports.contains(Sport.VOLLEYBALL) == true
+                golfCb.isChecked = user.selectedSports.contains(Sport.GOLF) == true
 
-            finish()
-            overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
+                val saveButton = findViewById<Button>(R.id.saveSportsButton)
+                saveButton.setOnClickListener {
+                    if (tennisCb.isChecked)
+                        user.selectedSports.add(Sport.TENNIS)
+                    if (basketballCb.isChecked)
+                        user.selectedSports.add(Sport.BASKETBALL)
+                    if (footballCb.isChecked)
+                        user.selectedSports.add(Sport.FOOTBALL)
+                    if (volleyballCb.isChecked)
+                        user.selectedSports.add(Sport.VOLLEYBALL)
+                    if (golfCb.isChecked)
+                        user.selectedSports.add(Sport.GOLF)
 
-            with(sharedPref.edit()) {
-                val selectedSportsJson = gson.toJson(selectedSports)
-                putString("selectedSports", selectedSportsJson)
-                apply()
+                    viewModel.updateUserInfo(user)
+
+                    finish()
+                    overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
+                }
             }
         }
     }
