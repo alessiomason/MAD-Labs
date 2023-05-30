@@ -30,7 +30,6 @@
     <string name="cal_frag_options_menu_tutorial">Accedi al tuo profilo personale ed esplora la disponibilità dei campi</string>
     <string name="cal_frag_calendar_tutorial">Visualizza le tue prenotazioni</string>
     <string name="cal_frag_reservations_list_tutorial">Seleziona un giorno nel calendario: le tue prenotazioni per il giorno appariranno qui</string>
-    <string name="tutorial_ok">Ok</string>
 
     <!-- PROFILE -->
     <string name="user_profile">Il mio profilo</string>
@@ -40,7 +39,8 @@
     <string name="bio">Bio e successi sportivi</string>
     <string name="phone">Telefono</string>
     <string name="age">Età</string>
-    <string name="years">%1$s anni</string>
+    <string name="set_age">Imposta</string>
+    <string name="years">%1$d anni</string>
     <string name="gender">Genere</string>
     <string name="genderMale">Maschio</string>
     <string name="genderFemale">Femmina</string>

@@ -1,8 +1,8 @@
 package it.polito.mad.playgroundsreservations.profile
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.graphics.Bitmap
@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
@@ -23,22 +24,26 @@ import androidx.core.net.toUri
 import androidx.fragment.app.FragmentContainerView
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
+import com.google.firebase.Timestamp
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.google.gson.Gson
+import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Gender
+import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.io.*
-import it.polito.mad.playgroundsreservations.Global
-import it.polito.mad.playgroundsreservations.database.Gender
-import it.polito.mad.playgroundsreservations.database.Sport
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.GregorianCalendar
 
 class EditProfileActivity: AppCompatActivity() {
-    private lateinit var selectedSports: SelectedSports
     private lateinit var nameView: TextView
-    private lateinit var nicknameView: EditText
-    private lateinit var ageView: EditText
+    private lateinit var dateOfBirthView: TextView
+    private lateinit var dateOfBirthButton: Button
     private lateinit var bioView: EditText
     private lateinit var genderMaleRadioButton: RadioButton
     private lateinit var genderFemaleRadioButton: RadioButton
@@ -48,6 +53,7 @@ class EditProfileActivity: AppCompatActivity() {
     private lateinit var ratingBarView: RatingBar
     private lateinit var userProfileImageView: ImageView
     private var userProfileImageUriString = ""
+    private var dateOfBirth: Timestamp? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +61,8 @@ class EditProfileActivity: AppCompatActivity() {
         this.title = resources?.getString(R.string.edit_profile)
 
         nameView = findViewById(R.id.editTextFullName)
-      //  nicknameView = findViewById(R.id.editTextNickname)
-        ageView = findViewById(R.id.editTextAge)
+        dateOfBirthView = findViewById(R.id.editTextAge)
+        dateOfBirthButton = findViewById(R.id.dateOfBirthButton)
         bioView = findViewById(R.id.editTextBio)
         genderMaleRadioButton = findViewById(R.id.radioGenderMale)
         genderFemaleRadioButton = findViewById(R.id.radioGenderFemale)
@@ -70,8 +76,7 @@ class EditProfileActivity: AppCompatActivity() {
         userProfileImageView.setOnClickListener {
             userProfileImageView.showContextMenu()
         }
-       // nameView.isFocusable=false
-        //nameView.isClickable=false
+
         // set onClick for Add new sports button
         val addChip = findViewById<Chip>(R.id.chipAdd)
         addChip.setOnClickListener {
@@ -93,9 +98,9 @@ class EditProfileActivity: AppCompatActivity() {
         viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
             if (user != null) {
                 loading.visibility = View.GONE
-                nameView.setText(user.fullName)
-               // nicknameView.setText(user.username)
+                nameView.text = user.fullName
                 bioView.setText(user.bio)
+
                 when (user.gender) {
                     Gender.MALE -> {
                         genderMaleRadioButton.isChecked = true
@@ -118,8 +123,30 @@ class EditProfileActivity: AppCompatActivity() {
                         genderOtherRadioButton.isChecked = false
                     }
                 }
-                // ageView.setText(resources.getString(R.string.years, calculateAge(user.dateOfBirth).toString()))
-                ageView.setText(resources.getString(R.string.years, user.dateOfBirth))
+
+                val date = user.dateOfBirth?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())
+                    ?.toLocalDate()?.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) ?: ""
+                dateOfBirthView.text = date
+
+                dateOfBirthButton.setOnClickListener {
+                    val datePickerDialog = DatePickerDialog(
+                        this,
+                        null,
+                        user.dateOfBirth?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.year ?: LocalDate.now().year,
+                        (user.dateOfBirth?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.monthValue ?: LocalDate.now().monthValue) - 1,
+                        user.dateOfBirth?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.dayOfMonth ?: LocalDate.now().dayOfMonth
+                    )
+                    datePickerDialog.setOnDateSetListener { _, year, month, dayOfMonth ->
+                        val calendar = GregorianCalendar(year, month, dayOfMonth)
+                        dateOfBirth = Timestamp(calendar.time)
+
+                        val newDate = dateOfBirth?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())
+                            ?.toLocalDate()?.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) ?: ""
+                        dateOfBirthView.text = newDate
+                    }
+                    datePickerDialog.show()
+                }
+
                 phoneView.setText(user.phone)
                 locationView.setText(user.location)
                 ratingBarView.rating = user.rating
@@ -254,7 +281,6 @@ class EditProfileActivity: AppCompatActivity() {
         outState.putString("userProfileImageUriString", userProfileImageUriString)
     }
 
-
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
@@ -289,15 +315,13 @@ class EditProfileActivity: AppCompatActivity() {
                     if (it != null) {
                         val user = User(
                             id = Global.userId!!,
-                        //    username = nicknameView.text.toString(),
                             fullName = nameView.text.toString(),
                             bio = bioView.text.toString(),
                             gender = gender,
                             phone = phoneView.text.toString(),
                             location = locationView.text.toString(),
                             rating = ratingBarView.rating,
-                            // dateBirth da modificare con la data
-                            dateOfBirth = ageView.text.split(" ")[0],
+                            dateOfBirth = dateOfBirth ?: it.dateOfBirth,
                             selectedSports = it.selectedSports,
                             alreadyShownTutorial = it.alreadyShownTutorial
                         )

@@ -148,20 +148,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/calendar_icon"
-                        android:paddingEnd="5dp"
                         android:layout_gravity="center"
                         app:tint="@color/primary" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/editTextAge"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
                         android:minHeight="48dp"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
+                        android:paddingHorizontal="20dp"
                         android:hint="@string/age"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <Button
+                        android:id="@+id/dateOfBirthButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/set_age" />
                 </LinearLayout>
 
                 <LinearLayout

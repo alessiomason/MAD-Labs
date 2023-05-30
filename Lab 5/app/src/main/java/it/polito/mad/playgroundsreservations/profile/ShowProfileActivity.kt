@@ -37,7 +37,6 @@ import java.io.InputStream
 class ShowProfileActivity: AppCompatActivity() {
     private lateinit var selectedSports: SelectedSports
     private lateinit var nameView: TextView
-    private lateinit var nicknameView: TextView
     private lateinit var ageView: TextView
     private lateinit var bioView: TextView
     private lateinit var genderView: TextView
@@ -52,7 +51,6 @@ class ShowProfileActivity: AppCompatActivity() {
         this.title = resources?.getString(R.string.user_profile)
 
         nameView = findViewById(R.id.textFullName)
-        //  nicknameView = findViewById(R.id.textNickname)
         ageView = findViewById(R.id.textAge)
         bioView = findViewById(R.id.textBio)
         genderView = findViewById(R.id.textGender)
@@ -91,7 +89,6 @@ class ShowProfileActivity: AppCompatActivity() {
             if (user != null) {
                 loading.visibility = GONE
                 nameView.text = user.fullName
-              //  nicknameView.text = user.username
                 bioView.text = user.bio
                 genderView.text = when (user.gender) {
                     Gender.MALE -> resources.getString(R.string.genderMale)
@@ -100,8 +97,7 @@ class ShowProfileActivity: AppCompatActivity() {
                     null -> ""
                 }
 
-                // ageView.text = resources.getString(R.string.years, calculateAge(user.dateOfBirth).toString())
-                ageView.text = resources.getString(R.string.years, user.dateOfBirth)
+                ageView.text = resources.getString(R.string.years, user.age)
                 phoneView.text = user.phone
                 locationView.text = user.location
                 ratingBarView.rating = user.rating

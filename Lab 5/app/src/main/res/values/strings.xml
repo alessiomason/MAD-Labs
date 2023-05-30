@@ -28,7 +28,6 @@
     <string name="cal_frag_options_menu_tutorial">Access your personal profile and explore the playgrounds availability</string>
     <string name="cal_frag_calendar_tutorial">Explore your reservations</string>
     <string name="cal_frag_reservations_list_tutorial">Select a day in the calendar: all your reservations for the day will appear here</string>
-    <string name="tutorial_ok">Ok</string>
 
     <!-- PROFILE -->
     <string name="user_profile">My profile</string>
@@ -38,7 +37,8 @@
     <string name="bio">Bio and sportive achievements</string>
     <string name="phone">Phone</string>
     <string name="age">Age</string>
-    <string name="years">%1$s years old</string>
+    <string name="set_age">Set</string>
+    <string name="years">%1$d years old</string>
     <string name="gender">Gender</string>
     <string name="genderMale">Male</string>
     <string name="genderFemale">Female</string>
