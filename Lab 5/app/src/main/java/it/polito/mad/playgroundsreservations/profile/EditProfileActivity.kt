@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RatingBar
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -34,7 +35,7 @@ import it.polito.mad.playgroundsreservations.database.Sport
 
 class EditProfileActivity: AppCompatActivity() {
     private lateinit var selectedSports: SelectedSports
-    private lateinit var nameView: EditText
+    private lateinit var nameView: TextView
     private lateinit var nicknameView: EditText
     private lateinit var ageView: EditText
     private lateinit var bioView: EditText
@@ -53,7 +54,7 @@ class EditProfileActivity: AppCompatActivity() {
         this.title = resources?.getString(R.string.edit_profile)
 
         nameView = findViewById(R.id.editTextFullName)
-        nicknameView = findViewById(R.id.editTextNickname)
+      //  nicknameView = findViewById(R.id.editTextNickname)
         ageView = findViewById(R.id.editTextAge)
         bioView = findViewById(R.id.editTextBio)
         genderMaleRadioButton = findViewById(R.id.radioGenderMale)
@@ -68,7 +69,8 @@ class EditProfileActivity: AppCompatActivity() {
         userProfileImageView.setOnClickListener {
             userProfileImageView.showContextMenu()
         }
-
+       // nameView.isFocusable=false
+        //nameView.isClickable=false
         // set onClick for Add new sports button
         val addChip = findViewById<Chip>(R.id.chipAdd)
         addChip.setOnClickListener {
@@ -82,6 +84,8 @@ class EditProfileActivity: AppCompatActivity() {
         super.onResume()
 
         val viewModel by viewModels<ViewModel>()
+       // nameView.isClickable=false;
+        //nameView.isFocusable=false
 
         viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
             if (user != null) {
