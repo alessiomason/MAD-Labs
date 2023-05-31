@@ -78,7 +78,13 @@ fun InviteFriendsScreen(reservationId: String, navController: NavController) {
     viewModel.getUser(Global.userId!!, user, friends, recentlyInvited)
     viewModel.getUsers(users)
 
-    if (reservation.value == null || user.value == null || friends.value.isEmpty() || recentlyInvited.value.isEmpty() || users.value.isEmpty())
+    if (    // still loading
+        reservation.value == null ||
+        user.value == null ||
+        (user.value?.friends?.size != null && user.value!!.friends.isNotEmpty() && friends.value.isEmpty()) ||
+        (user.value?.recentlyInvited?.size != null && user.value!!.recentlyInvited.isNotEmpty() && recentlyInvited.value.isEmpty()) ||
+        users.value.isEmpty()
+    )
         MyLoadingRatingPlaygrounds()
     else
         InviteFriendsScreenContent(reservation, user, friends, recentlyInvited, users, navController)
