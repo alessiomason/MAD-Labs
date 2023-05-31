@@ -43,7 +43,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
     private val args by navArgs<AddReservationFragmentArgs>()
     private val viewModel by viewModels<ViewModel>()
-    val zoneId: ZoneId = ZoneId.of("UTC+02:00")
+    val zoneId: ZoneId = ZoneId.systemDefault()
     var playgroundList = mutableListOf<Playground>()
     var arrayOccupated = mutableListOf<String>()
     var durationsList = mutableListOf<String>()
