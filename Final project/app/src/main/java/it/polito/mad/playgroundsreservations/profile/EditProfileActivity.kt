@@ -11,7 +11,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
@@ -32,6 +35,11 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Gender
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.database.User
+import it.polito.mad.playgroundsreservations.database.basketball
+import it.polito.mad.playgroundsreservations.database.football
+import it.polito.mad.playgroundsreservations.database.golf
+import it.polito.mad.playgroundsreservations.database.tennis
+import it.polito.mad.playgroundsreservations.database.volleyball
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.io.*
 import java.time.LocalDate
@@ -50,10 +58,22 @@ class EditProfileActivity: AppCompatActivity() {
     private lateinit var genderOtherRadioButton: RadioButton
     private lateinit var phoneView: EditText
     private lateinit var locationView: EditText
-    private lateinit var ratingBarView: RatingBar
+    // private lateinit var ratingBarView: RatingBar
     private lateinit var userProfileImageView: ImageView
     private var userProfileImageUriString = ""
     private var dateOfBirth: Timestamp? = null
+
+    private lateinit var basketballCb: CheckBox
+    private lateinit var volleyballCb: CheckBox
+    private lateinit var tennisCb: CheckBox
+    private lateinit var golfCb: CheckBox
+    private lateinit var footballCb: CheckBox
+
+    private lateinit var basketballRatingBar: RatingBar
+    private lateinit var volleyballRatingBar: RatingBar
+    private lateinit var tennisRatingBar: RatingBar
+    private lateinit var golfRatingBar: RatingBar
+    private lateinit var footballRatingBar: RatingBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,8 +89,29 @@ class EditProfileActivity: AppCompatActivity() {
         genderOtherRadioButton = findViewById(R.id.radioGenderOther)
         phoneView = findViewById(R.id.editTextPhone)
         locationView = findViewById(R.id.editTextLocation)
-        ratingBarView = findViewById(R.id.ratingBar)
+        // ratingBarView = findViewById(R.id.ratingBar)
         userProfileImageView = findViewById(R.id.imageUserProfile)
+
+        basketballCb = findViewById(R.id.checkBoxBasketball)
+        volleyballCb = findViewById(R.id.checkBoxVolleyball)
+        tennisCb = findViewById(R.id.checkBoxTennis)
+        golfCb = findViewById(R.id.checkBoxGolf)
+        footballCb = findViewById(R.id.checkBoxFootball)
+
+        basketballRatingBar = findViewById(R.id.basketballEditRowRatingBar)
+        basketballRatingBar.visibility = GONE
+
+        volleyballRatingBar = findViewById(R.id.volleyballEditRowRatingBar)
+        volleyballRatingBar.visibility = GONE
+
+        tennisRatingBar = findViewById(R.id.tennisEditRowRatingBar)
+        tennisRatingBar.visibility = GONE
+
+        golfRatingBar = findViewById(R.id.golfEditRowRatingBar)
+        golfRatingBar.visibility = GONE
+
+        footballRatingBar = findViewById(R.id.footballEditRowRatingBar)
+        footballRatingBar.visibility = GONE
 
         registerForContextMenu(userProfileImageView)
         userProfileImageView.setOnClickListener {
@@ -78,12 +119,12 @@ class EditProfileActivity: AppCompatActivity() {
         }
 
         // set onClick for Add new sports button
-        val addChip = findViewById<Chip>(R.id.chipAdd)
+        /* val addChip = findViewById<Chip>(R.id.chipAdd)
         addChip.setOnClickListener {
             val intent = Intent(this, SelectSportsActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
-        }
+        } */
     }
 
     override fun onResume() {
@@ -149,8 +190,75 @@ class EditProfileActivity: AppCompatActivity() {
 
                 phoneView.setText(user.phone)
                 locationView.setText(user.location)
-                ratingBarView.rating = user.rating
+                // ratingBarView.rating = user.rating
 
+                if (user.mySports.contains(basketball)) {
+                    basketballCb.isChecked = true
+                    basketballRatingBar.visibility = VISIBLE
+                    basketballRatingBar.rating = user.mySports[basketball]!!
+                }
+                if (user.mySports.contains(volleyball)) {
+                    volleyballCb.isChecked = true
+                    volleyballRatingBar.visibility = VISIBLE
+                    volleyballRatingBar.rating = user.mySports[volleyball]!!
+                }
+                if (user.mySports.contains(tennis)) {
+                    tennisCb.isChecked = true
+                    tennisRatingBar.visibility = VISIBLE
+                    tennisRatingBar.rating = user.mySports[tennis]!!
+                }
+                if (user.mySports.contains(golf)) {
+                    golfCb.isChecked = true
+                    golfRatingBar.visibility = VISIBLE
+                    golfRatingBar.rating = user.mySports[golf]!!
+                }
+                if (user.mySports.contains(football)) {
+                    footballCb.isChecked = true
+                    footballRatingBar.visibility = VISIBLE
+                    footballRatingBar.rating = user.mySports[football]!!
+                }
+
+                basketballCb.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        basketballRatingBar.visibility = VISIBLE
+                    } else {
+                        basketballRatingBar.visibility = GONE
+                    }
+                }
+
+                volleyballCb.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        volleyballRatingBar.visibility = VISIBLE
+                    } else {
+                        volleyballRatingBar.visibility = GONE
+                    }
+                }
+
+                tennisCb.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        tennisRatingBar.visibility = VISIBLE
+                    } else {
+                        tennisRatingBar.visibility = GONE
+                    }
+                }
+
+                golfCb.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        golfRatingBar.visibility = VISIBLE
+                    } else {
+                        golfRatingBar.visibility = GONE
+                    }
+                }
+
+                footballCb.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        footballRatingBar.visibility = VISIBLE
+                    } else {
+                        footballRatingBar.visibility = GONE
+                    }
+                }
+
+                /*
                 val tennisChip = findViewById<Chip>(R.id.chipTennis)
                 if (user.selectedSports.contains(Sport.TENNIS))
                     tennisChip.visibility = View.VISIBLE
@@ -174,7 +282,7 @@ class EditProfileActivity: AppCompatActivity() {
                 val golfChip = findViewById<Chip>(R.id.chipGolf)
                 if (user.selectedSports.contains(Sport.GOLF))
                     golfChip.visibility = View.VISIBLE
-                else golfChip.visibility = View.GONE
+                else golfChip.visibility = View.GONE */
 
                 val storageReference = Firebase.storage.reference.child("profileImages/${user.id}")
 
@@ -320,14 +428,59 @@ class EditProfileActivity: AppCompatActivity() {
                             gender = gender,
                             phone = phoneView.text.toString(),
                             location = locationView.text.toString(),
-                            rating = ratingBarView.rating,
+                            rating = 0.0f,
                             dateOfBirth = dateOfBirth ?: it.dateOfBirth,
                             selectedSports = it.selectedSports,
                             friends = it.friends,
                             recentlyInvited = it.recentlyInvited,
-                            alreadyShownTutorial = it.alreadyShownTutorial
+                            alreadyShownTutorial = it.alreadyShownTutorial,
+                            mySports = it.mySports
                         )
 
+                        val mySportsMap: MutableMap<String, Float> = user.mySports
+
+                        if (basketballCb.isChecked) {
+                            mySportsMap[basketball] = basketballRatingBar.rating
+                        } else {
+                            if (mySportsMap[basketball] != null) {
+                                mySportsMap.remove(basketball)
+                            }
+                        }
+                        if (volleyballCb.isChecked) {
+                            mySportsMap[volleyball] = volleyballRatingBar.rating
+                        } else {
+                            if (mySportsMap[volleyball] != null) {
+                                mySportsMap.remove(volleyball)
+                            }
+                        }
+                        if (tennisCb.isChecked) {
+                            mySportsMap[tennis] = tennisRatingBar.rating
+                        } else {
+                            if (mySportsMap[tennis] != null) {
+                                mySportsMap.remove(tennis)
+                            }
+                        }
+                        if (golfCb.isChecked) {
+                            mySportsMap[golf] = golfRatingBar.rating
+                        } else {
+                            if (mySportsMap[golf] != null) {
+                                mySportsMap.remove(golf)
+                            }
+                        }
+                        if (footballCb.isChecked) {
+                            mySportsMap[football] = footballRatingBar.rating
+                        } else {
+                            if (mySportsMap[football] != null) {
+                                mySportsMap.remove(football)
+                            }
+                        }
+
+                        val myAverageRating = mySportsMap.values.average().toFloat()
+
+                        user.mySports = mySportsMap
+                        if (mySportsMap.isNotEmpty()) {
+                            user.rating = myAverageRating
+                        }
                         viewModel.updateUserInfo(user)
                     }
                 }

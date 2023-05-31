@@ -216,32 +216,6 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/my_rating"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/black" />
-
-                    <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                        android:id="@+id/ratingBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:rating="3.5"
-                        android:numStars="5"
-                        style="@style/Widget.MaterialRatingBar.RatingBar"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="10dp" />
-
-                </LinearLayout>
-
                 <TextView
                     android:id="@+id/textMySports"
                     android:layout_width="match_parent"
@@ -251,77 +225,137 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold|italic" />
 
-                <HorizontalScrollView
+                <TableLayout
+                    android:id="@+id/tableMySports"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                    <!-- Riga 1 -->
+                    <TableRow
+                        android:id="@+id/editBasketballRow">
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipTennis"
+                        <CheckBox
+                            android:id="@+id/checkBoxBasketball"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:text="@string/sport_tennis"
-                            app:chipIcon="@drawable/tennis_ball"
-                            app:chipIconVisible="true" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipBasketball"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
                             android:text="@string/sport_basketball"
-                            app:chipIcon="@drawable/basketball_ball"
-                            app:chipIconVisible="true" />
+                            android:layout_marginStart="-6dp"
+                            android:drawableStart="@drawable/basketball_ball"
+                            android:drawablePadding="8dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipFootball"
+                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                            android:id="@+id/basketballEditRowRatingBar"
+                            style="@style/Widget.MaterialRatingBar.RatingBar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:text="@string/sport_football"
-                            app:chipIcon="@drawable/football_ball"
-                            app:chipIconVisible="true" />
+                            android:layout_marginTop="5dp"
+                            android:layout_marginStart="20dp"
+                            android:numStars="5"
+                            android:rating="0.5" />
+                    </TableRow>
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipVolleyball"
+                    <!-- Riga 2 -->
+                    <TableRow
+                        android:id="@+id/editVolleyballRow">
+
+                        <CheckBox
+                            android:id="@+id/checkBoxVolleyball"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
                             android:text="@string/sport_volleyball"
-                            app:chipIcon="@drawable/volleyball_ball"
-                            app:chipIconVisible="true" />
+                            android:layout_marginStart="-6dp"
+                            android:drawableStart="@drawable/volleyball_ball"
+                            android:drawablePadding="8dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipGolf"
+                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                            android:id="@+id/volleyballEditRowRatingBar"
+                            style="@style/Widget.MaterialRatingBar.RatingBar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginStart="20dp"
+                            android:numStars="5"
+                            android:rating="0.5" />
+                    </TableRow>
+
+                    <!-- Riga 3 -->
+                    <TableRow
+                        android:id="@+id/editTennisRow">
+
+                        <CheckBox
+                            android:id="@+id/checkBoxTennis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sport_tennis"
+                            android:layout_marginStart="-6dp"
+                            android:drawableStart="@drawable/tennis_ball"
+                            android:drawablePadding="8dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                            android:id="@+id/tennisEditRowRatingBar"
+                            style="@style/Widget.MaterialRatingBar.RatingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginStart="20dp"
+                            android:numStars="5"
+                            android:rating="0.5" />
+                    </TableRow>
+
+                    <!-- Riga 4 -->
+                    <TableRow
+                        android:id="@+id/editGolfRow">
+
+                        <CheckBox
+                            android:id="@+id/checkBoxGolf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="@string/sport_golf"
-                            app:chipIcon="@drawable/golf_ball"
-                            app:chipIconVisible="true" />
+                            android:layout_marginStart="-6dp"
+                            android:drawableStart="@drawable/golf_ball"
+                            android:drawablePadding="8dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipAdd"
+                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                            android:id="@+id/golfEditRowRatingBar"
+                            style="@style/Widget.MaterialRatingBar.RatingBar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:text="@string/add_sport"
-                            app:chipIcon="@drawable/plus_circle"
-                            app:chipIconVisible="true" />
+                            android:layout_marginTop="5dp"
+                            android:layout_marginStart="20dp"
+                            android:numStars="5"
+                            android:rating="0.5" />
+                    </TableRow>
 
-                    </LinearLayout>
-                </HorizontalScrollView>
+                    <!-- Riga 5 -->
+                    <TableRow
+                        android:id="@+id/editFootballRow">
+
+                        <CheckBox
+                            android:id="@+id/checkBoxFootball"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sport_football"
+                            android:layout_marginStart="-6dp"
+                            android:drawableStart="@drawable/football_ball"
+                            android:drawablePadding="8dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                            android:id="@+id/footballEditRowRatingBar"
+                            style="@style/Widget.MaterialRatingBar.RatingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginStart="20dp"
+                            android:numStars="5"
+                            android:rating="0.5" />
+                    </TableRow>
+
+                </TableLayout>
 
             </LinearLayout>
         </ScrollView>
@@ -336,7 +370,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/spinner_fragment" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

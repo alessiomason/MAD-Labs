@@ -10,6 +10,7 @@ import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
+import android.widget.TableRow
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +31,11 @@ import it.polito.mad.playgroundsreservations.MainActivity
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Gender
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.database.basketball
+import it.polito.mad.playgroundsreservations.database.football
+import it.polito.mad.playgroundsreservations.database.golf
+import it.polito.mad.playgroundsreservations.database.tennis
+import it.polito.mad.playgroundsreservations.database.volleyball
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.io.InputStream
 
@@ -43,6 +49,18 @@ class ShowProfileActivity: AppCompatActivity() {
     private lateinit var locationView: TextView
     private lateinit var ratingBarView: RatingBar
     private lateinit var userProfileImageView: ImageView
+
+    private lateinit var basketballRow: TableRow
+    private lateinit var volleyballRow: TableRow
+    private lateinit var tennisRow: TableRow
+    private lateinit var golfRow: TableRow
+    private lateinit var footballRow: TableRow
+
+    private lateinit var basketballRatingBar: RatingBar
+    private lateinit var volleyballRatingBar: RatingBar
+    private lateinit var tennisRatingBar: RatingBar
+    private lateinit var golfRatingBar: RatingBar
+    private lateinit var footballRatingBar: RatingBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +76,27 @@ class ShowProfileActivity: AppCompatActivity() {
         ratingBarView = findViewById(R.id.ratingBar)
         userProfileImageView = findViewById(R.id.imageUserProfile)
         ratingBarView.setIsIndicator(true)
+
+        basketballRow = findViewById(R.id.basketballRow)
+        volleyballRow = findViewById(R.id.volleyballRow)
+        tennisRow = findViewById(R.id.tennisRow)
+        golfRow = findViewById(R.id.golfRow)
+        footballRow = findViewById(R.id.footballRow)
+
+        basketballRatingBar = findViewById(R.id.basketballRowRatingBar)
+        basketballRatingBar.setIsIndicator(true)
+
+        volleyballRatingBar = findViewById(R.id.volleyballRowRatingBar)
+        volleyballRatingBar.setIsIndicator(true)
+
+        tennisRatingBar = findViewById(R.id.tennisRowRatingBar)
+        tennisRatingBar.setIsIndicator(true)
+
+        golfRatingBar = findViewById(R.id.golfRowRatingBar)
+        golfRatingBar.setIsIndicator(true)
+
+        footballRatingBar = findViewById(R.id.footballRowRatingBar)
+        footballRatingBar.setIsIndicator(true)
 
         findViewById<Button>(R.id.logout_button).setOnClickListener {
             FirebaseAuth.getInstance().signOut()
@@ -103,7 +142,48 @@ class ShowProfileActivity: AppCompatActivity() {
                 locationView.text = user.location
                 ratingBarView.rating = user.rating
 
-                val emptyChip = findViewById<Chip>(R.id.chipEmpty)
+                if (user.mySports.contains(basketball)) {
+                    basketballRow.visibility = VISIBLE
+                    basketballRatingBar.visibility = VISIBLE
+                    basketballRatingBar.rating = user.mySports[basketball]!!
+                } else {
+                    basketballRow.visibility = GONE
+                    basketballRatingBar.visibility = GONE
+                }
+                if (user.mySports.contains(volleyball)) {
+                    volleyballRow.visibility = VISIBLE
+                    volleyballRatingBar.visibility = VISIBLE
+                    volleyballRatingBar.rating = user.mySports[volleyball]!!
+                } else {
+                    volleyballRow.visibility = GONE
+                    volleyballRatingBar.visibility = GONE
+                }
+                if (user.mySports.contains(tennis)) {
+                    tennisRow.visibility = VISIBLE
+                    tennisRatingBar.visibility = VISIBLE
+                    tennisRatingBar.rating = user.mySports[tennis]!!
+                } else {
+                    tennisRow.visibility = GONE
+                    tennisRatingBar.visibility = GONE
+                }
+                if (user.mySports.contains(golf)) {
+                    golfRow.visibility = VISIBLE
+                    golfRatingBar.visibility = VISIBLE
+                    golfRatingBar.rating = user.mySports[golf]!!
+                } else {
+                    golfRow.visibility = GONE
+                    golfRatingBar.visibility = GONE
+                }
+                if (user.mySports.contains(football)) {
+                    footballRow.visibility = VISIBLE
+                    footballRatingBar.visibility = VISIBLE
+                    footballRatingBar.rating = user.mySports[football]!!
+                } else {
+                    footballRow.visibility = GONE
+                    footballRatingBar.visibility = GONE
+                }
+
+                /* val emptyChip = findViewById<Chip>(R.id.chipEmpty)
                 emptyChip.visibility = VISIBLE
 
                 val tennisChip = findViewById<Chip>(R.id.chipTennis)
@@ -134,7 +214,7 @@ class ShowProfileActivity: AppCompatActivity() {
                 if (user.selectedSports.contains(Sport.GOLF)) {
                     golfChip.visibility = VISIBLE
                     emptyChip.visibility = GONE
-                } else golfChip.visibility = GONE
+                } else golfChip.visibility = GONE */
 
                 val storageReference = Firebase.storage.reference.child("profileImages/${user.id}")
 

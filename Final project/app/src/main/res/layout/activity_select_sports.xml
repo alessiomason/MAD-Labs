@@ -28,7 +28,7 @@
                 android:layout_marginTop="20dp" />
 
             <CheckBox
-                android:id="@+id/checkBoxTennis"
+                android:id="@+id/checkBoxTennis1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -39,7 +39,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <CheckBox
-                android:id="@+id/checkBoxBasketball"
+                android:id="@+id/checkBoxBasketball1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -49,7 +49,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <CheckBox
-                android:id="@+id/checkBoxFootball"
+                android:id="@+id/checkBoxFootball1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -59,7 +59,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <CheckBox
-                android:id="@+id/checkBoxVolleyball"
+                android:id="@+id/checkBoxVolleyball1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -69,7 +69,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <CheckBox
-                android:id="@+id/checkBoxGolf"
+                android:id="@+id/checkBoxGolf1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
