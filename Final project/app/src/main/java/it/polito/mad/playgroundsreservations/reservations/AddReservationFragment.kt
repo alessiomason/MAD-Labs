@@ -200,7 +200,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                             }
                         }
 
-                        for (hour in 8..24) {
+                        for (hour in 8..23) {
                             hours.add("$hour:00")
                         }
                         hours.removeAll(arrayOccupated)
@@ -248,8 +248,16 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                                     Log.d("Ora totale: ", oraTotale.toString())
                                     esci = false
                                     i = 0
+                                    if (selectedItem == "23:00") {
+                                        i = 1
+                                        esci = true
+                                    }
                                     while (i != 4 && oraTotale < 24 && !esci) {
                                         i += 1
+                                        if ((position + i) >= hours.size) {
+                                            esci = true
+                                            break
+                                        }
                                         if (parent.getItemAtPosition((position + i)).toString()
                                                 .split(":")[0].toInt() == oraTotale + 1
                                         ) {
