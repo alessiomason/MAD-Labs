@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import it.polito.mad.playgroundsreservations.Global
@@ -433,5 +434,23 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         db.collection(usersCollectionPath)
             .document(user.id)
             .set(u)
+    }
+
+    fun befriend(friend: User) {
+        Log.d("FRIEND", "BEFRIEND")
+        val friendReference = db.collection(usersCollectionPath).document(friend.id)
+
+        db.collection(usersCollectionPath)
+            .document(Global.userId!!)
+            .update("friends", FieldValue.arrayUnion(friendReference))
+    }
+
+    fun unfriend(friend: User) {
+        Log.d("FRIEND", "UNFRIEND")
+        val friendReference = db.collection(usersCollectionPath).document(friend.id)
+
+        db.collection(usersCollectionPath)
+            .document(Global.userId!!)
+            .update("friends", FieldValue.arrayRemove(friendReference))
     }
 }

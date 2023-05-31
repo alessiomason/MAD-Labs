@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +29,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +47,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
@@ -55,18 +58,25 @@ import com.smarttoolfactory.ratingbar.RatingBar
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.database.User
+import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryVariantColor
 
 @Composable
-fun FriendBox(friend: User, sport: Sport) {
+fun FriendBox(
+    friend: User,
+    sport: Sport,
+    friends: MutableState<List<User>>
+) {
+    val viewModel: ViewModel = viewModel()
     val storageReference = Firebase.storage.reference.child("profileImages/${friend.id}")
     var imageUrl: Uri? by remember { mutableStateOf(null) }
     var showDefaultImage by remember { mutableStateOf(false) }
     var showAdditionalInfo by remember { mutableStateOf(false) }
-    
+    var isFriend by remember { mutableStateOf(friends.value.contains(friend)) }
+
     val sportIcon = when (sport) {
         Sport.TENNIS -> R.drawable.tennis_ball
         Sport.BASKETBALL -> R.drawable.basketball_ball
@@ -95,7 +105,9 @@ fun FriendBox(friend: User, sport: Sport) {
             Row(horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Row {
+                Row(
+                    modifier = Modifier.weight(1f)
+                ) {
                     Column(
                         modifier = Modifier
                             .padding(horizontal = 5.dp)
@@ -165,9 +177,11 @@ fun FriendBox(friend: User, sport: Sport) {
                                         )
                                     }
 
-                                    //Column {
-                                    //    Text(text = stringResource(id = sportName))
-                                    //}
+                                    /* Not enough space to show
+                                    Column {
+                                        Text(text = stringResource(id = sportName))
+                                    }
+                                    */
                                 }
                             }
 
@@ -188,8 +202,11 @@ fun FriendBox(friend: User, sport: Sport) {
                 }
 
                 Column(
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceEvenly
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(IntrinsicSize.Max),
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Button(
                         onClick = { /*TODO*/ },
@@ -198,16 +215,31 @@ fun FriendBox(friend: User, sport: Sport) {
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.add_friend),
-                            contentDescription = "Add person to friends"
+                            contentDescription = "Add person to friends",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .aspectRatio(1f)
                         )
                     }
 
                     OutlinedButton(
-                        onClick = { /*TODO*/ }
+                        onClick = {
+                            if (isFriend) {
+                                viewModel.unfriend(friend)
+                            } else {
+                                viewModel.befriend(friend)
+                            }
+                            isFriend = !isFriend
+                        }
                     ) {
+                        val starIcon = if (isFriend) R.drawable.filled_star else R.drawable.bordered_star
+
                         Image(
-                            painter = painterResource(id = R.drawable.bordered_star),
-                            contentDescription = "Add person to friends"
+                            painter = painterResource(id = starIcon),
+                            contentDescription = "Add person to friends",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .aspectRatio(1f)
                         )
                     }
                 }

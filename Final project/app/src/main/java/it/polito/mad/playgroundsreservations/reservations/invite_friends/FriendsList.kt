@@ -74,7 +74,7 @@ fun FriendsList(
 
         items(recentlyInvited.value.take(2)
         ) { friend ->
-            FriendBox(friend, sport)
+            FriendBox(friend, sport, friends)
         }
 
         if (recentlyInvited.value.size > 2) {
@@ -86,7 +86,7 @@ fun FriendsList(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    FriendBox(friend, sport)
+                    FriendBox(friend, sport, friends)
                 }
             }
         }
@@ -123,7 +123,7 @@ fun FriendsList(
         items(
             friends.value.take(2)
         ) { friend ->
-            FriendBox(friend, sport)
+            FriendBox(friend, sport, friends)
         }
 
         if (friends.value.size > 2) {
@@ -135,7 +135,7 @@ fun FriendsList(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    FriendBox(friend, sport)
+                    FriendBox(friend, sport, friends)
                 }
             }
         }

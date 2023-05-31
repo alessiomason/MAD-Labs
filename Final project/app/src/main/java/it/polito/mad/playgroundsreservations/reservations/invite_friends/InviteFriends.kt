@@ -115,7 +115,7 @@ fun InviteFriendsScreenContent(
                 items(users.value.filter { friend ->
                     friend.fullName.contains(searchQuery, ignoreCase = true)
                 }) { friend ->
-                    FriendBox(friend, reservation.value!!.sport)
+                    FriendBox(friend, reservation.value!!.sport, friends)
                 }
             }
         }
