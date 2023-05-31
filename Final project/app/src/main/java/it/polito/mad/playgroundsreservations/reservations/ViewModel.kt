@@ -3,6 +3,7 @@ package it.polito.mad.playgroundsreservations.reservations
 import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -315,6 +316,69 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
+    fun getUsers(usersState: MutableState<List<User>>) {
+        db.collection(usersCollectionPath)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read users.", error)
+                    return@addSnapshotListener
+                }
+
+                val list = mutableListOf<User>()
+                for (doc in value!!) {
+                    val u = doc.toUser()
+                    if (u.id != Global.userId)  // return all users except current
+                        list.add(u)
+                }
+
+                usersState.value = list
+            }
+    }
+
+    fun getUser(
+        userId: String,
+        userState: MutableState<User?>,
+        friendsState: MutableState<List<User>>,
+        recentlyInvitedState: MutableState<List<User>>
+    ) {
+        db.collection(usersCollectionPath)
+            .document(userId)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read user info.", error)
+                    userState.value = null
+                    return@addSnapshotListener
+                }
+
+                val u = value!!.toUser()
+                userState.value = u
+
+                val friendsList = mutableListOf<User>()
+                for ((i, doc) in u.friends.withIndex()) {
+                    doc.get()
+                        .addOnSuccessListener {
+                            friendsList.add(it.toUser())
+
+                            if (i == u.friends.size - 1) {  // last item has been added
+                                friendsState.value = friendsList
+                            }
+                        }
+                }
+
+                val recentlyInvitedList = mutableListOf<User>()
+                for ((i, doc) in u.recentlyInvited.withIndex()) {
+                    doc.get()
+                        .addOnSuccessListener {
+                            recentlyInvitedList.add(it.toUser())
+
+                            if (i == u.recentlyInvited.size - 1) {  // last item has been added
+                                recentlyInvitedState.value = recentlyInvitedList
+                            }
+                        }
+                }
+            }
+    }
+
     fun getUserInfo(userId: String): LiveData<User?> {
         val userInfo = MutableLiveData<User?>()
 
@@ -355,24 +419,5 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         db.collection(usersCollectionPath)
             .document(user.id)
             .set(u)
-    }
-
-    fun getUsers(usersState: MutableState<List<User>>) {
-        db.collection(usersCollectionPath)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Log.w(TAG, "Failed to read users.", error)
-                    return@addSnapshotListener
-                }
-
-                val list = mutableListOf<User>()
-                for (doc in value!!) {
-                    val u = doc.toUser()
-                    if (u.id != Global.userId)  // return all users except current
-                        list.add(u)
-                }
-
-                usersState.value = list
-            }
     }
 }

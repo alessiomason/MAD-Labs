@@ -323,6 +323,8 @@ class EditProfileActivity: AppCompatActivity() {
                             rating = ratingBarView.rating,
                             dateOfBirth = dateOfBirth ?: it.dateOfBirth,
                             selectedSports = it.selectedSports,
+                            friends = it.friends,
+                            recentlyInvited = it.recentlyInvited,
                             alreadyShownTutorial = it.alreadyShownTutorial
                         )
 

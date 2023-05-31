@@ -1,6 +1,7 @@
 package it.polito.mad.playgroundsreservations.database
 
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import java.time.LocalDate
 import java.time.Period
@@ -16,6 +17,8 @@ data class User(
     var location: String,
     var rating: Float = 0.0f,
     var selectedSports: MutableSet<Sport> = mutableSetOf(),
+    var friends: List<DocumentReference>,
+    var recentlyInvited: List<DocumentReference>,
     var alreadyShownTutorial: Boolean = false
 ) {
     val age: Int?
@@ -39,6 +42,8 @@ fun DocumentSnapshot.toUser(): User {
     val dateOfBirth = this.get("dateOfBirth", Timestamp::class.java)
     val rating = this.get("rating", Float::class.java)
     val selectedSportsStrings = this.get("selectedSports") as? List<String>
+    val friends = this.get("friends") as? List<DocumentReference> ?: emptyList()
+    val recentlyInvited = this.get("recentlyInvited") as? List<DocumentReference> ?: emptyList()
     val alreadyShownTutorial = this.get("alreadyShownTutorial", Boolean::class.java)
 
     val selectedSports = selectedSportsStrings?.map { it.toSport() }?.toMutableSet() ?: mutableSetOf()
@@ -53,6 +58,8 @@ fun DocumentSnapshot.toUser(): User {
         location ?: "",
         rating ?: (0.0).toFloat(),
         selectedSports,
+        friends,
+        recentlyInvited,
         alreadyShownTutorial ?: false
     )
 }

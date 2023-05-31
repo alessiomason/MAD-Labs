@@ -1,11 +1,7 @@
-package it.polito.mad.playgroundsreservations.reservations
+package it.polito.mad.playgroundsreservations.reservations.invite_friends
 
 import android.net.Uri
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -17,28 +13,20 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -56,11 +43,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
@@ -70,85 +52,13 @@ import com.google.firebase.storage.ktx.storage
 import com.smarttoolfactory.ratingbar.RatingBar
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.User
-import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryVariantColor
 
-class InviteFriends: Fragment() {
-    private val args by navArgs<InviteFriendsArgs>()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // ACTIVITY TITLE
-        activity?.title = activity?.resources?.getString(R.string.invite_friends)
-
-        return ComposeView(requireContext()).apply {
-            setContent {
-                PlaygroundsReservationsTheme {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        InviteFriendsScreen("", findNavController())
-                    }
-                }
-            }
-        }
-    }
-}
-
 @Composable
-fun InviteFriendsScreen(reservationId: String, navController: NavController) {
-    val viewModel: ViewModel = viewModel()
-
-    val users: MutableState<List<User>> = remember { mutableStateOf(emptyList()) }
-    viewModel.getUsers(users)
-
-    if (users.value.isEmpty())
-        MyLoadingRatingPlaygrounds()
-    else
-        InviteFriendsScreenContent(users, reservationId, navController)
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun InviteFriendsScreenContent(
-    users: MutableState<List<User>>,
-    reservationId: String,
-    navController: NavController
-) {
-    var searchQuery by remember { mutableStateOf("v") }
-
-    Column(Modifier.fillMaxWidth()) {
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
-            maxLines = 1,
-            label = { Text("Search") }
-        )
-
-        if (searchQuery == "") {
-            Text(text = "Start typing")
-        } else {
-            LazyColumn(Modifier.fillMaxWidth()) {
-                items(users.value.filter { friend ->
-                    friend.fullName.contains(searchQuery, ignoreCase = true)
-                }) { friend ->
-                    Friend(friend)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun Friend(friend: User) {
+fun FriendBox(friend: User) {
     val storageReference = Firebase.storage.reference.child("profileImages/${friend.id}")
     var imageUrl: Uri? by remember { mutableStateOf(null) }
     var showDefaultImage by remember { mutableStateOf(false) }
