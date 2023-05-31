@@ -25,15 +25,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import it.polito.mad.playgroundsreservations.database.Reservation
+import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
 
 @Composable
 fun FriendsList(
+    reservation: MutableState<Reservation?>,
     user: MutableState<User?>,
     friends: MutableState<List<User>>,
-    recentlyInvited: MutableState<List<User>>
+    recentlyInvited: MutableState<List<User>>,
+    sport: Sport
 ) {
     var showAllRecentlyInvited by remember { mutableStateOf(false) }
     var showAllFriends by remember { mutableStateOf(false) }
@@ -70,7 +74,7 @@ fun FriendsList(
 
         items(recentlyInvited.value.take(2)
         ) { friend ->
-            FriendBox(friend)
+            FriendBox(friend, sport)
         }
 
         if (recentlyInvited.value.size > 2) {
@@ -82,7 +86,7 @@ fun FriendsList(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    FriendBox(friend)
+                    FriendBox(friend, sport)
                 }
             }
         }
@@ -119,7 +123,7 @@ fun FriendsList(
         items(
             friends.value.take(2)
         ) { friend ->
-            FriendBox(friend)
+            FriendBox(friend, sport)
         }
 
         if (friends.value.size > 2) {
@@ -131,7 +135,7 @@ fun FriendsList(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    FriendBox(friend)
+                    FriendBox(friend, sport)
                 }
             }
         }

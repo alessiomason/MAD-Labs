@@ -98,6 +98,20 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             .document(reservationId)
     }
 
+    fun getReservation(reservationId: String, reservationState: MutableState<Reservation?>) {
+        db.collection(reservationsCollectionPath)
+            .document(reservationId)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read playground.", error)
+                    reservationState.value = null
+                    return@addSnapshotListener
+                }
+
+                reservationState.value = value!!.toReservation()
+            }
+    }
+
     fun getReservedPlaygrounds(sport: Sport): LiveData<Map<Reservation, Playground>> {
         val reservedPlaygrounds = MutableLiveData<Map<Reservation, Playground>>()
 

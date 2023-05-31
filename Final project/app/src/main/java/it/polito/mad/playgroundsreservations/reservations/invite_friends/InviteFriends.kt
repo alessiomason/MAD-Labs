@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -30,6 +32,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.reservations.MyLoadingRatingPlaygrounds
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
@@ -53,7 +56,7 @@ class InviteFriends: Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        InviteFriendsScreen("", findNavController())
+                        InviteFriendsScreen(args.reservationId, findNavController())
                     }
                 }
             }
@@ -65,35 +68,40 @@ class InviteFriends: Fragment() {
 fun InviteFriendsScreen(reservationId: String, navController: NavController) {
     val viewModel: ViewModel = viewModel()
 
-    val user: MutableState<User?> = remember { mutableStateOf(null) }
+    val reservation = remember { mutableStateOf<Reservation?>(null) }
+    val user = remember { mutableStateOf<User?>(null) }
     val friends = remember { mutableStateOf(emptyList<User>()) }
     val recentlyInvited = remember { mutableStateOf(emptyList<User>()) }
     val users = remember { mutableStateOf(emptyList<User>()) }
 
+    viewModel.getReservation(reservationId, reservation)
     viewModel.getUser(Global.userId!!, user, friends, recentlyInvited)
     viewModel.getUsers(users)
 
-    if (user.value == null || friends.value.isEmpty() || recentlyInvited.value.isEmpty() || users.value.isEmpty())
+    if (reservation.value == null || user.value == null || friends.value.isEmpty() || recentlyInvited.value.isEmpty() || users.value.isEmpty())
         MyLoadingRatingPlaygrounds()
     else
-        InviteFriendsScreenContent(user, friends, recentlyInvited, users, reservationId, navController)
+        InviteFriendsScreenContent(reservation, user, friends, recentlyInvited, users, navController)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InviteFriendsScreenContent(
+    reservation: MutableState<Reservation?>,
     user: MutableState<User?>,
     friends: MutableState<List<User>>,
     recentlyInvited: MutableState<List<User>>,
     users: MutableState<List<User>>,
-    reservationId: String,
     navController: NavController
 ) {
     var searchQuery by remember { mutableStateOf("") }
 
     Column(Modifier.fillMaxWidth()) {
         TextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 5.dp)
+            ,
             value = searchQuery,
             onValueChange = { searchQuery = it },
             maxLines = 1,
@@ -101,13 +109,13 @@ fun InviteFriendsScreenContent(
         )
 
         if (searchQuery == "") {
-            FriendsList(user, friends, recentlyInvited)
+            FriendsList(reservation, user, friends, recentlyInvited, reservation.value!!.sport)
         } else {
             LazyColumn(Modifier.fillMaxWidth()) {
                 items(users.value.filter { friend ->
                     friend.fullName.contains(searchQuery, ignoreCase = true)
                 }) { friend ->
-                    FriendBox(friend)
+                    FriendBox(friend, reservation.value!!.sport)
                 }
             }
         }

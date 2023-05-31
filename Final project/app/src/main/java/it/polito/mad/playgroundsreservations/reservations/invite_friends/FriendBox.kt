@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -51,6 +53,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.smarttoolfactory.ratingbar.RatingBar
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
@@ -58,11 +61,19 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColo
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryVariantColor
 
 @Composable
-fun FriendBox(friend: User) {
+fun FriendBox(friend: User, sport: Sport) {
     val storageReference = Firebase.storage.reference.child("profileImages/${friend.id}")
     var imageUrl: Uri? by remember { mutableStateOf(null) }
     var showDefaultImage by remember { mutableStateOf(false) }
     var showAdditionalInfo by remember { mutableStateOf(false) }
+    
+    val sportIcon = when (sport) {
+        Sport.TENNIS -> R.drawable.tennis_ball
+        Sport.BASKETBALL -> R.drawable.basketball_ball
+        Sport.FOOTBALL -> R.drawable.football_ball
+        Sport.VOLLEYBALL -> R.drawable.volleyball_ball
+        Sport.GOLF -> R.drawable.golf_ball
+    }
 
     storageReference.downloadUrl.addOnSuccessListener {
         imageUrl = it
@@ -81,94 +92,97 @@ fun FriendBox(friend: User) {
         Column(
             modifier = Modifier.padding(10.dp)
         ) {
-            Row(modifier = Modifier
-                .height(IntrinsicSize.Max)
+            Row(horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier
-                    .padding(horizontal = 5.dp)
-                    .weight(1f)) {
-                    if (imageUrl != null) {
-                        SubcomposeAsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(imageUrl)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = stringResource(R.string.age),
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(1f)
-                                .clip(CircleShape)
-                        ) {
-                            val state = painter.state
-                            if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                                CircularProgressIndicator()
-                            } else {
-                                SubcomposeAsyncImageContent()
-                            }
-                        }
-                    } else if (showDefaultImage) {
-                        Image(
-                            painter = painterResource(id = R.drawable.user_profile),
-                            contentDescription = stringResource(id = R.string.age),
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(1f)
-                                .clip(CircleShape)
-                        )
-                    } else {
-                        CircularProgressIndicator()
-                    }
-                }
-
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp)
-                        .width(IntrinsicSize.Max),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Row {
-                        Text(
-                            text = friend.fullName,
-                            color = PrimaryVariantColor,
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    }
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                Row {
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 5.dp)
                     ) {
-                        Column {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(5.dp)
+                        if (imageUrl != null) {
+                            SubcomposeAsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(imageUrl)
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = "Profile Image",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .width(75.dp)
+                                    .aspectRatio(1f)
+                                    .clip(CircleShape)
                             ) {
-                                Column {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.tennis_ball),
-                                        contentDescription = ""
-                                    )
-                                }
-
-                                Column {
-                                    Text(text = "Tennis")
+                                val state = painter.state
+                                if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                                    CircularProgressIndicator()
+                                } else {
+                                    SubcomposeAsyncImageContent()
                                 }
                             }
+                        } else if (showDefaultImage) {
+                            Image(
+                                painter = painterResource(id = R.drawable.user_profile),
+                                contentDescription = "Profile image",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .width(75.dp)
+                                    .aspectRatio(1f)
+                                    .clip(CircleShape)
+                            )
+                        } else {
+                            CircularProgressIndicator()
+                        }
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp)
+                            .width(IntrinsicSize.Max),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Row {
+                            Text(
+                                text = friend.fullName,
+                                color = PrimaryVariantColor,
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.titleLarge
+                            )
                         }
 
-                        Column {
-                            RatingBar(
-                                rating = friend.rating,
-                                space = 2.dp,
-                                imageVectorEmpty = ImageVector.vectorResource(id = R.drawable.bordered_star),
-                                imageVectorFFilled = ImageVector.vectorResource(id = R.drawable.filled_star),
-                                tintEmpty = SecondaryVariantColor,
-                                tintFilled = SecondaryVariantColor,
-                                itemSize = 24.dp,
-                                gestureEnabled = false
-                            )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                                ) {
+                                    Column {
+                                        Image(
+                                            painter = painterResource(id = sportIcon),
+                                            contentDescription = "Sport icon"
+                                        )
+                                    }
+
+                                    //Column {
+                                    //    Text(text = stringResource(id = sportName))
+                                    //}
+                                }
+                            }
+
+                            Column {
+                                RatingBar(
+                                    rating = friend.rating,
+                                    space = 2.dp,
+                                    imageVectorEmpty = ImageVector.vectorResource(id = R.drawable.bordered_star),
+                                    imageVectorFFilled = ImageVector.vectorResource(id = R.drawable.filled_star),
+                                    tintEmpty = SecondaryVariantColor,
+                                    tintFilled = SecondaryVariantColor,
+                                    itemSize = 24.dp,
+                                    gestureEnabled = false
+                                )
+                            }
                         }
                     }
                 }
