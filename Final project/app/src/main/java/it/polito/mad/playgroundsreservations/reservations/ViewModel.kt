@@ -91,16 +91,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-    fun getUserReference(userId: String): DocumentReference {
-        return db.collection(usersCollectionPath)
-            .document(userId)
-    }
-
-    fun getPlaygroundReference(playgroundId: String): DocumentReference {
-        return db.collection(playgroundsCollectionPath)
-            .document(playgroundId)
-    }
-
+    // RESERVATIONS FUNCTIONS
     fun getReservationReference(reservationId: String): DocumentReference {
         return db.collection(reservationsCollectionPath)
             .document(reservationId)
@@ -165,44 +156,6 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         return userReservations
     }
 
-    fun getPlayground(playgroundId: String, playgroundState: MutableState<Playground?>) {
-        db.collection(playgroundsCollectionPath)
-            .document(playgroundId)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Log.w(TAG, "Failed to read playground.", error)
-                    playgroundState.value = null
-                    return@addSnapshotListener
-                }
-
-                playgroundState.value = value!!.toPlayground()
-            }
-    }
-
-    fun getRatingByReservation(reservationId: String): LiveData<PlaygroundRating?> {
-        val playgroundRating = MutableLiveData<PlaygroundRating?>()
-
-        val reservationReference = db.collection(reservationsCollectionPath)
-            .document(reservationId)
-
-        db.collection(playgroundsRatingsCollectionPath)
-            .whereEqualTo("reservationId", reservationReference)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Log.w(TAG, "Failed to read user reservations.", error)
-                    playgroundRating.value = null
-                    return@addSnapshotListener
-                }
-
-                if (value?.isEmpty == false)
-                    playgroundRating.value = value.first().toPlaygroundRating()
-                else
-                    playgroundRating.value = null
-            }
-
-        return playgroundRating
-    }
-
     fun saveReservation(reservation: Reservation) {
         val r = hashMapOf(
             "userId" to reservation.userId,
@@ -238,6 +191,51 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             .delete()
     }
 
+    // PLAYGROUNDS FUNCTIONS
+    fun getPlaygroundReference(playgroundId: String): DocumentReference {
+        return db.collection(playgroundsCollectionPath)
+            .document(playgroundId)
+    }
+
+    fun getPlayground(playgroundId: String, playgroundState: MutableState<Playground?>) {
+        db.collection(playgroundsCollectionPath)
+            .document(playgroundId)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read playground.", error)
+                    playgroundState.value = null
+                    return@addSnapshotListener
+                }
+
+                playgroundState.value = value!!.toPlayground()
+            }
+    }
+
+    // PLAYGROUNDS RATING FUNCTIONS
+    fun getRatingByReservation(reservationId: String): LiveData<PlaygroundRating?> {
+        val playgroundRating = MutableLiveData<PlaygroundRating?>()
+
+        val reservationReference = db.collection(reservationsCollectionPath)
+            .document(reservationId)
+
+        db.collection(playgroundsRatingsCollectionPath)
+            .whereEqualTo("reservationId", reservationReference)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read user reservations.", error)
+                    playgroundRating.value = null
+                    return@addSnapshotListener
+                }
+
+                if (value?.isEmpty == false)
+                    playgroundRating.value = value.first().toPlaygroundRating()
+                else
+                    playgroundRating.value = null
+            }
+
+        return playgroundRating
+    }
+
     fun savePlaygroundRating(playgroundRating: PlaygroundRating) {
         val pr = hashMapOf(
             "playgroundId" to playgroundRating.playgroundId,
@@ -270,23 +268,6 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-    fun createUserIfNotExists(id: String, displayName: String?) {
-        db.collection(usersCollectionPath)
-            .document(id)
-            .get()
-            .addOnSuccessListener {
-                if (!it.exists()) {
-                    val newUser = hashMapOf(
-                        "fullName" to (displayName ?: "")
-                    )
-
-                    db.collection(usersCollectionPath)
-                        .document(id)
-                        .set(newUser)
-                }
-            }
-    }
-
     fun getRatingsByPlaygroundIdFragment(playgroundId: String): LiveData<List<PlaygroundRating?>> {
 
         val ratingPlaygrounds = MutableLiveData<List<PlaygroundRating?>>()
@@ -309,6 +290,29 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 ratingPlaygrounds.value = listOfRatings
             }
         return ratingPlaygrounds
+    }
+
+    // USER FUNCTIONS
+    fun getUserReference(userId: String): DocumentReference {
+        return db.collection(usersCollectionPath)
+            .document(userId)
+    }
+
+    fun createUserIfNotExists(id: String, displayName: String?) {
+        db.collection(usersCollectionPath)
+            .document(id)
+            .get()
+            .addOnSuccessListener {
+                if (!it.exists()) {
+                    val newUser = hashMapOf(
+                        "fullName" to (displayName ?: "")
+                    )
+
+                    db.collection(usersCollectionPath)
+                        .document(id)
+                        .set(newUser)
+                }
+            }
     }
 
     fun getUserInfo(userId: String): LiveData<User?> {
