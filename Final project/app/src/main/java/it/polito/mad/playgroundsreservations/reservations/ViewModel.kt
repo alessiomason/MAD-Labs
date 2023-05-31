@@ -248,7 +248,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         db.collection(playgroundsRatingsCollectionPath).add(pr)
     }
 
-    fun getRatingsByPlaygroundId(playgroundId: String,ratingsState: MutableState<List<PlaygroundRating>>) {
+    fun getRatingsByPlaygroundId(playgroundId: String, ratingsState: MutableState<List<PlaygroundRating>>) {
         val playgroundReference = db.collection(playgroundsCollectionPath)
             .document(playgroundId)
 
@@ -355,5 +355,24 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         db.collection(usersCollectionPath)
             .document(user.id)
             .set(u)
+    }
+
+    fun getUsers(usersState: MutableState<List<User>>) {
+        db.collection(usersCollectionPath)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read users.", error)
+                    return@addSnapshotListener
+                }
+
+                val list = mutableListOf<User>()
+                for (doc in value!!) {
+                    val u = doc.toUser()
+                    if (u.id != Global.userId)  // return all users except current
+                        list.add(u)
+                }
+
+                usersState.value = list
+            }
     }
 }

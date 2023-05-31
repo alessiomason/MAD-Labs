@@ -97,6 +97,7 @@
     <string name="no_ratings_yet">NO RATINGS HAVE BEEN LEFT YET</string>
     <string name="ratings_playground">Ratings</string>
     <string name="loading">Loading…</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- INVITE FRIENDS -->
+    <string name="invite_friends">Invite friends</string>
 </resources>

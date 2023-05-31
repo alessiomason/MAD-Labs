@@ -197,6 +197,7 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: String
         TextField(
             value = text,
             onValueChange = { text = it },
+            maxLines = 5,
             label = { Text(text = stringResource(id = R.string.optional_description_rating), color = colorResource(id = R.color.primary)) },
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
         )

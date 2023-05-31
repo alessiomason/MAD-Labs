@@ -47,6 +47,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel by viewModels<ViewModel>()
+        val navController = view.findNavController()
         val reservations = viewModel.getUserReservations(Global.userId!!)
         val playgrounds = viewModel.playgrounds
 
@@ -85,7 +86,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
 
                 val btnRateCourt = view.findViewById<Button>(R.id.btnRateCourt)
                 val myReviewLayout = view.findViewById<LinearLayout>(R.id.myReviewLayout)
-                // myReviewLayout.visibility = GONE
+
                 // display rate court button only for past reservations and if not already rated
                 val previousRatingForReservation = viewModel.getRatingByReservation(myReservation.id)
 
@@ -95,7 +96,6 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     ) {
                         btnRateCourt.visibility = VISIBLE
                         btnRateCourt.setOnClickListener {
-                            val navController = view.findNavController()
                             val action = ShowReservationFragmentDirections.actionShowReservationFragmentToRatingPlaygrounds(myReservation.playgroundId.id, myReservation.id)
                             navController.navigate(action)
                         }
@@ -160,6 +160,11 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 }
             }
         }
+
+        view.findViewById<Button>(R.id.invite_friends_button).setOnClickListener {
+            val action = ShowReservationFragmentDirections.actionShowReservationFragmentToInviteFriends(myReservation.id)
+            navController.navigate(action)
+        }
      }
 
    @Deprecated("Deprecated in Java")
@@ -181,7 +186,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
 
     @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController= view?.findNavController()
+        val navController = view?.findNavController()
         var action=ShowReservationFragmentDirections.actionShowReservationFragmentToCalendarFragment()
         // Handle item selection
         return when (item.itemId) {
