@@ -57,17 +57,19 @@ fun FriendsList(
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
 
-                TextButton(
-                    onClick = { showAllRecentlyInvited = !showAllRecentlyInvited },
-                    colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.padding(horizontal = 10.dp)
-                ) {
-                    Text(
-                        text = if (showAllRecentlyInvited) "See less" else "See all",
-                        color = PrimaryVariantColor,
-                        textAlign = TextAlign.Center
-                    )
+                if (recentlyInvited.value.size > 2) {
+                    TextButton(
+                        onClick = { showAllRecentlyInvited = !showAllRecentlyInvited },
+                        colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    ) {
+                        Text(
+                            text = if (showAllRecentlyInvited) "See less" else "See all",
+                            color = PrimaryVariantColor,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
@@ -105,17 +107,19 @@ fun FriendsList(
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
 
-                TextButton(
-                    onClick = { showAllFriends = !showAllFriends },
-                    colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.padding(horizontal = 10.dp)
-                ) {
-                    Text(
-                        text = if (showAllFriends) "See less" else "See all",
-                        color = PrimaryVariantColor,
-                        textAlign = TextAlign.Center
-                    )
+                if (friends.value.size > 2) {
+                    TextButton(
+                        onClick = { showAllFriends = !showAllFriends },
+                        colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    ) {
+                        Text(
+                            text = if (showAllFriends) "See less" else "See all",
+                            color = PrimaryVariantColor,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
