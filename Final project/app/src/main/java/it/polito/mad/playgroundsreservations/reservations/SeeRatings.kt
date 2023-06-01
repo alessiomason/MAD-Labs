@@ -24,11 +24,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,7 +61,7 @@ import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 
-class SeeRatings : Fragment() {
+class SeeRatings: Fragment() {
     private val args by navArgs<SeeRatingsArgs>()
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,21 +96,24 @@ fun SeeRatingsScreen(playgroundId: String, navController: NavController) {
     val viewModel: ViewModel = viewModel()
 
     val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
-    val ratingsList = remember { mutableStateOf(listOf<PlaygroundRating>()) }
-    // Get all ratings of the playground
-    viewModel.getRatingsByPlaygroundId(playgroundId, ratingsList)
-    // Get all info about that playground
-    viewModel.getPlayground(playgroundId, playground)
+    val ratingsList = remember { mutableStateListOf<PlaygroundRating>() }
+
+    LaunchedEffect(true) {
+        // Get all ratings of the playground
+        viewModel.getRatingsByPlaygroundId(playgroundId, ratingsList)
+        // Get all info about that playground
+        viewModel.getPlayground(playgroundId, playground)
+    }
 
 
-    if (playground.value == null && ratingsList.value.isEmpty())
+    if (playground.value == null && ratingsList.isEmpty())
         MyLoadingSeeRatings()
     else
         SeeRatingsScreenContent(playground = playground.value!!, ratingsList)
 }
 
 @Composable
-fun SeeRatingsScreenContent(playground: Playground, ratingList: MutableState<List<PlaygroundRating>>) {
+fun SeeRatingsScreenContent(playground: Playground, ratingList: SnapshotStateList<PlaygroundRating>) {
 
     var iconId by remember { mutableStateOf(0) }
     var sportNameId by remember { mutableStateOf(0) }
@@ -174,7 +180,7 @@ fun SeeRatingsScreenContent(playground: Playground, ratingList: MutableState<Lis
         }
         Spacer(modifier = Modifier.height(8.dp))
         LazyColumn{
-            items(ratingList.value){item: PlaygroundRating ->
+            items(ratingList) {item ->
                 ListItemComponent(item = item)
             }
         }

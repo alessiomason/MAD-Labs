@@ -28,6 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -95,7 +96,10 @@ fun RatingPlaygroundsScreen(playgroundId: String, reservationId: String, navCont
     val viewModel: ViewModel = viewModel()
 
     val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
-    viewModel.getPlayground(playgroundId, playground)
+
+    LaunchedEffect(true) {
+        viewModel.getPlayground(playgroundId, playground)
+    }
 
     if (playground.value == null)
         MyLoadingRatingPlaygrounds()
@@ -199,7 +203,9 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: String
             onValueChange = { text = it },
             maxLines = 5,
             label = { Text(text = stringResource(id = R.string.optional_description_rating), color = colorResource(id = R.color.primary)) },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
         )
         Button(
             onClick = {

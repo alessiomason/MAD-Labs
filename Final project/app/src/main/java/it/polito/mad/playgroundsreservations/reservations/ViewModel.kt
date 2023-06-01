@@ -264,7 +264,9 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         db.collection(playgroundsRatingsCollectionPath).add(pr)
     }
 
-    fun getRatingsByPlaygroundId(playgroundId: String, ratingsState: MutableState<List<PlaygroundRating>>) {
+    fun getRatingsByPlaygroundId(playgroundId: String, ratingsState: SnapshotStateList<PlaygroundRating>) {
+        ratingsState.clear()
+
         val playgroundReference = db.collection(playgroundsCollectionPath)
             .document(playgroundId)
 
@@ -276,11 +278,8 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                     return@addSnapshotListener
                 }
 
-                val list = mutableListOf<PlaygroundRating>()
                 for(doc in value!!)
-                    list.add(doc.toPlaygroundRating())
-
-                ratingsState.value = list
+                    ratingsState.add(doc.toPlaygroundRating())
             }
     }
 

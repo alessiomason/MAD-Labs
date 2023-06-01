@@ -84,8 +84,7 @@ fun InviteFriendsScreen(reservationId: String, navController: NavController) {
         viewModel.getUsers(users)
     }
 
-    if (stillLoading &&     // prevents from going back into loading
-        (
+    if (stillLoading && (   // prevents from going back into loading
             reservation.value == null ||
             user.value == null ||
             (user.value?.friends?.size != null && user.value!!.friends.isNotEmpty() && friends.isEmpty()) ||
