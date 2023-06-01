@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -18,7 +19,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
@@ -30,7 +30,7 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryVariantColor
 
 @Composable
-fun ProfileImage(friendId: String, size: Dp) {
+fun ProfileImage(friendId: String, small: Boolean) {
     val storageReference = Firebase.storage.reference.child("profileImages/${friendId}")
     var imageUrl: Uri? by remember { mutableStateOf(null) }
     var showDefaultImage by remember { mutableStateOf(false) }
@@ -42,6 +42,12 @@ fun ProfileImage(friendId: String, size: Dp) {
         Log.d("IMAGE URL", it.message ?: "")
     }
 
+    val loadingModifier = if (small) {
+        Modifier.size(25.dp).padding(5.dp)
+    } else {
+        Modifier.padding(15.dp)
+    }
+
     if (imageUrl != null) {
         SubcomposeAsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -51,7 +57,7 @@ fun ProfileImage(friendId: String, size: Dp) {
             contentDescription = "Profile Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .width(size)
+                .width(if (small) 25.dp else 75.dp)
                 .aspectRatio(1f)
                 .clip(CircleShape)
         ) {
@@ -59,7 +65,8 @@ fun ProfileImage(friendId: String, size: Dp) {
             if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
                 CircularProgressIndicator(
                     color = SecondaryVariantColor,
-                    modifier = Modifier.padding(size / 5)
+                    strokeWidth = if (small) 2.dp else 4.dp,
+                    modifier = loadingModifier
                 )
             } else {
                 SubcomposeAsyncImageContent()
@@ -71,14 +78,14 @@ fun ProfileImage(friendId: String, size: Dp) {
             contentDescription = "Profile image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .width(size)
+                .width(if (small) 25.dp else 75.dp)
                 .aspectRatio(1f)
                 .clip(CircleShape)
         )
     } else {
         CircularProgressIndicator(
             color = SecondaryVariantColor,
-            modifier = Modifier.padding(size / 5)
+            modifier = loadingModifier
         )
     }
 }

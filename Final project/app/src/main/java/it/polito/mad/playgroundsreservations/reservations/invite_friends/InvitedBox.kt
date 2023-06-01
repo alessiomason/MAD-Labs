@@ -1,7 +1,5 @@
 package it.polito.mad.playgroundsreservations.reservations.invite_friends
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -17,13 +15,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SelectableChipColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import it.polito.mad.playgroundsreservations.database.Reservation
@@ -31,9 +27,6 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryTransparentColor
-import it.polito.mad.playgroundsreservations.reservations.ui.theme.TertiaryColor
-import it.polito.mad.playgroundsreservations.reservations.ui.theme.TertiaryTransparentColor
-import it.polito.mad.playgroundsreservations.reservations.ui.theme.TertiaryVariantColor
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -72,7 +65,7 @@ fun InvitedBox(reservation: MutableState<Reservation?>) {
                         modifier = Modifier
                     ) },
                     leadingIcon = {
-                        ProfileImage(friendId = it.userId, size = 25.dp)
+                        ProfileImage(friendId = it.userId, small = true)
                     },
                     trailingIcon = {
                         IconButton(
