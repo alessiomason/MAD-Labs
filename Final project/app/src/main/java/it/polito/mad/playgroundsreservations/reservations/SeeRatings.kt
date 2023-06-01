@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -48,7 +49,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -60,6 +60,7 @@ import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
+import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
 
 class SeeRatings: Fragment() {
     private val args by navArgs<SeeRatingsArgs>()
@@ -107,7 +108,7 @@ fun SeeRatingsScreen(playgroundId: String, navController: NavController) {
 
 
     if (playground.value == null && ratingsList.isEmpty())
-        MyLoadingSeeRatings()
+        LoadingScreen()
     else
         SeeRatingsScreenContent(playground = playground.value!!, ratingsList)
 }
@@ -242,13 +243,4 @@ fun ListItemComponent(item: PlaygroundRating) {
             )
         // }
     }
-}
-
-@Composable
-fun MyLoadingSeeRatings() {
-    AndroidView(
-        factory = { context ->
-            LayoutInflater.from(context).inflate(R.layout.spinner_fragment, null)
-        }
-    )
 }

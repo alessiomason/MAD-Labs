@@ -102,7 +102,7 @@ fun RatingPlaygroundsScreen(playgroundId: String, reservationId: String, navCont
     }
 
     if (playground.value == null)
-        MyLoadingRatingPlaygrounds()
+        LoadingScreen()
     else
         RatingPlaygroundsScreenContent(playground = playground.value!!, reservationId = reservationId, navController)
 }
@@ -237,13 +237,4 @@ fun RatingPlaygroundsScreenContent(playground: Playground, reservationId: String
             modifier = Modifier.padding(top = 8.dp)
         ) */
     }
-}
-
-@Composable
-fun MyLoadingRatingPlaygrounds() {
-    AndroidView(
-        factory = { context ->
-            LayoutInflater.from(context).inflate(R.layout.spinner_fragment, null)
-        }
-    )
 }

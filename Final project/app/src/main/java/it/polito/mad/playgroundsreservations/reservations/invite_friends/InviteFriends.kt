@@ -37,7 +37,7 @@ import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.User
-import it.polito.mad.playgroundsreservations.reservations.MyLoadingRatingPlaygrounds
+import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 
@@ -92,7 +92,7 @@ fun InviteFriendsScreen(reservationId: String, navController: NavController) {
             users.value.isEmpty()
         )
     )
-        MyLoadingRatingPlaygrounds()
+        LoadingScreen()
     else {
         stillLoading = false
         InviteFriendsScreenContent(reservation, user, friends, recentlyInvited, users, navController)
