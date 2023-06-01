@@ -102,7 +102,7 @@ fun InviteFriendsScreen(reservationId: String, navController: NavController) {
     else {
         stillLoading = false
         InviteFriendsScreenContent(
-            reservation =  reservation,
+            reservation = reservation,
             user = user,
             friends = friends,
             recentlyInvited = recentlyInvited,
@@ -159,9 +159,10 @@ fun InviteFriendsScreenContent(
             )
         } else {
             LazyColumn(Modifier.fillMaxWidth()) {
-                items(users.filter { friend ->
-                    friend.fullName.contains(searchQuery, ignoreCase = true)
-                }) { friend ->
+                items(
+                    items = users.filter { friend ->
+                        friend.fullName.contains(searchQuery, ignoreCase = true)
+                    }, key = { it.id }) { friend ->
                     FriendBox(
                         friend = friend,
                         sport = reservation.value!!.sport,

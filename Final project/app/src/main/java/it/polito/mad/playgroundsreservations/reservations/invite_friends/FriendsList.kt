@@ -44,7 +44,7 @@ fun FriendsList(
     var showAllFriends by remember { mutableStateOf(false) }
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        item {
+        item(key = "recently_invited_title") {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -75,7 +75,9 @@ fun FriendsList(
             }
         }
 
-        items(recentlyInvited.take(2)
+        items(
+            items = recentlyInvited.take(2),
+            key = { "recently_invited_${it.id}" }
         ) { friend ->
             FriendBox(
                 friend = friend,
@@ -87,7 +89,8 @@ fun FriendsList(
 
         if (recentlyInvited.size > 2) {
             items(
-                recentlyInvited.drop(2)
+                items = recentlyInvited.drop(2),
+                key = { "recently_invited_${it.id}" }
             ) { friend ->
                 AnimatedVisibility(
                     visible = showAllRecentlyInvited,
@@ -104,7 +107,7 @@ fun FriendsList(
             }
         }
 
-        item {
+        item(key = "your_friends_title") {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -136,7 +139,8 @@ fun FriendsList(
         }
 
         items(
-            friends.take(2)
+            items = friends.take(2),
+            key = { "your_friends_${it.id}" }
         ) { friend ->
             FriendBox(
                 friend = friend,
@@ -148,7 +152,8 @@ fun FriendsList(
 
         if (friends.size > 2) {
             items(
-                friends.drop(2)
+                items = friends.drop(2),
+                key = { "your_friends_${it.id}" }
             ) { friend ->
                 AnimatedVisibility(
                     visible = showAllFriends,
