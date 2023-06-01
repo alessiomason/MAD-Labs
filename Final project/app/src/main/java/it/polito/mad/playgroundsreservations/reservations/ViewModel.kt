@@ -279,8 +279,6 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getRatingsByPlaygroundId(playgroundId: String, ratingsState: SnapshotStateList<PlaygroundRating>) {
-        ratingsState.clear()
-
         val playgroundReference = db.collection(playgroundsCollectionPath)
             .document(playgroundId)
 
@@ -291,6 +289,8 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                     Log.w(TAG, "Failed to read playground ratings.", error)
                     return@addSnapshotListener
                 }
+
+                ratingsState.clear()
 
                 for(doc in value!!)
                     ratingsState.add(doc.toPlaygroundRating())
@@ -352,6 +352,8 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                     return@addSnapshotListener
                 }
 
+                usersState.clear()
+
                 for (doc in value!!) {
                     val u = doc.toUser()
                     if (u.id != Global.userId)  // return all users except current
@@ -366,14 +368,14 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         friendsState: SnapshotStateList<User>,
         recentlyInvitedState: SnapshotStateList<User>
     ) {
-        friendsState.clear()
-        recentlyInvitedState.clear()
-
         db.collection(usersCollectionPath)
             .document(userId)
             .get().addOnSuccessListener { userDoc ->
                 val u = userDoc.toUser()
                 userState.value = u
+
+                friendsState.clear()
+                recentlyInvitedState.clear()
 
                 for (doc in u.friends) {
                     doc.get()
