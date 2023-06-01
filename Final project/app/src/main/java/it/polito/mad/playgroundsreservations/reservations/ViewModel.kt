@@ -353,42 +353,29 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     fun getUser(
         userId: String,
         userState: MutableState<User?>,
-        friendsState: MutableState<List<User>>,
-        recentlyInvitedState: MutableState<List<User>>
+        friendsState: SnapshotStateList<User>,
+        recentlyInvitedState: SnapshotStateList<User>
     ) {
+        friendsState.clear()
+        recentlyInvitedState.clear()
+
         db.collection(usersCollectionPath)
             .document(userId)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Log.w(TAG, "Failed to read user info.", error)
-                    userState.value = null
-                    return@addSnapshotListener
-                }
-
-                val u = value!!.toUser()
+            .get().addOnSuccessListener { userDoc ->
+                val u = userDoc.toUser()
                 userState.value = u
 
-                val friendsList = mutableListOf<User>()
-                for ((i, doc) in u.friends.withIndex()) {
+                for (doc in u.friends) {
                     doc.get()
                         .addOnSuccessListener {
-                            friendsList.add(it.toUser())
-
-                            if (i == u.friends.size - 1) {  // last item has been added
-                                friendsState.value = friendsList
-                            }
+                            friendsState.add(it.toUser())
                         }
                 }
 
-                val recentlyInvitedList = mutableListOf<User>()
-                for ((i, doc) in u.recentlyInvited.withIndex()) {
+                for (doc in u.recentlyInvited) {
                     doc.get()
                         .addOnSuccessListener {
-                            recentlyInvitedList.add(it.toUser())
-
-                            if (i == u.recentlyInvited.size - 1) {  // last item has been added
-                                recentlyInvitedState.value = recentlyInvitedList
-                            }
+                            recentlyInvitedState.add(it.toUser())
                         }
                 }
             }
@@ -438,7 +425,6 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun befriend(friend: User) {
-        Log.d("FRIEND", "BEFRIEND")
         val friendReference = db.collection(usersCollectionPath).document(friend.id)
 
         db.collection(usersCollectionPath)
@@ -447,7 +433,6 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun unfriend(friend: User) {
-        Log.d("FRIEND", "UNFRIEND")
         val friendReference = db.collection(usersCollectionPath).document(friend.id)
 
         db.collection(usersCollectionPath)

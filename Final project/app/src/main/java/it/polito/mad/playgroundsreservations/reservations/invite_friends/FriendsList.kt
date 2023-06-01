@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -35,8 +36,8 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVarian
 fun FriendsList(
     reservation: MutableState<Reservation?>,
     user: MutableState<User?>,
-    friends: MutableState<List<User>>,
-    recentlyInvited: MutableState<List<User>>,
+    friends: SnapshotStateList<User>,
+    recentlyInvited: SnapshotStateList<User>,
     sport: Sport
 ) {
     var showAllRecentlyInvited by remember { mutableStateOf(false) }
@@ -57,7 +58,7 @@ fun FriendsList(
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
 
-                if (recentlyInvited.value.size > 2) {
+                if (recentlyInvited.size > 2) {
                     TextButton(
                         onClick = { showAllRecentlyInvited = !showAllRecentlyInvited },
                         colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
@@ -74,14 +75,14 @@ fun FriendsList(
             }
         }
 
-        items(recentlyInvited.value.take(2)
+        items(recentlyInvited.take(2)
         ) { friend ->
             FriendBox(friend, sport, friends)
         }
 
-        if (recentlyInvited.value.size > 2) {
+        if (recentlyInvited.size > 2) {
             items(
-                recentlyInvited.value.drop(2)
+                recentlyInvited.drop(2)
             ) { friend ->
                 AnimatedVisibility(
                     visible = showAllRecentlyInvited,
@@ -107,7 +108,7 @@ fun FriendsList(
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
 
-                if (friends.value.size > 2) {
+                if (friends.size > 2) {
                     TextButton(
                         onClick = { showAllFriends = !showAllFriends },
                         colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
@@ -125,14 +126,14 @@ fun FriendsList(
         }
 
         items(
-            friends.value.take(2)
+            friends.take(2)
         ) { friend ->
             FriendBox(friend, sport, friends)
         }
 
-        if (friends.value.size > 2) {
+        if (friends.size > 2) {
             items(
-                friends.value.drop(2)
+                friends.drop(2)
             ) { friend ->
                 AnimatedVisibility(
                     visible = showAllFriends,

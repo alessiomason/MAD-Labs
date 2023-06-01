@@ -16,11 +16,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
@@ -68,26 +71,33 @@ class InviteFriends: Fragment() {
 fun InviteFriendsScreen(reservationId: String, navController: NavController) {
     val viewModel: ViewModel = viewModel()
 
+    var stillLoading by remember { mutableStateOf(true) }
     val reservation = remember { mutableStateOf<Reservation?>(null) }
     val user = remember { mutableStateOf<User?>(null) }
-    val friends = remember { mutableStateOf(emptyList<User>()) }
-    val recentlyInvited = remember { mutableStateOf(emptyList<User>()) }
+    val friends = remember { mutableStateListOf<User>() }
+    val recentlyInvited = remember { mutableStateListOf<User>() }
     val users = remember { mutableStateOf(emptyList<User>()) }
 
-    viewModel.getReservation(reservationId, reservation)
-    viewModel.getUser(Global.userId!!, user, friends, recentlyInvited)
-    viewModel.getUsers(users)
+    LaunchedEffect(true) {
+        viewModel.getReservation(reservationId, reservation)
+        viewModel.getUser(Global.userId!!, user, friends, recentlyInvited)
+        viewModel.getUsers(users)
+    }
 
-    if (    // still loading
-        reservation.value == null ||
-        user.value == null ||
-        (user.value?.friends?.size != null && user.value!!.friends.isNotEmpty() && friends.value.isEmpty()) ||
-        (user.value?.recentlyInvited?.size != null && user.value!!.recentlyInvited.isNotEmpty() && recentlyInvited.value.isEmpty()) ||
-        users.value.isEmpty()
+    if (stillLoading &&     // prevents from going back into loading
+        (
+            reservation.value == null ||
+            user.value == null ||
+            (user.value?.friends?.size != null && user.value!!.friends.isNotEmpty() && friends.isEmpty()) ||
+            (user.value?.recentlyInvited?.size != null && user.value!!.recentlyInvited.isNotEmpty() && recentlyInvited.isEmpty()) ||
+            users.value.isEmpty()
+        )
     )
         MyLoadingRatingPlaygrounds()
-    else
+    else {
+        stillLoading = false
         InviteFriendsScreenContent(reservation, user, friends, recentlyInvited, users, navController)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,8 +105,8 @@ fun InviteFriendsScreen(reservationId: String, navController: NavController) {
 fun InviteFriendsScreenContent(
     reservation: MutableState<Reservation?>,
     user: MutableState<User?>,
-    friends: MutableState<List<User>>,
-    recentlyInvited: MutableState<List<User>>,
+    friends: SnapshotStateList<User>,
+    recentlyInvited: SnapshotStateList<User>,
     users: MutableState<List<User>>,
     navController: NavController
 ) {
@@ -106,8 +116,7 @@ fun InviteFriendsScreenContent(
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 5.dp)
-            ,
+                .padding(bottom = 5.dp),
             value = searchQuery,
             onValueChange = { searchQuery = it },
             maxLines = 1,
