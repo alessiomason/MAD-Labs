@@ -124,7 +124,10 @@ fun FriendBox(
                             ) {
                                 val state = painter.state
                                 if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                                    CircularProgressIndicator()
+                                    CircularProgressIndicator(
+                                        color = SecondaryVariantColor,
+                                        modifier = Modifier.padding(15.dp)
+                                    )
                                 } else {
                                     SubcomposeAsyncImageContent()
                                 }
@@ -140,7 +143,10 @@ fun FriendBox(
                                     .clip(CircleShape)
                             )
                         } else {
-                            CircularProgressIndicator()
+                            CircularProgressIndicator(
+                                color = SecondaryVariantColor,
+                                modifier = Modifier.padding(15.dp)
+                            )
                         }
                     }
 

@@ -10,11 +10,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -40,6 +45,7 @@ import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
+import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
 
 class InviteFriends: Fragment() {
     private val args by navArgs<InviteFriendsArgs>()
@@ -113,13 +119,23 @@ fun InviteFriendsScreenContent(
 
     Column(Modifier.fillMaxWidth()) {
         TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 5.dp),
+            modifier = Modifier.fillMaxWidth(),
             value = searchQuery,
             onValueChange = { searchQuery = it },
             maxLines = 1,
-            label = { Text(stringResource(id = R.string.search_users)) }
+            label = { Text(stringResource(id = R.string.search_users)) },
+            colors = TextFieldDefaults.textFieldColors(
+                focusedLabelColor = SecondaryColor,
+                focusedIndicatorColor = SecondaryColor
+            ),
+            trailingIcon = {
+                IconButton(
+                    onClick = { searchQuery = "" },
+                    modifier = Modifier.padding(horizontal = 5.dp)
+                ) {
+                    Icon(Icons.Filled.Clear, contentDescription = "Clear")
+                }
+            }
         )
 
         if (searchQuery == "") {
