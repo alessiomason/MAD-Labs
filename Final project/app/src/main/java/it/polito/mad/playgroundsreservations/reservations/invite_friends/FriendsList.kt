@@ -77,7 +77,12 @@ fun FriendsList(
 
         items(recentlyInvited.take(2)
         ) { friend ->
-            FriendBox(friend, sport, friends)
+            FriendBox(
+                friend = friend,
+                sport = sport,
+                reservation = reservation,
+                friends = friends
+            )
         }
 
         if (recentlyInvited.size > 2) {
@@ -89,7 +94,12 @@ fun FriendsList(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    FriendBox(friend, sport, friends)
+                    FriendBox(
+                        friend = friend,
+                        sport = sport,
+                        reservation = reservation,
+                        friends = friends
+                    )
                 }
             }
         }
@@ -128,7 +138,12 @@ fun FriendsList(
         items(
             friends.take(2)
         ) { friend ->
-            FriendBox(friend, sport, friends)
+            FriendBox(
+                friend = friend,
+                sport = sport,
+                reservation = reservation,
+                friends = friends
+            )
         }
 
         if (friends.size > 2) {
@@ -140,7 +155,12 @@ fun FriendsList(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    FriendBox(friend, sport, friends)
+                    FriendBox(
+                        friend = friend,
+                        sport = sport,
+                        reservation = reservation,
+                        friends = friends
+                    )
                 }
             }
         }

@@ -101,7 +101,14 @@ fun InviteFriendsScreen(reservationId: String, navController: NavController) {
         LoadingScreen()
     else {
         stillLoading = false
-        InviteFriendsScreenContent(reservation, user, friends, recentlyInvited, users, navController)
+        InviteFriendsScreenContent(
+            reservation =  reservation,
+            user = user,
+            friends = friends,
+            recentlyInvited = recentlyInvited,
+            users = users,
+            navController = navController
+        )
     }
 }
 
@@ -138,14 +145,29 @@ fun InviteFriendsScreenContent(
             }
         )
 
+        if (reservation.value!!.invitations.isNotEmpty()) {
+            InvitedBox(reservation = reservation)
+        }
+
         if (searchQuery == "") {
-            FriendsList(reservation, user, friends, recentlyInvited, reservation.value!!.sport)
+            FriendsList(
+                reservation = reservation,
+                user = user,
+                friends = friends,
+                recentlyInvited = recentlyInvited,
+                sport = reservation.value!!.sport
+            )
         } else {
             LazyColumn(Modifier.fillMaxWidth()) {
                 items(users.value.filter { friend ->
                     friend.fullName.contains(searchQuery, ignoreCase = true)
                 }) { friend ->
-                    FriendBox(friend, reservation.value!!.sport, friends)
+                    FriendBox(
+                        friend = friend,
+                        sport = reservation.value!!.sport,
+                        reservation = reservation,
+                        friends = friends
+                    )
                 }
             }
         }

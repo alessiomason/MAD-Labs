@@ -102,14 +102,9 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     fun getReservation(reservationId: String, reservationState: MutableState<Reservation?>) {
         db.collection(reservationsCollectionPath)
             .document(reservationId)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Log.w(TAG, "Failed to read playground.", error)
-                    reservationState.value = null
-                    return@addSnapshotListener
-                }
-
-                reservationState.value = value!!.toReservation()
+            .get()
+            .addOnSuccessListener {
+                reservationState.value = it.toReservation()
             }
     }
 
@@ -179,7 +174,16 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             "sport" to reservation.sport.name.lowercase(),
             "time" to Timestamp(Date.from(reservation.time.toInstant())),
             "duration" to reservation.duration.toHours(),
-            "rentingEquipment" to reservation.rentingEquipment
+            "rentingEquipment" to reservation.rentingEquipment,
+            "invitations" to reservation.invitations.associate {
+                Pair(
+                    it.userId,
+                    hashMapOf(
+                        "fullName" to it.fullName,
+                        "status" to it.invitationStatus.name.lowercase()
+                    )
+                )
+            }
         )
 
         db.collection(reservationsCollectionPath).add(r)
@@ -193,7 +197,16 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             "sport" to reservation.sport.name.lowercase(),
             "time" to Timestamp(Date.from(reservation.time.toInstant())),
             "duration" to reservation.duration.toHours(),
-            "rentingEquipment" to reservation.rentingEquipment
+            "rentingEquipment" to reservation.rentingEquipment,
+            "invitations" to reservation.invitations.associate {
+                Pair(
+                    it.userId,
+                    hashMapOf(
+                        "fullName" to it.fullName,
+                        "status" to it.invitationStatus.name.lowercase()
+                    )
+                )
+            }
         )
 
         db.collection(reservationsCollectionPath)

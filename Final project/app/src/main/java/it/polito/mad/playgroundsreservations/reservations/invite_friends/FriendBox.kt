@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -27,6 +28,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImagePainter
@@ -53,6 +56,9 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.smarttoolfactory.ratingbar.RatingBar
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Invitation
+import it.polito.mad.playgroundsreservations.database.InvitationStatus
+import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
@@ -65,13 +71,14 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryVari
 fun FriendBox(
     friend: User,
     sport: Sport,
+    reservation: MutableState<Reservation?>,
     friends: SnapshotStateList<User>
 ) {
     val viewModel: ViewModel = viewModel()
-    val storageReference = Firebase.storage.reference.child("profileImages/${friend.id}")
-    var imageUrl: Uri? by remember { mutableStateOf(null) }
-    var showDefaultImage by remember { mutableStateOf(false) }
     var showAdditionalInfo by remember { mutableStateOf(false) }
+    var isInvited by remember { mutableStateOf(
+        reservation.value!!.invitations.map { it.userId }.contains(friend.id)
+    ) }
     var isFriend by remember { mutableStateOf(friends.contains(friend)) }
 
     val sportIcon = when (sport) {
@@ -80,13 +87,6 @@ fun FriendBox(
         Sport.FOOTBALL -> R.drawable.football_ball
         Sport.VOLLEYBALL -> R.drawable.volleyball_ball
         Sport.GOLF -> R.drawable.golf_ball
-    }
-
-    storageReference.downloadUrl.addOnSuccessListener {
-        imageUrl = it
-    }.addOnFailureListener {
-        showDefaultImage = true
-        Log.d("IMAGE URL", it.message ?: "")
     }
 
     Box(modifier = Modifier
@@ -109,45 +109,7 @@ fun FriendBox(
                         modifier = Modifier
                             .padding(horizontal = 5.dp)
                     ) {
-                        if (imageUrl != null) {
-                            SubcomposeAsyncImage(
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(imageUrl)
-                                    .crossfade(true)
-                                    .build(),
-                                contentDescription = "Profile Image",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .width(75.dp)
-                                    .aspectRatio(1f)
-                                    .clip(CircleShape)
-                            ) {
-                                val state = painter.state
-                                if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                                    CircularProgressIndicator(
-                                        color = SecondaryVariantColor,
-                                        modifier = Modifier.padding(15.dp)
-                                    )
-                                } else {
-                                    SubcomposeAsyncImageContent()
-                                }
-                            }
-                        } else if (showDefaultImage) {
-                            Image(
-                                painter = painterResource(id = R.drawable.user_profile),
-                                contentDescription = "Profile image",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .width(75.dp)
-                                    .aspectRatio(1f)
-                                    .clip(CircleShape)
-                            )
-                        } else {
-                            CircularProgressIndicator(
-                                color = SecondaryVariantColor,
-                                modifier = Modifier.padding(15.dp)
-                            )
-                        }
+                        ProfileImage(friendId = friend.id, size = 75.dp)
                     }
 
                     Column(
@@ -212,12 +174,32 @@ fun FriendBox(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            if (isInvited) {
+                                // viewModel.disinvite(friend, reservation)
+                                reservation.value!!.invitations.removeIf {
+                                    it.userId == friend.id
+                                }
+                            } else {
+                                // viewModel.invite(friend, reservation)
+                                reservation.value!!.invitations.add(
+                                    Invitation(
+                                        friend.id,
+                                        friend.fullName,
+                                        InvitationStatus.PENDING
+                                    )
+                                )
+                            }
+
+                            isInvited = !isInvited
+                        },
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
                     ) {
+                        val invitedIcon = if (isInvited) R.drawable.check_icon else R.drawable.add_person
+
                         Image(
-                            painter = painterResource(id = R.drawable.add_friend),
+                            painter = painterResource(id = invitedIcon),
                             contentDescription = "Add person to friends",
                             modifier = Modifier
                                 .size(24.dp)

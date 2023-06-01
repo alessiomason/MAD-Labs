@@ -19,6 +19,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.compose.runtime.mutableStateListOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
@@ -26,6 +27,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Invitation
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Reservation
@@ -356,7 +358,9 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                     viewModel.getPlaygroundReference(MyReservation.playgroundId),
                     MyReservation.sport,
                     MyReservation.time,
-                    MyReservation.duration
+                    MyReservation.duration,
+                    MyReservation.rentingEquipment,
+                    mutableStateListOf()
                 )
 
                 viewModel.saveReservation(newReservation)
