@@ -161,12 +161,12 @@ fun FriendBox(
                     Button(
                         onClick = {
                             if (isInvited) {
-                                // viewModel.disinvite(friend, reservation)
+                                viewModel.disinvite(friend, reservation.value!!.id)
                                 reservation.value!!.invitations.removeIf {
                                     it.userId == friend.id
                                 }
                             } else {
-                                // viewModel.invite(friend, reservation)
+                                viewModel.invite(friend, reservation.value!!.id)
                                 reservation.value!!.invitations.add(
                                     Invitation(
                                         friend.id,

@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import it.polito.mad.playgroundsreservations.Global
+import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Reservation
@@ -343,7 +344,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-    fun getUsers(usersState: MutableState<List<User>>) {
+    fun getUsers(usersState: SnapshotStateList<User>) {
         db.collection(usersCollectionPath)
             .addSnapshotListener { value, error ->
                 if (error != null) {
@@ -351,14 +352,11 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                     return@addSnapshotListener
                 }
 
-                val list = mutableListOf<User>()
                 for (doc in value!!) {
                     val u = doc.toUser()
                     if (u.id != Global.userId)  // return all users except current
-                        list.add(u)
+                        usersState.add(u)
                 }
-
-                usersState.value = list
             }
     }
 
@@ -450,5 +448,22 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         db.collection(usersCollectionPath)
             .document(Global.userId!!)
             .update("friends", FieldValue.arrayRemove(friendReference))
+    }
+
+    fun invite(friend: User, reservationId: String) {
+        val i = hashMapOf(
+            "fullName" to friend.fullName,
+            "status" to InvitationStatus.PENDING.name.lowercase()
+        )
+
+        db.collection(reservationsCollectionPath)
+            .document(reservationId)
+            .update("invitations.${friend.id}", i)
+    }
+
+    fun disinvite(friend: User, reservationId: String) {
+        db.collection(reservationsCollectionPath)
+            .document(reservationId)
+            .update("invitations.${friend.id}", FieldValue.delete())
     }
 }

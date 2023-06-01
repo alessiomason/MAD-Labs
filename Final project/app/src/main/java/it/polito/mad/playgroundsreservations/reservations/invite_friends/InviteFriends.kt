@@ -82,7 +82,7 @@ fun InviteFriendsScreen(reservationId: String, navController: NavController) {
     val user = remember { mutableStateOf<User?>(null) }
     val friends = remember { mutableStateListOf<User>() }
     val recentlyInvited = remember { mutableStateListOf<User>() }
-    val users = remember { mutableStateOf(emptyList<User>()) }
+    val users = remember { mutableStateListOf<User>() }
 
     LaunchedEffect(true) {
         viewModel.getReservation(reservationId, reservation)
@@ -95,7 +95,7 @@ fun InviteFriendsScreen(reservationId: String, navController: NavController) {
             user.value == null ||
             (user.value?.friends?.size != null && user.value!!.friends.isNotEmpty() && friends.isEmpty()) ||
             (user.value?.recentlyInvited?.size != null && user.value!!.recentlyInvited.isNotEmpty() && recentlyInvited.isEmpty()) ||
-            users.value.isEmpty()
+            users.isEmpty()
         )
     )
         LoadingScreen()
@@ -119,7 +119,7 @@ fun InviteFriendsScreenContent(
     user: MutableState<User?>,
     friends: SnapshotStateList<User>,
     recentlyInvited: SnapshotStateList<User>,
-    users: MutableState<List<User>>,
+    users: SnapshotStateList<User>,
     navController: NavController
 ) {
     var searchQuery by remember { mutableStateOf("") }
@@ -159,7 +159,7 @@ fun InviteFriendsScreenContent(
             )
         } else {
             LazyColumn(Modifier.fillMaxWidth()) {
-                items(users.value.filter { friend ->
+                items(users.filter { friend ->
                     friend.fullName.contains(searchQuery, ignoreCase = true)
                 }) { friend ->
                     FriendBox(
