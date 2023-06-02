@@ -164,7 +164,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
             priceElement.text=(myPlayground.pricePerHour*myReservation.duration.toHours().toInt()).toString()
             val inviteFriendsButton = view.findViewById<Button>(R.id.invite_friends_button)
 
-            if(myReservation.invitations.count { it.invitationStatus.toString() == "accepted" }+1==myPlayground.maxPlayers)
+            if(myReservation.invitations.count()+1==myPlayground.maxPlayers)
             {
                 inviteFriendsButton.visibility = GONE
             }

@@ -107,7 +107,7 @@ fun SeeRatingsScreen(playgroundId: String, navController: NavController) {
     }
 
 
-    if (playground.value == null && ratingsList.isEmpty())
+    if (playground.value == null ||  ratingsList.isEmpty())
         LoadingScreen()
     else
         SeeRatingsScreenContent(playground = playground.value!!, ratingsList)
