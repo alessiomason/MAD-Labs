@@ -453,6 +453,8 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             "location" to user.location,
             "rating" to user.rating,
             "mySports" to user.mySports.map { (s, r) -> s.name.lowercase() to r }.toMap(),
+            "friends" to user.friends,
+            "recentlyInvited" to user.recentlyInvited,
             "alreadyShownTutorial" to user.alreadyShownTutorial
         )
 
@@ -475,22 +477,5 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         db.collection(usersCollectionPath)
             .document(Global.userId!!)
             .update("friends", FieldValue.arrayRemove(friendReference))
-    }
-
-    fun invite(friend: User, reservationId: String) {
-        val i = hashMapOf(
-            "fullName" to friend.fullName,
-            "status" to InvitationStatus.PENDING.name.lowercase()
-        )
-
-        db.collection(reservationsCollectionPath)
-            .document(reservationId)
-            .update("invitations.${friend.id}", i)
-    }
-
-    fun disinvite(friend: User, reservationId: String) {
-        db.collection(reservationsCollectionPath)
-            .document(reservationId)
-            .update("invitations.${friend.id}", FieldValue.delete())
     }
 }

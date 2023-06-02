@@ -102,4 +102,5 @@
     <!-- INVITE FRIENDS -->
     <string name="invite_friends">Invita amici</string>
     <string name="search_users">Cerca tra tutti gli utenti</string>
+    <string name="invite_selected">Invita i selezionati</string>
 </resources>

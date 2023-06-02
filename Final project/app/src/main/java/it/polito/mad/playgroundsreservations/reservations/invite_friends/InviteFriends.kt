@@ -1,7 +1,11 @@
 package it.polito.mad.playgroundsreservations.reservations.invite_friends
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
@@ -34,14 +38,16 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.User
+import it.polito.mad.playgroundsreservations.profile.ShowProfileActivity
+import it.polito.mad.playgroundsreservations.reservations.CalendarFragmentDirections
 import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
@@ -49,6 +55,7 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColo
 
 class InviteFriends: Fragment() {
     private val args by navArgs<InviteFriendsArgs>()
+    lateinit var reservation: MutableState<Reservation?>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,27 +65,52 @@ class InviteFriends: Fragment() {
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.invite_friends)
 
+        setHasOptionsMenu(true)
+
         return ComposeView(requireContext()).apply {
             setContent {
+                reservation = remember { mutableStateOf(null) }
+
                 PlaygroundsReservationsTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        InviteFriendsScreen(args.reservationId, findNavController())
+                        InviteFriendsScreen(args.reservationId, reservation)
                     }
                 }
             }
         }
     }
+
+    @Deprecated("Deprecated in Java")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_invite_friends, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val navController = view?.findNavController()
+
+        // Handle presses on the action bar menu items
+        when (item.itemId) {
+            R.id.invite_friends -> {
+                val viewModel by viewModels<ViewModel>()
+
+                viewModel.updateReservation(reservation.value!!)
+                navController?.popBackStack()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
 
 @Composable
-fun InviteFriendsScreen(reservationId: String, navController: NavController) {
+fun InviteFriendsScreen(reservationId: String, reservation: MutableState<Reservation?>) {
     val viewModel: ViewModel = viewModel()
 
     var stillLoading by remember { mutableStateOf(true) }
-    val reservation = remember { mutableStateOf<Reservation?>(null) }
     val user = remember { mutableStateOf<User?>(null) }
     val friends = remember { mutableStateListOf<User>() }
     val recentlyInvited = remember { mutableStateListOf<User>() }
@@ -106,8 +138,7 @@ fun InviteFriendsScreen(reservationId: String, navController: NavController) {
             user = user,
             friends = friends,
             recentlyInvited = recentlyInvited,
-            users = users,
-            navController = navController
+            users = users
         )
     }
 }
@@ -119,8 +150,7 @@ fun InviteFriendsScreenContent(
     user: MutableState<User?>,
     friends: SnapshotStateList<User>,
     recentlyInvited: SnapshotStateList<User>,
-    users: SnapshotStateList<User>,
-    navController: NavController
+    users: SnapshotStateList<User>
 ) {
     var searchQuery by remember { mutableStateOf("") }
 

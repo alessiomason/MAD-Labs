@@ -101,4 +101,5 @@
     <!-- INVITE FRIENDS -->
     <string name="invite_friends">Invite friends</string>
     <string name="search_users">Search all users</string>
+    <string name="invite_selected">Invite selected friends</string>
 </resources>

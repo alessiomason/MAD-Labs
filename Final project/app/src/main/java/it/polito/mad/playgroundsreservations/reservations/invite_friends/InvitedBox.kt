@@ -49,7 +49,7 @@ fun InvitedBox(reservation: MutableState<Reservation?>) {
                 .fillMaxWidth()
                 .wrapContentHeight(align = Alignment.CenterVertically)
         ) {
-            reservation.value!!.invitations.forEach {
+            reservation.value!!.invitations.forEach { invitation ->
                 InputChip(
                     selected = false,
                     onClick = { /*TODO*/ },
@@ -61,15 +61,19 @@ fun InvitedBox(reservation: MutableState<Reservation?>) {
                     ),
                     border = InputChipDefaults.inputChipBorder(borderColor = SecondaryColor),
                     label = { Text(
-                        text = it.fullName,
+                        text = invitation.fullName,
                         modifier = Modifier
                     ) },
                     leadingIcon = {
-                        ProfileImage(friendId = it.userId, small = true)
+                        ProfileImage(friendId = invitation.userId, small = true)
                     },
                     trailingIcon = {
                         IconButton(
-                            onClick = { },
+                            onClick = {
+                                reservation.value!!.invitations.removeIf {
+                                    it.userId == invitation.userId
+                                }
+                            },
                             modifier = Modifier.size(20.dp)
                         ) {
                             Icon(

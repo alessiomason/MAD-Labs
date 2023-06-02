@@ -23,6 +23,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,6 +66,14 @@ fun FriendBox(
         reservation.value!!.invitations.map { it.userId }.contains(friend.id)
     ) }
     var isFriend by remember { mutableStateOf(friends.contains(friend)) }
+
+    LaunchedEffect(reservation.value!!.invitations.size) {
+        isInvited = reservation.value!!.invitations.map { it.userId }.contains(friend.id)
+    }
+
+    LaunchedEffect(friends.size) {
+        isFriend = friends.contains(friend)
+    }
 
     val sportIcon = when (sport) {
         Sport.TENNIS -> R.drawable.tennis_ball
@@ -168,12 +177,10 @@ fun FriendBox(
                     Button(
                         onClick = {
                             if (isInvited) {
-                                viewModel.disinvite(friend, reservation.value!!.id)
                                 reservation.value!!.invitations.removeIf {
                                     it.userId == friend.id
                                 }
                             } else {
-                                viewModel.invite(friend, reservation.value!!.id)
                                 reservation.value!!.invitations.add(
                                     Invitation(
                                         friend.id,
@@ -182,8 +189,6 @@ fun FriendBox(
                                     )
                                 )
                             }
-
-                            isInvited = !isInvited
                         },
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
@@ -208,7 +213,6 @@ fun FriendBox(
                                 viewModel.befriend(friend)
                                 friends.add(friend)
                             }
-                            isFriend = !isFriend
                         }
                     ) {
                         val starIcon = if (isFriend) R.drawable.filled_star else R.drawable.bordered_star
