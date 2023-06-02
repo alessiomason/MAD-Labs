@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
@@ -163,14 +164,27 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
             priceElement.text=(myPlayground.pricePerHour*myReservation.duration.toHours().toInt()).toString()
             val inviteFriendsButton = view.findViewById<Button>(R.id.invite_friends_button)
 
-            if (myReservation.time.plus(myReservation.duration).isBefore(Instant.now().atZone(myReservation.time.zone))) {
+            if(myReservation.invitations.count { it.invitationStatus.toString() == "accepted" }+1==myPlayground.maxPlayers)
+            {
+                inviteFriendsButton.visibility = GONE
+            }
+            else if (myReservation.time.plus(myReservation.duration).isBefore(Instant.now().atZone(myReservation.time.zone))) {
                 inviteFriendsButton.visibility = GONE
             } else {
                 inviteFriendsButton.visibility = VISIBLE
 
                 inviteFriendsButton.setOnClickListener {
-                    val action = ShowReservationFragmentDirections.actionShowReservationFragmentToInviteFriends(myReservation.id)
-                    navController.navigate(action)
+                    if(myReservation.invitations.count()+1==myPlayground.maxPlayers)
+                    {
+                        Toast.makeText(this.context, R.string.age_toast, Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        val action =
+                            ShowReservationFragmentDirections.actionShowReservationFragmentToInviteFriends(
+                                myReservation.id
+                            )
+                        navController.navigate(action)
+                    }
                 }
             }
 

@@ -9,7 +9,8 @@ data class Playground(
     val sport: Sport,
     val pricePerHour: Int,
     val region: String,
-    val city: String
+    val city: String,
+    val maxPlayers: Int
 )
 
 fun DocumentSnapshot.toPlayground(): Playground {
@@ -19,6 +20,7 @@ fun DocumentSnapshot.toPlayground(): Playground {
     val pricePerHour = this.get("pricePerHour", Int::class.java)
     val region = this.get("region", String::class.java)
     val city = this.get("city", String::class.java)
+    val maxPlayers=this.get("maxPlayers",Int::class.java)
 
-    return Playground(id,name ?: "", address ?: "", sport,pricePerHour ?: 0, region ?: "", city ?: "")
+    return Playground(id,name ?: "", address ?: "", sport,pricePerHour ?: 0, region ?: "", city ?: "",maxPlayers ?: 0)
 }
