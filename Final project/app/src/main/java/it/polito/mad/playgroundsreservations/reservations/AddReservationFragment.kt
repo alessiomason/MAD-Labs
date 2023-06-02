@@ -72,7 +72,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val reservations = viewModel.getUserReservations(Global.userId!!)
+        val reservations = viewModel.getAllReservations()
         val playgrounds = viewModel.playgrounds
 
         val loading = view.findViewById<FragmentContainerView>(R.id.loadingAddReservationFragment)

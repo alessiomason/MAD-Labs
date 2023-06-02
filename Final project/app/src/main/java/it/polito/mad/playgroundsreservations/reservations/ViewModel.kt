@@ -167,6 +167,32 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
 
         return userReservations
     }
+    fun getAllReservations(): LiveData<List<Reservation>> {
+        val reservations = MutableLiveData<List<Reservation>>()
+
+        db.collection(reservationsCollectionPath)
+            .orderBy("time")
+            .orderBy("duration")
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read  reservations.", error)
+                    reservations.value = emptyList()
+                    return@addSnapshotListener
+                }
+
+                val reservationsList = mutableListOf<Reservation>()
+                for (doc in value!!) {
+                    Log.d("Reservation",doc.toReservation().toString())
+                    val reservation = doc.toReservation()
+                    reservationsList.add(reservation)
+                }
+
+                reservations.value = reservationsList
+                Log.d("reservationList",reservations.value.toString())
+            }
+
+        return reservations
+    }
 
     fun saveReservation(reservation: Reservation) {
         val r = hashMapOf(
