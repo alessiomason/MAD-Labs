@@ -61,7 +61,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         navController = view.findNavController()
 
         val viewModel by viewModels<ViewModel>()
-        val reservations = viewModel.getUserReservations(Global.userId!!)
+        val reservations = viewModel.userReservations
         val playgrounds = viewModel.playgrounds
 
         // ACTIVITY TITLE

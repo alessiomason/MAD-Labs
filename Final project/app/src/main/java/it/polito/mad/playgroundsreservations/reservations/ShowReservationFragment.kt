@@ -2,7 +2,6 @@ package it.polito.mad.playgroundsreservations.reservations
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -22,7 +21,6 @@ import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
@@ -50,7 +48,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel by viewModels<ViewModel>()
         val navController = view.findNavController()
-        val reservations = viewModel.getUserReservations(Global.userId!!)
+        val reservations = viewModel.userReservations
         val playgrounds = viewModel.playgrounds
         val priceElement=view.findViewById<TextView>(R.id.price)
 

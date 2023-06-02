@@ -85,6 +85,7 @@ fun ProfileImage(friendId: String, small: Boolean) {
     } else {
         CircularProgressIndicator(
             color = SecondaryVariantColor,
+            strokeWidth = if (small) 2.dp else 4.dp,
             modifier = loadingModifier
         )
     }

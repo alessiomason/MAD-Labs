@@ -174,7 +174,12 @@ fun FriendBox(
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    val invitation = reservation.value!!.invitations.find { it.userId == friend.id }
+                    val enableButton = invitation == null || invitation.invitationStatus == InvitationStatus.PENDING
+
                     Button(
+                        // enable inviting and uninviting only for pending invitations
+                        enabled = enableButton,
                         onClick = {
                             if (isInvited) {
                                 reservation.value!!.invitations.removeIf {

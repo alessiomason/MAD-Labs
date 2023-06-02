@@ -97,6 +97,7 @@ class InviteFriends: Fragment() {
 
                 viewModel.updateReservation(reservation.value!!)
                 viewModel.updateRecentlyInvited(reservation.value!!.invitations)
+                viewModel.invite(reservation.value!!.id, reservation.value!!.invitations.map { it.userId })
                 navController?.popBackStack()
             }
         }
