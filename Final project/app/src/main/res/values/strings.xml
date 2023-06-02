@@ -73,6 +73,7 @@
     <string name="renting_equipment">Renting equipment</string>
     <string name="playground_name">Playground name</string>
     <string name="sport_type">Sport type</string>
+    <string name="price_string">Price</string>
     <string name="add_button">+</string>
     <string name="date">Date</string>
     <string name="duration">Duration</string>

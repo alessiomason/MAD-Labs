@@ -43,6 +43,8 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
     private var aus = 0
     private var hours = mutableListOf<String>()
     var durationsList = mutableListOf<String>()
+    private var price=0
+    private var pricePerHour=0;
 
     lateinit var myReservation: Reservation
     private lateinit var myPlayground: Playground
@@ -179,6 +181,8 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
                 }
 
                 val spinnerDuration = view.findViewById<Spinner>(R.id.spinnerDuration)
+                val priceElement=view.findViewById<TextView>(R.id.price)
+                pricePerHour=myPlayground.pricePerHour
                 for (j in 1..myReservation.duration.toHours().toInt())
                     durationsList.add("$j h")
 
@@ -249,8 +253,9 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
                             id: Long
                         ) {
                             val selectedItem = parent.getItemAtPosition(position).toString()
-                            myReservation.duration =
-                                Duration.ofHours(selectedItem.split(' ')[0].toLong())
+                            myReservation.duration = Duration.ofHours(selectedItem.split(' ')[0].toLong())
+                            price=pricePerHour*(selectedItem.split(' ')[0].toInt())
+                            priceElement.text = price.toString()
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {

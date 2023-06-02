@@ -52,6 +52,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         val navController = view.findNavController()
         val reservations = viewModel.getUserReservations(Global.userId!!)
         val playgrounds = viewModel.playgrounds
+        val priceElement=view.findViewById<TextView>(R.id.price)
 
         val loading = view.findViewById<FragmentContainerView>(R.id.loadingShowReservationFragment)
         val fragmentManager = childFragmentManager
@@ -161,7 +162,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     Sport.GOLF -> { image.setImageResource(R.drawable.golf_field); sportIcon.setImageResource(R.drawable.golf_ball) }
                 }
             }
-
+            priceElement.text=(myPlayground.pricePerHour*myReservation.duration.toHours().toInt()).toString()
             val inviteFriendsButton = view.findViewById<Button>(R.id.invite_friends_button)
 
             if (myReservation.time.plus(myReservation.duration).isBefore(Instant.now().atZone(myReservation.time.zone))) {

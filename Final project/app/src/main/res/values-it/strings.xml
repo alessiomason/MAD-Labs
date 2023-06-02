@@ -74,6 +74,7 @@
     <string name="renting_equipment">Noleggio attrezzature</string>
     <string name="playground_name">Nome campo</string>
     <string name="sport_type">Tipo sport</string>
+    <string name="price_string">Prezzo</string>
     <string name="add_button">+</string>
     <string name="date">Data</string>
     <string name="duration">Durata</string>

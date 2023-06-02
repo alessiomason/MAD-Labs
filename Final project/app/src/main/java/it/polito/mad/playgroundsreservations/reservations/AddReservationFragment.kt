@@ -51,6 +51,8 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
     var durationsList = mutableListOf<String>()
     var aus = 0
     var hours = mutableListOf<String>()
+    var price=0
+    var pricePerHour=0
 
     object MyReservation {
         var playgroundId = ""
@@ -115,6 +117,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
             spinner.adapter = adapter
             val spinnerHour = view.findViewById<Spinner>(R.id.spinnerDuration)
             val spinnerDuration = view.findViewById<Spinner>(R.id.spinnerDuration2)
+            val priceElement=view.findViewById<TextView>(R.id.price)
 
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -127,6 +130,8 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                     val playground = playgroundList[position]
                     MyReservation.playgroundId = playground.id
                     MyReservation.sport = playgroundList[position].sport
+                    pricePerHour=playground.pricePerHour
+                    priceElement.text = pricePerHour.toString()
 
                     val editor = sharedPreferences.edit()
                     editor.putString("playgroundSelected", playground.id)
@@ -288,8 +293,11 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                                     id: Long
                                 ) {
                                     val selectedItem = parent.getItemAtPosition(position).toString()
-                                    MyReservation.duration =
-                                        Duration.ofHours(selectedItem.split(' ')[0].toLong())
+                                    MyReservation.duration = Duration.ofHours(selectedItem.split(' ')[0].toLong())
+                                    price=pricePerHour*(selectedItem.split(' ')[0].toInt())
+                                    priceElement.text = price.toString()
+
+
                                 }
 
                                 override fun onNothingSelected(parent: AdapterView<*>?) {
