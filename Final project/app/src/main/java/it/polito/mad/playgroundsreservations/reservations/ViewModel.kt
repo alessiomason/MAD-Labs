@@ -50,6 +50,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     val reservations = MutableLiveData<List<Reservation>>()
     val userReservations = MutableLiveData<List<Reservation>>()
     val tutorialShown = MutableLiveData<Boolean?>()
+    val nPendingInvitations = MutableLiveData(0)
 
     private val userReservationsObserver = Observer<List<Reservation>> { reservationsList ->
         reservationsList.filter { r ->
@@ -114,6 +115,14 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 tutorialShown.value = value!!.getBoolean("alreadyShownTutorial")
+            }
+
+        // set listener for number of pending notifications
+        db.collection(usersCollectionPath)
+            .document(Global.userId!!)
+            .get()
+            .addOnSuccessListener {
+                nPendingInvitations.value = (it.get("invitations") as? List<*>)?.size ?: 0
             }
     }
 
@@ -481,5 +490,38 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 .document(it)
                 .update("invitations", FieldValue.arrayUnion(reservationReference))
         }
+    }
+
+    fun getInvitedToReservations(
+        invitedToReservationsState: SnapshotStateList<Pair<Reservation, Playground>>,
+        stillLoading: MutableState<Boolean>
+    ) {
+        db.collection(usersCollectionPath)
+            .document(Global.userId!!)
+            .get()
+            .addOnSuccessListener { user ->
+                invitedToReservationsState.clear()
+
+                val invitationsList = user.get("invitations") as? List<DocumentReference>
+
+                if (invitationsList == null) {
+                    stillLoading.value = false
+                    return@addOnSuccessListener
+                }
+
+                invitationsList.forEach { reservationReference ->
+                    reservationReference
+                        .get()
+                        .addOnSuccessListener { r ->
+                            val reservation = r.toReservation()
+
+                            reservation.playgroundId
+                                .get()
+                                .addOnSuccessListener { p ->
+                                    invitedToReservationsState.add(Pair(reservation, p.toPlayground()))
+                                }
+                        }
+                }
+            }
     }
 }

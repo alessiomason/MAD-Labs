@@ -7,14 +7,14 @@ data class Playground(
     val name: String,
     val address: String,
     val sport: Sport,
-    val pricePerHour:Int
+    val pricePerHour: Int
 )
 
 fun DocumentSnapshot.toPlayground(): Playground {
     val name = this.get("name", String::class.java)
     val address = this.get("address", String::class.java)
     val sport = this.get("sport", String::class.java)!!.toSport()
-    val pricePerHour=this.get("pricePerHour",Int::class.java)
+    val pricePerHour=this.get("pricePerHour", Int::class.java)
 
-    return Playground(id,name ?: "", address ?: "", sport,pricePerHour?:0)
+    return Playground(id,name ?: "", address ?: "", sport, pricePerHour ?: 0)
 }

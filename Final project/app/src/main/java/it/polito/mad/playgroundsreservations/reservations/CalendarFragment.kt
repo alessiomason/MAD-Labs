@@ -47,6 +47,7 @@ private var tappedDay = MutableLiveData(Instant.now().atZone(zoneId).toLocalDate
 
 class CalendarFragment: Fragment(R.layout.calendar_fragment) {
     private lateinit var navController: NavController
+    val viewModel by viewModels<ViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,7 +61,6 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         super.onViewCreated(view, savedInstanceState)
         navController = view.findNavController()
 
-        val viewModel by viewModels<ViewModel>()
         val reservations = viewModel.userReservations
         val playgrounds = viewModel.playgrounds
 
@@ -143,6 +143,23 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_switch_view_calendar, menu)
+
+        val notificationMenuItem = menu.findItem(R.id.pending_invitations)
+        val notificationActionView = notificationMenuItem.actionView
+        val notificationCount = notificationActionView?.findViewById<TextView>(R.id.notification_count)
+
+        notificationActionView?.setOnClickListener {
+            onOptionsItemSelected(notificationMenuItem)
+        }
+
+        viewModel.nPendingInvitations.observe(viewLifecycleOwner) { n ->
+            if (n > 0) {
+                notificationCount?.visibility = VISIBLE
+                notificationCount?.text = n.toString()
+            } else {
+                notificationCount?.visibility = GONE
+            }
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -152,6 +169,10 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
 
         // Handle presses on the action bar menu items
         when (item.itemId) {
+            R.id.pending_invitations -> {
+                val action = CalendarFragmentDirections.actionCalendarFragmentToPendingInvitations()
+                navController?.navigate(action)
+            }
             R.id.user_profile -> {
                 val intent = Intent(activity?.applicationContext, ShowProfileActivity::class.java)
                 startActivity(intent)

@@ -30,6 +30,9 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_enter_anim"
             app:popExitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_calendarFragment_to_pendingInvitations"
+            app:destination="@id/pendingInvitations" />
     </fragment>
     <fragment
         android:id="@+id/showReservationFragment"
@@ -149,4 +152,8 @@
             android:name="reservationId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/pendingInvitations"
+        android:name="it.polito.mad.playgroundsreservations.reservations.pending_invitations.PendingInvitations"
+        android:label="PendingInvitations" />
 </navigation>
