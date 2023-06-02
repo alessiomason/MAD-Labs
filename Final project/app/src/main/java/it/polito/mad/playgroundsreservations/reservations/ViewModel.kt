@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import it.polito.mad.playgroundsreservations.Global
+import it.polito.mad.playgroundsreservations.database.Invitation
 import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
@@ -477,5 +478,24 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         db.collection(usersCollectionPath)
             .document(Global.userId!!)
             .update("friends", FieldValue.arrayRemove(friendReference))
+    }
+
+    // saves only 5 most recent invited users
+    fun updateRecentlyInvited(invitations: SnapshotStateList<Invitation>) {
+        db.collection(usersCollectionPath)
+            .document(Global.userId!!)
+            .get()
+            .addOnSuccessListener {
+                val oldList = it.toUser().recentlyInvited.reversed()
+
+                val newList = invitations.map { i ->
+                    db.collection(usersCollectionPath).document(i.userId)
+                }.plus(oldList).toSet().take(5)
+
+
+                db.collection(usersCollectionPath)
+                    .document(Global.userId!!)
+                    .update("recentlyInvited", newList)
+            }
     }
 }

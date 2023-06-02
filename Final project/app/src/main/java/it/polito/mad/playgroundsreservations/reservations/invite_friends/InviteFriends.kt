@@ -99,6 +99,7 @@ class InviteFriends: Fragment() {
                 val viewModel by viewModels<ViewModel>()
 
                 viewModel.updateReservation(reservation.value!!)
+                viewModel.updateRecentlyInvited(reservation.value!!.invitations)
                 navController?.popBackStack()
             }
         }
