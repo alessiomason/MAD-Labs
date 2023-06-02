@@ -225,7 +225,11 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold|italic" />
 
-                <TableLayout
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TableLayout
                     android:id="@+id/tableMySports"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -356,6 +360,8 @@
                     </TableRow>
 
                 </TableLayout>
+
+                </HorizontalScrollView>
 
             </LinearLayout>
         </ScrollView>

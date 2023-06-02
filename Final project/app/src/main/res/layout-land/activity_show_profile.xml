@@ -209,71 +209,178 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                <TableLayout
+                    android:id="@+id/tableMySports"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipTennis"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:text="@string/sport_tennis"
-                        app:chipIcon="@drawable/tennis_ball"
-                        app:chipIconVisible="true" />
+                    <!-- Riga 1 -->
+                    <TableRow
+                        android:id="@+id/basketballRow"
+                        android:visibility="gone">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipBasketball"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:text="@string/sport_basketball"
-                        app:chipIcon="@drawable/basketball_ball"
-                        app:chipIconVisible="true" />
+                        <ImageView
+                            android:id="@+id/basketballRowIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/basketball_ball" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipFootball"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:text="@string/sport_football"
-                        app:chipIcon="@drawable/football_ball"
-                        app:chipIconVisible="true" />
+                        <TextView
+                            android:id="@+id/basketballRowText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="9dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:text="@string/sport_basketball" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipVolleyball"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:text="@string/sport_volleyball"
-                        app:chipIcon="@drawable/volleyball_ball"
-                        app:chipIconVisible="true" />
+                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                            android:id="@+id/basketballRowRatingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:rating="3.5"
+                            android:numStars="5"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="20dp"
+                            style="@style/Widget.MaterialRatingBar.RatingBar"
+                            android:layout_gravity="center_horizontal" />
+                    </TableRow>
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipGolf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:text="@string/sport_golf"
-                        app:chipIcon="@drawable/golf_ball"
-                        app:chipIconVisible="true" />
+                    <!-- Riga 2 -->
+                    <TableRow
+                        android:id="@+id/volleyballRow"
+                        android:visibility="gone">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipEmpty"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:text="@string/sport_empty"
-                        app:chipIconVisible="true" />
+                        <ImageView
+                            android:id="@+id/volleyballRowIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/volleyball_ball"/>
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/volleyballRowText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="9dp"
+                            android:layout_marginStart="10dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:text="@string/sport_volleyball"/>
+
+                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                            android:id="@+id/volleyballRowRatingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:rating="3.5"
+                            android:numStars="5"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="20dp"
+                            style="@style/Widget.MaterialRatingBar.RatingBar"
+                            android:layout_gravity="center_horizontal" />
+                    </TableRow>
+
+                    <!-- Riga 3 -->
+                    <TableRow
+                        android:id="@+id/tennisRow"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/tennisRowIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/tennis_ball"/>
+
+                        <TextView
+                            android:id="@+id/tennisRowText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="9dp"
+                            android:layout_marginStart="10dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:text="@string/sport_tennis"/>
+
+                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                            android:id="@+id/tennisRowRatingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:rating="3.5"
+                            android:numStars="5"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="20dp"
+                            style="@style/Widget.MaterialRatingBar.RatingBar"
+                            android:layout_gravity="center_horizontal" />
+                    </TableRow>
+
+                    <!-- Riga 4 -->
+                    <TableRow
+                        android:id="@+id/golfRow"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/golfRowIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/golf_ball"/>
+
+                        <TextView
+                            android:id="@+id/golfRowText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="9dp"
+                            android:layout_marginStart="10dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:text="@string/sport_golf"/>
+
+                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                            android:id="@+id/golfRowRatingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:rating="3.5"
+                            android:numStars="5"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="20dp"
+                            style="@style/Widget.MaterialRatingBar.RatingBar"
+                            android:layout_gravity="center_horizontal" />
+                    </TableRow>
+
+                    <!-- Riga 5 -->
+                    <TableRow
+                        android:id="@+id/footballRow"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/footballRowIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/football_ball"/>
+
+                        <TextView
+                            android:id="@+id/footballRowText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="9dp"
+                            android:layout_marginStart="10dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:text="@string/sport_football"/>
+
+                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                            android:id="@+id/footballRowRatingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:rating="3.5"
+                            android:numStars="5"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="20dp"
+                            style="@style/Widget.MaterialRatingBar.RatingBar"
+                            android:layout_gravity="center_horizontal" />
+                    </TableRow>
+
+                </TableLayout>
+
             </HorizontalScrollView>
 
             <TextView
@@ -498,6 +605,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout="@layout/spinner_fragment"/>
 
 </LinearLayout>
