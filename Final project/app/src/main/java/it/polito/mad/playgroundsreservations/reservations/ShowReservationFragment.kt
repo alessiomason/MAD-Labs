@@ -2,6 +2,7 @@ package it.polito.mad.playgroundsreservations.reservations
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -27,6 +28,7 @@ import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.profile.SpinnerFragment
+import it.polito.mad.playgroundsreservations.reservations.invite_friends.ListOfInvitations
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -159,11 +161,21 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     Sport.GOLF -> { image.setImageResource(R.drawable.golf_field); sportIcon.setImageResource(R.drawable.golf_ball) }
                 }
             }
-        }
 
-        view.findViewById<Button>(R.id.invite_friends_button).setOnClickListener {
-            val action = ShowReservationFragmentDirections.actionShowReservationFragmentToInviteFriends(myReservation.id)
-            navController.navigate(action)
+            val inviteFriendsButton = view.findViewById<Button>(R.id.invite_friends_button)
+
+            if (myReservation.time.plus(myReservation.duration).isBefore(Instant.now().atZone(myReservation.time.zone))) {
+                inviteFriendsButton.visibility = GONE
+            } else {
+                inviteFriendsButton.visibility = VISIBLE
+
+                inviteFriendsButton.setOnClickListener {
+                    val action = ShowReservationFragmentDirections.actionShowReservationFragmentToInviteFriends(myReservation.id)
+                    navController.navigate(action)
+                }
+            }
+
+            fragmentManager.beginTransaction().replace(R.id.listOfInvitations, ListOfInvitations(myReservation.invitations)).commit()
         }
      }
 

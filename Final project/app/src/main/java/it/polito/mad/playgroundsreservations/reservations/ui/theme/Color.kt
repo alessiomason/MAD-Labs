@@ -23,6 +23,11 @@ val PrimaryVariantColor = Color(0xFF003549)
 val SecondaryColor = Color(0xFF007FAC)
 val SecondaryTransparentColor = Color(0x22007FAC)
 val SecondaryVariantColor = Color(0xFF00668B)
+
+val PendingColor = Color(0xFF9C27B0)
+val AcceptedColor = Color(0xFF4CAF50)
+val RefusedColor = Color(0xFFE91E63)
+
 val TennisColor = Color(0xFFCCFF00)
 val BasketballColor = Color(0xFFFFA500)
 val FootballColor = Color(0xFFBB86FC)

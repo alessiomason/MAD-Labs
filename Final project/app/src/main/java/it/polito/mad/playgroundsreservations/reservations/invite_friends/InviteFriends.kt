@@ -1,6 +1,5 @@
 package it.polito.mad.playgroundsreservations.reservations.invite_friends
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -46,8 +45,6 @@ import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.User
-import it.polito.mad.playgroundsreservations.profile.ShowProfileActivity
-import it.polito.mad.playgroundsreservations.reservations.CalendarFragmentDirections
 import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
