@@ -141,32 +141,57 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-    fun getReservedPlaygrounds(sport: Sport): LiveData<Map<Reservation, Playground>> {
+    fun getReservedPlaygrounds(sport: Sport?): LiveData<Map<Reservation, Playground>> {
         val reservedPlaygrounds = MutableLiveData<Map<Reservation, Playground>>()
+        // get Reservation by Sport
+        if (sport != null) {
+            db.collection(reservationsCollectionPath)
+                .whereEqualTo("sport", sport.name.lowercase())
+                .orderBy("time")
+                .orderBy("duration")
+                .addSnapshotListener { value, error ->
+                    if (error != null) {
+                        Log.w(TAG, "Failed to read reserved playgrounds.", error)
+                        reservedPlaygrounds.value = emptyMap()
+                        return@addSnapshotListener
+                    }
 
-        db.collection(reservationsCollectionPath)
-            .whereEqualTo("sport", sport.name.lowercase())
-            .orderBy("time")
-            .orderBy("duration")
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Log.w(TAG, "Failed to read reserved playgrounds.", error)
-                    reservedPlaygrounds.value = emptyMap()
-                    return@addSnapshotListener
+                    val reservedPlaygroundsMap = mutableMapOf<Reservation, Playground>()
+                    for (doc in value!!) {
+                        val reservation = doc.toReservation()
+
+                        reservation.playgroundId.get()
+                            .addOnSuccessListener {
+                                val playground = it.toPlayground()
+                                reservedPlaygroundsMap[reservation] = playground
+                                reservedPlaygrounds.value = reservedPlaygroundsMap
+                            }
+                    }
                 }
+        } else { // get all reservations
+            db.collection(reservationsCollectionPath)
+                .orderBy("time")
+                .orderBy("duration")
+                .addSnapshotListener { value, error ->
+                    if (error != null) {
+                        Log.w(TAG, "Failed to read reserved playgrounds.", error)
+                        reservedPlaygrounds.value = emptyMap()
+                        return@addSnapshotListener
+                    }
 
-                val reservedPlaygroundsMap = mutableMapOf<Reservation, Playground>()
-                for (doc in value!!) {
-                    val reservation = doc.toReservation()
+                    val reservedPlaygroundsMap = mutableMapOf<Reservation, Playground>()
+                    for (doc in value!!) {
+                        val reservation = doc.toReservation()
 
-                    reservation.playgroundId.get()
-                        .addOnSuccessListener {
-                            val playground = it.toPlayground()
-                            reservedPlaygroundsMap[reservation] = playground
-                            reservedPlaygrounds.value = reservedPlaygroundsMap
-                        }
+                        reservation.playgroundId.get()
+                            .addOnSuccessListener {
+                                val playground = it.toPlayground()
+                                reservedPlaygroundsMap[reservation] = playground
+                                reservedPlaygrounds.value = reservedPlaygroundsMap
+                            }
+                    }
                 }
-            }
+        }
 
         return reservedPlaygrounds
     }

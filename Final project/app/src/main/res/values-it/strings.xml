@@ -8,6 +8,9 @@
     <string name="sport_football">Calcio</string>
     <string name="sport_volleyball">Pallavolo</string>
     <string name="sport_golf">Golf</string>
+    <string name="sport_all">Tutti gli sport</string>
+    <string name="region_all">Tutte le regioni</string>
+    <string name="city_all">Tutte le città</string>
     <string name="tennis_court">Campo da tennis</string>
     <string name="tennis_court_description">Superficie in cemento</string>
     <string name="basketball_court">Campo da basket</string>

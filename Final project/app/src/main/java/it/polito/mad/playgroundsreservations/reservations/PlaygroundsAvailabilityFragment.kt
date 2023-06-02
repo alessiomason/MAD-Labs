@@ -2,12 +2,14 @@ package it.polito.mad.playgroundsreservations.reservations
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.view.children
@@ -38,6 +40,7 @@ import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.profile.SpinnerFragment
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.time.format.TextStyle
@@ -45,11 +48,16 @@ import java.util.Locale
 
 class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_availability), AdapterView.OnItemSelectedListener {
 
-    private val sports = Sport.values()
+    private val sports = arrayOf(null, Sport.TENNIS, Sport.FOOTBALL, Sport.VOLLEYBALL, Sport.BASKETBALL, Sport.GOLF)
     private lateinit var weekCalendarView: WeekCalendarView
     private var selectedSport = MutableLiveData(Sport.TENNIS)
     private var selectedDate = MutableLiveData(LocalDate.now())
+    private var selectedRegion = MutableLiveData("Piemonte")
+    private var selectedCity = MutableLiveData("Torino")
     private lateinit var reservedPlaygrounds: LiveData<Map<Reservation, Playground>>
+    private var arrayRegion = mutableListOf<String>()
+    private var arrayCity = mutableListOf<String>()
+    val mapRegionToCity = mutableMapOf<String, MutableList<String>>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,8 +74,13 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.playgrounds_availability)
 
+        mapRegionToCity[resources.getString(R.string.region_all)] = mutableListOf(resources.getString(R.string.city_all))
+        arrayRegion.add(resources.getString(R.string.region_all))
+        arrayCity.add(resources.getString(R.string.city_all))
+
         // SPINNER
         val spinner = view.findViewById<Spinner>(R.id.spinner)
+
         activity?.let { activity ->
             ArrayAdapter(
                 activity.applicationContext,
@@ -80,6 +93,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
                             Sport.FOOTBALL -> R.string.sport_football
                             Sport.VOLLEYBALL -> R.string.sport_volleyball
                             Sport.GOLF -> R.string.sport_golf
+                            else -> {R.string.sport_all}
                         }
                     )
                 }
@@ -89,6 +103,96 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
             }
         }
         spinner.onItemSelectedListener = this
+
+        // SPINNER REGION
+        val spinnerRegion = view.findViewById<Spinner>(R.id.spinnerRegion)
+
+        // SPINNER CITY
+        val spinnerCity = view.findViewById<Spinner>(R.id.spinnerCity)
+
+        // get all regions and cities of playgrounds from DB
+        viewModel.playgrounds.observe(viewLifecycleOwner) { playgroundList ->
+            playgroundList.forEach { p ->
+                // se il vettore di Regioni non contiene ancora quella regione, la aggiungo
+                if (!arrayRegion.contains(p.region)){
+                    arrayRegion.add(p.region)
+                }
+                // se il vettore di Città non contiene ancora quella regione, la aggiungo
+                if (!arrayCity.contains(p.city)) {
+                    arrayCity.add(p.city)
+                }
+                // se la mappa regione - città non contiene ancora quella regione, inizializzo una lista associata
+                if (!mapRegionToCity.containsKey(p.region)) {
+                    mapRegionToCity[p.region] = mutableListOf()
+                }
+                // se la città associata alla regione non è ancora presente nella lista, la aggiungo
+                if (mapRegionToCity[p.region]?.contains(p.city) == false) {
+                    mapRegionToCity[p.region]?.add(p.city)
+                }
+                // se la città non è ancora stata associata a "tutte le regioni", la aggiungo
+                if (mapRegionToCity[resources.getString(R.string.region_all)]?.contains(p.city) == false) {
+                    mapRegionToCity[resources.getString(R.string.region_all)]?.add(p.city)
+                }
+            }
+
+            activity?.let { activity ->
+                ArrayAdapter(
+                    activity.applicationContext,
+                    R.layout.spinner_item,
+                    arrayRegion.toTypedArray()
+                ).also { adapterRegion ->
+                    adapterRegion.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spinnerRegion.adapter = adapterRegion
+                }
+            }
+            spinnerRegion.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        selectedRegion.postValue(arrayRegion[position])
+                        activity?.let { activity ->
+                            mapRegionToCity[arrayRegion[position]]?.let {
+                                    ArrayAdapter(
+                                        activity.applicationContext,
+                                        R.layout.spinner_item,
+                                        it.toTypedArray()
+                                    ).also { adapterCity ->
+                                        adapterCity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                        spinnerCity.adapter = adapterCity
+                                    }
+                            }
+                        }
+
+                        spinnerCity.onItemSelectedListener =
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                    parent: AdapterView<*>,
+                                    view: View?,
+                                    position: Int,
+                                    id: Long
+                                ) {
+                                    selectedCity.postValue(parent.getItemAtPosition(position).toString())
+                                }
+
+                                override fun onNothingSelected(parent: AdapterView<*>) {
+
+                                }
+
+                            }
+
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+
+                    }
+
+                }
+
+        }
 
         // CALENDAR
         weekCalendarView = view.findViewById(R.id.week_calendar_view)
@@ -166,18 +270,57 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
 
         selectedSport.observe(viewLifecycleOwner) { sport ->
+            // filtro SPORT già applicato
             reservedPlaygrounds = viewModel.getReservedPlaygrounds(sport)
 
             reservedPlaygrounds.observe(viewLifecycleOwner) { reservedPlaygroundsMap ->
                 selectedDate.observe(viewLifecycleOwner) { selectedDateValue ->
-                    loading.visibility = GONE
-                    val displayedReservedPlaygrounds = reservedPlaygroundsMap.filter {
-                        it.key.time.toLocalDate() == selectedDateValue
+                    selectedRegion.observe(viewLifecycleOwner) { region ->
+                        selectedCity.observe(viewLifecycleOwner) { city ->
+                            loading.visibility = GONE
+
+                            val displayedReservedPlaygrounds=
+                            // filtro "TUTTE LE REGIONI E TUTTE LE CITTA" applicato
+                            if (region == resources.getString(R.string.region_all) && city == resources.getString(R.string.city_all)) {
+                                reservedPlaygroundsMap.filter {
+                                    it.key.time.toLocalDate() == selectedDateValue
+                                }
+                            // filtro "TUTTE LE REGIONI E UNA CITTA SPECIFICA" applicato
+                            } else if (region == resources.getString(R.string.region_all) && city != resources.getString(R.string.city_all)) {
+                                reservedPlaygroundsMap.filter {
+                                    it.key.time.toLocalDate() == selectedDateValue && it.value.city == city
+                                }
+                            // filtro "REGIONE E CITTA" specifica applicato
+                            } else {
+                                reservedPlaygroundsMap.filter {
+                                    it.key.time.toLocalDate() == selectedDateValue && it.value.region == region && it.value.city == city
+                                }
+                            }
+
+
+                            /* if (region != resources.getString(R.string.region_all))
+                                displayedReservedPlaygrounds.filter { it.value.region == region }
+
+                            if (city != resources.getString(R.string.city_all))
+                                displayedReservedPlaygrounds.filter { it.value.city == city } */
+
+                            recyclerView.adapter = MyAdapter(displayedReservedPlaygrounds)
+                        }
                     }
-                    recyclerView.adapter = MyAdapter(displayedReservedPlaygrounds)
                 }
             }
         }
+
+        /* selectedRegion.observe(viewLifecycleOwner) { region ->
+                        if (region != resources.getString(R.string.region_all))
+                            displayedReservedPlaygrounds.filter { it.value.region == region }
+                    }
+
+                    selectedCity.observe(viewLifecycleOwner) { city ->
+                        loading.visibility = GONE
+                        if (city != resources.getString(R.string.city_all))
+                            displayedReservedPlaygrounds.filter { it.value.city == city }
+                    } */
 
         val navController = view.findNavController()
         button.setOnClickListener {
@@ -220,6 +363,8 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
     // RECYCLER VIEW CLASSES
     class ItemViewHolder(private val view: View): ViewHolder(view) {
         private val titleTextView = view.findViewById<TextView>(R.id.reservation_box_title)
+        private val sportIconTextView = view.findViewById<ImageView>(R.id.reservation_box_sport_icon)
+        private val sportNameTextView = view.findViewById<TextView>(R.id.reservation_box_sport)
         private val durationTextView = view.findViewById<TextView>(R.id.reservation_box_duration)
         private val playgroundTextView = view.findViewById<TextView>(R.id.reservation_box_playground)
 
@@ -228,6 +373,28 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
                 R.string.reservation_box_title,
                 rp.first.time.toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
             )
+            when (rp.second.sport) {
+                Sport.TENNIS -> {
+                    sportIconTextView.setImageResource(R.drawable.tennis_ball)
+                    sportNameTextView.setText(R.string.sport_tennis)
+                }
+                Sport.FOOTBALL -> {
+                    sportIconTextView.setImageResource(R.drawable.football_ball)
+                    sportNameTextView.setText(R.string.sport_football)
+                }
+                Sport.VOLLEYBALL -> {
+                    sportIconTextView.setImageResource(R.drawable.volleyball_ball)
+                    sportNameTextView.setText(R.string.sport_volleyball)
+                }
+                Sport.GOLF -> {
+                    sportIconTextView.setImageResource(R.drawable.golf_ball)
+                    sportNameTextView.setText(R.string.sport_golf)
+                }
+                Sport.BASKETBALL -> {
+                    sportIconTextView.setImageResource(R.drawable.basketball_ball)
+                    sportNameTextView.setText(R.string.sport_basketball)
+                }
+            }
             if (rp.first.duration.toHours().toInt() == 1) {
                 durationTextView.text = view.context.getString(R.string.reservation_box_duration_single_hour, rp.first.duration.toHours())
             } else if (rp.first.duration.toHours().toInt() == 2 || rp.first.duration.toHours().toInt() == 3) {
