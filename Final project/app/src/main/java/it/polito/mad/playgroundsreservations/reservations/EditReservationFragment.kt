@@ -88,7 +88,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
                     }
                 }
 
-                for (hour in 8..23) {
+                for (hour in 8..24) {
                     hours.add("$hour:00")
                 }
                 hours.removeAll(arrayOccupated)
