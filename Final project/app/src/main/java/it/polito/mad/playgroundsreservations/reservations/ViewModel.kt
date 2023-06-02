@@ -7,6 +7,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
@@ -30,6 +31,11 @@ import java.util.Date
 // CAMBIARE value!! con controllo != null
 
 class ViewModel(application: Application) : AndroidViewModel(application) {
+    override fun onCleared() {
+        reservations.removeObserver(userReservationsObserver)
+        super.onCleared()
+    }
+
     companion object {
         const val TAG = "VIEW_MODEL"
         const val usersCollectionPath = "users"
@@ -42,7 +48,20 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
 
     val playgrounds = MutableLiveData<List<Playground>>()
     val reservations = MutableLiveData<List<Reservation>>()
+    val userReservations = MutableLiveData<List<Reservation>>()
     val tutorialShown = MutableLiveData<Boolean?>()
+
+    private val userReservationsObserver = Observer<List<Reservation>> { reservationsList ->
+        reservationsList.filter { r ->
+            r.userId.id == Global.userId ||
+                    r.invitations
+                        .filter { it.invitationStatus == InvitationStatus.ACCEPTED }
+                        .map { it.userId }
+                        .contains(Global.userId)
+        }.also {
+            userReservations.value = it
+        }
+    }
 
     init {
         // set listener for playgrounds
@@ -80,6 +99,9 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
 
                 reservations.value = reservationsList
             }
+
+        // start observing user reservations
+        reservations.observeForever(userReservationsObserver)
 
         // set listener for tutorialShown
         db.collection(usersCollectionPath)
@@ -138,61 +160,6 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             }
 
         return reservedPlaygrounds
-    }
-
-    fun getUserReservations(userId: String): LiveData<List<Reservation>> {
-        val userReservations = MutableLiveData<List<Reservation>>()
-
-        val userReference = db.collection(usersCollectionPath)
-            .document(userId)
-
-        db.collection(reservationsCollectionPath)
-            .whereEqualTo("userId", userReference)
-            .orderBy("time")
-            .orderBy("duration")
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Log.w(TAG, "Failed to read user reservations.", error)
-                    userReservations.value = emptyList()
-                    return@addSnapshotListener
-                }
-
-                val userReservationsList = mutableListOf<Reservation>()
-                for (doc in value!!) {
-                    val reservation = doc.toReservation()
-                    userReservationsList.add(reservation)
-                }
-
-                userReservations.value = userReservationsList
-            }
-
-        return userReservations
-    }
-    fun getAllReservations(): LiveData<List<Reservation>> {
-        val reservations = MutableLiveData<List<Reservation>>()
-
-        db.collection(reservationsCollectionPath)
-            .orderBy("time")
-            .orderBy("duration")
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Log.w(TAG, "Failed to read  reservations.", error)
-                    reservations.value = emptyList()
-                    return@addSnapshotListener
-                }
-
-                val reservationsList = mutableListOf<Reservation>()
-                for (doc in value!!) {
-                    Log.d("Reservation",doc.toReservation().toString())
-                    val reservation = doc.toReservation()
-                    reservationsList.add(reservation)
-                }
-
-                reservations.value = reservationsList
-                Log.d("reservationList",reservations.value.toString())
-            }
-
-        return reservations
     }
 
     fun saveReservation(reservation: Reservation) {

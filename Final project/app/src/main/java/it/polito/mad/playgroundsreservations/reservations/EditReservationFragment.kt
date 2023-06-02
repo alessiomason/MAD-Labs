@@ -19,7 +19,6 @@ import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
@@ -51,7 +50,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel by viewModels<ViewModel>()
-        val reservations = viewModel.getAllReservations()
+        val reservations = viewModel.reservations
         val playgrounds = viewModel.playgrounds
         val arrayOccupated = mutableListOf<String>()
 
