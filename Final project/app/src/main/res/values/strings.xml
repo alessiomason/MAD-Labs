@@ -57,6 +57,7 @@
     <string name="select_your_sports">Select your sports</string>
     <string name="my_rating">My rating</string>
     <string name="logout">Logout</string>
+    <string name="age_toast">You need to be at least 14</string>
 
     <!-- RESERVATIONS -->
     <string name="reservation_box_title">Reservation at %1$s</string>

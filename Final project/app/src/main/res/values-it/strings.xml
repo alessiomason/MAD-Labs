@@ -58,6 +58,7 @@
     <string name="select_your_sports">Seleziona i tuoi sport</string>
     <string name="my_rating">La mia valutazione</string>
     <string name="logout">Logout</string>
+    <string name="age_toast">Devi avere almeno 14 anni</string>
 
     <!-- RESERVATIONS -->
     <string name="reservation_box_title">Prenotazione alle ore %1$s</string>

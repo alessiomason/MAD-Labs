@@ -51,7 +51,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel by viewModels<ViewModel>()
-        val reservations = viewModel.getUserReservations(Global.userId!!)
+        val reservations = viewModel.getAllReservations()
         val playgrounds = viewModel.playgrounds
         val arrayOccupated = mutableListOf<String>()
 
@@ -88,7 +88,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
                     }
                 }
 
-                for (hour in 8..24) {
+                for (hour in 8..23) {
                     hours.add("$hour:00")
                 }
                 hours.removeAll(arrayOccupated)

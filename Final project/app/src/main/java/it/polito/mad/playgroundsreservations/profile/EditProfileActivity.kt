@@ -20,6 +20,7 @@ import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -40,6 +41,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Calendar
 import java.util.GregorianCalendar
 
 class EditProfileActivity: AppCompatActivity() {
@@ -57,6 +59,8 @@ class EditProfileActivity: AppCompatActivity() {
     private var userProfileImageUriString = ""
     private var dateOfBirth: Timestamp? = null
 
+    private var tooYoung:Boolean = false;
+
     private lateinit var basketballCb: CheckBox
     private lateinit var volleyballCb: CheckBox
     private lateinit var tennisCb: CheckBox
@@ -68,6 +72,8 @@ class EditProfileActivity: AppCompatActivity() {
     private lateinit var tennisRatingBar: RatingBar
     private lateinit var golfRatingBar: RatingBar
     private lateinit var footballRatingBar: RatingBar
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -171,13 +177,38 @@ class EditProfileActivity: AppCompatActivity() {
                         (user.dateOfBirth?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.monthValue ?: LocalDate.now().monthValue) - 1,
                         user.dateOfBirth?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.dayOfMonth ?: LocalDate.now().dayOfMonth
                     )
+                    // Imposta la data massima selezionabile come la data di oggi meno un giorno P.S non funziona
+                    datePickerDialog.datePicker.maxDate = System.currentTimeMillis() - 1000
+
+
                     datePickerDialog.setOnDateSetListener { _, year, month, dayOfMonth ->
+                        val selectedDate = Calendar.getInstance()
+                        selectedDate.set(year, month, dayOfMonth)
+
+                        val currentDate = Calendar.getInstance()
+                        val minAge = 14
+
+                        currentDate.add(Calendar.YEAR, -minAge) // Sottrai l'età minima dalla data attuale
+
+                        if (selectedDate.after(currentDate)) {
+                            // L'utente ha meno di 14 anni
+                            Toast.makeText(this, R.string.age_toast, Toast.LENGTH_SHORT).show()
+                            tooYoung=true;
+                            return@setOnDateSetListener
+                        }
+
+
+
+
                         val calendar = GregorianCalendar(year, month, dayOfMonth)
                         dateOfBirth = Timestamp(calendar.time)
+                       // val minAge=14;
+                        //dateOfBirth.add(calendar.Yea)
 
                         val newDate = dateOfBirth?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())
                             ?.toLocalDate()?.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) ?: ""
                         dateOfBirthView.text = newDate
+                        tooYoung=false;
                     }
                     datePickerDialog.show()
                 }
@@ -401,81 +432,89 @@ class EditProfileActivity: AppCompatActivity() {
 
         when (item.itemId) {
             R.id.save_profile -> {
-                finish()
-                overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
-
-                var gender: Gender? = null
-                if (genderMaleRadioButton.isChecked) {
-                    gender = Gender.MALE
-                } else if (genderFemaleRadioButton.isChecked) {
-                    gender = Gender.FEMALE
-                } else if (genderOtherRadioButton.isChecked) {
-                    gender = Gender.OTHER
+                if(tooYoung)
+                {
+                    Toast.makeText(this, R.string.age_toast, Toast.LENGTH_SHORT).show()
                 }
+                else
+                {
+                    finish()
+                    overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
 
-                viewModel.getUserInfo(Global.userId!!).observe(this) {
-                    if (it != null) {
-                        val user = User(
-                            id = Global.userId!!,
-                            fullName = nameView.text.toString(),
-                            bio = bioView.text.toString(),
-                            gender = gender,
-                            phone = phoneView.text.toString(),
-                            location = locationView.text.toString(),
-                            rating = 0.0f,
-                            dateOfBirth = dateOfBirth ?: it.dateOfBirth,
-                            mySports = it.mySports,
-                            friends = it.friends,
-                            recentlyInvited = it.recentlyInvited,
-                            alreadyShownTutorial = it.alreadyShownTutorial
-                        )
-
-                        val mySportsMap = user.mySports
-
-                        if (basketballCb.isChecked) {
-                            mySportsMap[Sport.BASKETBALL] = basketballRatingBar.rating
-                        } else {
-                            if (mySportsMap[Sport.BASKETBALL] != null) {
-                                mySportsMap.remove(Sport.BASKETBALL)
-                            }
-                        }
-                        if (volleyballCb.isChecked) {
-                            mySportsMap[Sport.VOLLEYBALL] = volleyballRatingBar.rating
-                        } else {
-                            if (mySportsMap[Sport.VOLLEYBALL] != null) {
-                                mySportsMap.remove(Sport.VOLLEYBALL)
-                            }
-                        }
-                        if (tennisCb.isChecked) {
-                            mySportsMap[Sport.TENNIS] = tennisRatingBar.rating
-                        } else {
-                            if (mySportsMap[Sport.TENNIS] != null) {
-                                mySportsMap.remove(Sport.TENNIS)
-                            }
-                        }
-                        if (golfCb.isChecked) {
-                            mySportsMap[Sport.GOLF] = golfRatingBar.rating
-                        } else {
-                            if (mySportsMap[Sport.GOLF] != null) {
-                                mySportsMap.remove(Sport.GOLF)
-                            }
-                        }
-                        if (footballCb.isChecked) {
-                            mySportsMap[Sport.FOOTBALL] = footballRatingBar.rating
-                        } else {
-                            if (mySportsMap[Sport.FOOTBALL] != null) {
-                                mySportsMap.remove(Sport.FOOTBALL)
-                            }
-                        }
-
-                        val myAverageRating = mySportsMap.values.average().toFloat()
-
-                        user.mySports = mySportsMap
-                        if (mySportsMap.isNotEmpty()) {
-                            user.rating = myAverageRating
-                        }
-                        viewModel.updateUserInfo(user)
+                    var gender: Gender? = null
+                    if (genderMaleRadioButton.isChecked) {
+                        gender = Gender.MALE
+                    } else if (genderFemaleRadioButton.isChecked) {
+                        gender = Gender.FEMALE
+                    } else if (genderOtherRadioButton.isChecked) {
+                        gender = Gender.OTHER
                     }
+
+                    viewModel.getUserInfo(Global.userId!!).observe(this) {
+                        if (it != null) {
+                            val user = User(
+                                id = Global.userId!!,
+                                fullName = nameView.text.toString(),
+                                bio = bioView.text.toString(),
+                                gender = gender,
+                                phone = phoneView.text.toString(),
+                                location = locationView.text.toString(),
+                                rating = 0.0f,
+                                dateOfBirth = dateOfBirth ?: it.dateOfBirth,
+                                mySports = it.mySports,
+                                friends = it.friends,
+                                recentlyInvited = it.recentlyInvited,
+                                alreadyShownTutorial = it.alreadyShownTutorial
+                            )
+
+                            val mySportsMap = user.mySports
+
+                            if (basketballCb.isChecked) {
+                                mySportsMap[Sport.BASKETBALL] = basketballRatingBar.rating
+                            } else {
+                                if (mySportsMap[Sport.BASKETBALL] != null) {
+                                    mySportsMap.remove(Sport.BASKETBALL)
+                                }
+                            }
+                            if (volleyballCb.isChecked) {
+                                mySportsMap[Sport.VOLLEYBALL] = volleyballRatingBar.rating
+                            } else {
+                                if (mySportsMap[Sport.VOLLEYBALL] != null) {
+                                    mySportsMap.remove(Sport.VOLLEYBALL)
+                                }
+                            }
+                            if (tennisCb.isChecked) {
+                                mySportsMap[Sport.TENNIS] = tennisRatingBar.rating
+                            } else {
+                                if (mySportsMap[Sport.TENNIS] != null) {
+                                    mySportsMap.remove(Sport.TENNIS)
+                                }
+                            }
+                            if (golfCb.isChecked) {
+                                mySportsMap[Sport.GOLF] = golfRatingBar.rating
+                            } else {
+                                if (mySportsMap[Sport.GOLF] != null) {
+                                    mySportsMap.remove(Sport.GOLF)
+                                }
+                            }
+                            if (footballCb.isChecked) {
+                                mySportsMap[Sport.FOOTBALL] = footballRatingBar.rating
+                            } else {
+                                if (mySportsMap[Sport.FOOTBALL] != null) {
+                                    mySportsMap.remove(Sport.FOOTBALL)
+                                }
+                            }
+
+                            val myAverageRating = mySportsMap.values.average().toFloat()
+
+                            user.mySports = mySportsMap
+                            if (mySportsMap.isNotEmpty()) {
+                                user.rating = myAverageRating
+                            }
+                            viewModel.updateUserInfo(user)
+                        }
+                    }
+
                 }
 
                 return true
