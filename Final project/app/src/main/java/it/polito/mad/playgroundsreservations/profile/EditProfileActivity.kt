@@ -26,7 +26,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentContainerView
 import com.bumptech.glide.Glide
-import com.google.android.material.chip.Chip
 import com.google.firebase.Timestamp
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -35,11 +34,6 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Gender
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.database.User
-import it.polito.mad.playgroundsreservations.database.basketball
-import it.polito.mad.playgroundsreservations.database.football
-import it.polito.mad.playgroundsreservations.database.golf
-import it.polito.mad.playgroundsreservations.database.tennis
-import it.polito.mad.playgroundsreservations.database.volleyball
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.io.*
 import java.time.LocalDate
@@ -192,30 +186,30 @@ class EditProfileActivity: AppCompatActivity() {
                 locationView.setText(user.location)
                 // ratingBarView.rating = user.rating
 
-                if (user.mySports.contains(basketball)) {
+                if (user.mySports.contains(Sport.BASKETBALL)) {
                     basketballCb.isChecked = true
                     basketballRatingBar.visibility = VISIBLE
-                    basketballRatingBar.rating = user.mySports[basketball]!!
+                    basketballRatingBar.rating = user.mySports[Sport.BASKETBALL]!!
                 }
-                if (user.mySports.contains(volleyball)) {
+                if (user.mySports.contains(Sport.VOLLEYBALL)) {
                     volleyballCb.isChecked = true
                     volleyballRatingBar.visibility = VISIBLE
-                    volleyballRatingBar.rating = user.mySports[volleyball]!!
+                    volleyballRatingBar.rating = user.mySports[Sport.VOLLEYBALL]!!
                 }
-                if (user.mySports.contains(tennis)) {
+                if (user.mySports.contains(Sport.TENNIS)) {
                     tennisCb.isChecked = true
                     tennisRatingBar.visibility = VISIBLE
-                    tennisRatingBar.rating = user.mySports[tennis]!!
+                    tennisRatingBar.rating = user.mySports[Sport.TENNIS]!!
                 }
-                if (user.mySports.contains(golf)) {
+                if (user.mySports.contains(Sport.GOLF)) {
                     golfCb.isChecked = true
                     golfRatingBar.visibility = VISIBLE
-                    golfRatingBar.rating = user.mySports[golf]!!
+                    golfRatingBar.rating = user.mySports[Sport.GOLF]!!
                 }
-                if (user.mySports.contains(football)) {
+                if (user.mySports.contains(Sport.FOOTBALL)) {
                     footballCb.isChecked = true
                     footballRatingBar.visibility = VISIBLE
-                    footballRatingBar.rating = user.mySports[football]!!
+                    footballRatingBar.rating = user.mySports[Sport.FOOTBALL]!!
                 }
 
                 basketballCb.setOnCheckedChangeListener { _, isChecked ->
@@ -430,48 +424,47 @@ class EditProfileActivity: AppCompatActivity() {
                             location = locationView.text.toString(),
                             rating = 0.0f,
                             dateOfBirth = dateOfBirth ?: it.dateOfBirth,
-                            selectedSports = it.selectedSports,
+                            mySports = it.mySports,
                             friends = it.friends,
                             recentlyInvited = it.recentlyInvited,
-                            alreadyShownTutorial = it.alreadyShownTutorial,
-                            mySports = it.mySports
+                            alreadyShownTutorial = it.alreadyShownTutorial
                         )
 
-                        val mySportsMap: MutableMap<String, Float> = user.mySports
+                        val mySportsMap = user.mySports
 
                         if (basketballCb.isChecked) {
-                            mySportsMap[basketball] = basketballRatingBar.rating
+                            mySportsMap[Sport.BASKETBALL] = basketballRatingBar.rating
                         } else {
-                            if (mySportsMap[basketball] != null) {
-                                mySportsMap.remove(basketball)
+                            if (mySportsMap[Sport.BASKETBALL] != null) {
+                                mySportsMap.remove(Sport.BASKETBALL)
                             }
                         }
                         if (volleyballCb.isChecked) {
-                            mySportsMap[volleyball] = volleyballRatingBar.rating
+                            mySportsMap[Sport.VOLLEYBALL] = volleyballRatingBar.rating
                         } else {
-                            if (mySportsMap[volleyball] != null) {
-                                mySportsMap.remove(volleyball)
+                            if (mySportsMap[Sport.VOLLEYBALL] != null) {
+                                mySportsMap.remove(Sport.VOLLEYBALL)
                             }
                         }
                         if (tennisCb.isChecked) {
-                            mySportsMap[tennis] = tennisRatingBar.rating
+                            mySportsMap[Sport.TENNIS] = tennisRatingBar.rating
                         } else {
-                            if (mySportsMap[tennis] != null) {
-                                mySportsMap.remove(tennis)
+                            if (mySportsMap[Sport.TENNIS] != null) {
+                                mySportsMap.remove(Sport.TENNIS)
                             }
                         }
                         if (golfCb.isChecked) {
-                            mySportsMap[golf] = golfRatingBar.rating
+                            mySportsMap[Sport.GOLF] = golfRatingBar.rating
                         } else {
-                            if (mySportsMap[golf] != null) {
-                                mySportsMap.remove(golf)
+                            if (mySportsMap[Sport.GOLF] != null) {
+                                mySportsMap.remove(Sport.GOLF)
                             }
                         }
                         if (footballCb.isChecked) {
-                            mySportsMap[football] = footballRatingBar.rating
+                            mySportsMap[Sport.FOOTBALL] = footballRatingBar.rating
                         } else {
-                            if (mySportsMap[football] != null) {
-                                mySportsMap.remove(football)
+                            if (mySportsMap[Sport.FOOTBALL] != null) {
+                                mySportsMap.remove(Sport.FOOTBALL)
                             }
                         }
 

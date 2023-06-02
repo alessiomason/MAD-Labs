@@ -20,25 +20,17 @@ import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule
 import com.firebase.ui.storage.images.FirebaseImageLoader
-import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import com.google.gson.Gson
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.MainActivity
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Gender
 import it.polito.mad.playgroundsreservations.database.Sport
-import it.polito.mad.playgroundsreservations.database.basketball
-import it.polito.mad.playgroundsreservations.database.football
-import it.polito.mad.playgroundsreservations.database.golf
-import it.polito.mad.playgroundsreservations.database.tennis
-import it.polito.mad.playgroundsreservations.database.volleyball
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.io.InputStream
-
 
 class ShowProfileActivity: AppCompatActivity() {
     private lateinit var nameView: TextView
@@ -142,79 +134,46 @@ class ShowProfileActivity: AppCompatActivity() {
                 locationView.text = user.location
                 ratingBarView.rating = user.rating
 
-                if (user.mySports.contains(basketball)) {
+                if (user.mySports.contains(Sport.BASKETBALL)) {
                     basketballRow.visibility = VISIBLE
                     basketballRatingBar.visibility = VISIBLE
-                    basketballRatingBar.rating = user.mySports[basketball]!!
+                    basketballRatingBar.rating = user.mySports[Sport.BASKETBALL]!!
                 } else {
                     basketballRow.visibility = GONE
                     basketballRatingBar.visibility = GONE
                 }
-                if (user.mySports.contains(volleyball)) {
+                if (user.mySports.contains(Sport.VOLLEYBALL)) {
                     volleyballRow.visibility = VISIBLE
                     volleyballRatingBar.visibility = VISIBLE
-                    volleyballRatingBar.rating = user.mySports[volleyball]!!
+                    volleyballRatingBar.rating = user.mySports[Sport.VOLLEYBALL]!!
                 } else {
                     volleyballRow.visibility = GONE
                     volleyballRatingBar.visibility = GONE
                 }
-                if (user.mySports.contains(tennis)) {
+                if (user.mySports.contains(Sport.TENNIS)) {
                     tennisRow.visibility = VISIBLE
                     tennisRatingBar.visibility = VISIBLE
-                    tennisRatingBar.rating = user.mySports[tennis]!!
+                    tennisRatingBar.rating = user.mySports[Sport.TENNIS]!!
                 } else {
                     tennisRow.visibility = GONE
                     tennisRatingBar.visibility = GONE
                 }
-                if (user.mySports.contains(golf)) {
+                if (user.mySports.contains(Sport.GOLF)) {
                     golfRow.visibility = VISIBLE
                     golfRatingBar.visibility = VISIBLE
-                    golfRatingBar.rating = user.mySports[golf]!!
+                    golfRatingBar.rating = user.mySports[Sport.GOLF]!!
                 } else {
                     golfRow.visibility = GONE
                     golfRatingBar.visibility = GONE
                 }
-                if (user.mySports.contains(football)) {
+                if (user.mySports.contains(Sport.FOOTBALL)) {
                     footballRow.visibility = VISIBLE
                     footballRatingBar.visibility = VISIBLE
-                    footballRatingBar.rating = user.mySports[football]!!
+                    footballRatingBar.rating = user.mySports[Sport.FOOTBALL]!!
                 } else {
                     footballRow.visibility = GONE
                     footballRatingBar.visibility = GONE
                 }
-
-                /* val emptyChip = findViewById<Chip>(R.id.chipEmpty)
-                emptyChip.visibility = VISIBLE
-
-                val tennisChip = findViewById<Chip>(R.id.chipTennis)
-                if (user.selectedSports.contains(Sport.TENNIS)) {
-                    tennisChip.visibility = VISIBLE
-                    emptyChip.visibility = GONE
-                } else tennisChip.visibility = GONE
-
-                val basketballChip = findViewById<Chip>(R.id.chipBasketball)
-                if (user.selectedSports.contains(Sport.BASKETBALL)) {
-                    basketballChip.visibility = VISIBLE
-                    emptyChip.visibility = GONE
-                } else basketballChip.visibility = GONE
-
-                val footballChip = findViewById<Chip>(R.id.chipFootball)
-                if (user.selectedSports.contains(Sport.FOOTBALL)) {
-                    footballChip.visibility = VISIBLE
-                    emptyChip.visibility = GONE
-                } else footballChip.visibility = GONE
-
-                val volleyballChip = findViewById<Chip>(R.id.chipVolleyball)
-                if (user.selectedSports.contains(Sport.VOLLEYBALL)) {
-                    volleyballChip.visibility = VISIBLE
-                    emptyChip.visibility = GONE
-                } else volleyballChip.visibility = GONE
-
-                val golfChip = findViewById<Chip>(R.id.chipGolf)
-                if (user.selectedSports.contains(Sport.GOLF)) {
-                    golfChip.visibility = VISIBLE
-                    emptyChip.visibility = GONE
-                } else golfChip.visibility = GONE */
 
                 val storageReference = Firebase.storage.reference.child("profileImages/${user.id}")
 

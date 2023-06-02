@@ -136,16 +136,23 @@ fun FriendBox(
                             }
 
                             Column {
-                                RatingBar(
-                                    rating = friend.rating,
-                                    space = 2.dp,
-                                    imageVectorEmpty = ImageVector.vectorResource(id = R.drawable.bordered_star),
-                                    imageVectorFFilled = ImageVector.vectorResource(id = R.drawable.filled_star),
-                                    tintEmpty = SecondaryVariantColor,
-                                    tintFilled = SecondaryVariantColor,
-                                    itemSize = 24.dp,
-                                    gestureEnabled = false
-                                )
+                                if (friend.mySports[reservation.value!!.sport] != null) {
+                                    RatingBar(
+                                        rating = friend.mySports[reservation.value!!.sport]!!,
+                                        space = 2.dp,
+                                        imageVectorEmpty = ImageVector.vectorResource(id = R.drawable.bordered_star),
+                                        imageVectorFFilled = ImageVector.vectorResource(id = R.drawable.filled_star),
+                                        tintEmpty = SecondaryVariantColor,
+                                        tintFilled = SecondaryVariantColor,
+                                        itemSize = 24.dp,
+                                        gestureEnabled = false
+                                    )
+                                } else {
+                                    Text(
+                                        text = "The user did not insert a personal rating for this sport.",
+                                        style = MaterialTheme.typography.labelMedium
+                                    )
+                                }
                             }
                         }
                     }

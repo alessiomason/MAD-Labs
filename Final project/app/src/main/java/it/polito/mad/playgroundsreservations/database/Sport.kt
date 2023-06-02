@@ -4,12 +4,6 @@ enum class Sport {
     TENNIS, BASKETBALL, FOOTBALL, VOLLEYBALL, GOLF
 }
 
-const val tennis = "tennis"
-const val basketball = "basketball"
-const val football = "football"
-const val volleyball = "volleyball"
-const val golf = "golf"
-
 fun String.toSport(): Sport {
     return when (this) {
         "tennis" -> Sport.TENNIS

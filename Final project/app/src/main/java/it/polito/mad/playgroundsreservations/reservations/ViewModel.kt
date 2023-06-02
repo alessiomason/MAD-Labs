@@ -426,9 +426,8 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             "phone" to user.phone,
             "location" to user.location,
             "rating" to user.rating,
-            "selectedSports" to user.selectedSports.map { it.name.lowercase() } .toList(),
-            "alreadyShownTutorial" to user.alreadyShownTutorial,
-            "mySports" to user.mySports
+            "mySports" to user.mySports.map { (s, r) -> s.name.lowercase() to r }.toMap(),
+            "alreadyShownTutorial" to user.alreadyShownTutorial
         )
 
         db.collection(usersCollectionPath)

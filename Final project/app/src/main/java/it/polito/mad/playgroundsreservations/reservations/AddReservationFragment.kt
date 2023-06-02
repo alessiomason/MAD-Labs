@@ -131,14 +131,12 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                     val editor = sharedPreferences.edit()
                     editor.putString("playgroundSelected", playground.id)
                     editor.apply()
-                    // MyReservation.playgroundId = sharedPreferences.getString("playgroundSelected", "").toString()
-
 
                     var totalRating = 0.0f
                     val ratingBarValue = viewModel.getRatingsByPlaygroundIdFragment(playground.id)
                     ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
                         if (ratingPlaygroundsList.isEmpty()){
-                            ratingBar.rating = (0.0).toFloat()
+                            ratingBar.rating = 0.0f
                         } else {
                             ratingPlaygroundsList.forEach { r ->
                                 totalRating += r?.rating!!

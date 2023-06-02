@@ -16,11 +16,10 @@ data class User(
     var phone: String,
     var location: String,
     var rating: Float = 0.0f,
-    var selectedSports: MutableSet<Sport> = mutableSetOf(),
+    var mySports: MutableMap<Sport, Float> = mutableMapOf(),
     var friends: List<DocumentReference>,
     var recentlyInvited: List<DocumentReference>,
-    var alreadyShownTutorial: Boolean = false,
-    var mySports: MutableMap<String, Float> = mutableMapOf()
+    var alreadyShownTutorial: Boolean = false
 ) {
     val age: Int?
         get() {
@@ -42,15 +41,11 @@ fun DocumentSnapshot.toUser(): User {
     val location = this.get("location", String::class.java)
     val dateOfBirth = this.get("dateOfBirth", Timestamp::class.java)
     val rating = this.get("rating", Float::class.java)
-    val selectedSportsStrings = this.get("selectedSports") as? List<String>
+    val mySportsStrings = (this.get("mySports") as? Map<String, Float>)
+    val mySports = mySportsStrings?.map{ (s, r) -> s.toSport() to r }?.toMap() ?: emptyMap()
     val friends = this.get("friends") as? List<DocumentReference> ?: emptyList()
     val recentlyInvited = this.get("recentlyInvited") as? List<DocumentReference> ?: emptyList()
     val alreadyShownTutorial = this.get("alreadyShownTutorial", Boolean::class.java)
-
-    val mySportsStrings = this.get("mySports") as? Map<String, Float>
-
-    val selectedSports = selectedSportsStrings?.map { it.toSport() }?.toMutableSet() ?: mutableSetOf()
-    val mySports = mySportsStrings?.mapValues { (_, rating) -> rating }?.toMutableMap() ?: mutableMapOf()
 
     return User(
         id,
@@ -60,11 +55,10 @@ fun DocumentSnapshot.toUser(): User {
         gender,
         phone ?: "",
         location ?: "",
-        rating ?: (0.0).toFloat(),
-        selectedSports,
+        rating ?: 0.0f,
+        mySports.toMutableMap(),
         friends,
         recentlyInvited,
-        alreadyShownTutorial ?: false,
-        mySports
+        alreadyShownTutorial ?: false
     )
 }
