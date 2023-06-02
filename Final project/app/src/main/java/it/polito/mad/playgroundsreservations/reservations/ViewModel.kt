@@ -465,4 +465,21 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                     .update("recentlyInvited", newList)
             }
     }
+
+    fun invite(reservationId: String, invitedIds: List<String>) {
+        val reservationReference = db.collection(reservationsCollectionPath)
+            .document(reservationId)
+
+        invitedIds.forEach {
+            // remove previous pending invitations (avoid duplication)
+            db.collection(usersCollectionPath)
+                .document(it)
+                .update("invitations", FieldValue.arrayRemove(reservationReference))
+
+            // invite
+            db.collection(usersCollectionPath)
+                .document(it)
+                .update("invitations", FieldValue.arrayUnion(reservationReference))
+        }
+    }
 }
