@@ -24,6 +24,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
@@ -58,6 +59,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         val fragmentManager = childFragmentManager
         fragmentManager.beginTransaction().replace(R.id.loadingShowReservationFragment, SpinnerFragment()).commit()
         loading.visibility = VISIBLE
+        view.findViewById<Button>(R.id.revoke_partecipation_button).visibility= GONE
 
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.reservation)
@@ -192,6 +194,16 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                         navController.navigate(action)
                     }
                 }
+            }
+
+            if(myReservation.userId!=viewModel.getUserReference(Global.userId!!) && myReservation.time.isAfter(Instant.now().atZone(myReservation.time.zone)))
+            {
+                view.findViewById<Button>(R.id.revoke_partecipation_button).visibility= VISIBLE
+                view.findViewById<Button>(R.id.revoke_partecipation_button).setOnClickListener{
+                    viewModel.updateInvitationStatus(myReservation.id,InvitationStatus.REFUSED)
+                    navController.popBackStack()
+                }
+
             }
 
             fragmentManager.beginTransaction().replace(R.id.listOfInvitations, ListOfInvitations(myReservation.invitations)).commit()

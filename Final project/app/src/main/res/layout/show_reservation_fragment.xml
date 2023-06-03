@@ -231,6 +231,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="@string/invite_friends" />
+                <Button
+                    android:id="@+id/revoke_partecipation_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="revoca" />
 
                 <Button
                     android:id="@+id/btnRateCourt"

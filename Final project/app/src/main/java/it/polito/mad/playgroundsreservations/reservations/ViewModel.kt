@@ -555,7 +555,6 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
     }
-
     fun updateInvitationStatus(reservationId: String, newStatus: InvitationStatus) {
         db.collection(reservationsCollectionPath)
             .document(reservationId)
