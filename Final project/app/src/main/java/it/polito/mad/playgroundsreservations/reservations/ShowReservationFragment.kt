@@ -213,6 +213,16 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
            cancelMenuItem.isEnabled = false
            cancelMenuItem.isVisible = false
        }
+
+      if(this::myReservation.isInitialized && myReservation.userId!=viewModel.getUserReference(Global.userId!!))
+       {
+           editMenuItem.isEnabled = false
+           editMenuItem.isVisible = false
+           cancelMenuItem.isEnabled = false
+           cancelMenuItem.isVisible = false
+       }
+
+
    }
 
     @Deprecated("Deprecated in Java")
