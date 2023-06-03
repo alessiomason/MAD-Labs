@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
@@ -164,7 +165,9 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
             priceElement.text=(myPlayground.pricePerHour*myReservation.duration.toHours().toInt()).toString()
             val inviteFriendsButton = view.findViewById<Button>(R.id.invite_friends_button)
 
-            if(myReservation.invitations.count()+1==myPlayground.maxPlayers)
+            if(myReservation.userId!= viewModel.getUserReference(Global.userId!!))
+                inviteFriendsButton.visibility = GONE
+            else if(myReservation.invitations.count {it.invitationStatus.toString()=="accepted"}+1==myPlayground.maxPlayers)
             {
                 inviteFriendsButton.visibility = GONE
             }
