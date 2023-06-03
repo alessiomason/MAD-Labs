@@ -113,4 +113,5 @@
     <string name="invited_by">Invitato da %1$s</string>
     <string name="price_per_hour">Prezzo totale: %1$d €/h</string>
     <string name="playground_address">Indirizzo del campo: %1$s</string>
+    <string name="show_inviter_profile">Mostra il profilo di %1$s</string>
 </resources>

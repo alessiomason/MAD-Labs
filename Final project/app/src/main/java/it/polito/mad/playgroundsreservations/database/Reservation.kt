@@ -17,6 +17,7 @@ import java.time.ZonedDateTime
 data class Reservation(
     val id: String,
     val userId: DocumentReference,
+    val userFullName: String,
     var playgroundId: DocumentReference,
     var sport: Sport,
     var time: ZonedDateTime,
@@ -27,6 +28,7 @@ data class Reservation(
 
 fun DocumentSnapshot.toReservation(): Reservation {
     val userId = this.get("userId", DocumentReference::class.java)!!
+    val userFullName = this.get("userFullName", String::class.java) ?: ""
     val playgroundId = this.get("playgroundId", DocumentReference::class.java)!!
     val sport = this.get("sport", String::class.java)!!.toSport()
     val time = this.get("time", Timestamp::class.java)!!.toDate().toInstant().atZone(ZoneId.systemDefault())
@@ -37,6 +39,7 @@ fun DocumentSnapshot.toReservation(): Reservation {
     return Reservation(
         id,
         userId,
+        userFullName,
         playgroundId,
         sport,
         time,

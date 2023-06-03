@@ -360,6 +360,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                 val newReservation = Reservation(
                     "",
                     viewModel.getUserReference(Global.userId!!),
+                    Global.fullName!!,
                     viewModel.getPlaygroundReference(MyReservation.playgroundId),
                     MyReservation.sport,
                     MyReservation.time,

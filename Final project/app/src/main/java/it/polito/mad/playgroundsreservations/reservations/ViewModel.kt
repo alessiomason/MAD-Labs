@@ -199,6 +199,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     fun saveReservation(reservation: Reservation) {
         val r = hashMapOf(
             "userId" to reservation.userId,
+            "userFullName" to reservation.userFullName,
             "playgroundId" to reservation.playgroundId,
             "sport" to reservation.sport.name.lowercase(),
             "time" to Timestamp(Date.from(reservation.time.toInstant())),
@@ -222,6 +223,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         val r = hashMapOf(
             "id" to reservation.id,
             "userId" to reservation.userId,
+            "userFullName" to reservation.userFullName,
             "playgroundId" to reservation.playgroundId,
             "sport" to reservation.sport.name.lowercase(),
             "time" to Timestamp(Date.from(reservation.time.toInstant())),

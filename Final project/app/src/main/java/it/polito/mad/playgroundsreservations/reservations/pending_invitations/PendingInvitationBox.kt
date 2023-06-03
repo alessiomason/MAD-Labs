@@ -160,7 +160,7 @@ fun PendingInvitationBox(i: Pair<Reservation, Playground>) {
                                 .padding(end = 5.dp)
                                 .size(20.dp)
                         )
-                        Text(text = stringResource(id = R.string.invited_by, "Alessio Mason"))
+                        Text(text = stringResource(id = R.string.invited_by, reservation.userFullName))
                     }
                 }
             }
@@ -181,7 +181,7 @@ fun PendingInvitationBox(i: Pair<Reservation, Playground>) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         ProfileImage(friendId = reservation.userId.id, small = true)
-                        Text(text = "Show Alessio Mason's profile")
+                        Text(text = stringResource(id = R.string.show_inviter_profile, reservation.userFullName))
                     }
                 }
             }
