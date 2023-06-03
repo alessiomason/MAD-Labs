@@ -57,7 +57,17 @@ class ShowProfileActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_profile)
-        this.title = resources?.getString(R.string.user_profile)
+
+        val logoutButton = findViewById<Button>(R.id.logout_button)
+        val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
+
+        if (userId == Global.userId!!) {
+            this.title = resources?.getString(R.string.user_profile)
+        }
+        else {
+            this.title = resources?.getString(R.string.reservation_creator_profile)
+            logoutButton.visibility = GONE
+        }
 
         nameView = findViewById(R.id.textFullName)
         ageView = findViewById(R.id.textAge)
@@ -90,7 +100,9 @@ class ShowProfileActivity: AppCompatActivity() {
         footballRatingBar = findViewById(R.id.footballRowRatingBar)
         footballRatingBar.setIsIndicator(true)
 
-        findViewById<Button>(R.id.logout_button).setOnClickListener {
+
+
+        logoutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             Global.userId = null
 
@@ -109,10 +121,13 @@ class ShowProfileActivity: AppCompatActivity() {
 
         val loading = findViewById<FragmentContainerView>(R.id.loadingShowProfileFragment)
         val fragmentManager = supportFragmentManager
-        fragmentManager.beginTransaction().replace(R.id.loadingShowProfileFragment, SpinnerFragment()).commit()
+        fragmentManager.beginTransaction()
+            .replace(R.id.loadingShowProfileFragment, SpinnerFragment()).commit()
         loading.visibility = VISIBLE
 
-        viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
+        val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
+
+        viewModel.getUserInfo(userId).observe(this) { user ->
             if (user != null) {
                 loading.visibility = GONE
                 nameView.text = user.fullName
@@ -185,7 +200,7 @@ class ShowProfileActivity: AppCompatActivity() {
         }
 
         playgrounds.observe(this) { itemList ->
-            itemList?.let {items ->
+            itemList?.let { items ->
                 for (item in items) {
                     when (item.sport) {
                         Sport.BASKETBALL -> {
@@ -197,6 +212,7 @@ class ShowProfileActivity: AppCompatActivity() {
                                 findViewById<TextView>(R.id.my_court_basketball_address)
                             addressView.text = item.address
                         }
+
                         Sport.VOLLEYBALL -> {
                             val textView = findViewById<TextView>(R.id.my_court_volleyball_title)
                             textView.text = item.name
@@ -206,6 +222,7 @@ class ShowProfileActivity: AppCompatActivity() {
                                 findViewById<TextView>(R.id.my_court_volleyball_address)
                             addressView.text = item.address
                         }
+
                         Sport.GOLF -> {
                             val textView = findViewById<TextView>(R.id.my_court_golf_title)
                             textView.text = item.name
@@ -214,6 +231,7 @@ class ShowProfileActivity: AppCompatActivity() {
                             val addressView = findViewById<TextView>(R.id.my_court_golf_address)
                             addressView.text = item.address
                         }
+
                         Sport.TENNIS -> {
                             val textView = findViewById<TextView>(R.id.my_court_tennis_title)
                             textView.text = item.name
@@ -222,6 +240,7 @@ class ShowProfileActivity: AppCompatActivity() {
                             val addressView = findViewById<TextView>(R.id.my_court_tennis_address)
                             addressView.text = item.address
                         }
+
                         Sport.FOOTBALL -> {
                             val textView = findViewById<TextView>(R.id.my_court_football_title)
                             textView.text = item.name
@@ -245,11 +264,16 @@ class ShowProfileActivity: AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu to use in the action bar
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return super.onCreateOptionsMenu(menu)
+        val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
+        if (userId == Global.userId) {
+            // Inflate the menu to use in the action bar
+            val inflater = menuInflater
+            inflater.inflate(R.menu.menu, menu)
+            return super.onCreateOptionsMenu(menu)
+        }
+        return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.modify_profile -> {

@@ -1,5 +1,8 @@
 package it.polito.mad.playgroundsreservations.reservations.pending_invitations
 
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -29,16 +32,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityOptionsCompat
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.profile.ShowProfileActivity
 import it.polito.mad.playgroundsreservations.reservations.invite_friends.ProfileImage
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.AcceptedColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
@@ -52,6 +58,11 @@ import java.time.format.FormatStyle
 fun PendingInvitationBox(i: Pair<Reservation, Playground>) {
     val (reservation, playground) = i
     var showAdditionalInfo by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val intent = Intent(context, ShowProfileActivity::class.java)
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+        intent.removeExtra("reservationCreatorId")
+    }
 
     val image = when (playground.sport) {
         Sport.TENNIS -> R.drawable.tennis_court
@@ -168,7 +179,13 @@ fun PendingInvitationBox(i: Pair<Reservation, Playground>) {
             Row {
                 TextButton(
                     onClick = {
-                        // @salvo vai la onClick è tutta tua
+                        intent.putExtra("reservationCreatorId", reservation.userId.id)
+                        val options = ActivityOptionsCompat.makeCustomAnimation(
+                            context,
+                            R.anim.fade_in,
+                            R.anim.no_anim
+                        )
+                        launcher.launch(intent, options)
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
                     shape = RoundedCornerShape(10.dp),
