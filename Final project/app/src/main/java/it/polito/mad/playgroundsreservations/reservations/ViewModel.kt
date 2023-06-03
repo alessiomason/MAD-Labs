@@ -200,7 +200,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         return reservedPlaygrounds
     }
 
-    fun saveReservation(reservation: Reservation): DocumentReference {
+    fun saveReservation(reservation: Reservation) {
         val r = hashMapOf(
             "userId" to reservation.userId,
             "userFullName" to reservation.userFullName,
@@ -220,10 +220,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             }
         )
 
-        val ref = db.collection(reservationsCollectionPath).document()
-        ref.set(r)
-
-        return ref
+         db.collection(reservationsCollectionPath).add(r)
     }
 
     fun updateReservation(reservation: Reservation) {

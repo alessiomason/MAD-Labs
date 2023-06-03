@@ -370,11 +370,6 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                 )
 
                 val ref = viewModel.saveReservation(newReservation)
-                action =
-                    AddReservationFragmentDirections.actionAddReservationFragmentToShowReservationFragment(ref.id)
-
-                val fragmentManager = requireFragmentManager()
-                fragmentManager.popBackStack()
                 navController?.navigate(action)
             }
         }
