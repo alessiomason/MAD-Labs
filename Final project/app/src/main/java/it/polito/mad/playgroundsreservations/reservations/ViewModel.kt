@@ -551,4 +551,18 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
     }
+
+    fun updateInvitationStatus(reservationId: String, newStatus: InvitationStatus) {
+        db.collection(reservationsCollectionPath)
+            .document(reservationId)
+            .update("invitations.${Global.userId}.status", newStatus.name.lowercase())
+    }
+
+    fun deleteInvitationNotification(reservationId: String) {
+        val reservationReference = db.collection(reservationsCollectionPath).document(reservationId)
+
+        db.collection(usersCollectionPath)
+            .document(Global.userId!!)
+            .update("invitations", FieldValue.arrayRemove(reservationReference))
+    }
 }

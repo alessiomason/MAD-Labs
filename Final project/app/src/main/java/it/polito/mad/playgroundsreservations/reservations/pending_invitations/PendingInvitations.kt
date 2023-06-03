@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
@@ -65,22 +66,35 @@ fun PendingInvitationsScreen() {
         viewModel.getInvitedToReservations(invitedToReservations, stillLoading)
     }
 
+    val dealWithInvitation: (String, InvitationStatus) -> Unit = { reservationId: String, newStatus: InvitationStatus ->
+        viewModel.updateInvitationStatus(reservationId, newStatus)
+        viewModel.deleteInvitationNotification(reservationId)
+        // leave the invitation and only change the buttons
+        //invitedToReservations.removeIf { it.first.id == reservationId }
+    }
+
     if (stillLoading.value && invitedToReservations.isEmpty()) {
         LoadingScreen()
     } else {
         stillLoading.value = false
-        PendingInvitationsScreenContent(invitedToReservations = invitedToReservations)
+        PendingInvitationsScreenContent(
+            invitedToReservations = invitedToReservations,
+            dealWithInvitation = dealWithInvitation
+        )
     }
 }
 
 @Composable
-fun PendingInvitationsScreenContent(invitedToReservations: SnapshotStateList<Pair<Reservation, Playground>>) {
+fun PendingInvitationsScreenContent(
+    invitedToReservations: SnapshotStateList<Pair<Reservation, Playground>>,
+    dealWithInvitation: (String, InvitationStatus) -> Unit
+) {
     LazyColumn {
         items(
             items = invitedToReservations,
             key = { it.first.id }
         ) {
-            PendingInvitationBox(it)
+            PendingInvitationBox(it, dealWithInvitation)
         }
     }
 }

@@ -2,14 +2,9 @@ package it.polito.mad.playgroundsreservations.database
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime

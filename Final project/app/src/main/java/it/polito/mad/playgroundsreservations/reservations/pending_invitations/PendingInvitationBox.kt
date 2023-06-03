@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityOptionsCompat
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
@@ -55,12 +56,17 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 @Composable
-fun PendingInvitationBox(i: Pair<Reservation, Playground>) {
+fun PendingInvitationBox(
+    i: Pair<Reservation, Playground>,
+    dealWithInvitation: (String, InvitationStatus) -> Unit
+) {
     val (reservation, playground) = i
     var showAdditionalInfo by remember { mutableStateOf(false) }
+    var invitationStatus by remember { mutableStateOf(InvitationStatus.PENDING) }
+
     val context = LocalContext.current
     val intent = Intent(context, ShowProfileActivity::class.java)
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         intent.removeExtra("reservationCreatorId")
     }
 
@@ -262,47 +268,105 @@ fun PendingInvitationBox(i: Pair<Reservation, Playground>) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                OutlinedButton(
-                    onClick = { /*TODO*/ },
-                    shape = MaterialTheme.shapes.medium,
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = RefusedColor),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 10.dp, end = 5.dp)
-                        .padding(vertical = 10.dp)
-                ) {
-                    Row {
-                        Icon(
-                            painter = painterResource(id = R.drawable.cross_circle_icon),
-                            contentDescription = "User icon",
-                            tint = RefusedColor,
+                when (invitationStatus) {
+                    InvitationStatus.ACCEPTED -> {
+                        OutlinedButton(
+                            enabled = false,
+                            onClick = { },
+                            shape = MaterialTheme.shapes.medium,
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = RefusedColor),
                             modifier = Modifier
-                                .padding(end = 5.dp)
-                                .size(20.dp)
-                        )
-                        Text(text = "Refuse")
+                                .weight(1f)
+                                .padding(start = 10.dp, end = 5.dp)
+                                .padding(vertical = 10.dp)
+                        ) {
+                            Row {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.check_icon),
+                                    contentDescription = "User icon",
+                                    tint = AcceptedColor,
+                                    modifier = Modifier
+                                        .padding(end = 5.dp)
+                                        .size(20.dp)
+                                )
+                                Text(text = "Accepted")
+                            }
+                        }
                     }
-                }
-
-                OutlinedButton(
-                    onClick = { /*TODO*/ },
-                    shape = MaterialTheme.shapes.medium,
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = AcceptedColor),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 5.dp, end = 10.dp)
-                        .padding(vertical = 10.dp)
-                ) {
-                    Row {
-                        Icon(
-                            painter = painterResource(id = R.drawable.check_icon),
-                            contentDescription = "User icon",
-                            tint = AcceptedColor,
+                    InvitationStatus.REFUSED -> {
+                        OutlinedButton(
+                            enabled = false,
+                            onClick = { },
+                            shape = MaterialTheme.shapes.medium,
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = RefusedColor),
                             modifier = Modifier
-                                .padding(end = 5.dp)
-                                .size(20.dp)
-                        )
-                        Text(text = "Accept")
+                                .weight(1f)
+                                .padding(start = 10.dp, end = 5.dp)
+                                .padding(vertical = 10.dp)
+                        ) {
+                            Row {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.cross_circle_icon),
+                                    contentDescription = "User icon",
+                                    tint = RefusedColor,
+                                    modifier = Modifier
+                                        .padding(end = 5.dp)
+                                        .size(20.dp)
+                                )
+                                Text(text = "Refused")
+                            }
+                        }
+                    }
+                    InvitationStatus.PENDING -> {
+                        OutlinedButton(
+                            onClick = {
+                                dealWithInvitation(reservation.id, InvitationStatus.REFUSED)
+                                invitationStatus = InvitationStatus.REFUSED
+                            },
+                            shape = MaterialTheme.shapes.medium,
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = RefusedColor),
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 10.dp, end = 5.dp)
+                                .padding(vertical = 10.dp)
+                        ) {
+                            Row {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.cross_circle_icon),
+                                    contentDescription = "User icon",
+                                    tint = RefusedColor,
+                                    modifier = Modifier
+                                        .padding(end = 5.dp)
+                                        .size(20.dp)
+                                )
+                                Text(text = "Refuse")
+                            }
+                        }
+
+                        OutlinedButton(
+                            onClick = {
+                                dealWithInvitation(reservation.id, InvitationStatus.ACCEPTED)
+                                invitationStatus = InvitationStatus.ACCEPTED
+                            },
+                            shape = MaterialTheme.shapes.medium,
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = AcceptedColor),
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 5.dp, end = 10.dp)
+                                .padding(vertical = 10.dp)
+                        ) {
+                            Row {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.check_icon),
+                                    contentDescription = "User icon",
+                                    tint = AcceptedColor,
+                                    modifier = Modifier
+                                        .padding(end = 5.dp)
+                                        .size(20.dp)
+                                )
+                                Text(text = "Accept")
+                            }
+                        }
                     }
                 }
             }
