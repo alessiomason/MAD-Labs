@@ -61,12 +61,18 @@ fun PendingInvitationsScreen() {
 
     val stillLoading = remember { mutableStateOf(true) }
     val invitedToReservations = remember { mutableStateListOf<Pair<Reservation, Playground>>() }
+    val invitedToReservationsStatuses = remember { mutableStateListOf<Pair<String, InvitationStatus>>() }
 
     LaunchedEffect(true) {
         viewModel.getInvitedToReservations(invitedToReservations, stillLoading)
     }
 
     val dealWithInvitation: (String, InvitationStatus) -> Unit = { reservationId: String, newStatus: InvitationStatus ->
+        invitedToReservationsStatuses.removeIf {
+            it.first == reservationId
+        }
+        invitedToReservationsStatuses.add(Pair(reservationId, newStatus))
+
         viewModel.updateInvitationStatus(reservationId, newStatus)
         viewModel.deleteInvitationNotification(reservationId)
         // leave the invitation and only change the buttons
@@ -77,8 +83,13 @@ fun PendingInvitationsScreen() {
         LoadingScreen()
     } else {
         stillLoading.value = false
+        invitedToReservations.forEach {
+            invitedToReservationsStatuses.add(Pair(it.first.id, InvitationStatus.PENDING))
+        }
+
         PendingInvitationsScreenContent(
             invitedToReservations = invitedToReservations,
+            invitedToReservationsStatuses,
             dealWithInvitation = dealWithInvitation
         )
     }
@@ -87,14 +98,23 @@ fun PendingInvitationsScreen() {
 @Composable
 fun PendingInvitationsScreenContent(
     invitedToReservations: SnapshotStateList<Pair<Reservation, Playground>>,
+    invitedToReservationsState: SnapshotStateList<Pair<String, InvitationStatus>>,
     dealWithInvitation: (String, InvitationStatus) -> Unit
 ) {
     LazyColumn {
         items(
             items = invitedToReservations,
             key = { it.first.id }
-        ) {
-            PendingInvitationBox(it, dealWithInvitation)
+        ) { invitedToReservation ->
+            invitedToReservationsState.find {
+                it.first == invitedToReservation.first.id
+            }?.let { invitedToReservationState ->
+                PendingInvitationBox(
+                    invitedToReservation,
+                    invitedToReservationState.second,
+                    dealWithInvitation
+                )
+            }
         }
     }
 }
