@@ -39,6 +39,7 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.reservations.invite_friends.ProfileImage
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.AcceptedColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
@@ -160,6 +161,27 @@ fun PendingInvitationBox(i: Pair<Reservation, Playground>) {
                                 .size(20.dp)
                         )
                         Text(text = stringResource(id = R.string.invited_by, "Alessio Mason"))
+                    }
+                }
+            }
+
+            Row {
+                TextButton(
+                    onClick = {
+                        // @salvo vai la onClick è tutta tua
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        ProfileImage(friendId = reservation.userId.id, small = true)
+                        Text(text = "Show Alessio Mason's profile")
                     }
                 }
             }
