@@ -58,11 +58,11 @@ import java.time.format.FormatStyle
 @Composable
 fun PendingInvitationBox(
     i: Pair<Reservation, Playground>,
+    invitationStatus: InvitationStatus,
     dealWithInvitation: (String, InvitationStatus) -> Unit
 ) {
     val (reservation, playground) = i
     var showAdditionalInfo by remember { mutableStateOf(false) }
-    var invitationStatus by remember { mutableStateOf(InvitationStatus.PENDING) }
 
     val context = LocalContext.current
     val intent = Intent(context, ShowProfileActivity::class.java)
@@ -274,11 +274,13 @@ fun PendingInvitationBox(
                             enabled = false,
                             onClick = { },
                             shape = MaterialTheme.shapes.medium,
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = RefusedColor),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = AcceptedColor,
+                                disabledContentColor = AcceptedColor
+                            ),
                             modifier = Modifier
                                 .weight(1f)
-                                .padding(start = 10.dp, end = 5.dp)
-                                .padding(vertical = 10.dp)
+                                .padding(10.dp)
                         ) {
                             Row {
                                 Icon(
@@ -298,11 +300,13 @@ fun PendingInvitationBox(
                             enabled = false,
                             onClick = { },
                             shape = MaterialTheme.shapes.medium,
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = RefusedColor),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = RefusedColor,
+                                disabledContentColor = RefusedColor
+                            ),
                             modifier = Modifier
                                 .weight(1f)
-                                .padding(start = 10.dp, end = 5.dp)
-                                .padding(vertical = 10.dp)
+                                .padding(10.dp)
                         ) {
                             Row {
                                 Icon(
@@ -319,10 +323,7 @@ fun PendingInvitationBox(
                     }
                     InvitationStatus.PENDING -> {
                         OutlinedButton(
-                            onClick = {
-                                dealWithInvitation(reservation.id, InvitationStatus.REFUSED)
-                                invitationStatus = InvitationStatus.REFUSED
-                            },
+                            onClick = { dealWithInvitation(reservation.id, InvitationStatus.REFUSED) },
                             shape = MaterialTheme.shapes.medium,
                             colors = ButtonDefaults.outlinedButtonColors(contentColor = RefusedColor),
                             modifier = Modifier
@@ -344,10 +345,7 @@ fun PendingInvitationBox(
                         }
 
                         OutlinedButton(
-                            onClick = {
-                                dealWithInvitation(reservation.id, InvitationStatus.ACCEPTED)
-                                invitationStatus = InvitationStatus.ACCEPTED
-                            },
+                            onClick = { dealWithInvitation(reservation.id, InvitationStatus.ACCEPTED) },
                             shape = MaterialTheme.shapes.medium,
                             colors = ButtonDefaults.outlinedButtonColors(contentColor = AcceptedColor),
                             modifier = Modifier
