@@ -125,6 +125,10 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
                 if (!mapRegionToCity.containsKey(p.region)) {
                     mapRegionToCity[p.region] = mutableListOf()
                 }
+                // se "tutte le città" non è stata ancora associata alla regione, la aggiungo
+                if (mapRegionToCity[p.region]?.contains(resources.getString(R.string.city_all)) == false) {
+                    mapRegionToCity[p.region]?.add(resources.getString(R.string.city_all))
+                }
                 // se la città associata alla regione non è ancora presente nella lista, la aggiungo
                 if (mapRegionToCity[p.region]?.contains(p.city) == false) {
                     mapRegionToCity[p.region]?.add(p.city)
@@ -290,19 +294,19 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
                                 reservedPlaygroundsMap.filter {
                                     it.key.time.toLocalDate() == selectedDateValue && it.value.city == city
                                 }
+                            }
+                            // filtro "REGIONE specifica e TUTTE LE CITTA" applicato
+                            else if (region != resources.getString(R.string.region_all) && city == resources.getString(R.string.city_all)) {
+                                reservedPlaygroundsMap.filter {
+                                    it.key.time.toLocalDate() == selectedDateValue && it.value.region == region
+                                }
+                            }
                             // filtro "REGIONE E CITTA" specifica applicato
-                            } else {
+                            else {
                                 reservedPlaygroundsMap.filter {
                                     it.key.time.toLocalDate() == selectedDateValue && it.value.region == region && it.value.city == city
                                 }
                             }
-
-
-                            /* if (region != resources.getString(R.string.region_all))
-                                displayedReservedPlaygrounds.filter { it.value.region == region }
-
-                            if (city != resources.getString(R.string.city_all))
-                                displayedReservedPlaygrounds.filter { it.value.city == city } */
 
                             recyclerView.adapter = MyAdapter(displayedReservedPlaygrounds)
                         }
