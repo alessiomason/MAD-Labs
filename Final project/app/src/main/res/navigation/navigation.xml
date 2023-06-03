@@ -87,6 +87,9 @@
         <action
             android:id="@+id/action_addReservationFragment_to_seeRatings"
             app:destination="@id/seeRatings" />
+        <action
+            android:id="@+id/action_addReservationFragment_to_showReservationFragment"
+            app:destination="@id/showReservationFragment" />
     </fragment>
     <fragment
         android:id="@+id/editReservationFragment"

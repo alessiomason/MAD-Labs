@@ -345,7 +345,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController= view?.findNavController()
-        val action = AddReservationFragmentDirections.actionAddReservationFragmentToCalendarFragment()
+        var action = AddReservationFragmentDirections.actionAddReservationFragmentToCalendarFragment()
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_edit_reservation -> {
@@ -369,9 +369,14 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                     mutableStateListOf()
                 )
 
-                viewModel.saveReservation(newReservation)
+              var ref= viewModel.saveReservation(newReservation)
+            action=AddReservationFragmentDirections.actionAddReservationFragmentToShowReservationFragment(ref.id)
 
-                navController?.navigate(action)
+
+              // navController?.popBackStack()
+                val fragmentManager = requireFragmentManager()
+                fragmentManager.popBackStack()
+               navController?.navigate(action)
 
             }
         }

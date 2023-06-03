@@ -64,6 +64,7 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         val reservations = viewModel.userReservations
         val playgrounds = viewModel.playgrounds
 
+
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.my_reservations)
 
