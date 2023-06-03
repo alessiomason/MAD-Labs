@@ -111,4 +111,7 @@
 
     <!-- PENDING INVITATIONS -->
     <string name="pending_invitations">Inviti in sospeso</string>
+    <string name="invited_by">Invitato da %1$s</string>
+    <string name="price_per_hour">Prezzo: %1$d €/h</string>
+    <string name="playground_address">Indirizzo del campo: %1$s</string>
 </resources>

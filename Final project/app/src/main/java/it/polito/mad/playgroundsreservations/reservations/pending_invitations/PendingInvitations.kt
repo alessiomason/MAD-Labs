@@ -6,17 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -33,7 +30,6 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsRe
 
 class PendingInvitations: Fragment() {
     private val args by navArgs<InviteFriendsArgs>()
-    lateinit var reservation: MutableState<Reservation?>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,8 +75,12 @@ fun PendingInvitationsScreen() {
 
 @Composable
 fun PendingInvitationsScreenContent(invitedToReservations: SnapshotStateList<Pair<Reservation, Playground>>) {
-    Text(text = "Work in progress...")
     LazyColumn {
-
+        items(
+            items = invitedToReservations,
+            key = { it.first.id }
+        ) {
+            PendingInvitationBox(it)
+        }
     }
 }

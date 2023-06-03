@@ -35,7 +35,7 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsRe
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.RefusedColor
 
-class ListOfInvitations(val invitations: SnapshotStateList<Invitation>): Fragment() {
+class ListOfInvitations(private val invitations: SnapshotStateList<Invitation>): Fragment() {
     private val args by navArgs<InviteFriendsArgs>()
 
     override fun onCreateView(
