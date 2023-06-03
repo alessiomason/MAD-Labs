@@ -15,8 +15,12 @@ class NotLoggedReservationsActivity : AppCompatActivity() {
         val fragment = PlaygroundsAvailabilityFragment()
         val tag = "PlaygroundsAvailabilityFragment"
         val containerViewId = R.id.fragmentContainerViewNotLogged
-        fragmentTransaction.replace(containerViewId, fragment, tag)
+        fragmentTransaction.replace(containerViewId, fragment, tag).commit()
+    }
 
-        fragmentTransaction.commit()
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
     }
 }

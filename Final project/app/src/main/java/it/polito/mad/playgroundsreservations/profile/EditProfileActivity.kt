@@ -59,7 +59,7 @@ class EditProfileActivity: AppCompatActivity() {
     private var userProfileImageUriString = ""
     private var dateOfBirth: Timestamp? = null
 
-    private var tooYoung:Boolean = false;
+    private var tooYoung:Boolean = false
 
     private lateinit var basketballCb: CheckBox
     private lateinit var volleyballCb: CheckBox
@@ -134,11 +134,11 @@ class EditProfileActivity: AppCompatActivity() {
         val loading = findViewById<FragmentContainerView>(R.id.loadingEditProfileFragment)
         val fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction().replace(R.id.loadingEditProfileFragment, SpinnerFragment()).commit()
-        loading.visibility = View.VISIBLE
+        loading.visibility = VISIBLE
 
         viewModel.getUserInfo(Global.userId!!).observe(this) { user ->
             if (user != null) {
-                loading.visibility = View.GONE
+                loading.visibility = GONE
                 nameView.text = user.fullName
                 bioView.setText(user.bio)
 
@@ -193,7 +193,7 @@ class EditProfileActivity: AppCompatActivity() {
                         if (selectedDate.after(currentDate)) {
                             // L'utente ha meno di 14 anni
                             Toast.makeText(this, R.string.age_toast, Toast.LENGTH_SHORT).show()
-                            tooYoung=true;
+                            tooYoung=true
                             return@setOnDateSetListener
                         }
 
@@ -208,7 +208,7 @@ class EditProfileActivity: AppCompatActivity() {
                         val newDate = dateOfBirth?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())
                             ?.toLocalDate()?.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) ?: ""
                         dateOfBirthView.text = newDate
-                        tooYoung=false;
+                        tooYoung=false
                     }
                     datePickerDialog.show()
                 }

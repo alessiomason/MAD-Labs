@@ -2,7 +2,6 @@ package it.polito.mad.playgroundsreservations.reservations
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +40,6 @@ import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.profile.SpinnerFragment
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.time.format.TextStyle
