@@ -64,7 +64,6 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
         val reservations = viewModel.userReservations
         val playgrounds = viewModel.playgrounds
 
-
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.my_reservations)
 
@@ -144,7 +143,11 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_switch_view_calendar, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
+    @Deprecated("Deprecated in Java")
+    override fun onPrepareOptionsMenu(menu: Menu) {
         val notificationMenuItem = menu.findItem(R.id.pending_invitations)
         val notificationActionView = notificationMenuItem.actionView
         val notificationCount = notificationActionView?.findViewById<TextView>(R.id.notification_count)
@@ -161,7 +164,8 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
                 notificationCount?.visibility = GONE
             }
         }
-        super.onCreateOptionsMenu(menu, inflater)
+
+        super.onPrepareOptionsMenu(menu)
     }
 
     @Deprecated("Deprecated in Java")

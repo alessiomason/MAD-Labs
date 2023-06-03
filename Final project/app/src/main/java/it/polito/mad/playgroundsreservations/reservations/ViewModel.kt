@@ -120,9 +120,13 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         // set listener for number of pending notifications
         db.collection(usersCollectionPath)
             .document(Global.userId!!)
-            .get()
-            .addOnSuccessListener {
-                nPendingInvitations.value = (it.get("invitations") as? List<*>)?.size ?: 0
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read users's notifications.", error)
+                    return@addSnapshotListener
+                }
+
+                nPendingInvitations.value = (value!!.get("invitations") as? List<*>)?.size ?: 0
             }
     }
 
@@ -196,7 +200,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         return reservedPlaygrounds
     }
 
-    fun saveReservation(reservation: Reservation) :DocumentReference{
+    fun saveReservation(reservation: Reservation): DocumentReference {
         val r = hashMapOf(
             "userId" to reservation.userId,
             "userFullName" to reservation.userFullName,
@@ -215,11 +219,11 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
         )
-        var ref=db.collection(reservationsCollectionPath).document()
-        ref.set(r);
+
+        val ref = db.collection(reservationsCollectionPath).document()
+        ref.set(r)
+
         return ref
-
-
     }
 
     fun updateReservation(reservation: Reservation) {
