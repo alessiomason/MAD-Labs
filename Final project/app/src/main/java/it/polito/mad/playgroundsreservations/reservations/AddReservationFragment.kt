@@ -369,15 +369,13 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                     mutableStateListOf()
                 )
 
-              var ref= viewModel.saveReservation(newReservation)
-            action=AddReservationFragmentDirections.actionAddReservationFragmentToShowReservationFragment(ref.id)
+                val ref = viewModel.saveReservation(newReservation)
+                action =
+                    AddReservationFragmentDirections.actionAddReservationFragmentToShowReservationFragment(ref.id)
 
-
-              // navController?.popBackStack()
                 val fragmentManager = requireFragmentManager()
                 fragmentManager.popBackStack()
-               navController?.navigate(action)
-
+                navController?.navigate(action)
             }
         }
         return super.onOptionsItemSelected(item)

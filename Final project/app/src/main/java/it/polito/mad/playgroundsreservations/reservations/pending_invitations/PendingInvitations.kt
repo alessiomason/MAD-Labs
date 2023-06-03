@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -28,6 +29,7 @@ import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.invite_friends.InviteFriendsArgs
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
+import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 
 class PendingInvitations: Fragment() {
     private val args by navArgs<InviteFriendsArgs>()
@@ -81,6 +83,13 @@ fun PendingInvitationsScreen() {
 
     if (stillLoading.value && invitedToReservations.isEmpty()) {
         LoadingScreen()
+    } else if (invitedToReservations.isEmpty()) {
+        Text(
+            text = "Zero invitations found. Go and make one yourself!",
+            style = MaterialTheme.typography.titleLarge,
+            color = PrimaryColor,
+            modifier = Modifier.fillMaxSize()
+        )
     } else {
         stillLoading.value = false
         invitedToReservations.forEach {
