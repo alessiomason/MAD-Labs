@@ -4,7 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -16,8 +23,13 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.navArgs
@@ -84,12 +96,7 @@ fun PendingInvitationsScreen() {
     if (stillLoading.value && invitedToReservations.isEmpty()) {
         LoadingScreen()
     } else if (invitedToReservations.isEmpty()) {
-        Text(
-            text = "Zero invitations found. Go and make one yourself!",
-            style = MaterialTheme.typography.titleLarge,
-            color = PrimaryColor,
-            modifier = Modifier.fillMaxSize()
-        )
+        ZeroPendingInvitations()
     } else {
         stillLoading.value = false
         invitedToReservations.forEach {
@@ -125,5 +132,35 @@ fun PendingInvitationsScreenContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun ZeroPendingInvitations() {
+    Column (
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+        Image(
+            painter = painterResource(id = R.drawable.notification_bell_off),
+            contentDescription = "Zero notifications",
+            alignment = Alignment.Center,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .size(100.dp)
+        )
+        Text(
+            text = "Zero invitations found. Go and make one yourself!",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = PrimaryColor,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 40.dp)
+        )
+        Spacer(modifier = Modifier.weight(3f))
     }
 }

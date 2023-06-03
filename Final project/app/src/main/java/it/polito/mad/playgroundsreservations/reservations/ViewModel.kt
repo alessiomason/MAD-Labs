@@ -538,7 +538,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
 
                 val invitationsList = user.get("invitations") as? List<DocumentReference>
 
-                if (invitationsList == null) {
+                if (invitationsList.isNullOrEmpty()) {
                     stillLoading.value = false
                     return@addOnSuccessListener
                 }
