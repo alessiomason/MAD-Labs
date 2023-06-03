@@ -20,7 +20,7 @@
     <!-- HOME SCREEN -->
     <string name="home_title">Welcome!</string>
     <string name="home_subtitle">Explore the playgrounds availability or login to discover all the features!</string>
-    <string name="show_playgrounds_availability">Explore playgrounds availability (non funziona)</string>
+    <string name="show_playgrounds_availability">Explore playgrounds availability</string>
     <string name="login">Login</string>
     <string name="login_email">Sign in with email</string>
 

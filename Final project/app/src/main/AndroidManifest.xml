@@ -31,7 +31,7 @@
             android:name=".profile.EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".profile.SelectSportsActivity"
+            android:name=".reservations.NotLoggedReservationsActivity"
             android:exported="false" />
         <activity
             android:name=".reservations.ReservationsActivity"

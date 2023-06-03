@@ -33,6 +33,7 @@ import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekCalendarView
 import com.kizitonwose.calendar.view.WeekDayBinder
 import com.kizitonwose.calendar.view.WeekHeaderFooterBinder
+import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
@@ -62,9 +63,13 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel by viewModels<ViewModel>()
+        val viewModel by viewModels<NotLoggedViewModel>()
         // NEW RESERVATION BUTTON
         val button = view.findViewById<Button>(R.id.reserve_new_playground_button)
+
+        // If not logged you can't create a new reservation
+        if (Global.userId == null)
+            button.visibility = GONE
 
         val loading = view.findViewById<FragmentContainerView>(R.id.loadingPlaygroundAvailabilityFragment)
         val fragmentManager = childFragmentManager
@@ -232,6 +237,8 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
                     } else {
                         button.visibility = VISIBLE
                     }
+                    if (Global.userId == null)
+                        button.visibility = GONE
 
                 } else {
                     container.textView.setTextColor(Color.BLACK)
@@ -314,17 +321,6 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
                 }
             }
         }
-
-        /* selectedRegion.observe(viewLifecycleOwner) { region ->
-                        if (region != resources.getString(R.string.region_all))
-                            displayedReservedPlaygrounds.filter { it.value.region == region }
-                    }
-
-                    selectedCity.observe(viewLifecycleOwner) { city ->
-                        loading.visibility = GONE
-                        if (city != resources.getString(R.string.city_all))
-                            displayedReservedPlaygrounds.filter { it.value.city == city }
-                    } */
 
         val navController = view.findNavController()
         button.setOnClickListener {

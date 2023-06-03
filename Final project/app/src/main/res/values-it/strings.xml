@@ -25,7 +25,7 @@
     <!-- HOME SCREEN -->
     <string name="home_title">Benvenuto!</string>
     <string name="home_subtitle">Esplora la disponibilità dei campi o accedi per scoprire tutte le funzionalità!</string>
-    <string name="show_playgrounds_availability">Esplora la disponibilità dei campi (non funziona)</string>
+    <string name="show_playgrounds_availability">Esplora la disponibilità dei campi</string>
     <string name="login">Login</string>
     <string name="login_email">Accedi con la tua email</string>
 

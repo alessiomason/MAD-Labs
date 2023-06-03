@@ -11,6 +11,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
+import it.polito.mad.playgroundsreservations.reservations.NotLoggedReservationsActivity
 import it.polito.mad.playgroundsreservations.reservations.ReservationsActivity
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 
@@ -72,7 +73,7 @@ class MainActivity: AppCompatActivity() {
 
         val playgroundsAvailabilityButton = findViewById<Button>(R.id.playgroundsAvailabilityButton)
         playgroundsAvailabilityButton.setOnClickListener {
-            val intent = Intent(this, ReservationsActivity::class.java)
+            val intent = Intent(this, NotLoggedReservationsActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
         }
