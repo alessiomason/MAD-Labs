@@ -158,7 +158,7 @@ fun FriendBox(
                                     )
                                 } else {
                                     Text(
-                                        text = "The user did not insert a personal rating for this sport.",
+                                        text = stringResource(id = R.string.no_rating_for_sport),
                                         style = MaterialTheme.typography.labelMedium
                                     )
                                 }
@@ -241,7 +241,9 @@ fun FriendBox(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = if (showAdditionalInfo) "See less" else "See more",
+                        text = if (showAdditionalInfo)
+                            stringResource(id = R.string.see_less)
+                        else stringResource(id = R.string.see_more),
                         color = PrimaryVariantColor,
                         textAlign = TextAlign.Center
                     )

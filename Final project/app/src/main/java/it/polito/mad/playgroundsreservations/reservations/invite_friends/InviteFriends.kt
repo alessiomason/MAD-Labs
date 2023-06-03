@@ -181,7 +181,6 @@ fun InviteFriendsScreenContent(
         if (searchQuery == "") {
             FriendsList(
                 reservation = reservation,
-                user = user,
                 friends = friends,
                 recentlyInvited = recentlyInvited,
                 sport = reservation.value!!.sport

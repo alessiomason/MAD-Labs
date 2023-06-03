@@ -369,7 +369,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                     mutableStateListOf()
                 )
 
-                val ref = viewModel.saveReservation(newReservation)
+                viewModel.saveReservation(newReservation)
                 navController?.navigate(action)
             }
         }

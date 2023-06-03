@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -89,7 +90,7 @@ fun PendingInvitationsScreen() {
 
         viewModel.updateInvitationStatus(reservationId, newStatus)
         viewModel.deleteInvitationNotification(reservationId)
-        // leave the invitation and only change the buttons
+        // commented to leave the invitation and only change the buttons
         //invitedToReservations.removeIf { it.first.id == reservationId }
     }
 
@@ -152,7 +153,7 @@ fun ZeroPendingInvitations() {
                 .size(100.dp)
         )
         Text(
-            text = "Zero invitations found. Go and make one yourself!",
+            text = stringResource(id = R.string.zero_invitations),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = PrimaryColor,

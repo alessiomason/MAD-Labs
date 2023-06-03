@@ -37,7 +37,7 @@ class MainActivity: AppCompatActivity() {
             val user = FirebaseAuth.getInstance().currentUser
             if (user != null) {   // Successfully signed in
                 Global.userId = user.uid
-                    Global.fullName = user.displayName
+                Global.fullName = user.displayName
                 viewModel.createUserIfNotExists(user.uid, user.displayName)
 
                 val intent = Intent(this, ReservationsActivity::class.java)

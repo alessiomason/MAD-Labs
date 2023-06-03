@@ -24,9 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Invitation
 import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.AcceptedColor
@@ -103,12 +105,18 @@ fun InvitationBox(invitation: Invitation) {
                     InvitationStatus.PENDING -> PendingColor
                 }
 
+                val badgeText = when (invitation.invitationStatus) {
+                    InvitationStatus.ACCEPTED -> R.string.accepted
+                    InvitationStatus.REFUSED -> R.string.refused
+                    InvitationStatus.PENDING -> R.string.pending
+                }
+
                 Badge(
                     containerColor = badgeColor,
                     contentColor = Color.White
                 ) {
                     Text(
-                        text = invitation.invitationStatus.name,
+                        text = stringResource(id = badgeText).uppercase(),
                         modifier = Modifier.padding(5.dp)
                     )
                 }

@@ -214,7 +214,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Invited for this reservation"
+                    android:text="@string/invited_for_this_reservation"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/primaryVariant"
                     android:textStyle="bold" />
@@ -236,7 +236,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="revoca" />
+                    android:text="@string/cancel_participation" />
 
                 <Button
                     android:id="@+id/btnRateCourt"

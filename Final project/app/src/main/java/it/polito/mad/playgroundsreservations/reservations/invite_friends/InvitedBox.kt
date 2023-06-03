@@ -52,7 +52,7 @@ fun InvitedBox(reservation: MutableState<Reservation?>) {
             reservation.value!!.invitations.forEach { invitation ->
                 InputChip(
                     selected = false,
-                    onClick = { /*TODO*/ },
+                    onClick = { },
                     modifier = Modifier
                         .padding(horizontal = 5.dp),
                     colors = InputChipDefaults.inputChipColors(

@@ -109,6 +109,14 @@
     <string name="invite_friends">Invita amici</string>
     <string name="search_users">Cerca tra tutti gli utenti</string>
     <string name="invite_selected">Invita i selezionati</string>
+    <string name="see_less">Vedi di più</string>
+    <string name="see_more">Vedi di meno</string>
+    <string name="see_all">Vedi tutti</string>
+    <string name="no_rating_for_sport">L\'utente non ha inserito una valutazione personale per questo sport.</string>
+    <string name="recently_invited">Invitati di recente</string>
+    <string name="your_friends">I tuoi amici</string>
+    <string name="invited_for_this_reservation">Invitati per questa prenotazione</string>
+    <string name="cancel_participation">Annulla partecipazione</string>
 
     <!-- PENDING INVITATIONS -->
     <string name="pending_invitations">Inviti in sospeso</string>
@@ -116,4 +124,10 @@
     <string name="price_per_hour">Prezzo totale: %1$d €/h</string>
     <string name="playground_address">Indirizzo del campo: %1$s</string>
     <string name="show_inviter_profile">Mostra il profilo di %1$s</string>
+    <string name="zero_invitations">Nessun invito trovato! Inizia con il mandarne uno tu!</string>
+    <string name="accept">Accetta</string>
+    <string name="refuse">Rifiuta</string>
+    <string name="accepted">Accettato</string>
+    <string name="refused">Rifiutato</string>
+    <string name="pending">In attesa</string>
 </resources>

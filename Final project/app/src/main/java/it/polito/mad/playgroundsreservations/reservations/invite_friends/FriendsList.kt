@@ -23,9 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.database.User
@@ -35,7 +37,6 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVarian
 @Composable
 fun FriendsList(
     reservation: MutableState<Reservation?>,
-    user: MutableState<User?>,
     friends: SnapshotStateList<User>,
     recentlyInvited: SnapshotStateList<User>,
     sport: Sport
@@ -46,12 +47,14 @@ fun FriendsList(
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         item(key = "recently_invited_title") {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Recently invited",
+                    text = stringResource(id = R.string.recently_invited),
                     color = PrimaryColor,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.headlineMedium,
@@ -66,7 +69,9 @@ fun FriendsList(
                         modifier = Modifier.padding(horizontal = 10.dp)
                     ) {
                         Text(
-                            text = if (showAllRecentlyInvited) "See less" else "See all",
+                            text = if (showAllRecentlyInvited)
+                                stringResource(id = R.string.see_less)
+                            else stringResource(id = R.string.see_all),
                             color = PrimaryVariantColor,
                             textAlign = TextAlign.Center
                         )
@@ -109,12 +114,14 @@ fun FriendsList(
 
         item(key = "your_friends_title") {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Your friends",
+                    text = stringResource(id = R.string.your_friends),
                     color = PrimaryColor,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.headlineMedium,
@@ -129,7 +136,9 @@ fun FriendsList(
                         modifier = Modifier.padding(horizontal = 10.dp)
                     ) {
                         Text(
-                            text = if (showAllFriends) "See less" else "See all",
+                            text = if (showAllFriends)
+                                stringResource(id = R.string.see_less)
+                            else stringResource(id = R.string.see_all),
                             color = PrimaryVariantColor,
                             textAlign = TextAlign.Center
                         )

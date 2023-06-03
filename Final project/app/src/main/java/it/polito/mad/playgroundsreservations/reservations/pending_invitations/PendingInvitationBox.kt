@@ -228,7 +228,9 @@ fun PendingInvitationBox(
                         .padding(horizontal = 10.dp)
                 ) {
                     Text(
-                        text = if (showAdditionalInfo) "See less" else "See more",
+                        text = if (showAdditionalInfo)
+                            stringResource(id = R.string.see_less)
+                        else stringResource(id = R.string.see_more),
                         color = PrimaryVariantColor,
                         textAlign = TextAlign.Center
                     )
@@ -300,7 +302,7 @@ fun PendingInvitationBox(
                                         .padding(end = 5.dp)
                                         .size(20.dp)
                                 )
-                                Text(text = "Accepted")
+                                Text(text = stringResource(id = R.string.accepted))
                             }
                         }
                     }
@@ -326,7 +328,7 @@ fun PendingInvitationBox(
                                         .padding(end = 5.dp)
                                         .size(20.dp)
                                 )
-                                Text(text = "Refused")
+                                Text(text = stringResource(id = R.string.refused))
                             }
                         }
                     }
@@ -349,7 +351,7 @@ fun PendingInvitationBox(
                                         .padding(end = 5.dp)
                                         .size(20.dp)
                                 )
-                                Text(text = "Refuse")
+                                Text(text = stringResource(id = R.string.refuse))
                             }
                         }
 
@@ -371,7 +373,7 @@ fun PendingInvitationBox(
                                         .padding(end = 5.dp)
                                         .size(20.dp)
                                 )
-                                Text(text = "Accept")
+                                Text(text = stringResource(id = R.string.accept))
                             }
                         }
                     }
