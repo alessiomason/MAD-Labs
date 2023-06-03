@@ -20,7 +20,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintTop_toBottomOf="parent" >
-
+        <TextView
+            android:id="@+id/reservationCreator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/created_by"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/secondary_text_light"
+            android:textStyle="italic" />
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/reservationImage"
             android:layout_width="match_parent"

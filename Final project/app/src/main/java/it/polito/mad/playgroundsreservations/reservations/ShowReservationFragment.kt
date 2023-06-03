@@ -70,7 +70,10 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                         invalidateOptionsMenu(activity)
                     }
                 }
-
+            val createdBy = getString(R.string.created_by)
+            val userFullName = myReservation.userFullName
+            val message = "$createdBy $userFullName"
+            view.findViewById<TextView>(R.id.reservationCreator).text=message
             playgrounds.observe(viewLifecycleOwner) { playgroundsList ->
                 playgroundsList.forEach { p ->
                     if (p.id == myReservation.playgroundId.id) {
