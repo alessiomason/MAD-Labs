@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,49 +31,54 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.smarttoolfactory.ratingbar.RatingBar
 import it.polito.mad.playgroundsreservations.R
-import it.polito.mad.playgroundsreservations.database.Invitation
-import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Playground
-import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
-import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
-import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
-import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryVariantColor
 
 @Composable
-fun FavoritePlaygroundBox(
-    playground: Playground,
-    playgrounds: SnapshotStateList<Playground>,
-    sport: Sport
-) {
+fun FavoritePlaygroundBox(playground: Playground, favoritePlaygrounds: SnapshotStateList<Playground>) {
     val viewModel: ViewModel = viewModel()
+
     var showAdditionalInfo by remember { mutableStateOf(false) }
+    var isFavoritePlayground by remember { mutableStateOf(favoritePlaygrounds.contains(playground)) }
 
-    var isFavoritePlayground by remember { mutableStateOf(playgrounds.contains(playground)) }
-
-    LaunchedEffect(playgrounds.size) {
-        isFavoritePlayground = playgrounds.contains(playground)
+    LaunchedEffect(favoritePlaygrounds.size) {
+        isFavoritePlayground = favoritePlaygrounds.contains(playground)
     }
 
-    val sportIcon = when (sport) {
+    val sportIcon = when (playground.sport) {
         Sport.TENNIS -> R.drawable.tennis_ball
         Sport.BASKETBALL -> R.drawable.basketball_ball
         Sport.FOOTBALL -> R.drawable.football_ball
         Sport.VOLLEYBALL -> R.drawable.volleyball_ball
         Sport.GOLF -> R.drawable.golf_ball
+    }
+
+    val sportName = when (playground.sport) {
+        Sport.TENNIS -> R.string.sport_tennis
+        Sport.BASKETBALL -> R.string.sport_basketball
+        Sport.FOOTBALL -> R.string.sport_football
+        Sport.VOLLEYBALL -> R.string.sport_volleyball
+        Sport.GOLF -> R.string.sport_golf
+    }
+
+    val playgroundImage = when (playground.sport) {
+        Sport.TENNIS -> R.drawable.tennis_court
+        Sport.BASKETBALL -> R.drawable.basketball_court
+        Sport.FOOTBALL -> R.drawable.football_pitch
+        Sport.VOLLEYBALL -> R.drawable.volleyball_court
+        Sport.GOLF -> R.drawable.golf_field
     }
 
     Box(modifier = Modifier
@@ -97,7 +101,15 @@ fun FavoritePlaygroundBox(
                         modifier = Modifier
                             .padding(horizontal = 5.dp)
                     ) {
-                        FavoritePlaygroundImage(friendId = "0", small = false)
+                        Image(
+                            painter = painterResource(id = playgroundImage),
+                            contentDescription = "Playground image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .width(75.dp)
+                                .aspectRatio(1f)
+                                .clip(CircleShape)
+                        )
                     }
 
                     Column(
@@ -120,43 +132,15 @@ fun FavoritePlaygroundBox(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column {
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(5.dp)
-                                ) {
-                                    Column {
-                                        Image(
-                                            painter = painterResource(id = sportIcon),
-                                            contentDescription = "Sport icon"
-                                        )
-                                    }
-
-                                    /* Not enough space to show
-                                    Column {
-                                        Text(text = stringResource(id = sportName))
-                                    }
-                                    */
-                                }
+                                Image(
+                                    painter = painterResource(id = sportIcon),
+                                    contentDescription = "Sport icon"
+                                )
                             }
-                            /*
+
                             Column {
-                                if (friend.mySports[reservation.value!!.sport] != null) {
-                                    RatingBar(
-                                        rating = friend.mySports[reservation.value!!.sport]!!,
-                                        space = 2.dp,
-                                        imageVectorEmpty = ImageVector.vectorResource(id = R.drawable.bordered_star),
-                                        imageVectorFFilled = ImageVector.vectorResource(id = R.drawable.filled_star),
-                                        tintEmpty = SecondaryVariantColor,
-                                        tintFilled = SecondaryVariantColor,
-                                        itemSize = 24.dp,
-                                        gestureEnabled = false
-                                    )
-                                } else {
-                                    Text(
-                                        text = stringResource(id = R.string.no_rating_for_sport),
-                                        style = MaterialTheme.typography.labelMedium
-                                    )
-                                }
-                            } */
+                                Text(text = stringResource(id = sportName))
+                            }
                         }
                     }
                 }
@@ -172,11 +156,11 @@ fun FavoritePlaygroundBox(
                     OutlinedButton(
                         onClick = {
                             if (isFavoritePlayground) {
-                                // viewModel.unfriend(friend)
-                                // friends.remove(friend)
+                                viewModel.removeFavoritePlayground(playground.id)
+                                favoritePlaygrounds.remove(playground)
                             } else {
-                                // viewModel.befriend(friend)
-                                // friends.add(friend)
+                                viewModel.addFavoritePlayground(playground.id)
+                                favoritePlaygrounds.add(playground)
                             }
                         }
                     ) {
@@ -214,7 +198,6 @@ fun FavoritePlaygroundBox(
                 Column {
                     Row {
                         Text(
-                            // text = stringResource(id = R.string.bio),
                             text = "Address",
                             color = PrimaryColor,
                             modifier = Modifier.padding(horizontal = 5.dp)
@@ -224,6 +207,40 @@ fun FavoritePlaygroundBox(
                     Row {
                         Text(
                             text = playground.address,
+                            modifier = Modifier.padding(horizontal = 10.dp)
+                        )
+                    }
+
+                    Row {
+                        Text(
+                            text = "Price per hour",
+                            color = PrimaryColor,
+                            modifier = Modifier
+                                .padding(top = 5.dp)
+                                .padding(horizontal = 5.dp)
+                        )
+                    }
+
+                    Row {
+                        Text(
+                            text = "${playground.pricePerHour} €/h",
+                            modifier = Modifier.padding(horizontal = 10.dp)
+                        )
+                    }
+
+                    Row {
+                        Text(
+                            text = "Maximum number of people",
+                            color = PrimaryColor,
+                            modifier = Modifier
+                                .padding(top = 5.dp)
+                                .padding(horizontal = 5.dp)
+                        )
+                    }
+
+                    Row {
+                        Text(
+                            text = "${playground.maxPlayers} people",
                             modifier = Modifier.padding(horizontal = 10.dp)
                         )
                     }

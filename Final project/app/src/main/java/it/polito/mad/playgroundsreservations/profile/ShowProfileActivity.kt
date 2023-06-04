@@ -65,11 +65,10 @@ class ShowProfileActivity: AppCompatActivity() {
 
         if (userId == Global.userId!!) {
             this.title = resources?.getString(R.string.user_profile)
-        }
-        else if(title == "CreatorTitle") {
+        } else if (title == "CreatorTitle") {
             this.title = resources?.getString(R.string.reservation_creator_profile)
             logoutButton.visibility = GONE
-        }else{
+        } else {
             this.title = resources?.getString(R.string.contact_profile)
         }
 

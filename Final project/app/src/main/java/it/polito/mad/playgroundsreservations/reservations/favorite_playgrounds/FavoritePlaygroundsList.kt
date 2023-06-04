@@ -3,6 +3,7 @@ package it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,22 +23,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
-import it.polito.mad.playgroundsreservations.database.Reservation
-import it.polito.mad.playgroundsreservations.database.Sport
-import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
 
 @Composable
-fun FavoritePlaygroundsList(
-    playgrounds: SnapshotStateList<Playground>,
-) {
+fun FavoritePlaygroundsList(playgrounds: SnapshotStateList<Playground>, ) {
     var showAllFavoritePlaygrounds by remember { mutableStateOf(false) }
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -51,8 +47,7 @@ fun FavoritePlaygroundsList(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    //text = stringResource(id = R.string.your_friends),
-                    text = "Your favorite playgrounds",
+                    text = "Favorite playgrounds",
                     color = PrimaryColor,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.headlineMedium,
@@ -84,8 +79,7 @@ fun FavoritePlaygroundsList(
         ) { playground ->
             FavoritePlaygroundBox(
                 playground = playground,
-                playgrounds = playgrounds,
-                sport = playground.sport
+                favoritePlaygrounds = playgrounds
             )
         }
 
@@ -101,8 +95,7 @@ fun FavoritePlaygroundsList(
                 ) {
                     FavoritePlaygroundBox(
                         playground = playground,
-                        playgrounds = playgrounds,
-                        sport = playground.sport
+                        favoritePlaygrounds = playgrounds
                     )
                 }
             }
