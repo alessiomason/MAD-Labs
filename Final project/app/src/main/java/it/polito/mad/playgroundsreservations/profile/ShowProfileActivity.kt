@@ -29,8 +29,8 @@ import it.polito.mad.playgroundsreservations.MainActivity
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Gender
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.reservations.MyCourtsActivity
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
-import it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds.FavoriteCourtsFragment
 import java.io.InputStream
 
 class ShowProfileActivity: AppCompatActivity() {
@@ -55,11 +55,15 @@ class ShowProfileActivity: AppCompatActivity() {
     private lateinit var golfRatingBar: RatingBar
     private lateinit var footballRatingBar: RatingBar
 
+    private lateinit var logoutButton: Button
+    private lateinit var favoriteCourtsButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_profile)
 
-        val logoutButton = findViewById<Button>(R.id.logout_button)
+        logoutButton = findViewById(R.id.logout_button)
+        favoriteCourtsButton = findViewById(R.id.favoriteCourtsButton)
         val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
         val title: String = intent.getStringExtra("title").toString()
 
@@ -67,9 +71,12 @@ class ShowProfileActivity: AppCompatActivity() {
             this.title = resources?.getString(R.string.user_profile)
         } else if (title == "CreatorTitle") {
             this.title = resources?.getString(R.string.reservation_creator_profile)
+            favoriteCourtsButton.visibility = GONE
             logoutButton.visibility = GONE
         } else {
             this.title = resources?.getString(R.string.contact_profile)
+            favoriteCourtsButton.visibility = GONE
+            logoutButton.visibility = GONE
         }
 
         nameView = findViewById(R.id.textFullName)
@@ -127,13 +134,10 @@ class ShowProfileActivity: AppCompatActivity() {
             .replace(R.id.loadingShowProfileFragment, SpinnerFragment()).commit()
         loading.visibility = VISIBLE
 
-        val favoriteCourtsButton = findViewById<Button>(R.id.favoriteCourtsButton)
-        val favoriteCourtsFragment = findViewById<FragmentContainerView>(R.id.favoriteCourtsFragment)
-
         favoriteCourtsButton.setOnClickListener{
-            fragmentManager.beginTransaction()
-                .replace(R.id.favoriteCourtsFragment, FavoriteCourtsFragment()).commit()
-            favoriteCourtsFragment.visibility = VISIBLE
+            val intent = Intent(this, MyCourtsActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
         }
 
         val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
@@ -207,61 +211,6 @@ class ShowProfileActivity: AppCompatActivity() {
                     .load(storageReference)
                     .placeholder(R.drawable.user_profile)
                     .into(userProfileImageView)
-            }
-        }
-
-        playgrounds.observe(this) { itemList ->
-            itemList?.let { items ->
-                for (item in items) {
-                    when (item.sport) {
-                        Sport.BASKETBALL -> {
-                            val textView = findViewById<TextView>(R.id.my_court_basketball_title)
-                            textView.text = item.name
-                            val imageView = findViewById<ImageView>(R.id.my_court_basketball_image)
-                            imageView.setImageResource(R.drawable.basketball_court)
-                            val addressView =
-                                findViewById<TextView>(R.id.my_court_basketball_address)
-                            addressView.text = item.address
-                        }
-
-                        Sport.VOLLEYBALL -> {
-                            val textView = findViewById<TextView>(R.id.my_court_volleyball_title)
-                            textView.text = item.name
-                            val imageView = findViewById<ImageView>(R.id.my_court_volleyball_image)
-                            imageView.setImageResource(R.drawable.volleyball_court)
-                            val addressView =
-                                findViewById<TextView>(R.id.my_court_volleyball_address)
-                            addressView.text = item.address
-                        }
-
-                        Sport.GOLF -> {
-                            val textView = findViewById<TextView>(R.id.my_court_golf_title)
-                            textView.text = item.name
-                            val imageView = findViewById<ImageView>(R.id.my_court_golf_image)
-                            imageView.setImageResource(R.drawable.golf_field)
-                            val addressView = findViewById<TextView>(R.id.my_court_golf_address)
-                            addressView.text = item.address
-                        }
-
-                        Sport.TENNIS -> {
-                            val textView = findViewById<TextView>(R.id.my_court_tennis_title)
-                            textView.text = item.name
-                            val imageView = findViewById<ImageView>(R.id.my_court_tennis_image)
-                            imageView.setImageResource(R.drawable.tennis_court)
-                            val addressView = findViewById<TextView>(R.id.my_court_tennis_address)
-                            addressView.text = item.address
-                        }
-
-                        Sport.FOOTBALL -> {
-                            val textView = findViewById<TextView>(R.id.my_court_football_title)
-                            textView.text = item.name
-                            val imageView = findViewById<ImageView>(R.id.my_court_football_image)
-                            imageView.setImageResource(R.drawable.football_pitch)
-                            val addressView = findViewById<TextView>(R.id.my_court_football_address)
-                            addressView.text = item.address
-                        }
-                    }
-                }
             }
         }
     }

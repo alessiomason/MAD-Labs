@@ -34,6 +34,9 @@
             android:name=".reservations.NotLoggedReservationsActivity"
             android:exported="false" />
         <activity
+            android:name=".reservations.MyCourtsActivity"
+            android:exported="false" />
+        <activity
             android:name=".reservations.ReservationsActivity"
             android:exported="false">
         </activity>
