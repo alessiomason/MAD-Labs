@@ -105,6 +105,7 @@
     <string name="optional_description_entered">No optional description entered</string>
     <string name="my_review_title">MY REVIEW:</string>
     <string name="no_ratings_yet">NO RATINGS HAVE BEEN LEFT YET</string>
+    <string name="no_ratings_yet_playground">No ratings have been left yet</string>
     <string name="ratings_playground">Ratings</string>
     <string name="loading">Loading…</string>
     <string name="created_by">Created by: </string>
@@ -121,7 +122,7 @@
     <string name="your_friends">Your friends</string>
     <string name="invited_for_this_reservation">Invited for this reservation</string>
     <string name="cancel_participation">Cancel participation</string>
-    <string name="max_invited_friends">you have reached the maximum number of inviteable people</string>
+    <string name="max_invited_friends">You have reached the maximum number of inviteable people</string>
 
     <!-- PENDING INVITATIONS -->
     <string name="pending_invitations">Pending invitations</string>

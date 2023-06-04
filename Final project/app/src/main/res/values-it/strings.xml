@@ -106,6 +106,7 @@
     <string name="optional_description_entered">Nessuna descrizione opzionale inserita</string>
     <string name="my_review_title">LA MIA VALUTAZIONE:</string>
     <string name="no_ratings_yet">NON È STATO ANCORA LASCIATO ALCUN RATING</string>
+    <string name="no_ratings_yet_playground">Non è stato ancora lasciato alcun rating</string>
     <string name="ratings_playground">Valutazioni</string>
     <string name="loading">Caricamento…</string>
     <string name="created_by">Creato da: </string>

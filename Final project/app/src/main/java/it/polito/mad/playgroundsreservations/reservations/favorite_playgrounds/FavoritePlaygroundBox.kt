@@ -26,6 +26,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,6 +45,7 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Invitation
 import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Playground
+import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
@@ -58,12 +60,16 @@ fun FavoritePlaygroundBox(
     favoritePlaygrounds: SnapshotStateList<Playground>
 ) {
     val viewModel: ViewModel = viewModel()
-
     var showAdditionalInfo by remember { mutableStateOf(false) }
     var isFavoritePlayground by remember { mutableStateOf(favoritePlaygrounds.contains(playground)) }
+    val ratingsList = remember { mutableStateListOf<PlaygroundRating>() }
 
     LaunchedEffect(favoritePlaygrounds.size) {
         isFavoritePlayground = favoritePlaygrounds.contains(playground)
+    }
+
+    LaunchedEffect(true) {
+        viewModel.getRatingsByPlaygroundId(playgroundId = playground.id, ratingsState = ratingsList)
     }
 
     val sportIcon = when (playground.sport) {
@@ -205,6 +211,23 @@ fun FavoritePlaygroundBox(
                                 .aspectRatio(1f)
                         )
                     }
+                }
+            }
+
+            Row {
+                TextButton(
+                    onClick = {  },
+                    colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = if (ratingsList.isEmpty())
+                            stringResource(id = R.string.no_ratings_yet_playground)
+                        else stringResource(id = R.string.see_ratings),
+                        color = PrimaryVariantColor,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
 
