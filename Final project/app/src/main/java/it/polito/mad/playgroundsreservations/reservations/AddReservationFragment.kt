@@ -46,8 +46,6 @@ import java.util.Date
 
 class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
-    private lateinit var onBackPressedCallback: OnBackPressedCallback
-
     private val args by navArgs<AddReservationFragmentArgs>()
     private val viewModel by viewModels<ViewModel>()
     val zoneId: ZoneId = ZoneId.systemDefault()
@@ -73,24 +71,6 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if(view?.findViewById<FragmentContainerView>(R.id.showSeeRatingsFragment)?.visibility== VISIBLE)
-                {
-                    view?.findViewById<FragmentContainerView>(R.id.showSeeRatingsFragment)?.visibility= GONE
-                }
-                else
-                    findNavController().popBackStack()
-                // Gestisci l'evento "Indietro" qui
-                // Esegui le operazioni desiderate
-                // Chiamata a una funzione, navigazione, ecc.
-            }
-        }
-
-        // Aggiungi il callback all'activity corrente
-        view?.findViewById<FragmentContainerView>(R.id.showSeeRatingsFragment)?.visibility== GONE
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
         return inflater.inflate(R.layout.add_reservation_fragment, container, false)
     }
 
@@ -346,17 +326,8 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                             noRatingsTextView.visibility = GONE
                             seeRatingButton.visibility = VISIBLE
                             seeRatingButton.setOnClickListener {
-                               // val action = AddReservationFragmentDirections.actionAddReservationFragmentToSeeRatings(playground.id)
-                               // navController.navigate(action)
-
-                                val bundle = Bundle().apply {
-                                    putString("playgroundId", playground.id)
-
-                                }
-                                val seeRatingsFragment = SeeRatings()
-                                seeRatingsFragment.arguments = bundle
-                                fragmentManager.beginTransaction().replace(R.id.showSeeRatingsFragment, seeRatingsFragment).commit()
-                                seeRatingsFragmentReference.visibility= VISIBLE
+                               val action = AddReservationFragmentDirections.actionAddReservationFragmentToSeeRatings(playground.id)
+                               navController.navigate(action)
                             }
                         }
                     }
@@ -375,13 +346,6 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_save_edit_reservation, menu)
         super.onCreateOptionsMenu(menu, inflater)
-    }
-     fun onBackPressed() {
-        // Esegui operazioni personalizzate qui
-        if(view?.findViewById<FragmentContainerView>(R.id.showSeeRatingsFragment)?.visibility== VISIBLE)
-        {
-            view?.findViewById<FragmentContainerView>(R.id.showSeeRatingsFragment)?.visibility= GONE
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
