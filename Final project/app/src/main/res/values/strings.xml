@@ -32,6 +32,7 @@
     <!-- PROFILE -->
     <string name="user_profile">My profile</string>
     <string name="reservation_creator_profile">Reservation creator\'s profile</string>
+    <string name="contact_profile">User Profile</string>
     <string name="edit_profile">Edit profile</string>
     <string name="full_name">Full Name</string>
     <string name="nickname">Nickname</string>
@@ -54,6 +55,7 @@
     <string name="sport_empty">No sports selected yet</string>
     <string name="add_sport">Add/Edit</string>
     <string name="modify_profile">Modify</string>
+    <string name="add_friend">Add Friend</string>
     <string name="save_profile">Save</string>
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
@@ -62,6 +64,9 @@
     <string name="my_rating">My rating</string>
     <string name="logout">Logout</string>
     <string name="age_toast">You need to be at least 14</string>
+    <string name="search_people">Search People</string>
+    <string name="add_contact">Add friend</string>
+    <string name="delete_contact">Delete friend</string>
 
     <!-- RESERVATIONS -->
     <string name="reservation_box_title">Reservation at %1$s</string>

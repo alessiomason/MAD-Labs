@@ -30,6 +30,7 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Gender
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
+import it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds.FavoriteCourtsFragment
 import java.io.InputStream
 
 class ShowProfileActivity: AppCompatActivity() {
@@ -60,13 +61,16 @@ class ShowProfileActivity: AppCompatActivity() {
 
         val logoutButton = findViewById<Button>(R.id.logout_button)
         val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
+        val title: String = intent.getStringExtra("title").toString()
 
         if (userId == Global.userId!!) {
             this.title = resources?.getString(R.string.user_profile)
         }
-        else {
+        else if(title == "CreatorTitle") {
             this.title = resources?.getString(R.string.reservation_creator_profile)
             logoutButton.visibility = GONE
+        }else{
+            this.title = resources?.getString(R.string.contact_profile)
         }
 
         nameView = findViewById(R.id.textFullName)
@@ -101,7 +105,6 @@ class ShowProfileActivity: AppCompatActivity() {
         footballRatingBar.setIsIndicator(true)
 
 
-
         logoutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             Global.userId = null
@@ -124,6 +127,15 @@ class ShowProfileActivity: AppCompatActivity() {
         fragmentManager.beginTransaction()
             .replace(R.id.loadingShowProfileFragment, SpinnerFragment()).commit()
         loading.visibility = VISIBLE
+
+        val favoriteCourtsButton = findViewById<Button>(R.id.favoriteCourtsButton)
+        val favoriteCourtsFragment = findViewById<FragmentContainerView>(R.id.favoriteCourtsFragment)
+
+        favoriteCourtsButton.setOnClickListener{
+            fragmentManager.beginTransaction()
+                .replace(R.id.favoriteCourtsFragment, FavoriteCourtsFragment()).commit()
+            favoriteCourtsFragment.visibility = VISIBLE
+        }
 
         val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
 
@@ -276,6 +288,12 @@ class ShowProfileActivity: AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.add_friend ->{
+                val intent = Intent(this, Contacts::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
+                return true
+            }
             R.id.modify_profile -> {
                 val intent = Intent(this, EditProfileActivity::class.java)
                 startActivity(intent)
