@@ -567,6 +567,14 @@
                 </HorizontalScrollView>
 
                 <Button
+                    android:id="@+id/favoriteCourtsButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:backgroundTint="@color/secondaryVariant"
+                    android:text="Favorite Courts" />
+
+                <Button
                     android:id="@+id/logout_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -581,6 +589,17 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/loadingShowProfileFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/favoriteCourtsFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"

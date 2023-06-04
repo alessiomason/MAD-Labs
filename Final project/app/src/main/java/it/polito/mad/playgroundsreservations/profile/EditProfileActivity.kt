@@ -464,7 +464,8 @@ class EditProfileActivity: AppCompatActivity() {
                                 mySports = it.mySports,
                                 friends = it.friends,
                                 recentlyInvited = it.recentlyInvited,
-                                alreadyShownTutorial = it.alreadyShownTutorial
+                                alreadyShownTutorial = it.alreadyShownTutorial,
+                                myCourts = it.myCourts
                             )
 
                             val mySportsMap = user.mySports

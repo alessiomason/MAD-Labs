@@ -275,6 +275,23 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
+    fun getPlaygrounds(playgroundsState: SnapshotStateList<Playground>) {
+        db.collection(playgroundsCollectionPath)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Failed to read playgrounds.", error)
+                    return@addSnapshotListener
+                }
+
+                playgroundsState.clear()
+
+                for (doc in value!!) {
+                    val p = doc.toPlayground()
+                    playgroundsState.add(p)
+                }
+            }
+    }
+
     // PLAYGROUNDS RATING FUNCTIONS
     fun getRatingByReservation(reservationId: String): LiveData<PlaygroundRating?> {
         val playgroundRating = MutableLiveData<PlaygroundRating?>()
@@ -422,6 +439,26 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                     doc.get()
                         .addOnSuccessListener {
                             recentlyInvitedState.add(it.toUser())
+                        }
+                }
+            }
+    }
+
+    fun getUserPlaygrounds(
+        userId: String,
+        playgroundsState: SnapshotStateList<Playground>,
+    ) {
+        db.collection(usersCollectionPath)
+            .document(userId)
+            .get().addOnSuccessListener { userDoc ->
+                val u = userDoc.toUser()
+
+                playgroundsState.clear()
+
+                for (doc in u.myCourts) {
+                    doc.get()
+                        .addOnSuccessListener {
+                            playgroundsState.add(it.toPlayground())
                         }
                 }
             }
