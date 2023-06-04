@@ -30,6 +30,7 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Gender
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
+import it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds.FavoriteCourtsFragment
 import java.io.InputStream
 
 class ShowProfileActivity: AppCompatActivity() {
@@ -104,7 +105,6 @@ class ShowProfileActivity: AppCompatActivity() {
         footballRatingBar.setIsIndicator(true)
 
 
-
         logoutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             Global.userId = null
@@ -127,6 +127,15 @@ class ShowProfileActivity: AppCompatActivity() {
         fragmentManager.beginTransaction()
             .replace(R.id.loadingShowProfileFragment, SpinnerFragment()).commit()
         loading.visibility = VISIBLE
+
+        val favoriteCourtsButton = findViewById<Button>(R.id.favoriteCourtsButton)
+        val favoriteCourtsFragment = findViewById<FragmentContainerView>(R.id.favoriteCourtsFragment)
+
+        favoriteCourtsButton.setOnClickListener{
+            fragmentManager.beginTransaction()
+                .replace(R.id.favoriteCourtsFragment, FavoriteCourtsFragment()).commit()
+            favoriteCourtsFragment.visibility = VISIBLE
+        }
 
         val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
 

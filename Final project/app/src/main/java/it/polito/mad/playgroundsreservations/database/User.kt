@@ -19,7 +19,8 @@ data class User(
     var mySports: MutableMap<Sport, Float> = mutableMapOf(),
     var friends: List<DocumentReference>,
     var recentlyInvited: List<DocumentReference>,
-    var alreadyShownTutorial: Boolean = false
+    var alreadyShownTutorial: Boolean = false,
+    var myCourts: List<DocumentReference>
 ) {
     val age: Int?
         get() {
@@ -46,6 +47,7 @@ fun DocumentSnapshot.toUser(): User {
     val friends = this.get("friends") as? List<DocumentReference> ?: emptyList()
     val recentlyInvited = this.get("recentlyInvited") as? List<DocumentReference> ?: emptyList()
     val alreadyShownTutorial = this.get("alreadyShownTutorial", Boolean::class.java)
+    val myCourts = this.get("myCourts") as? List<DocumentReference> ?: emptyList()
 
     return User(
         id,
@@ -59,6 +61,7 @@ fun DocumentSnapshot.toUser(): User {
         mySports.toMutableMap(),
         friends,
         recentlyInvited,
-        alreadyShownTutorial ?: false
+        alreadyShownTutorial ?: false,
+        myCourts
     )
 }
