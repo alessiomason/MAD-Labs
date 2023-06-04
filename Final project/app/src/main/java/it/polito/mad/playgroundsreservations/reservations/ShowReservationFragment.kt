@@ -182,18 +182,12 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 inviteFriendsButton.visibility = VISIBLE
 
                 inviteFriendsButton.setOnClickListener {
-                    if(myReservation.invitations.count()+1==myPlayground.maxPlayers)
-                    {
-                        Toast.makeText(this.context, R.string.age_toast, Toast.LENGTH_SHORT).show()
-                    }
-                    else {
                         val action =
                             ShowReservationFragmentDirections.actionShowReservationFragmentToInviteFriends(
                                 myReservation.id
                             )
                         navController.navigate(action)
                     }
-                }
             }
 
             if(myReservation.userId!=viewModel.getUserReference(Global.userId!!) && myReservation.time.isAfter(Instant.now().atZone(myReservation.time.zone)))

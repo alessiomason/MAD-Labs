@@ -117,6 +117,8 @@
     <string name="your_friends">I tuoi amici</string>
     <string name="invited_for_this_reservation">Invitati per questa prenotazione</string>
     <string name="cancel_participation">Annulla partecipazione</string>
+    <string name="max_invited_friends">hai raggiunto il numero massimo di persone invitabili</string>
+
 
     <!-- PENDING INVITATIONS -->
     <string name="pending_invitations">Inviti in sospeso</string>

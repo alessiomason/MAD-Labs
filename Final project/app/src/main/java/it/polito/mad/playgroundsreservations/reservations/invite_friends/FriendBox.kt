@@ -1,5 +1,6 @@
 package it.polito.mad.playgroundsreservations.reservations.invite_friends
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -23,6 +24,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -33,17 +35,22 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.firebase.firestore.DocumentReference
 import com.smarttoolfactory.ratingbar.RatingBar
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Invitation
 import it.polito.mad.playgroundsreservations.database.InvitationStatus
+import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.database.User
@@ -62,18 +69,35 @@ fun FriendBox(
 ) {
     val viewModel: ViewModel = viewModel()
     var showAdditionalInfo by remember { mutableStateOf(false) }
+    val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
     var isInvited by remember { mutableStateOf(
         reservation.value!!.invitations.map { it.userId }.contains(friend.id)
     ) }
     var isFriend by remember { mutableStateOf(friends.contains(friend)) }
-
+    var mostra by remember {
+        mutableStateOf(false)
+    }
+    var idPlayg: String =""
     LaunchedEffect(reservation.value!!.invitations.size) {
         isInvited = reservation.value!!.invitations.map { it.userId }.contains(friend.id)
+
     }
 
     LaunchedEffect(friends.size) {
         isFriend = friends.contains(friend)
     }
+    LaunchedEffect(true )
+    {
+
+        viewModel.reservations.value!!.forEach { r ->
+            if (r.id==reservation.value!!.id) {
+                idPlayg=r.playgroundId.id
+            }
+        }
+        viewModel.getPlayground(idPlayg,playground)
+    }
+
+
 
     val sportIcon = when (sport) {
         Sport.TENNIS -> R.drawable.tennis_ball
@@ -186,13 +210,23 @@ fun FriendBox(
                                     it.userId == friend.id
                                 }
                             } else {
-                                reservation.value!!.invitations.add(
-                                    Invitation(
-                                        friend.id,
-                                        friend.fullName,
-                                        InvitationStatus.PENDING
+                                if(reservation.value!!.invitations.count{it.invitationStatus.toString().toLowerCase()=="accepted"}
+                                + reservation.value!!.invitations.count{it.invitationStatus.toString().toLowerCase()=="pending"}+1==playground.value!!.maxPlayers)
+                                {
+                                    mostra=true
+                                }
+                                else
+                                {
+                                    mostra=false
+                                    reservation.value!!.invitations.add(
+                                        Invitation(
+                                            friend.id,
+                                            friend.fullName,
+                                            InvitationStatus.PENDING
+                                        )
                                     )
-                                )
+                                }
+
                             }
                         },
                         shape = RoundedCornerShape(10.dp),
@@ -208,7 +242,11 @@ fun FriendBox(
                                 .aspectRatio(1f)
                         )
                     }
-
+                    if(mostra==true)
+                    {
+                        ShowToastMessage()
+                        mostra=false
+                    }
                     OutlinedButton(
                         onClick = {
                             if (isFriend) {
@@ -269,5 +307,13 @@ fun FriendBox(
                 }
             }
         }
+    }
+}
+@Composable
+fun ShowToastMessage(duration: Int = Toast.LENGTH_SHORT) {
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        Toast.makeText(context, R.string.max_invited_friends, duration).show()
     }
 }
