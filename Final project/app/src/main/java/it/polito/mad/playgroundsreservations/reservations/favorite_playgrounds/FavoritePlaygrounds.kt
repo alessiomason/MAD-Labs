@@ -74,8 +74,35 @@ class FavoritePlaygrounds: Fragment() {
     }
 }
 
+class FavoritePlaygroundsFromProfile: Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // ACTIVITY TITLE
+        activity?.title = "Favorite courts"
+
+        return ComposeView(requireContext()).apply {
+            setContent {
+                PlaygroundsReservationsTheme {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        FavoritePlaygroundsScreen(
+                            canChoosePlayground = false,
+                            navController = null
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Composable
-fun FavoritePlaygroundsScreen(canChoosePlayground: Boolean, navController: NavController) {
+fun FavoritePlaygroundsScreen(canChoosePlayground: Boolean, navController: NavController?) {
     val viewModel: ViewModel = viewModel()
 
     var stillLoading by remember { mutableStateOf(true) }
@@ -88,8 +115,8 @@ fun FavoritePlaygroundsScreen(canChoosePlayground: Boolean, navController: NavCo
     }
 
     val choosePlayground: (HashMap<String, String>) -> Unit = {
-        navController.previousBackStackEntry?.savedStateHandle?.set("chosenPlayground", it)
-        navController.popBackStack()
+        navController?.previousBackStackEntry?.savedStateHandle?.set("chosenPlayground", it)
+        navController?.popBackStack()
     }
 
     if (stillLoading && (   // prevents from going back into loading

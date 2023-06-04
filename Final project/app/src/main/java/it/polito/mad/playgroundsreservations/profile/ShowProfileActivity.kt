@@ -31,7 +31,6 @@ import it.polito.mad.playgroundsreservations.database.Gender
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.MyCourtsActivity
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
-import it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds.FavoritePlaygrounds
 import java.io.InputStream
 
 class ShowProfileActivity: AppCompatActivity() {

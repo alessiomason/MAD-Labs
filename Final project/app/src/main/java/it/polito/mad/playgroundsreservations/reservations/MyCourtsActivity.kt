@@ -3,7 +3,7 @@ package it.polito.mad.playgroundsreservations.reservations
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import it.polito.mad.playgroundsreservations.R
-import it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds.FavoriteCourtsFragment
+import it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds.FavoritePlaygroundsFromProfile
 
 class MyCourtsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,8 +13,8 @@ class MyCourtsActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
-        val fragment = FavoriteCourtsFragment()
-        val tag = "FavoriteCourtsFragment"
+        val fragment = FavoritePlaygroundsFromProfile()
+        val tag = "FavoritePlaygrounds"
         val containerViewId = R.id.fragmentContainerViewMyCourts
         fragmentTransaction.replace(containerViewId, fragment, tag).commit()
     }
