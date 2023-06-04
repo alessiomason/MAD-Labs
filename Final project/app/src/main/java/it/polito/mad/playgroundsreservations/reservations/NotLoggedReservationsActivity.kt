@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import it.polito.mad.playgroundsreservations.R
 
-class NotLoggedReservationsActivity : AppCompatActivity() {
+class NotLoggedReservationsActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.not_logged_activity_reservations)
@@ -20,7 +20,6 @@ class NotLoggedReservationsActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        super.onBackPressed()
         overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
     }
 }

@@ -51,6 +51,12 @@
                 android:numStars="5"
                 android:rating="3.5" />
 
+            <Button
+                android:id="@+id/choose_playground_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose playground" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

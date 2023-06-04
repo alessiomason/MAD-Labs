@@ -210,13 +210,15 @@ fun FriendBox(
                                     it.userId == friend.id
                                 }
                             } else {
-                                if(reservation.value!!.invitations.count{it.invitationStatus.toString().toLowerCase()=="accepted"}
-                                + reservation.value!!.invitations.count{it.invitationStatus.toString().toLowerCase()=="pending"}+1==playground.value!!.maxPlayers)
-                                {
-                                    mostra=true
+                                if (reservation.value!!.invitations.count {
+                                        it.invitationStatus.toString().lowercase() == "accepted"
+                                    }
+                                    + reservation.value!!.invitations.count {
+                                        it.invitationStatus.toString().lowercase() == "pending"
+                                    } + 1 == playground.value!!.maxPlayers) {
+                                    mostra = true
                                 }
-                                else
-                                {
+                                else {
                                     mostra=false
                                     reservation.value!!.invitations.add(
                                         Invitation(
@@ -226,7 +228,6 @@ fun FriendBox(
                                         )
                                     )
                                 }
-
                             }
                         },
                         shape = RoundedCornerShape(10.dp),
@@ -242,11 +243,12 @@ fun FriendBox(
                                 .aspectRatio(1f)
                         )
                     }
-                    if(mostra==true)
-                    {
+
+                    if (mostra) {
                         ShowToastMessage()
-                        mostra=false
+                        mostra = false
                     }
+
                     OutlinedButton(
                         onClick = {
                             if (isFriend) {

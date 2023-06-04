@@ -90,6 +90,9 @@
         <action
             android:id="@+id/action_addReservationFragment_to_showReservationFragment"
             app:destination="@id/showReservationFragment" />
+        <action
+            android:id="@+id/action_addReservationFragment_to_favoritePlaygroundsFragment"
+            app:destination="@id/favoritePlaygroundsFragment" />
     </fragment>
     <fragment
         android:id="@+id/editReservationFragment"
@@ -159,4 +162,13 @@
         android:id="@+id/pendingInvitations"
         android:name="it.polito.mad.playgroundsreservations.reservations.pending_invitations.PendingInvitations"
         android:label="PendingInvitations" />
+    <fragment
+        android:id="@+id/favoritePlaygroundsFragment"
+        android:name="it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds.FavoritePlaygrounds"
+        android:label="FavoritePlaygroundsFragment" >
+        <argument
+            android:name="canChoosePlayground"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
 </navigation>

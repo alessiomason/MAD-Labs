@@ -23,7 +23,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,17 +34,19 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.database.Playground
-import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
 
-class FavoriteCourtsFragment: Fragment() {
-    lateinit var reservation: MutableState<Reservation?>
+class FavoritePlaygrounds: Fragment() {
+    private val args by navArgs<FavoritePlaygroundsArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,7 +63,10 @@ class FavoriteCourtsFragment: Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        FavoritePlaygroundsScreen()
+                        FavoritePlaygroundsScreen(
+                            canChoosePlayground = args.canChoosePlayground,
+                            navController = findNavController()
+                        )
                     }
                 }
             }
@@ -71,7 +75,7 @@ class FavoriteCourtsFragment: Fragment() {
 }
 
 @Composable
-fun FavoritePlaygroundsScreen() {
+fun FavoritePlaygroundsScreen(canChoosePlayground: Boolean, navController: NavController) {
     val viewModel: ViewModel = viewModel()
 
     var stillLoading by remember { mutableStateOf(true) }
@@ -83,6 +87,11 @@ fun FavoritePlaygroundsScreen() {
         viewModel.getUserPlaygrounds(Global.userId!!, favoritePlaygrounds)
     }
 
+    val choosePlayground: (HashMap<String, String>) -> Unit = {
+        navController.previousBackStackEntry?.savedStateHandle?.set("chosenPlayground", it)
+        navController.popBackStack()
+    }
+
     if (stillLoading && (   // prevents from going back into loading
             playgrounds.isEmpty() || favoritePlaygrounds.isEmpty()
         )
@@ -91,6 +100,8 @@ fun FavoritePlaygroundsScreen() {
     else {
         stillLoading = false
         FavoritePlaygroundsScreenContent(
+            canChoosePlayground = canChoosePlayground,
+            choosePlayground = choosePlayground,
             playgrounds = playgrounds,
             favoritePlaygrounds = favoritePlaygrounds
         )
@@ -100,6 +111,8 @@ fun FavoritePlaygroundsScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritePlaygroundsScreenContent(
+    canChoosePlayground: Boolean,
+    choosePlayground: (HashMap<String, String>) -> Unit,
     playgrounds: SnapshotStateList<Playground>,
     favoritePlaygrounds: SnapshotStateList<Playground>
 ) {
@@ -139,7 +152,11 @@ fun FavoritePlaygroundsScreenContent(
         )
 
         if (searchQuery == "" && sportFilter.value == null && regionFilter.value == null && cityFilter.value == null) {
-            FavoritePlaygroundsList(playgrounds = favoritePlaygrounds)
+            FavoritePlaygroundsList(
+                canChoosePlayground = canChoosePlayground,
+                choosePlayground = choosePlayground,
+                playgrounds = favoritePlaygrounds
+            )
         } else {
             LazyColumn(Modifier.fillMaxWidth()) {
                 items(
@@ -150,6 +167,8 @@ fun FavoritePlaygroundsScreenContent(
                                 (cityFilter.value == null || playground.city == cityFilter.value)
                     }, key = { it.id }) { playground ->
                     FavoritePlaygroundBox(
+                        canChoosePlayground = canChoosePlayground,
+                        choosePlayground = choosePlayground,
                         playground = playground,
                         favoritePlaygrounds = favoritePlaygrounds
                     )

@@ -19,22 +19,20 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.runtime.mutableStateListOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.database.toSport
 import it.polito.mad.playgroundsreservations.profile.SpinnerFragment
 import java.text.SimpleDateFormat
 import java.time.Duration
@@ -56,6 +54,11 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
     var hours = mutableListOf<String>()
     var price=0
     var pricePerHour=0
+
+    lateinit var image: ImageView
+    lateinit var sportIcon: ImageView
+    lateinit var sportName: TextView
+    lateinit var priceElement: TextView
 
     object MyReservation {
         var playgroundId = ""
@@ -92,6 +95,12 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.add_reservation)
 
+        view.findViewById<Button>(R.id.choose_playground_button).setOnClickListener {
+            val action = AddReservationFragmentDirections
+                .actionAddReservationFragmentToFavoritePlaygroundsFragment(canChoosePlayground = true)
+            navController.navigate(action)
+        }
+
         playgrounds.observe(viewLifecycleOwner) {
             it.forEach { p ->
                 playgroundList.add(p)
@@ -113,15 +122,15 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
             val seeRatingButton = view.findViewById<Button>(R.id.btnSeeRatings)
             val noRatingsTextView = view.findViewById<TextView>(R.id.noRatingsTextView)
 
-            val image = view.findViewById<ImageView>(R.id.reservationImage)
-            val sportIcon = view.findViewById<ImageView>(R.id.sportNameIcon)
-            val sportName = view.findViewById<TextView>(R.id.sportName)
+            image = view.findViewById<ImageView>(R.id.reservationImage)
+            sportIcon = view.findViewById<ImageView>(R.id.sportNameIcon)
+            sportName = view.findViewById<TextView>(R.id.sportName)
 
             val spinner = view.findViewById<Spinner>(R.id.playgroundList)
             spinner.adapter = adapter
             val spinnerHour = view.findViewById<Spinner>(R.id.spinnerDuration)
             val spinnerDuration = view.findViewById<Spinner>(R.id.spinnerDuration2)
-            val priceElement=view.findViewById<TextView>(R.id.price)
+            priceElement = view.findViewById<TextView>(R.id.price)
 
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -337,12 +346,52 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
                 }
             }
-
-
         }
 
         view.findViewById<TextView>(R.id.viewHour).text = args.dateOfReservation
     }
+
+    override fun onResume() {
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<HashMap<String, String>>("chosenPlayground")
+            ?.observe(viewLifecycleOwner) {
+                MyReservation.playgroundId = it["id"]!!
+                MyReservation.sport = it["sport"]!!.toSport()
+
+                when (MyReservation.sport) {
+                    Sport.TENNIS ->  {
+                        image.setImageResource(R.drawable.tennis_court)
+                        sportIcon.setImageResource(R.drawable.tennis_ball)
+                        sportName.setText(R.string.sport_tennis)
+                    }
+                    Sport.FOOTBALL -> {
+                        image.setImageResource(R.drawable.football_pitch)
+                        sportIcon.setImageResource(R.drawable.football_ball)
+                        sportName.setText(R.string.sport_football)
+                    }
+                    Sport.GOLF -> {
+                        image.setImageResource(R.drawable.golf_field)
+                        sportIcon.setImageResource(R.drawable.golf_ball)
+                        sportName.setText(R.string.sport_golf)
+                    }
+                    Sport.VOLLEYBALL -> {
+                        image.setImageResource(R.drawable.volleyball_court)
+                        sportIcon.setImageResource(R.drawable.volleyball_ball)
+                        sportName.setText(R.string.sport_volleyball)
+                    }
+                    Sport.BASKETBALL -> {
+                        image.setImageResource(R.drawable.basketball_court)
+                        sportIcon.setImageResource(R.drawable.basketball_ball)
+                        sportName.setText(R.string.sport_basketball)
+                    }
+                }
+
+                pricePerHour = it["pricePerHour"]!!.toInt()
+                priceElement.text = it["pricePerHour"]!!
+            }
+
+        super.onResume()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_save_edit_reservation, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -350,7 +399,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController= view?.findNavController()
-        var action = AddReservationFragmentDirections.actionAddReservationFragmentToCalendarFragment()
+        val action = AddReservationFragmentDirections.actionAddReservationFragmentToCalendarFragment()
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_edit_reservation -> {

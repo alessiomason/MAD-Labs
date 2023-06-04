@@ -3,7 +3,6 @@ package it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,18 +22,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
+import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
 
 @Composable
-fun FavoritePlaygroundsList(playgrounds: SnapshotStateList<Playground>, ) {
+fun FavoritePlaygroundsList(
+    canChoosePlayground: Boolean,
+    choosePlayground: (HashMap<String, String>) -> Unit,
+    playgrounds: SnapshotStateList<Playground>
+) {
     var showAllFavoritePlaygrounds by remember { mutableStateOf(false) }
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -78,6 +81,8 @@ fun FavoritePlaygroundsList(playgrounds: SnapshotStateList<Playground>, ) {
             key = { "your_favorite_playgrounds_${it.id}" }
         ) { playground ->
             FavoritePlaygroundBox(
+                canChoosePlayground = canChoosePlayground,
+                choosePlayground = choosePlayground,
                 playground = playground,
                 favoritePlaygrounds = playgrounds
             )
@@ -94,6 +99,8 @@ fun FavoritePlaygroundsList(playgrounds: SnapshotStateList<Playground>, ) {
                     exit = fadeOut()
                 ) {
                     FavoritePlaygroundBox(
+                        canChoosePlayground = canChoosePlayground,
+                        choosePlayground = choosePlayground,
                         playground = playground,
                         favoritePlaygrounds = playgrounds
                     )

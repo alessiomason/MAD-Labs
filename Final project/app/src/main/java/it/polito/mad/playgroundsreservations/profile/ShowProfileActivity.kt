@@ -31,6 +31,7 @@ import it.polito.mad.playgroundsreservations.database.Gender
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.MyCourtsActivity
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
+import it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds.FavoritePlaygrounds
 import java.io.InputStream
 
 class ShowProfileActivity: AppCompatActivity() {
@@ -134,7 +135,7 @@ class ShowProfileActivity: AppCompatActivity() {
             .replace(R.id.loadingShowProfileFragment, SpinnerFragment()).commit()
         loading.visibility = VISIBLE
 
-        favoriteCourtsButton.setOnClickListener{
+        favoriteCourtsButton.setOnClickListener {
             val intent = Intent(this, MyCourtsActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.fade_in, R.anim.no_anim)

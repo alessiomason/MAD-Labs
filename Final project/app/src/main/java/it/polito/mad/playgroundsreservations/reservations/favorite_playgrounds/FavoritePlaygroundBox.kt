@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -40,14 +41,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import it.polito.mad.playgroundsreservations.R
+import it.polito.mad.playgroundsreservations.database.Invitation
+import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
+import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
 
 @Composable
-fun FavoritePlaygroundBox(playground: Playground, favoritePlaygrounds: SnapshotStateList<Playground>) {
+fun FavoritePlaygroundBox(
+    canChoosePlayground: Boolean,
+    choosePlayground: (HashMap<String, String>) -> Unit,
+    playground: Playground,
+    favoritePlaygrounds: SnapshotStateList<Playground>
+) {
     val viewModel: ViewModel = viewModel()
 
     var showAdditionalInfo by remember { mutableStateOf(false) }
@@ -152,6 +161,28 @@ fun FavoritePlaygroundBox(playground: Playground, favoritePlaygrounds: SnapshotS
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    if (canChoosePlayground) {
+                        Button(
+                            onClick = {
+                                val p = hashMapOf(
+                                    "id" to playground.id,
+                                    "sport" to playground.sport.name.lowercase(),
+                                    "pricePerHour" to playground.pricePerHour.toString()
+                                )
+
+                                choosePlayground(p) },
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.check_icon),
+                                contentDescription = "Add person to friends",
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .aspectRatio(1f)
+                            )
+                        }
+                    }
 
                     OutlinedButton(
                         onClick = {
