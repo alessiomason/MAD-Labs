@@ -60,13 +60,16 @@ class ShowProfileActivity: AppCompatActivity() {
 
         val logoutButton = findViewById<Button>(R.id.logout_button)
         val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
+        val title: String = intent.getStringExtra("title").toString()
 
         if (userId == Global.userId!!) {
             this.title = resources?.getString(R.string.user_profile)
         }
-        else {
+        else if(title == "CreatorTitle") {
             this.title = resources?.getString(R.string.reservation_creator_profile)
             logoutButton.visibility = GONE
+        }else{
+            this.title = resources?.getString(R.string.contact_profile)
         }
 
         nameView = findViewById(R.id.textFullName)
@@ -276,6 +279,12 @@ class ShowProfileActivity: AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.add_friend ->{
+                val intent = Intent(this, Contacts::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
+                return true
+            }
             R.id.modify_profile -> {
                 val intent = Intent(this, EditProfileActivity::class.java)
                 startActivity(intent)
