@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import it.polito.mad.playgroundsreservations.Global
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
+import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
@@ -102,35 +104,50 @@ fun FavoritePlaygroundsScreenContent(
     favoritePlaygrounds: SnapshotStateList<Playground>
 ) {
     var searchQuery by remember { mutableStateOf("") }
+    val sportFilter = remember { mutableStateOf< Sport?>(null) }
+    val regionFilter = remember { mutableStateOf<String?>(null) }
+    val cityFilter = remember { mutableStateOf<String?>(null) }
 
-    Column(Modifier.fillMaxWidth()) {
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
-            maxLines = 1,
-            label = { Text(text = "Search all playgrounds")},
-            colors = TextFieldDefaults.textFieldColors(
-                focusedLabelColor = SecondaryColor,
-                focusedIndicatorColor = SecondaryColor
-            ),
-            trailingIcon = {
-                IconButton(
-                    onClick = { searchQuery = "" },
-                    modifier = Modifier.padding(horizontal = 5.dp)
-                ) {
-                    Icon(Icons.Filled.Clear, contentDescription = "Clear")
+    Column {
+        Row {
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                maxLines = 1,
+                label = { Text(text = "Search all playgrounds")},
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedLabelColor = SecondaryColor,
+                    focusedIndicatorColor = SecondaryColor
+                ),
+                trailingIcon = {
+                    IconButton(
+                        onClick = { searchQuery = "" },
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    ) {
+                        Icon(Icons.Filled.Clear, contentDescription = "Clear")
+                    }
                 }
-            }
+            )
+        }
+
+        PlaygroundsFilters(
+            playgrounds = playgrounds,
+            sportFilter = sportFilter,
+            regionFilter = regionFilter,
+            cityFilter = cityFilter
         )
 
-        if (searchQuery == "") {
+        if (searchQuery == "" && sportFilter.value == null && regionFilter.value == null && cityFilter.value == null) {
             FavoritePlaygroundsList(playgrounds = favoritePlaygrounds)
         } else {
             LazyColumn(Modifier.fillMaxWidth()) {
                 items(
                     items = playgrounds.filter { playground ->
-                        playground.name.contains(searchQuery, ignoreCase = true)
+                        playground.name.contains(searchQuery, ignoreCase = true) &&
+                                (sportFilter.value == null || playground.sport == sportFilter.value) &&
+                                (regionFilter.value == null || playground.region == regionFilter.value) &&
+                                (cityFilter.value == null || playground.city == cityFilter.value)
                     }, key = { it.id }) { playground ->
                     FavoritePlaygroundBox(
                         playground = playground,
