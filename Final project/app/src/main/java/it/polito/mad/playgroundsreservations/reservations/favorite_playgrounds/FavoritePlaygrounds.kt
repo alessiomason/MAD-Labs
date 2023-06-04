@@ -2,9 +2,6 @@ package it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
@@ -34,17 +31,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.findNavController
 import it.polito.mad.playgroundsreservations.Global
-import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
-import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
@@ -59,65 +51,33 @@ class FavoriteCourtsFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // ACTIVITY TITLE
-        //activity?.title = activity?.resources?.getString(R.string.invite_friends)
-        activity?.title = "Favorite Courts"
-        setHasOptionsMenu(true)
+        activity?.title = "Favorite courts"
 
         return ComposeView(requireContext()).apply {
             setContent {
-                val playgrounds = remember { mutableStateListOf<Playground>() }
-
                 PlaygroundsReservationsTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        FavoritePlaygroundsScreen(playgrounds)
+                        FavoritePlaygroundsScreen()
                     }
                 }
             }
         }
     }
-
-    @Deprecated("Deprecated in Java")
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_invite_friends, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController = view?.findNavController()
-        /*
-        // Handle presses on the action bar menu items
-        when (item.itemId) {
-            R.id.invite_friends -> {
-                val viewModel by viewModels<ViewModel>()
-
-                viewModel.updateReservation(reservation.value!!)
-                viewModel.updateRecentlyInvited(reservation.value!!.invitations)
-                viewModel.invite(reservation.value!!.id, reservation.value!!.invitations.map { it.userId })
-                navController?.popBackStack()
-            }
-        } */
-        return super.onOptionsItemSelected(item)
-    }
 }
 
 @Composable
-fun FavoritePlaygroundsScreen(playgrounds: SnapshotStateList<Playground>) {
+fun FavoritePlaygroundsScreen() {
     val viewModel: ViewModel = viewModel()
 
     var stillLoading by remember { mutableStateOf(true) }
-    // val user = remember { mutableStateOf<User?>(null) }
+    val playgrounds = remember { mutableStateListOf<Playground>() }
     val favoritePlaygrounds = remember { mutableStateListOf<Playground>() }
-    // val recentlyInvited = remember { mutableStateListOf<User>() }
-    // val users = remember { mutableStateListOf<User>() }
 
     LaunchedEffect(true) {
-        // get tutti i campi
         viewModel.getPlaygrounds(playgrounds)
-        // get campi preferiti dell'utente
         viewModel.getUserPlaygrounds(Global.userId!!, favoritePlaygrounds)
     }
 
@@ -149,7 +109,6 @@ fun FavoritePlaygroundsScreenContent(
             value = searchQuery,
             onValueChange = { searchQuery = it },
             maxLines = 1,
-            //label = { Text(stringResource(id = R.string.search_users)) },
             label = { Text(text = "Search all playgrounds")},
             colors = TextFieldDefaults.textFieldColors(
                 focusedLabelColor = SecondaryColor,
@@ -166,9 +125,7 @@ fun FavoritePlaygroundsScreenContent(
         )
 
         if (searchQuery == "") {
-            FavoritePlaygroundsList(
-                playgrounds = favoritePlaygrounds
-            )
+            FavoritePlaygroundsList(playgrounds = favoritePlaygrounds)
         } else {
             LazyColumn(Modifier.fillMaxWidth()) {
                 items(
@@ -177,8 +134,7 @@ fun FavoritePlaygroundsScreenContent(
                     }, key = { it.id }) { playground ->
                     FavoritePlaygroundBox(
                         playground = playground,
-                        playgrounds = favoritePlaygrounds,
-                        sport = playground.sport
+                        favoritePlaygrounds = favoritePlaygrounds
                     )
                 }
             }
