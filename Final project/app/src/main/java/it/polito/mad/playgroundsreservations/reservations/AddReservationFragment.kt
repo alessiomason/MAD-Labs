@@ -61,7 +61,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
     lateinit var priceElement: TextView
 
     object MyReservation {
-        var playgroundId = ""
+        var playgroundId = "0b4bdHYh2JR20jSLUKEZ"
         var sport = Sport.VOLLEYBALL
         var time: ZonedDateTime = ZonedDateTime.of(2023, 5, 26, 14, 0, 0, 0, zoneId)
         var duration: Duration = Duration.ofHours(1)
@@ -77,326 +77,270 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
         return inflater.inflate(R.layout.add_reservation_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onResume() {
+
         val reservations = viewModel.reservations
         val playgrounds = viewModel.playgrounds
 
-        val loading = view.findViewById<FragmentContainerView>(R.id.loadingAddReservationFragment)
-        val seeRatingsFragmentReference= view.findViewById<FragmentContainerView>(R.id.showSeeRatingsFragment)
+        val loading = view?.findViewById<FragmentContainerView>(R.id.loadingAddReservationFragment)
+        val seeRatingsFragmentReference= view?.findViewById<FragmentContainerView>(R.id.showSeeRatingsFragment)
         val fragmentManager = childFragmentManager
         fragmentManager.beginTransaction().replace(R.id.loadingAddReservationFragment, SpinnerFragment()).commit()
-        loading.visibility = VISIBLE
-        seeRatingsFragmentReference.visibility=GONE
+        loading?.visibility = VISIBLE
+        seeRatingsFragmentReference?.visibility=GONE
 
         playgroundList.removeAll(playgroundList)
         val sharedPreferences = requireContext().getSharedPreferences("AddPref", Context.MODE_PRIVATE)
-        val navController = view.findNavController()
+        val navController = view?.findNavController()
         // ACTIVITY TITLE
         activity?.title = activity?.resources?.getString(R.string.add_reservation)
 
-        view.findViewById<Button>(R.id.choose_playground_button).setOnClickListener {
+        view?.findViewById<Button>(R.id.choose_playground_button)?.setOnClickListener {
             val action = AddReservationFragmentDirections
                 .actionAddReservationFragmentToFavoritePlaygroundsFragment(canChoosePlayground = true)
-            navController.navigate(action)
+            navController?.navigate(action)
         }
 
-        playgrounds.observe(viewLifecycleOwner) {
-            it.forEach { p ->
-                playgroundList.add(p)
-            }
-
-            val adapter =
-                activity?.let {
-                    ArrayAdapter(
-                        it.applicationContext,
-                        android.R.layout.simple_spinner_dropdown_item,
-                        playgroundList.map { p -> p.name }.toTypedArray()
-                    )
-                }
-
-
-            val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
-            ratingBar.setIsIndicator(true)
-
-            val seeRatingButton = view.findViewById<Button>(R.id.btnSeeRatings)
-            val noRatingsTextView = view.findViewById<TextView>(R.id.noRatingsTextView)
-
-            image = view.findViewById<ImageView>(R.id.reservationImage)
-            sportIcon = view.findViewById<ImageView>(R.id.sportNameIcon)
-            sportName = view.findViewById<TextView>(R.id.sportName)
-
-            val spinner = view.findViewById<Spinner>(R.id.playgroundList)
-            spinner.adapter = adapter
-            val spinnerHour = view.findViewById<Spinner>(R.id.spinnerDuration)
-            val spinnerDuration = view.findViewById<Spinner>(R.id.spinnerDuration2)
-            priceElement = view.findViewById<TextView>(R.id.price)
-
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    hours.removeAll(hours)
-                    val playground = playgroundList[position]
-                    MyReservation.playgroundId = playground.id
-                    MyReservation.sport = playgroundList[position].sport
-                    pricePerHour=playground.pricePerHour
-                    priceElement.text = pricePerHour.toString()
-
-                    val editor = sharedPreferences.edit()
-                    editor.putString("playgroundSelected", playground.id)
-                    editor.apply()
-
-                    var totalRating = 0.0f
-                    val ratingBarValue = viewModel.getRatingsByPlaygroundIdFragment(playground.id)
-                    ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
-                        if (ratingPlaygroundsList.isEmpty()){
-                            ratingBar.rating = 0.0f
-                        } else {
-                            ratingPlaygroundsList.forEach { r ->
-                                totalRating += r?.rating!!
-                            }
-                            ratingBar.rating = totalRating / ratingPlaygroundsList.size
-                        }
-                    }
-
-                    when (MyReservation.sport) {
-                        Sport.TENNIS ->  {
-                            image.setImageResource(R.drawable.tennis_court)
-                            sportIcon.setImageResource(R.drawable.tennis_ball)
-                            sportName.setText(R.string.sport_tennis)
-                        }
-                        Sport.FOOTBALL -> {
-                            image.setImageResource(R.drawable.football_pitch)
-                            sportIcon.setImageResource(R.drawable.football_ball)
-                            sportName.setText(R.string.sport_football)
-                        }
-                        Sport.GOLF -> {
-                            image.setImageResource(R.drawable.golf_field)
-                            sportIcon.setImageResource(R.drawable.golf_ball)
-                            sportName.setText(R.string.sport_golf)
-                        }
-                        Sport.VOLLEYBALL -> {
-                            image.setImageResource(R.drawable.volleyball_court)
-                            sportIcon.setImageResource(R.drawable.volleyball_ball)
-                            sportName.setText(R.string.sport_volleyball)
-                        }
-                        Sport.BASKETBALL -> {
-                            image.setImageResource(R.drawable.basketball_court)
-                            sportIcon.setImageResource(R.drawable.basketball_ball)
-                            sportName.setText(R.string.sport_basketball)
-                        }
-                    }
-
-                    reservations.observe(viewLifecycleOwner) {
-                        arrayOccupated.removeAll(arrayOccupated)
-                        val formatter = SimpleDateFormat("yyyy-MM-dd")
-                        val formatterDate=formatter.format(Date.from(Instant.now()))
-                        if (args.dateOfReservation==formatterDate) {
-                           val ora= Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-                            for(i in 8..ora) {
-                                    arrayOccupated.add(i.toString()+":00")
-                            }
-                        }
-                        it.forEach { r ->
-                            if (r.playgroundId.path.split('/')[1] == playground.id &&
-                                r.time.year == args.dateOfReservation.split("-")[0].toInt() &&
-                                r.time.month.value == args.dateOfReservation.split("-")[1].toInt() &&
-                                r.time.dayOfMonth == args.dateOfReservation.split("-")[2].toInt()
-                            ) {
-                                // same day, same field
-                                arrayOccupated.add(r.time.hour.toString() + ":00")
-                                aus = r.time.hour
-                                for (i in 1 until r.duration.toHours()) {
-                                    arrayOccupated.add((aus + 1).toString() + ":00")
-                                    aus += 1
-                                }
-                                Log.d("C", arrayOccupated.toString())
-                            }
-                        }
-
-                        for (hour in 8..23) {
-                            hours.add("$hour:00")
-                        }
-                        hours.removeAll(arrayOccupated)
-                        Log.d("listaFinale", hours.toString())
-
-                        val adapterHours =
-                            activity?.let {
-                                ArrayAdapter(
-                                    it.applicationContext,
-                                    android.R.layout.simple_spinner_dropdown_item,
-                                    hours.toTypedArray()
-                                )
-                            }
-                        spinnerHour.adapter = adapterHours
-                        spinnerHour.setSelection(0)
-
-                        val durationAdapter =
-                            activity?.let {
-                                ArrayAdapter(
-                                    it.applicationContext,
-                                    android.R.layout.simple_spinner_dropdown_item,
-                                    durationsList
-                                )
-                            }
-                        spinnerDuration.adapter = durationAdapter
-                        var i: Int
-                        var oraTotale: Int
-                        var esci: Boolean
-                        spinnerHour.onItemSelectedListener =
-                            object : AdapterView.OnItemSelectedListener {
-                                override fun onItemSelected(
-                                    parent: AdapterView<*>,
-                                    view: View?,
-                                    position: Int,
-                                    id: Long
-                                ) {
-                                    val selectedItem = parent.getItemAtPosition(position).toString()
-                                    MyReservation.time = ZonedDateTime.of(
-                                        args.dateOfReservation.split("-")[0].toInt(),
-                                        args.dateOfReservation.split("-")[1].toInt(),
-                                        args.dateOfReservation.split("-")[2].toInt(), 14, 0, 0, 0, zoneId)
-                                    MyReservation.time =
-                                        MyReservation.time.withHour(selectedItem.split(':')[0].toInt())
-                                    oraTotale = selectedItem.split(':')[0].toInt()
-                                    Log.d("Ora totale: ", oraTotale.toString())
-                                    esci = false
-                                    i = 0
-                                    if (selectedItem == "23:00") {
-                                        i = 1
-                                        esci = true
-                                    }
-                                    while (i != 4 && oraTotale < 24 && !esci) {
-                                        i += 1
-                                        if ((position + i) >= hours.size) {
-                                            esci = true
-                                            break
-                                        }
-                                        if (parent.getItemAtPosition((position + i)).toString()
-                                                .split(":")[0].toInt() == oraTotale + 1
-                                        ) {
-                                            oraTotale += 1
-                                        } else
-                                            esci = true
-                                    }
-                                    if (i == 4)
-                                        i = 3
-                                    durationsList.removeAll(durationsList)
-                                    for (j in 1..i)
-                                        durationsList.add("$j h")
-                                    durationAdapter?.notifyDataSetChanged()
-                                }
-
-                                override fun onNothingSelected(parent: AdapterView<*>) {
-
-                                }
-
-
-                            }
-                        spinnerDuration.onItemSelectedListener =
-                            object : AdapterView.OnItemSelectedListener {
-                                override fun onItemSelected(
-                                    parent: AdapterView<*>,
-                                    view: View?,
-                                    position: Int,
-                                    id: Long
-                                ) {
-                                    val selectedItem = parent.getItemAtPosition(position).toString()
-                                    MyReservation.duration = Duration.ofHours(selectedItem.split(' ')[0].toLong())
-                                    price=pricePerHour*(selectedItem.split(' ')[0].toInt())
-                                    priceElement.text = price.toString()
-
-
-                                }
-
-                                override fun onNothingSelected(parent: AdapterView<*>?) {
-                                    TODO("Not yet implemented")
-                                }
-
-                            }
-                    }
-
-                    ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
-                        loading.visibility = GONE
-                        val ratingSinglePlaygroundList = mutableListOf<PlaygroundRating>()
-                        ratingPlaygroundsList.forEach { r ->
-                            if (r?.playgroundId?.id == playground.id) {
-                                ratingSinglePlaygroundList.add(r)
-                            }
-                        }
-                        if (ratingSinglePlaygroundList.isEmpty()){
-                            seeRatingButton.visibility = GONE
-                            noRatingsTextView.visibility = VISIBLE
-                        } else {
-                            noRatingsTextView.visibility = GONE
-                            seeRatingButton.visibility = VISIBLE
-                            seeRatingButton.setOnClickListener {
-                               val action = AddReservationFragmentDirections.actionAddReservationFragmentToSeeRatings(playground.id)
-                               navController.navigate(action)
-                            }
-                        }
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-
-                }
-            }
-        }
-
-        view.findViewById<TextView>(R.id.viewHour).text = args.dateOfReservation
-    }
-
-    override fun onResume() {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<HashMap<String, String>>("chosenPlayground")
             ?.observe(viewLifecycleOwner) {
                 MyReservation.playgroundId = it["id"]!!
                 MyReservation.sport = it["sport"]!!.toSport()
+            }
 
-                when (MyReservation.sport) {
-                    Sport.TENNIS ->  {
-                        image.setImageResource(R.drawable.tennis_court)
-                        sportIcon.setImageResource(R.drawable.tennis_ball)
-                        sportName.setText(R.string.sport_tennis)
+        playgrounds.observe(viewLifecycleOwner) {
+
+            it.forEach { p ->
+                playgroundList.add(p)
+            }
+
+            val ratingBar = view?.findViewById<RatingBar>(R.id.ratingBar)
+            ratingBar?.setIsIndicator(true)
+
+            val seeRatingButton = view?.findViewById<Button>(R.id.btnSeeRatings)
+            val noRatingsTextView = view?.findViewById<TextView>(R.id.noRatingsTextView)
+
+            image = view?.findViewById(R.id.reservationImage)!!
+            sportIcon = view?.findViewById(R.id.sportNameIcon)!!
+            sportName = view?.findViewById(R.id.sportName)!!
+
+            val playgroundNameView = view?.findViewById<TextView>(R.id.addPlaygroundName)
+            val spinnerHour = view?.findViewById<Spinner>(R.id.spinnerDuration)
+            val spinnerDuration = view?.findViewById<Spinner>(R.id.spinnerDuration2)
+            priceElement = view?.findViewById<TextView>(R.id.price)!!
+
+
+            hours.removeAll(hours)
+            val playground = playgroundList.find { it.id == MyReservation.playgroundId}
+            pricePerHour = playground?.pricePerHour!!
+            priceElement.text = pricePerHour.toString()
+            playgroundNameView?.text = playground.name
+
+            val editor = sharedPreferences.edit()
+            editor.putString("playgroundSelected", playground.id)
+            editor.apply()
+
+            var totalRating = 0.0f
+            val ratingBarValue = viewModel.getRatingsByPlaygroundIdFragment(playground.id)
+            ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
+                if (ratingPlaygroundsList.isEmpty()){
+                    ratingBar?.rating = 0.0f
+                } else {
+                    ratingPlaygroundsList.forEach { r ->
+                        totalRating += r?.rating!!
                     }
-                    Sport.FOOTBALL -> {
-                        image.setImageResource(R.drawable.football_pitch)
-                        sportIcon.setImageResource(R.drawable.football_ball)
-                        sportName.setText(R.string.sport_football)
+                    ratingBar?.rating = totalRating / ratingPlaygroundsList.size
+                }
+            }
+
+            when (MyReservation.sport) {
+                Sport.TENNIS ->  {
+                    image.setImageResource(R.drawable.tennis_court)
+                    sportIcon.setImageResource(R.drawable.tennis_ball)
+                    sportName.setText(R.string.sport_tennis)
+                }
+                Sport.FOOTBALL -> {
+                    image.setImageResource(R.drawable.football_pitch)
+                    sportIcon.setImageResource(R.drawable.football_ball)
+                    sportName.setText(R.string.sport_football)
+                }
+                Sport.GOLF -> {
+                    image.setImageResource(R.drawable.golf_field)
+                    sportIcon.setImageResource(R.drawable.golf_ball)
+                    sportName.setText(R.string.sport_golf)
+                }
+                Sport.VOLLEYBALL -> {
+                    image.setImageResource(R.drawable.volleyball_court)
+                    sportIcon.setImageResource(R.drawable.volleyball_ball)
+                    sportName.setText(R.string.sport_volleyball)
+                }
+                Sport.BASKETBALL -> {
+                    image.setImageResource(R.drawable.basketball_court)
+                    sportIcon.setImageResource(R.drawable.basketball_ball)
+                    sportName.setText(R.string.sport_basketball)
+                }
+            }
+
+            reservations.observe(viewLifecycleOwner) {
+                arrayOccupated.removeAll(arrayOccupated)
+                val formatter = SimpleDateFormat("yyyy-MM-dd")
+                val formatterDate=formatter.format(Date.from(Instant.now()))
+                if (args.dateOfReservation==formatterDate) {
+                    val ora= Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+                    for(i in 8..ora) {
+                        arrayOccupated.add(i.toString()+":00")
                     }
-                    Sport.GOLF -> {
-                        image.setImageResource(R.drawable.golf_field)
-                        sportIcon.setImageResource(R.drawable.golf_ball)
-                        sportName.setText(R.string.sport_golf)
-                    }
-                    Sport.VOLLEYBALL -> {
-                        image.setImageResource(R.drawable.volleyball_court)
-                        sportIcon.setImageResource(R.drawable.volleyball_ball)
-                        sportName.setText(R.string.sport_volleyball)
-                    }
-                    Sport.BASKETBALL -> {
-                        image.setImageResource(R.drawable.basketball_court)
-                        sportIcon.setImageResource(R.drawable.basketball_ball)
-                        sportName.setText(R.string.sport_basketball)
+                }
+                it.forEach { r ->
+                    if (r.playgroundId.path.split('/')[1] == playground.id &&
+                        r.time.year == args.dateOfReservation.split("-")[0].toInt() &&
+                        r.time.month.value == args.dateOfReservation.split("-")[1].toInt() &&
+                        r.time.dayOfMonth == args.dateOfReservation.split("-")[2].toInt()
+                    ) {
+                        // same day, same field
+                        arrayOccupated.add(r.time.hour.toString() + ":00")
+                        aus = r.time.hour
+                        for (i in 1 until r.duration.toHours()) {
+                            arrayOccupated.add((aus + 1).toString() + ":00")
+                            aus += 1
+                        }
+                        Log.d("C", arrayOccupated.toString())
                     }
                 }
 
-                pricePerHour = it["pricePerHour"]!!.toInt()
-                priceElement.text = it["pricePerHour"]!!
+                for (hour in 8..23) {
+                    hours.add("$hour:00")
+                }
+                hours.removeAll(arrayOccupated)
+                Log.d("listaFinale", hours.toString())
+
+                val adapterHours =
+                    activity?.let {
+                        ArrayAdapter(
+                            it.applicationContext,
+                            android.R.layout.simple_spinner_dropdown_item,
+                            hours.toTypedArray()
+                        )
+                    }
+                spinnerHour?.adapter = adapterHours
+                spinnerHour?.setSelection(0)
+
+                val durationAdapter =
+                    activity?.let {
+                        ArrayAdapter(
+                            it.applicationContext,
+                            android.R.layout.simple_spinner_dropdown_item,
+                            durationsList
+                        )
+                    }
+                spinnerDuration?.adapter = durationAdapter
+                var i: Int
+                var oraTotale: Int
+                var esci: Boolean
+                spinnerHour?.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            val selectedItem = parent.getItemAtPosition(position).toString()
+                            MyReservation.time = ZonedDateTime.of(
+                                args.dateOfReservation.split("-")[0].toInt(),
+                                args.dateOfReservation.split("-")[1].toInt(),
+                                args.dateOfReservation.split("-")[2].toInt(), 14, 0, 0, 0, zoneId)
+                            MyReservation.time =
+                                MyReservation.time.withHour(selectedItem.split(':')[0].toInt())
+                            oraTotale = selectedItem.split(':')[0].toInt()
+                            Log.d("Ora totale: ", oraTotale.toString())
+                            esci = false
+                            i = 0
+                            if (selectedItem == "23:00") {
+                                i = 1
+                                esci = true
+                            }
+                            while (i != 4 && oraTotale < 24 && !esci) {
+                                i += 1
+                                if ((position + i) >= hours.size) {
+                                    esci = true
+                                    break
+                                }
+                                if (parent.getItemAtPosition((position + i)).toString()
+                                        .split(":")[0].toInt() == oraTotale + 1
+                                ) {
+                                    oraTotale += 1
+                                } else
+                                    esci = true
+                            }
+                            if (i == 4)
+                                i = 3
+                            durationsList.removeAll(durationsList)
+                            for (j in 1..i)
+                                durationsList.add("$j h")
+                            durationAdapter?.notifyDataSetChanged()
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>) {
+
+                        }
+
+
+                    }
+                spinnerDuration?.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            val selectedItem = parent.getItemAtPosition(position).toString()
+                            MyReservation.duration = Duration.ofHours(selectedItem.split(' ')[0].toLong())
+                            price=pricePerHour*(selectedItem.split(' ')[0].toInt())
+                            priceElement.text = price.toString()
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            TODO("Not yet implemented")
+                        }
+
+                    }
             }
+
+            ratingBarValue.observe(viewLifecycleOwner) { ratingPlaygroundsList ->
+                loading?.visibility = GONE
+                val ratingSinglePlaygroundList = mutableListOf<PlaygroundRating>()
+                ratingPlaygroundsList.forEach { r ->
+                    if (r?.playgroundId?.id == playground.id) {
+                        ratingSinglePlaygroundList.add(r)
+                    }
+                }
+                if (ratingSinglePlaygroundList.isEmpty()){
+                    seeRatingButton?.visibility = GONE
+                    noRatingsTextView?.visibility = VISIBLE
+                } else {
+                    noRatingsTextView?.visibility = GONE
+                    seeRatingButton?.visibility = VISIBLE
+                    seeRatingButton?.setOnClickListener {
+                        val action = AddReservationFragmentDirections.actionAddReservationFragmentToSeeRatings(playground.id)
+                        navController?.navigate(action)
+                    }
+                }
+            }
+        }
+
+        view?.findViewById<TextView>(R.id.viewHour)!!.text = args.dateOfReservation
 
         super.onResume()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_save_edit_reservation, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController= view?.findNavController()
         val action = AddReservationFragmentDirections.actionAddReservationFragmentToCalendarFragment()

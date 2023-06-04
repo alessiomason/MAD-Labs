@@ -96,7 +96,7 @@
     <string name="rate_court">Rate Court</string>
     <string name="edit_reservation_hours">Time: </string>
     <string name="edit_reservation_duration">Duration: </string>
-    <string name="add_reservation_court">Court: </string>
+    <string name="add_reservation_court">Playground: </string>
     <string name="optional_description_rating">Add a description (optional)</string>
     <string name="rating_label">Rating:</string>
     <string name="title_activity_rating_playgrounds">RatingPlaygrounds</string>

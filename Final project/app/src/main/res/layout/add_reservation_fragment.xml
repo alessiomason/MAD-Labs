@@ -41,6 +41,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/addPlaygroundName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="-5dp"
+                android:text="@string/playground_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@android:color/secondary_text_light" />
+
             <me.zhanghai.android.materialratingbar.MaterialRatingBar
                 android:id="@+id/ratingBar"
                 style="@style/Widget.MaterialRatingBar.RatingBar"
@@ -56,35 +66,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Choose playground" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="2dp"
-                    android:paddingEnd="5dp"
-                    android:src="@drawable/court_generic_icon"
-                    app:tint="@color/primary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/add_reservation_court"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@android:color/secondary_text_light" />
-
-                <Spinner
-                    android:id="@+id/playgroundList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
