@@ -242,10 +242,11 @@
                             android:layout_height="wrap_content"
                             android:rating="3.5"
                             android:numStars="5"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="3dp"
                             android:layout_marginStart="20dp"
                             style="@style/Widget.MaterialRatingBar.RatingBar"
-                            android:layout_gravity="center_horizontal" />
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"  />
                     </TableRow>
 
                     <!-- Riga 2 -->
@@ -275,10 +276,11 @@
                             android:layout_height="wrap_content"
                             android:rating="3.5"
                             android:numStars="5"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="3dp"
                             android:layout_marginStart="20dp"
                             style="@style/Widget.MaterialRatingBar.RatingBar"
-                            android:layout_gravity="center_horizontal" />
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"  />
                     </TableRow>
 
                     <!-- Riga 3 -->
@@ -308,10 +310,11 @@
                             android:layout_height="wrap_content"
                             android:rating="3.5"
                             android:numStars="5"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="3dp"
                             android:layout_marginStart="20dp"
                             style="@style/Widget.MaterialRatingBar.RatingBar"
-                            android:layout_gravity="center_horizontal" />
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"  />
                     </TableRow>
 
                     <!-- Riga 4 -->
@@ -341,10 +344,11 @@
                             android:layout_height="wrap_content"
                             android:rating="3.5"
                             android:numStars="5"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="3dp"
                             android:layout_marginStart="20dp"
                             style="@style/Widget.MaterialRatingBar.RatingBar"
-                            android:layout_gravity="center_horizontal" />
+                            android:scaleX="0.8"
+                            android:scaleY="0.8" />
                     </TableRow>
 
                     <!-- Riga 5 -->
@@ -374,10 +378,11 @@
                             android:layout_height="wrap_content"
                             android:rating="3.5"
                             android:numStars="5"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="3dp"
                             android:layout_marginStart="20dp"
                             style="@style/Widget.MaterialRatingBar.RatingBar"
-                            android:layout_gravity="center_horizontal" />
+                            android:scaleX="0.8"
+                            android:scaleY="0.8"  />
                     </TableRow>
 
                 </TableLayout>
