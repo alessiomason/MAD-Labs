@@ -19,7 +19,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,24 +29,27 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.viewmodel.compose.viewModel
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Invitation
 import it.polito.mad.playgroundsreservations.database.InvitationStatus
+import it.polito.mad.playgroundsreservations.database.Reservation
+import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
+import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.AcceptedColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PendingColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.RefusedColor
 
-class ListOfInvitations(private val invitations: SnapshotStateList<Invitation>): Fragment() {
-    private val args by navArgs<InviteFriendsArgs>()
-
+class ListOfInvitations: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val reservationId = arguments?.getString("reservationId")
+
         return ComposeView(requireContext()).apply {
             setContent {
                 PlaygroundsReservationsTheme {
@@ -52,13 +57,31 @@ class ListOfInvitations(private val invitations: SnapshotStateList<Invitation>):
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        Column {
-                            invitations.forEach {
-                                InvitationBox(invitation = it)
-                            }
-                        }
+                        ListOfInvitationsContent(reservationId = reservationId)
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun ListOfInvitationsContent(reservationId: String?) {
+    val viewModel: ViewModel = viewModel()
+    val reservation = remember { mutableStateOf<Reservation?>(null) }
+
+    LaunchedEffect(true) {
+        if (reservationId != null) {
+            viewModel.getReservation(reservationId = reservationId, reservationState = reservation)
+        }
+    }
+
+    if (reservation.value == null) {
+        LoadingScreen()
+    } else {
+        Column {
+            reservation.value!!.invitations.forEach {
+                InvitationBox(invitation = it)
             }
         }
     }

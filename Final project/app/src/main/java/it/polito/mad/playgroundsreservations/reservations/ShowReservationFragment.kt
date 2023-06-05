@@ -15,7 +15,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
@@ -193,14 +192,24 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
             if(myReservation.userId!=viewModel.getUserReference(Global.userId!!) && myReservation.time.isAfter(Instant.now().atZone(myReservation.time.zone)))
             {
                 view.findViewById<Button>(R.id.revoke_partecipation_button).visibility= VISIBLE
-                view.findViewById<Button>(R.id.revoke_partecipation_button).setOnClickListener{
+                view.findViewById<Button>(R.id.revoke_partecipation_button).setOnClickListener {
                     viewModel.updateInvitationStatus(myReservation.id,InvitationStatus.REFUSED)
                     navController.popBackStack()
                 }
 
             }
 
-            fragmentManager.beginTransaction().replace(R.id.listOfInvitations, ListOfInvitations(myReservation.invitations)).commit()
+            // show listOfInvitations fragment
+            val data = Bundle()
+            data.putString("reservationId", myReservation.id)
+
+            val transaction = fragmentManager.beginTransaction()
+            val invitationsFragment = ListOfInvitations()
+            invitationsFragment.arguments = data
+
+            transaction
+            .replace(R.id.listOfInvitations, invitationsFragment)
+            .commit()
         }
      }
 
