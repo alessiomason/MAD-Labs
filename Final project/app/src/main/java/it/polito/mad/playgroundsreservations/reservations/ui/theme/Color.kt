@@ -28,6 +28,8 @@ val PendingColor = Color(0xFF9C27B0)
 val AcceptedColor = Color(0xFF4CAF50)
 val RefusedColor = Color(0xFFE91E63)
 
+val LightGrayColor = Color(0xFFE9E9E9)
+
 val TennisColor = Color(0xFFCCFF00)
 val BasketballColor = Color(0xFFFFA500)
 val FootballColor = Color(0xFFBB86FC)
