@@ -130,6 +130,8 @@
     <string name="invited_by">Invitato da %1$s</string>
     <string name="total_price">Prezzo totale: %1$d €/h</string>
     <string name="playground_address">Indirizzo del campo: %1$s</string>
+    <string name="address_playground">Indirizzo: %1$s</string>
+    <string name="playground_location">Luogo: %1$s</string>
     <string name="show_inviter_profile">Mostra il profilo di %1$s</string>
     <string name="zero_invitations">Nessun invito trovato! Inizia con il mandarne uno tu!</string>
     <string name="accept">Accetta</string>
@@ -151,4 +153,5 @@
     <string name="price">%1%s €/h</string>
     <string name="max_number_of_people">Numero massimo di persone</string>
     <string name="n_people">%1$d persone</string>
+    <string name="playgrounds_availability_explanation">Visualizza tutti i campi prenotati: se non vedi una prenotazione, il campo è tuo!</string>
 </resources>

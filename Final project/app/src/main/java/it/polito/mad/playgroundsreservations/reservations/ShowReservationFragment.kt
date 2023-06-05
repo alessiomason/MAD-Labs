@@ -53,6 +53,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
         val reservations = viewModel.userReservations
         val playgrounds = viewModel.playgrounds
         val priceElement=view.findViewById<TextView>(R.id.price)
+        val address = view.findViewById<TextView>(R.id.addressInfo)
 
         val loading = view.findViewById<FragmentContainerView>(R.id.loadingShowReservationFragment)
         val fragmentManager = childFragmentManager
@@ -158,6 +159,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 val image = view.findViewById<ImageView>(R.id.reservationImage)
                 val sportIcon = view.findViewById<ImageView>(R.id.sportNameIcon)
 
+
                 when (myReservation.sport) {
                     Sport.TENNIS -> { image.setImageResource(R.drawable.tennis_court); sportIcon.setImageResource(R.drawable.tennis_ball) }
                     Sport.BASKETBALL -> { image.setImageResource(R.drawable.basketball_court); sportIcon.setImageResource(R.drawable.basketball_ball) }
@@ -167,6 +169,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                 }
             }
             priceElement.text = activity?.resources?.getString(R.string.price_with_currency, myPlayground.pricePerHour*myReservation.duration.toHours())
+            address.text = myPlayground.address
             val inviteFriendsButton = view.findViewById<Button>(R.id.invite_friends_button)
 
             if(myReservation.userId!= viewModel.getUserReference(Global.userId!!))

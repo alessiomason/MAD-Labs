@@ -144,6 +144,29 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:src="@drawable/home_icon"
+                        android:paddingEnd="5dp"
+                        android:layout_gravity="center"
+                        app:tint="@color/primary" />
+
+                    <TextView
+                        android:id="@+id/addressInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/address_playground"
+                        android:textColor="@android:color/secondary_text_light"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/account_circle"
                         android:paddingEnd="5dp"
                         android:layout_gravity="center"

@@ -369,6 +369,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
         private val sportNameTextView = view.findViewById<TextView>(R.id.reservation_box_sport)
         private val durationTextView = view.findViewById<TextView>(R.id.reservation_box_duration)
         private val playgroundTextView = view.findViewById<TextView>(R.id.reservation_box_playground)
+        private val addressTextView = view.findViewById<TextView>(R.id.reservation_box_address)
 
         fun bind(rp: Pair<Reservation, Playground>) {
             titleTextView.text = view.context.getString(
@@ -404,6 +405,7 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
             }
 
             playgroundTextView.text = view.context.getString(R.string.reservation_box_playground_name, rp.second.name)
+            addressTextView.text = view.context.getString(R.string.playground_location, "${rp.second.region}, ${rp.second.city}")
         }
     }
 

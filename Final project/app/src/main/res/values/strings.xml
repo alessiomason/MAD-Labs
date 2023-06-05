@@ -129,6 +129,8 @@
     <string name="invited_by">Invited by %1$s</string>
     <string name="total_price">Total price: %1$d €/h</string>
     <string name="playground_address">Playground address: %1$s</string>
+    <string name="address_playground">Address: %1$s</string>
+    <string name="playground_location">Location: %1$s</string>
     <string name="show_inviter_profile">Show %1$s\'s profile</string>
     <string name="zero_invitations">Zero invitations found. Go and make one yourself!</string>
     <string name="accept">Accept</string>
@@ -150,4 +152,5 @@
     <string name="price">%1%s €/h</string>
     <string name="max_number_of_people">Maximum number of people</string>
     <string name="n_people">%1$d people</string>
+    <string name="playgrounds_availability_explanation">See all reserved playgrounds: if you don\'t see a reservation, it\'s yours for the taking!</string>
 </resources>
