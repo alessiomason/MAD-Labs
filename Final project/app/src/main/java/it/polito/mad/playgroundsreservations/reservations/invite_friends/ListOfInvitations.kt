@@ -76,9 +76,7 @@ fun ListOfInvitationsContent(reservationId: String?) {
         }
     }
 
-    if (reservation.value == null) {
-        LoadingScreen()
-    } else {
+    if (reservation.value != null) {
         Column {
             reservation.value!!.invitations.forEach {
                 InvitationBox(invitation = it)

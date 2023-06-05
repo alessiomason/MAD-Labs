@@ -189,8 +189,8 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     }
             }
 
-            if(myReservation.userId!=viewModel.getUserReference(Global.userId!!) && myReservation.time.isAfter(Instant.now().atZone(myReservation.time.zone)))
-            {
+            if (myReservation.userId.id != Global.userId!! &&
+                myReservation.time.isAfter(Instant.now().atZone(myReservation.time.zone))) {
                 view.findViewById<Button>(R.id.revoke_partecipation_button).visibility= VISIBLE
                 view.findViewById<Button>(R.id.revoke_partecipation_button).setOnClickListener {
                     viewModel.updateInvitationStatus(myReservation.id,InvitationStatus.REFUSED)

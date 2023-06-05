@@ -206,9 +206,16 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun deleteReservation(reservation: Reservation) {
-        db.collection(reservationsCollectionPath)
-            .document(reservation.id)
-            .delete()
+        val reservationReference = db.collection(reservationsCollectionPath).document(reservation.id)
+
+        // remove invitation notifications for this reservation from users
+        for (invitation in reservation.invitations) {
+            db.collection(usersCollectionPath)
+                .document(invitation.userId)
+                .update("invitations", FieldValue.arrayRemove(reservationReference))
+        }
+
+        reservationReference.delete()
     }
 
     // PLAYGROUNDS FUNCTIONS
