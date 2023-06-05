@@ -43,7 +43,6 @@ import java.util.Calendar
 import java.util.Date
 
 class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
-
     private val args by navArgs<AddReservationFragmentArgs>()
     private val viewModel by viewModels<ViewModel>()
     val zoneId: ZoneId = ZoneId.systemDefault()
@@ -83,11 +82,9 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
         val playgrounds = viewModel.playgrounds
 
         val loading = view?.findViewById<FragmentContainerView>(R.id.loadingAddReservationFragment)
-        val seeRatingsFragmentReference= view?.findViewById<FragmentContainerView>(R.id.showSeeRatingsFragment)
         val fragmentManager = childFragmentManager
         fragmentManager.beginTransaction().replace(R.id.loadingAddReservationFragment, SpinnerFragment()).commit()
         loading?.visibility = VISIBLE
-        seeRatingsFragmentReference?.visibility=GONE
 
         playgroundList.removeAll(playgroundList)
         val sharedPreferences = requireContext().getSharedPreferences("AddPref", Context.MODE_PRIVATE)
@@ -346,15 +343,18 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
 
     @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController= view?.findNavController()
-        val action = AddReservationFragmentDirections.actionAddReservationFragmentToCalendarFragment()
+        val navController = view?.findNavController()
+
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_edit_reservation -> {
-                val chkEquipment=view?.findViewById<CheckBox>(R.id.rentingEquipment)
+                // show loading as saving might take some time
+                view?.findViewById<FragmentContainerView>(R.id.loadingAddReservationFragment)
+                    ?.visibility = VISIBLE
 
+                val chkEquipment = view?.findViewById<CheckBox>(R.id.rentingEquipment)
                 if (chkEquipment != null) {
-                    MyReservation.rentingEquipment=chkEquipment.isChecked
+                    MyReservation.rentingEquipment = chkEquipment.isChecked
                 }
 
                 val newReservation = Reservation(
@@ -369,8 +369,38 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                     mutableStateListOf()
                 )
 
-                viewModel.saveReservation(newReservation)
-                navController?.navigate(action)
+                val (newReservationId, saved) = viewModel.saveReservation(newReservation)
+
+                /**
+                To avoid going back to the Add Reservation screen from following screens,
+                firstly the BackStack is popped (going back to the previous screen), and
+                then the new action is set to navigate to the ShowReservationFragment.
+                The AddReservationFragment is accessible from CalendarFragment and
+                PlaygroundsAvailabilityFragment, so it is necessary to set the appropriate
+                action to go to the ShowReservationFragment from the fragment the popBackStack
+                leads to.
+                Ultimately, this ensures that when the user presses the Back button, the
+                Add Reservation screen is not shown and the user is taken back to the previous
+                screen.
+                */
+                val action = if (args.fromPlaygroundsAvailability) {
+                    PlaygroundsAvailabilityFragmentDirections
+                        .actionPlaygroundsAvailabilityFragmentToShowReservationFragment(
+                            reservationId = newReservationId
+                        )
+                } else {
+                    CalendarFragmentDirections
+                        .actionCalendarFragmentToShowReservationFragment(
+                            reservationId = newReservationId
+                        )
+                }
+
+                saved.observe(viewLifecycleOwner) { successfullySaved ->
+                    if (successfullySaved) {
+                        navController?.popBackStack()
+                        navController?.navigate(action)
+                    }
+                }
             }
         }
         return super.onOptionsItemSelected(item)

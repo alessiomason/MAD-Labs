@@ -322,7 +322,11 @@ class PlaygroundsAvailabilityFragment: Fragment(R.layout.fragment_playgrounds_av
 
         val navController = view.findNavController()
         button.setOnClickListener {
-            val action = PlaygroundsAvailabilityFragmentDirections.actionPlaygroundsAvailabilityFragmentToAddReservationFragment(selectedDate.value.toString())
+            val action = PlaygroundsAvailabilityFragmentDirections
+                .actionPlaygroundsAvailabilityFragmentToAddReservationFragment(
+                    dateOfReservation = selectedDate.value.toString(),
+                    fromPlaygroundsAvailability = true
+                )
             navController.navigate(action)
         }
     }

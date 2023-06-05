@@ -257,8 +257,11 @@ class CalendarFragment: Fragment(R.layout.calendar_fragment) {
                 plusTextView.visibility = GONE
             } else {
                 plusTextView.setOnClickListener {
-                    val action = CalendarFragmentDirections.actionCalendarFragmentToAddReservationFragment(
-                        tappedDay.value.toString())
+                    val action = CalendarFragmentDirections.
+                    actionCalendarFragmentToAddReservationFragment(
+                        dateOfReservation = tappedDay.value.toString(),
+                        fromPlaygroundsAvailability = false
+                    )
                     nav.navigate(action)
                 }
             }

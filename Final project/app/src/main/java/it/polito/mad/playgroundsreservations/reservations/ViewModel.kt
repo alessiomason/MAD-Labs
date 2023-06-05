@@ -144,9 +144,8 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-    fun saveReservation(reservation: Reservation) {
+    fun saveReservation(reservation: Reservation): Pair<String, MutableLiveData<Boolean>> {
         // update recently reserved playgrounds
-
         // remove if already present (avoid duplication)
         db.collection(usersCollectionPath)
             .document(Global.userId!!)
@@ -177,7 +176,14 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             }
         )
 
-         db.collection(reservationsCollectionPath).add(r)
+        val saved = MutableLiveData(false)
+        val newReservationReference = db.collection(reservationsCollectionPath).document()
+
+        newReservationReference.set(r).addOnSuccessListener {
+            saved.value = true
+        }
+
+        return Pair(newReservationReference.id, saved)
     }
 
     fun updateReservation(reservation: Reservation) {
