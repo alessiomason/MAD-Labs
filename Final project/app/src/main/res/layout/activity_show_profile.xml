@@ -371,14 +371,22 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="15dp"
                     android:backgroundTint="@color/secondaryVariant"
-                    android:text="Favorite Courts" />
+                    android:text="@string/favorite_courts" />
+
+                <Button
+                    android:id="@+id/friendsListButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:backgroundTint="@color/secondaryVariant"
+                    android:text="@string/your_friends" />
 
                 <Button
                     android:id="@+id/logout_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:backgroundTint="@color/secondaryVariant"
+                    android:backgroundTint="@android:color/holo_red_dark"
                     android:text="@string/logout" />
 
             </LinearLayout>

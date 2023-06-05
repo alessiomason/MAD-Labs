@@ -47,8 +47,11 @@ import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
+import it.polito.mad.playgroundsreservations.reservations.ui.theme.LightGrayColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
+import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryTransparentColor
+import it.polito.mad.playgroundsreservations.reservations.ui.theme.TertiaryTransparentColor
 
 class ChoosePlayground: Fragment() {
     private val args by navArgs<ChoosePlaygroundArgs>()
@@ -181,6 +184,7 @@ fun ChoosePlaygroundScreenContent(
                 maxLines = 1,
                 label = { Text(text = "Search all playgrounds")},
                 colors = TextFieldDefaults.textFieldColors(
+                    containerColor = LightGrayColor,
                     focusedLabelColor = SecondaryColor,
                     focusedIndicatorColor = SecondaryColor
                 ),
