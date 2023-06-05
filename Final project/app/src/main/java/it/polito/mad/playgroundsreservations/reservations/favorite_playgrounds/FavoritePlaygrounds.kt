@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +32,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -39,6 +42,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.Global
+import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
@@ -153,6 +157,7 @@ fun FavoritePlaygroundsScreenContent(
     favoritePlaygrounds: SnapshotStateList<Playground>
 ) {
     var searchQuery by rememberSaveable { mutableStateOf("") }
+    var showFilters by rememberSaveable { mutableStateOf(false) }
     val sportFilter = rememberSaveable { mutableStateOf< Sport?>(null) }
     val regionFilter = rememberSaveable { mutableStateOf<String?>(null) }
     val cityFilter = rememberSaveable { mutableStateOf<String?>(null) }
@@ -170,22 +175,40 @@ fun FavoritePlaygroundsScreenContent(
                     focusedIndicatorColor = SecondaryColor
                 ),
                 trailingIcon = {
-                    IconButton(
-                        onClick = { searchQuery = "" },
-                        modifier = Modifier.padding(horizontal = 5.dp)
-                    ) {
-                        Icon(Icons.Filled.Clear, contentDescription = "Clear")
+                    Row {
+                        IconButton(onClick = { searchQuery = "" }) {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = "Clear",
+                                tint = Color.DarkGray
+                            )
+                        }
+
+                        IconButton(
+                            onClick = { showFilters = !showFilters },
+                            modifier = Modifier.padding(horizontal = 5.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.filter_icon),
+                                contentDescription = "Filter",
+                                tint = if (sportFilter.value != null || regionFilter.value != null || cityFilter.value != null)
+                                    SecondaryColor
+                                else Color.DarkGray
+                            )
+                        }
                     }
                 }
             )
         }
 
-        PlaygroundsFilters(
-            playgrounds = playgrounds,
-            sportFilter = sportFilter,
-            regionFilter = regionFilter,
-            cityFilter = cityFilter
-        )
+        AnimatedVisibility(visible = showFilters) {
+            PlaygroundsFilters(
+                playgrounds = playgrounds,
+                sportFilter = sportFilter,
+                regionFilter = regionFilter,
+                cityFilter = cityFilter
+            )
+        }
 
         if (searchQuery == "" && sportFilter.value == null && regionFilter.value == null && cityFilter.value == null) {
             FavoritePlaygroundsList(

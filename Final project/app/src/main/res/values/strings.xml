@@ -136,4 +136,9 @@
     <string name="accepted">Accepted</string>
     <string name="refused">Refused</string>
     <string name="pending">Pending</string>
+
+    <!-- CHOOSE PLAYGROUNDS -->
+    <string name="all_sports">All sports</string>
+    <string name="all_regions">All regions</string>
+    <string name="all_cities">All cities</string>
 </resources>

@@ -125,7 +125,6 @@
     <string name="cancel_participation">Annulla partecipazione</string>
     <string name="max_invited_friends">hai raggiunto il numero massimo di persone invitabili</string>
 
-
     <!-- PENDING INVITATIONS -->
     <string name="pending_invitations">Inviti in sospeso</string>
     <string name="invited_by">Invitato da %1$s</string>
@@ -138,4 +137,9 @@
     <string name="accepted">Accettato</string>
     <string name="refused">Rifiutato</string>
     <string name="pending">In attesa</string>
+
+    <!-- CHOOSE PLAYGROUNDS -->
+    <string name="all_sports">Tutti gli sport</string>
+    <string name="all_regions">Tutte le regioni</string>
+    <string name="all_cities">Tutte le città</string>
 </resources>

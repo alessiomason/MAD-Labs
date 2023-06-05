@@ -18,10 +18,12 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Sport
+import it.polito.mad.playgroundsreservations.database.toLocalizedStringResourceId
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryVariantColor
 
 @Composable
@@ -41,24 +43,30 @@ fun PlaygroundsFilters(
             .background(color = SecondaryVariantColor),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Column(
+        Row (
             modifier = Modifier.padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = sportFilter.value?.name ?: "All sports",
+                    text = stringResource(sportFilter.value?.toLocalizedStringResourceId() ?: R.string.all_sports),
                     color = Color.White,
-                    modifier = Modifier.clickable { sportFilterExpanded.value = true }
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .clickable { sportFilterExpanded.value = true }
+                        .fillMaxWidth()
                 )
                 SportDropDownMenu(sportFilter = sportFilter, sportFilterExpanded = sportFilterExpanded)
             }
 
-            Row {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = regionFilter.value ?: "All regions",
+                    text = regionFilter.value ?: stringResource(id = R.string.all_regions),
                     color = Color.White,
-                    modifier = Modifier.clickable { regionFilterExpanded.value = true }
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .clickable { regionFilterExpanded.value = true }
+                        .fillMaxWidth()
                 )
                 RegionDropDownMenu(
                     playgrounds = playgrounds,
@@ -67,14 +75,18 @@ fun PlaygroundsFilters(
                 )
             }
 
-            Row {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = cityFilter.value ?: "All cities",
+                    text = cityFilter.value ?: stringResource(id = R.string.all_cities),
                     color = Color.White,
-                    modifier = Modifier.clickable { cityFilterExpanded.value = true }
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .clickable { cityFilterExpanded.value = true }
+                        .fillMaxWidth()
                 )
                 CityDropDownMenu(
                     playgrounds = playgrounds,
+                    regionFilter = regionFilter,
                     cityFilter = cityFilter,
                     cityFilterExpanded = cityFilterExpanded
                 )
@@ -96,15 +108,7 @@ fun SportDropDownMenu(sportFilter: MutableState<Sport?>, sportFilterExpanded: Mu
                 sportFilter.value = item
                 sportFilterExpanded.value = false
             }) {
-                val sportName = when (item) {
-                    Sport.TENNIS -> R.string.sport_tennis
-                    Sport.BASKETBALL -> R.string.sport_basketball
-                    Sport.FOOTBALL -> R.string.sport_football
-                    Sport.VOLLEYBALL -> R.string.sport_volleyball
-                    Sport.GOLF -> R.string.sport_golf
-                }
-
-                Text(text = stringResource(sportName))
+                Text(text = stringResource(item.toLocalizedStringResourceId()))
             }
         }
     }
@@ -122,9 +126,14 @@ fun RegionDropDownMenu(
             regionFilterExpanded.value = false
         }
     ) {
-        playgrounds.map {
-            it.region
-        }.toSet().forEach { item ->
+        DropdownMenuItem(onClick = {
+            regionFilter.value = null
+            regionFilterExpanded.value = false
+        }) {
+            Text(text = stringResource(id = R.string.all_regions))
+        }
+
+        playgrounds.map { it.region }.toSet().sorted().forEach { item ->
             DropdownMenuItem(onClick = {
                 regionFilter.value = item
                 regionFilterExpanded.value = false
@@ -138,6 +147,7 @@ fun RegionDropDownMenu(
 @Composable
 fun CityDropDownMenu(
     playgrounds: SnapshotStateList<Playground>,
+    regionFilter: MutableState<String?>,
     cityFilter: MutableState<String?>,
     cityFilterExpanded: MutableState<Boolean>
 ) {
@@ -147,9 +157,16 @@ fun CityDropDownMenu(
             cityFilterExpanded.value = false
         }
     ) {
-        playgrounds.map {
-            it.city
-        }.toSet().forEach { item ->
+        DropdownMenuItem(onClick = {
+            cityFilter.value = null
+            cityFilterExpanded.value = false
+        }) {
+            Text(text = stringResource(id = R.string.all_cities))
+        }
+
+        playgrounds.filter {
+            regionFilter.value == null || it.region == regionFilter.value
+        }.map { it.city }.toSet().sorted().forEach { item ->
             DropdownMenuItem(onClick = {
                 cityFilter.value = item
                 cityFilterExpanded.value = false
