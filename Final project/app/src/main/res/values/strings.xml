@@ -55,7 +55,6 @@
     <string name="sport_empty">No sports selected yet</string>
     <string name="add_sport">Add/Edit</string>
     <string name="modify_profile">Modify</string>
-    <string name="add_friend">Add Friend</string>
     <string name="save_profile">Save</string>
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
@@ -142,4 +141,5 @@
     <string name="all_sports">All sports</string>
     <string name="all_regions">All regions</string>
     <string name="all_cities">All cities</string>
+    <string name="favorite_courts">Favorite courts</string>
 </resources>

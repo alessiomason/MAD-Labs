@@ -39,75 +39,77 @@ fun FriendsList(
     reservation: MutableState<Reservation?>,
     friends: SnapshotStateList<User>,
     recentlyInvited: SnapshotStateList<User>,
-    sport: Sport
+    sport: Sport?
 ) {
     var showAllRecentlyInvited by remember { mutableStateOf(false) }
     var showAllFriends by remember { mutableStateOf(false) }
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        item(key = "recently_invited_title") {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(id = R.string.recently_invited),
-                    color = PrimaryColor,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(horizontal = 10.dp)
-                )
-
-                if (recentlyInvited.size > 2) {
-                    TextButton(
-                        onClick = { showAllRecentlyInvited = !showAllRecentlyInvited },
-                        colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
-                        shape = RoundedCornerShape(10.dp),
+        if (reservation.value != null) {
+            item(key = "recently_invited_title") {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.recently_invited),
+                        color = PrimaryColor,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.headlineMedium,
                         modifier = Modifier.padding(horizontal = 10.dp)
-                    ) {
-                        Text(
-                            text = if (showAllRecentlyInvited)
-                                stringResource(id = R.string.see_less)
-                            else stringResource(id = R.string.see_all),
-                            color = PrimaryVariantColor,
-                            textAlign = TextAlign.Center
-                        )
+                    )
+
+                    if (recentlyInvited.size > 2) {
+                        TextButton(
+                            onClick = { showAllRecentlyInvited = !showAllRecentlyInvited },
+                            colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier.padding(horizontal = 10.dp)
+                        ) {
+                            Text(
+                                text = if (showAllRecentlyInvited)
+                                    stringResource(id = R.string.see_less)
+                                else stringResource(id = R.string.see_all),
+                                color = PrimaryVariantColor,
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
                 }
             }
-        }
 
-        items(
-            items = recentlyInvited.take(2),
-            key = { "recently_invited_${it.id}" }
-        ) { friend ->
-            FriendBox(
-                friend = friend,
-                sport = sport,
-                reservation = reservation,
-                friends = friends
-            )
-        }
-
-        if (recentlyInvited.size > 2) {
             items(
-                items = recentlyInvited.drop(2),
+                items = recentlyInvited.take(2),
                 key = { "recently_invited_${it.id}" }
             ) { friend ->
-                AnimatedVisibility(
-                    visible = showAllRecentlyInvited,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    FriendBox(
-                        friend = friend,
-                        sport = sport,
-                        reservation = reservation,
-                        friends = friends
-                    )
+                FriendBox(
+                    friend = friend,
+                    sport = sport,
+                    reservation = reservation,
+                    friends = friends
+                )
+            }
+
+            if (recentlyInvited.size > 2) {
+                items(
+                    items = recentlyInvited.drop(2),
+                    key = { "recently_invited_${it.id}" }
+                ) { friend ->
+                    AnimatedVisibility(
+                        visible = showAllRecentlyInvited,
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        FriendBox(
+                            friend = friend,
+                            sport = sport,
+                            reservation = reservation,
+                            friends = friends
+                        )
+                    }
                 }
             }
         }

@@ -390,25 +390,32 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
                 android:backgroundTint="@color/secondaryVariant"
-                android:text="Favorite Courts" />
+                android:text="@string/favorite_courts" />
+
+            <Button
+                android:id="@+id/friendsListButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/secondaryVariant"
+                android:text="@string/your_friends" />
 
             <Button
                 android:id="@+id/logout_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:backgroundTint="@color/secondaryVariant"
+                android:backgroundTint="@android:color/holo_red_dark"
                 android:text="@string/logout" />
         </LinearLayout>
     </ScrollView>
-
-    <!-- other views, with a total layout_weight of 2 -->
 
     <androidx.fragment.app.FragmentContainerView
             android:id="@+id/loadingShowProfileFragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

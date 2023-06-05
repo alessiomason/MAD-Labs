@@ -64,7 +64,7 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryVari
 @Composable
 fun FriendBox(
     friend: User,
-    sport: Sport,
+    sport: Sport?,
     reservation: MutableState<Reservation?>,
     friends: SnapshotStateList<User>
 ) {
@@ -72,6 +72,7 @@ fun FriendBox(
     var showAdditionalInfo by remember { mutableStateOf(false) }
     val playground: MutableState<Playground?> = remember { mutableStateOf(null) }
     var isInvited by remember { mutableStateOf(
+        reservation.value != null &&
         reservation.value!!.invitations.map { it.userId }.contains(friend.id)
     ) }
     var isFriend by remember { mutableStateOf(friends.contains(friend)) }
@@ -83,8 +84,9 @@ fun FriendBox(
         intent.removeExtra("reservationCreatorId")
     }
 
-    LaunchedEffect(reservation.value!!.invitations.size) {
-        isInvited = reservation.value!!.invitations.map { it.userId }.contains(friend.id)
+    LaunchedEffect(reservation.value?.invitations?.size) {
+        isInvited = reservation.value != null &&
+                reservation.value!!.invitations.map { it.userId }.contains(friend.id)
     }
 
     LaunchedEffect(friends.size) {
@@ -92,7 +94,9 @@ fun FriendBox(
     }
 
     LaunchedEffect(true) {
-        viewModel.getPlayground(reservation.value!!.playgroundId.id, playground)
+        if (reservation.value != null) {
+            viewModel.getPlayground(reservation.value!!.playgroundId.id, playground)
+        }
     }
 
     val sportIcon = when (sport) {
@@ -101,6 +105,7 @@ fun FriendBox(
         Sport.FOOTBALL -> R.drawable.football_ball
         Sport.VOLLEYBALL -> R.drawable.volleyball_ball
         Sport.GOLF -> R.drawable.golf_ball
+        null -> null
     }
 
     Box(modifier = Modifier
@@ -141,46 +146,48 @@ fun FriendBox(
                             )
                         }
 
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column {
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(5.dp)
-                                ) {
-                                    Column {
-                                        Image(
-                                            painter = painterResource(id = sportIcon),
-                                            contentDescription = "Sport icon"
+                        if (reservation.value != null) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column {
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(5.dp)
+                                    ) {
+                                        Column {
+                                            Image(
+                                                painter = painterResource(id = sportIcon!!),
+                                                contentDescription = "Sport icon"
+                                            )
+                                        }
+
+                                        /* Not enough space to show
+                                        Column {
+                                            Text(text = stringResource(id = sportName))
+                                        }
+                                        */
+                                    }
+                                }
+
+                                Column {
+                                    if (friend.mySports[reservation.value!!.sport] != null) {
+                                        RatingBar(
+                                            rating = friend.mySports[reservation.value!!.sport]!!,
+                                            space = 2.dp,
+                                            imageVectorEmpty = ImageVector.vectorResource(id = R.drawable.bordered_star),
+                                            imageVectorFFilled = ImageVector.vectorResource(id = R.drawable.filled_star),
+                                            tintEmpty = SecondaryVariantColor,
+                                            tintFilled = SecondaryVariantColor,
+                                            itemSize = 24.dp,
+                                            gestureEnabled = false
+                                        )
+                                    } else {
+                                        Text(
+                                            text = stringResource(id = R.string.no_rating_for_sport),
+                                            style = MaterialTheme.typography.labelMedium
                                         )
                                     }
-
-                                    /* Not enough space to show
-                                    Column {
-                                        Text(text = stringResource(id = sportName))
-                                    }
-                                    */
-                                }
-                            }
-
-                            Column {
-                                if (friend.mySports[reservation.value!!.sport] != null) {
-                                    RatingBar(
-                                        rating = friend.mySports[reservation.value!!.sport]!!,
-                                        space = 2.dp,
-                                        imageVectorEmpty = ImageVector.vectorResource(id = R.drawable.bordered_star),
-                                        imageVectorFFilled = ImageVector.vectorResource(id = R.drawable.filled_star),
-                                        tintEmpty = SecondaryVariantColor,
-                                        tintFilled = SecondaryVariantColor,
-                                        itemSize = 24.dp,
-                                        gestureEnabled = false
-                                    )
-                                } else {
-                                    Text(
-                                        text = stringResource(id = R.string.no_rating_for_sport),
-                                        style = MaterialTheme.typography.labelMedium
-                                    )
                                 }
                             }
                         }
@@ -194,50 +201,52 @@ fun FriendBox(
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val invitation = reservation.value!!.invitations.find { it.userId == friend.id }
+                    val invitation = reservation.value?.invitations?.find { it.userId == friend.id }
                     val enableButton = invitation == null || invitation.invitationStatus == InvitationStatus.PENDING
 
-                    Button(
-                        // enable inviting and uninviting only for pending invitations
-                        enabled = enableButton,
-                        onClick = {
-                            if (isInvited) {
-                                reservation.value!!.invitations.removeIf {
-                                    it.userId == friend.id
-                                }
-                            } else {
-                                if (reservation.value!!.invitations.count {
-                                        it.invitationStatus == InvitationStatus.ACCEPTED
+                    if (reservation.value != null) {
+                        Button(
+                            // enable inviting and uninviting only for pending invitations
+                            enabled = enableButton,
+                            onClick = {
+                                if (isInvited) {
+                                    reservation.value!!.invitations.removeIf {
+                                        it.userId == friend.id
                                     }
-                                    + reservation.value!!.invitations.count {
-                                        it.invitationStatus == InvitationStatus.PENDING
-                                    } + 1 == playground.value!!.maxPlayers) {
-                                    showToast = true
-                                }
-                                else {
-                                    showToast=false
-                                    reservation.value!!.invitations.add(
-                                        Invitation(
-                                            friend.id,
-                                            friend.fullName,
-                                            InvitationStatus.PENDING
+                                } else {
+                                    if (reservation.value!!.invitations.count {
+                                            it.invitationStatus == InvitationStatus.ACCEPTED
+                                        }
+                                        + reservation.value!!.invitations.count {
+                                            it.invitationStatus == InvitationStatus.PENDING
+                                        } + 1 == playground.value!!.maxPlayers) {
+                                        showToast = true
+                                    }
+                                    else {
+                                        showToast = false
+                                        reservation.value!!.invitations.add(
+                                            Invitation(
+                                                friend.id,
+                                                friend.fullName,
+                                                InvitationStatus.PENDING
+                                            )
                                         )
-                                    )
+                                    }
                                 }
-                            }
-                        },
-                        shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
-                    ) {
-                        val invitedIcon = if (isInvited) R.drawable.check_icon else R.drawable.add_person
+                            },
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
+                        ) {
+                            val invitedIcon = if (isInvited) R.drawable.check_icon else R.drawable.add_person
 
-                        Image(
-                            painter = painterResource(id = invitedIcon),
-                            contentDescription = "Add person to friends",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .aspectRatio(1f)
-                        )
+                            Image(
+                                painter = painterResource(id = invitedIcon),
+                                contentDescription = "Add person to friends",
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .aspectRatio(1f)
+                            )
+                        }
                     }
 
                     if (showToast) {

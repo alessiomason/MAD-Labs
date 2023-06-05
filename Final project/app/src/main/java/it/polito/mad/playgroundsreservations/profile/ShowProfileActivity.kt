@@ -31,6 +31,7 @@ import it.polito.mad.playgroundsreservations.database.Gender
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.MyCourtsActivity
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
+import it.polito.mad.playgroundsreservations.reservations.YourFriendsActivity
 import java.io.InputStream
 
 class ShowProfileActivity: AppCompatActivity() {
@@ -57,6 +58,7 @@ class ShowProfileActivity: AppCompatActivity() {
 
     private lateinit var logoutButton: Button
     private lateinit var favoriteCourtsButton: Button
+    private lateinit var yourFriendsButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +66,7 @@ class ShowProfileActivity: AppCompatActivity() {
 
         logoutButton = findViewById(R.id.logout_button)
         favoriteCourtsButton = findViewById(R.id.favoriteCourtsButton)
+        yourFriendsButton = findViewById(R.id.friendsListButton)
         val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
         val title: String = intent.getStringExtra("title").toString()
 
@@ -72,10 +75,12 @@ class ShowProfileActivity: AppCompatActivity() {
         } else if (title == "CreatorTitle") {
             this.title = resources?.getString(R.string.reservation_creator_profile)
             favoriteCourtsButton.visibility = GONE
+            yourFriendsButton.visibility = GONE
             logoutButton.visibility = GONE
         } else {
             this.title = resources?.getString(R.string.contact_profile)
             favoriteCourtsButton.visibility = GONE
+            yourFriendsButton.visibility = GONE
             logoutButton.visibility = GONE
         }
 
@@ -110,6 +115,18 @@ class ShowProfileActivity: AppCompatActivity() {
         footballRatingBar = findViewById(R.id.footballRowRatingBar)
         footballRatingBar.setIsIndicator(true)
 
+        favoriteCourtsButton.setOnClickListener {
+            val intent = Intent(this, MyCourtsActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
+        }
+
+        yourFriendsButton.setOnClickListener {
+            val intent = Intent(this, YourFriendsActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
+            finish()
+        }
 
         logoutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
@@ -126,19 +143,12 @@ class ShowProfileActivity: AppCompatActivity() {
         super.onResume()
 
         val viewModel by viewModels<ViewModel>()
-        val playgrounds = viewModel.playgrounds
 
         val loading = findViewById<FragmentContainerView>(R.id.loadingShowProfileFragment)
         val fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction()
             .replace(R.id.loadingShowProfileFragment, SpinnerFragment()).commit()
         loading.visibility = VISIBLE
-
-        favoriteCourtsButton.setOnClickListener {
-            val intent = Intent(this, MyCourtsActivity::class.java)
-            startActivity(intent)
-            overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
-        }
 
         val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
 
@@ -215,9 +225,7 @@ class ShowProfileActivity: AppCompatActivity() {
         }
     }
 
-    @Deprecated("Deprecated in Java",
-        ReplaceWith("super.onBackPressed()", "androidx.appcompat.app.AppCompatActivity")
-    )
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         overridePendingTransition(R.anim.no_anim, R.anim.fade_out)
@@ -236,12 +244,6 @@ class ShowProfileActivity: AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.add_friend ->{
-                val intent = Intent(this, Contacts::class.java)
-                startActivity(intent)
-                overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
-                return true
-            }
             R.id.modify_profile -> {
                 val intent = Intent(this, EditProfileActivity::class.java)
                 startActivity(intent)

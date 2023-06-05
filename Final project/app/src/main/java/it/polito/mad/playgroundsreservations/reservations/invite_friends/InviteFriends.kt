@@ -105,8 +105,38 @@ class InviteFriends: Fragment() {
     }
 }
 
+class InviteFriendsFromProfile: Fragment() {
+    lateinit var reservation: MutableState<Reservation?>
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // ACTIVITY TITLE
+        activity?.title = activity?.resources?.getString(R.string.your_friends)
+
+        setHasOptionsMenu(true)
+
+        return ComposeView(requireContext()).apply {
+            setContent {
+                reservation = remember { mutableStateOf(null) }
+
+                PlaygroundsReservationsTheme {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        InviteFriendsScreen(null, reservation)
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Composable
-fun InviteFriendsScreen(reservationId: String, reservation: MutableState<Reservation?>) {
+fun InviteFriendsScreen(reservationId: String?, reservation: MutableState<Reservation?>) {
     val viewModel: ViewModel = viewModel()
 
     var stillLoading by remember { mutableStateOf(true) }
@@ -116,13 +146,15 @@ fun InviteFriendsScreen(reservationId: String, reservation: MutableState<Reserva
     val users = remember { mutableStateListOf<User>() }
 
     LaunchedEffect(true) {
-        viewModel.getReservation(reservationId, reservation)
+        if (reservationId != null) {
+            viewModel.getReservation(reservationId, reservation)
+        }
         viewModel.getUser(Global.userId!!, user, friends, recentlyInvited)
         viewModel.getUsers(users)
     }
 
     if (stillLoading && (   // prevents from going back into loading
-            reservation.value == null ||
+            (reservationId != null && reservation.value == null) ||
             user.value == null ||
             (user.value?.friends?.size != null && user.value!!.friends.isNotEmpty() && friends.isEmpty()) ||
             (user.value?.recentlyInvited?.size != null && user.value!!.recentlyInvited.isNotEmpty() && recentlyInvited.isEmpty()) ||
@@ -134,7 +166,6 @@ fun InviteFriendsScreen(reservationId: String, reservation: MutableState<Reserva
         stillLoading = false
         InviteFriendsScreenContent(
             reservation = reservation,
-            user = user,
             friends = friends,
             recentlyInvited = recentlyInvited,
             users = users
@@ -146,7 +177,6 @@ fun InviteFriendsScreen(reservationId: String, reservation: MutableState<Reserva
 @Composable
 fun InviteFriendsScreenContent(
     reservation: MutableState<Reservation?>,
-    user: MutableState<User?>,
     friends: SnapshotStateList<User>,
     recentlyInvited: SnapshotStateList<User>,
     users: SnapshotStateList<User>
@@ -174,7 +204,7 @@ fun InviteFriendsScreenContent(
             }
         )
 
-        if (reservation.value!!.invitations.isNotEmpty()) {
+        if (reservation.value != null && reservation.value!!.invitations.isNotEmpty()) {
             InvitedBox(reservation = reservation)
         }
 
@@ -183,7 +213,7 @@ fun InviteFriendsScreenContent(
                 reservation = reservation,
                 friends = friends,
                 recentlyInvited = recentlyInvited,
-                sport = reservation.value!!.sport
+                sport = reservation.value?.sport
             )
         } else {
             LazyColumn(Modifier.fillMaxWidth()) {
@@ -193,7 +223,7 @@ fun InviteFriendsScreenContent(
                     }, key = { it.id }) { friend ->
                     FriendBox(
                         friend = friend,
-                        sport = reservation.value!!.sport,
+                        sport = reservation.value?.sport,
                         reservation = reservation,
                         friends = friends
                     )

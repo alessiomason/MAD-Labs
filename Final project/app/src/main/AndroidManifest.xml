@@ -31,6 +31,9 @@
             android:name=".profile.EditProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".reservations.YourFriendsActivity"
+            android:exported="false" />
+        <activity
             android:name=".reservations.NotLoggedReservationsActivity"
             android:exported="false" />
         <activity
@@ -38,10 +41,6 @@
             android:exported="false" />
         <activity
             android:name=".reservations.ReservationsActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".profile.Contacts"
             android:exported="false">
         </activity>
         <activity
