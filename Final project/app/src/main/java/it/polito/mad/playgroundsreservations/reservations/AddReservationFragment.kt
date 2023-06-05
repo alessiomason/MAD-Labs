@@ -315,6 +315,9 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                         ratingSinglePlaygroundList.add(r)
                     }
                 }
+
+                /* SEE RATINGS MOVED TO CHOOSE PLAYGROUND
+
                 if (ratingSinglePlaygroundList.isEmpty()){
                     seeRatingButton?.visibility = GONE
                     noRatingsTextView?.visibility = VISIBLE
@@ -326,6 +329,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                         navController?.navigate(action)
                     }
                 }
+                */
             }
         }
 
