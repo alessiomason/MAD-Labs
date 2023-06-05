@@ -51,8 +51,6 @@ import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.LightGrayColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
-import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryTransparentColor
-import it.polito.mad.playgroundsreservations.reservations.ui.theme.TertiaryTransparentColor
 
 class ChoosePlayground: Fragment() {
     private val args by navArgs<ChoosePlaygroundArgs>()

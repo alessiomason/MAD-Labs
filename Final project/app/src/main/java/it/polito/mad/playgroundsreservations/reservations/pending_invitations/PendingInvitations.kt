@@ -33,14 +33,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.fragment.navArgs
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
-import it.polito.mad.playgroundsreservations.reservations.invite_friends.InviteFriendsArgs
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 

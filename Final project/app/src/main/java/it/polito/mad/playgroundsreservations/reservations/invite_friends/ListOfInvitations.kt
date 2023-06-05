@@ -34,7 +34,6 @@ import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Invitation
 import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Reservation
-import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.AcceptedColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PendingColor

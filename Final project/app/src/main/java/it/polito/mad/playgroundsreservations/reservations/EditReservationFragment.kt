@@ -43,7 +43,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
     private var hours = mutableListOf<String>()
     var durationsList = mutableListOf<String>()
     private var price=0
-    private var pricePerHour=0;
+    private var pricePerHour=0
 
     lateinit var myReservation: Reservation
     private lateinit var myPlayground: Playground
