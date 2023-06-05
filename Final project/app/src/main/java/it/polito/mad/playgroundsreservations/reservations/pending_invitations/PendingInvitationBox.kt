@@ -191,8 +191,8 @@ fun PendingInvitationBox(
                 }
             }
 
-            Row {
-                TextButton(
+            Row(modifier = Modifier.padding(top = 5.dp)) {
+                OutlinedButton(
                     onClick = {
                         intent.putExtra("reservationCreatorId", reservation.userId.id)
                         intent.putExtra("title", "CreatorTitle")
@@ -203,7 +203,7 @@ fun PendingInvitationBox(
                         )
                         launcher.launch(intent, options)
                     },
-                    colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = PrimaryVariantColor),
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .fillMaxWidth()
