@@ -255,7 +255,7 @@ fun PendingInvitationBox(
                     ) {
                         Text(
                             text = stringResource(
-                                id = R.string.price_per_hour,
+                                id = R.string.total_price,
                                 playground.pricePerHour
                             )
                         )

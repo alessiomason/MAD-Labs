@@ -47,6 +47,7 @@ import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.reservations.LoadingScreen
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
+import it.polito.mad.playgroundsreservations.reservations.ui.theme.LightGrayColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
 
@@ -191,6 +192,7 @@ fun InviteFriendsScreenContent(
             maxLines = 1,
             label = { Text(stringResource(id = R.string.search_users)) },
             colors = TextFieldDefaults.textFieldColors(
+                containerColor = LightGrayColor,
                 focusedLabelColor = SecondaryColor,
                 focusedIndicatorColor = SecondaryColor
             ),

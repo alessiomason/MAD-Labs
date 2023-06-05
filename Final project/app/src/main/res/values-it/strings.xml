@@ -99,7 +99,7 @@
     <string name="add_reservation_court">Campo: </string>
     <string name="optional_description_rating">Aggiungi una descrizione (facoltativa)</string>
     <string name="rating_label">Valutazione:</string>
-    <string name="title_activity_rating_playgrounds">RatingPlaygrounds</string>
+    <string name="title_activity_rating_playgrounds">Valuta campo</string>
     <string name="save_rating">Salva Rating</string>
     <string name="see_ratings">Guarda i ratings</string>
     <string name="optional_description_entered">Nessuna descrizione opzionale inserita</string>
@@ -122,12 +122,12 @@
     <string name="your_friends">I tuoi amici</string>
     <string name="invited_for_this_reservation">Invitati per questa prenotazione</string>
     <string name="cancel_participation">Annulla partecipazione</string>
-    <string name="max_invited_friends">hai raggiunto il numero massimo di persone invitabili</string>
+    <string name="max_invited_friends">Hai raggiunto il numero massimo di persone invitabili</string>
 
     <!-- PENDING INVITATIONS -->
     <string name="pending_invitations">Inviti in sospeso</string>
     <string name="invited_by">Invitato da %1$s</string>
-    <string name="price_per_hour">Prezzo totale: %1$d €/h</string>
+    <string name="total_price">Prezzo totale: %1$d €/h</string>
     <string name="playground_address">Indirizzo del campo: %1$s</string>
     <string name="show_inviter_profile">Mostra il profilo di %1$s</string>
     <string name="zero_invitations">Nessun invito trovato! Inizia con il mandarne uno tu!</string>
@@ -138,7 +138,16 @@
     <string name="pending">In attesa</string>
 
     <!-- CHOOSE PLAYGROUNDS -->
+    <string name="recently_reserved">Prenotati recentemente</string>
     <string name="all_sports">Tutti gli sport</string>
     <string name="all_regions">Tutte le regioni</string>
     <string name="all_cities">Tutte le città</string>
+    <string name="favorite_courts">Campi preferiti</string>
+    <string name="choose_playground">Scegli campo</string>
+    <string name="search_all_playgrounds">Cerca tra tutti i campi</string>
+    <string name="select_playground">Scegli campo</string>
+    <string name="price_per_hour">Prezzo all\'ora</string>
+    <string name="price">%1%s €/h</string>
+    <string name="max_number_of_people">Numero massimo di persone</string>
+    <string name="n_people">%1$d persone</string>
 </resources>

@@ -98,7 +98,7 @@
     <string name="add_reservation_court">Playground: </string>
     <string name="optional_description_rating">Add a description (optional)</string>
     <string name="rating_label">Rating:</string>
-    <string name="title_activity_rating_playgrounds">RatingPlaygrounds</string>
+    <string name="title_activity_rating_playgrounds">Rate playground</string>
     <string name="save_rating">Save rating</string>
     <string name="see_ratings">See ratings</string>
     <string name="optional_description_entered">No optional description entered</string>
@@ -121,12 +121,12 @@
     <string name="your_friends">Your friends</string>
     <string name="invited_for_this_reservation">Invited for this reservation</string>
     <string name="cancel_participation">Cancel participation</string>
-    <string name="max_invited_friends">You have reached the maximum number of inviteable people</string>
+    <string name="max_invited_friends">You have reached the maximum number of people you can invite</string>
 
     <!-- PENDING INVITATIONS -->
     <string name="pending_invitations">Pending invitations</string>
     <string name="invited_by">Invited by %1$s</string>
-    <string name="price_per_hour">Total price: %1$d €/h</string>
+    <string name="total_price">Total price: %1$d €/h</string>
     <string name="playground_address">Playground address: %1$s</string>
     <string name="show_inviter_profile">Show %1$s\'s profile</string>
     <string name="zero_invitations">Zero invitations found. Go and make one yourself!</string>
@@ -142,4 +142,11 @@
     <string name="all_regions">All regions</string>
     <string name="all_cities">All cities</string>
     <string name="favorite_courts">Favorite courts</string>
+    <string name="choose_playground">Choose playground</string>
+    <string name="search_all_playgrounds">Search all playgrounds</string>
+    <string name="select_playground">Select playground</string>
+    <string name="price_per_hour">Price per hour</string>
+    <string name="price">%1%s €/h</string>
+    <string name="max_number_of_people">Maximum number of people</string>
+    <string name="n_people">%1$d people</string>
 </resources>

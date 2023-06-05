@@ -65,7 +65,7 @@
                 android:id="@+id/choose_playground_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Choose playground" />
+                android:text="@string/choose_playground" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -176,6 +176,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

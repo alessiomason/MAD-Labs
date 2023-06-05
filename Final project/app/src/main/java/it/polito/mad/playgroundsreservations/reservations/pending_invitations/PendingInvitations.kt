@@ -45,8 +45,6 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsRe
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 
 class PendingInvitations: Fragment() {
-    private val args by navArgs<InviteFriendsArgs>()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

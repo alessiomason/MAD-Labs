@@ -211,7 +211,7 @@ fun ChoosePlaygroundBox(
                         colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(text = "Select playground".uppercase())
+                        Text(text = stringResource(id = R.string.select_playground).uppercase())
                     }
                 }
             }
@@ -252,7 +252,7 @@ fun ChoosePlaygroundBox(
 
                     Row {
                         Text(
-                            text = "Price per hour",
+                            text = stringResource(id = R.string.price_per_hour),
                             color = PrimaryColor,
                             modifier = Modifier
                                 .padding(top = 5.dp)
@@ -262,14 +262,14 @@ fun ChoosePlaygroundBox(
 
                     Row {
                         Text(
-                            text = "${playground.pricePerHour} €/h",
+                            text = stringResource(id = R.string.price, playground.pricePerHour),
                             modifier = Modifier.padding(horizontal = 10.dp)
                         )
                     }
 
                     Row {
                         Text(
-                            text = "Maximum number of people",
+                            text = stringResource(id = R.string.max_number_of_people),
                             color = PrimaryColor,
                             modifier = Modifier
                                 .padding(top = 5.dp)
@@ -279,7 +279,7 @@ fun ChoosePlaygroundBox(
 
                     Row {
                         Text(
-                            text = "${playground.maxPlayers} people",
+                            text = stringResource(id = R.string.n_people, playground.maxPlayers),
                             modifier = Modifier.padding(horizontal = 10.dp)
                         )
                     }

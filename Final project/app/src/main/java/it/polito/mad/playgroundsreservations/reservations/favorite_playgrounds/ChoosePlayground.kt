@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -62,7 +63,7 @@ class ChoosePlayground: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // ACTIVITY TITLE
-        activity?.title = "Favorite courts"
+        activity?.title = activity?.resources?.getString(R.string.choose_playground)
 
         return ComposeView(requireContext()).apply {
             setContent {
@@ -89,7 +90,7 @@ class ChoosePlaygroundFromProfile: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // ACTIVITY TITLE
-        activity?.title = "Favorite courts"
+        activity?.title = activity?.resources?.getString(R.string.favorite_courts)
 
         return ComposeView(requireContext()).apply {
             setContent {
@@ -182,7 +183,7 @@ fun ChoosePlaygroundScreenContent(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
                 maxLines = 1,
-                label = { Text(text = "Search all playgrounds")},
+                label = { Text(text = stringResource(id = R.string.search_all_playgrounds))},
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = LightGrayColor,
                     focusedLabelColor = SecondaryColor,

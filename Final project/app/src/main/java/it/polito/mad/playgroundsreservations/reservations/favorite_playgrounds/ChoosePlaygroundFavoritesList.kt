@@ -84,7 +84,7 @@ fun ChoosePlaygroundFavoritesList(
                 key = { "recent_playgrounds_${it.id}" }
             ) { playground ->
                 ChoosePlaygroundBox(
-                    canChoosePlayground = canChoosePlayground,
+                    canChoosePlayground = true,
                     choosePlayground = choosePlayground,
                     seeRatings = seeRatings,
                     playground = playground,
@@ -103,7 +103,7 @@ fun ChoosePlaygroundFavoritesList(
                         exit = fadeOut()
                     ) {
                         ChoosePlaygroundBox(
-                            canChoosePlayground = canChoosePlayground,
+                            canChoosePlayground = true,
                             choosePlayground = choosePlayground,
                             seeRatings = seeRatings,
                             playground = playground,
