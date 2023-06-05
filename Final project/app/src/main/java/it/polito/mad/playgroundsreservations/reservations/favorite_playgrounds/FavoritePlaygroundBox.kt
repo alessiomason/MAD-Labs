@@ -29,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -42,8 +43,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import it.polito.mad.playgroundsreservations.R
-import it.polito.mad.playgroundsreservations.database.Invitation
-import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Sport
@@ -56,11 +55,12 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColo
 fun FavoritePlaygroundBox(
     canChoosePlayground: Boolean,
     choosePlayground: (HashMap<String, String>) -> Unit,
+    seeRatings: (String) -> Unit,
     playground: Playground,
     favoritePlaygrounds: SnapshotStateList<Playground>
 ) {
     val viewModel: ViewModel = viewModel()
-    var showAdditionalInfo by remember { mutableStateOf(false) }
+    var showAdditionalInfo by rememberSaveable { mutableStateOf(false) }
     var isFavoritePlayground by remember { mutableStateOf(favoritePlaygrounds.contains(playground)) }
     val ratingsList = remember { mutableStateListOf<PlaygroundRating>() }
 
@@ -69,7 +69,12 @@ fun FavoritePlaygroundBox(
     }
 
     LaunchedEffect(true) {
-        viewModel.getRatingsByPlaygroundId(playgroundId = playground.id, ratingsState = ratingsList)
+        if (canChoosePlayground) {  // otherwise I don't have the navController and I cannot show the other page
+            viewModel.getRatingsByPlaygroundId(
+                playgroundId = playground.id,
+                ratingsState = ratingsList
+            )
+        }
     }
 
     val sportIcon = when (playground.sport) {
@@ -167,29 +172,6 @@ fun FavoritePlaygroundBox(
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if (canChoosePlayground) {
-                        Button(
-                            onClick = {
-                                val p = hashMapOf(
-                                    "id" to playground.id,
-                                    "sport" to playground.sport.name.lowercase(),
-                                    "pricePerHour" to playground.pricePerHour.toString()
-                                )
-
-                                choosePlayground(p) },
-                            shape = RoundedCornerShape(10.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.check_icon),
-                                contentDescription = "Add person to friends",
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .aspectRatio(1f)
-                            )
-                        }
-                    }
-
                     OutlinedButton(
                         onClick = {
                             if (isFavoritePlayground) {
@@ -214,20 +196,23 @@ fun FavoritePlaygroundBox(
                 }
             }
 
-            Row {
-                TextButton(
-                    onClick = {  },
-                    colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = if (ratingsList.isEmpty())
-                            stringResource(id = R.string.no_ratings_yet_playground)
-                        else stringResource(id = R.string.see_ratings),
-                        color = PrimaryVariantColor,
-                        textAlign = TextAlign.Center
-                    )
+            if (canChoosePlayground) {
+                Row(modifier = Modifier.padding(top = 10.dp)) {
+                    Button(
+                        onClick = {
+                            val p = hashMapOf(
+                                "id" to playground.id,
+                                "sport" to playground.sport.name.lowercase(),
+                                "pricePerHour" to playground.pricePerHour.toString()
+                            )
+
+                            choosePlayground(p) },
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = SecondaryColor),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = "Select playground".uppercase())
+                    }
                 }
             }
 
@@ -297,6 +282,27 @@ fun FavoritePlaygroundBox(
                             text = "${playground.maxPlayers} people",
                             modifier = Modifier.padding(horizontal = 10.dp)
                         )
+                    }
+
+                    if (canChoosePlayground) {  // otherwise I don't have the navController
+                        Row {
+                            OutlinedButton(
+                                onClick = { seeRatings(playground.id) },
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = PrimaryVariantColor),
+                                shape = RoundedCornerShape(10.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 10.dp)
+                            ) {
+                                Text(
+                                    text = if (ratingsList.isEmpty())
+                                        stringResource(id = R.string.no_ratings_yet_playground)
+                                    else stringResource(id = R.string.see_ratings),
+                                    color = PrimaryVariantColor,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
                     }
                 }
             }

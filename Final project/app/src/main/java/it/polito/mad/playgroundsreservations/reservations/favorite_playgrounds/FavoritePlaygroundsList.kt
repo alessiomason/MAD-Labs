@@ -17,7 +17,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -28,7 +28,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Playground
-import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
 
@@ -36,9 +35,10 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVarian
 fun FavoritePlaygroundsList(
     canChoosePlayground: Boolean,
     choosePlayground: (HashMap<String, String>) -> Unit,
+    seeRatings: (String) -> Unit,
     playgrounds: SnapshotStateList<Playground>
 ) {
-    var showAllFavoritePlaygrounds by remember { mutableStateOf(false) }
+    var showAllFavoritePlaygrounds by rememberSaveable { mutableStateOf(false) }
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         item(key = "your_favorite_playgrounds_title") {
@@ -83,6 +83,7 @@ fun FavoritePlaygroundsList(
             FavoritePlaygroundBox(
                 canChoosePlayground = canChoosePlayground,
                 choosePlayground = choosePlayground,
+                seeRatings = seeRatings,
                 playground = playground,
                 favoritePlaygrounds = playgrounds
             )
@@ -101,6 +102,7 @@ fun FavoritePlaygroundsList(
                     FavoritePlaygroundBox(
                         canChoosePlayground = canChoosePlayground,
                         choosePlayground = choosePlayground,
+                        seeRatings = seeRatings,
                         playground = playground,
                         favoritePlaygrounds = playgrounds
                     )

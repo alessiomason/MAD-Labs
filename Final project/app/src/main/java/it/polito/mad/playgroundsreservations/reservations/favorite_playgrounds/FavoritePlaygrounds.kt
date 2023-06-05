@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
@@ -114,6 +115,12 @@ fun FavoritePlaygroundsScreen(canChoosePlayground: Boolean, navController: NavCo
         viewModel.getUserPlaygrounds(Global.userId!!, favoritePlaygrounds)
     }
 
+    val seeRatings: (String) -> Unit = { playgroundId ->
+        val action = FavoritePlaygroundsDirections
+            .actionFavoritePlaygroundsFragmentToSeeRatings(playgroundId)
+        navController?.navigate(action)
+    }
+
     val choosePlayground: (HashMap<String, String>) -> Unit = {
         navController?.previousBackStackEntry?.savedStateHandle?.set("chosenPlayground", it)
         navController?.popBackStack()
@@ -129,6 +136,7 @@ fun FavoritePlaygroundsScreen(canChoosePlayground: Boolean, navController: NavCo
         FavoritePlaygroundsScreenContent(
             canChoosePlayground = canChoosePlayground,
             choosePlayground = choosePlayground,
+            seeRatings = seeRatings,
             playgrounds = playgrounds,
             favoritePlaygrounds = favoritePlaygrounds
         )
@@ -140,13 +148,14 @@ fun FavoritePlaygroundsScreen(canChoosePlayground: Boolean, navController: NavCo
 fun FavoritePlaygroundsScreenContent(
     canChoosePlayground: Boolean,
     choosePlayground: (HashMap<String, String>) -> Unit,
+    seeRatings: (String) -> Unit,
     playgrounds: SnapshotStateList<Playground>,
     favoritePlaygrounds: SnapshotStateList<Playground>
 ) {
-    var searchQuery by remember { mutableStateOf("") }
-    val sportFilter = remember { mutableStateOf< Sport?>(null) }
-    val regionFilter = remember { mutableStateOf<String?>(null) }
-    val cityFilter = remember { mutableStateOf<String?>(null) }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    val sportFilter = rememberSaveable { mutableStateOf< Sport?>(null) }
+    val regionFilter = rememberSaveable { mutableStateOf<String?>(null) }
+    val cityFilter = rememberSaveable { mutableStateOf<String?>(null) }
 
     Column {
         Row {
@@ -182,6 +191,7 @@ fun FavoritePlaygroundsScreenContent(
             FavoritePlaygroundsList(
                 canChoosePlayground = canChoosePlayground,
                 choosePlayground = choosePlayground,
+                seeRatings = seeRatings,
                 playgrounds = favoritePlaygrounds
             )
         } else {
@@ -196,6 +206,7 @@ fun FavoritePlaygroundsScreenContent(
                     FavoritePlaygroundBox(
                         canChoosePlayground = canChoosePlayground,
                         choosePlayground = choosePlayground,
+                        seeRatings = seeRatings,
                         playground = playground,
                         favoritePlaygrounds = favoritePlaygrounds
                     )

@@ -47,17 +47,17 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
     private val args by navArgs<AddReservationFragmentArgs>()
     private val viewModel by viewModels<ViewModel>()
     val zoneId: ZoneId = ZoneId.systemDefault()
-    var playgroundList = mutableListOf<Playground>()
-    var arrayOccupated = mutableListOf<String>()
+    private var playgroundList = mutableListOf<Playground>()
+    private var arrayOccupated = mutableListOf<String>()
     var durationsList = mutableListOf<String>()
-    var aus = 0
+    private var aus = 0
     var hours = mutableListOf<String>()
     var price=0
     var pricePerHour=0
 
     lateinit var image: ImageView
-    lateinit var sportIcon: ImageView
-    lateinit var sportName: TextView
+    private lateinit var sportIcon: ImageView
+    private lateinit var sportName: TextView
     lateinit var priceElement: TextView
 
     object MyReservation {
@@ -126,7 +126,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
             val playgroundNameView = view?.findViewById<TextView>(R.id.addPlaygroundName)
             val spinnerHour = view?.findViewById<Spinner>(R.id.spinnerDuration)
             val spinnerDuration = view?.findViewById<Spinner>(R.id.spinnerDuration2)
-            priceElement = view?.findViewById<TextView>(R.id.price)!!
+            priceElement = view?.findViewById(R.id.price)!!
 
 
             hours.removeAll(hours)
@@ -187,7 +187,7 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
                 if (args.dateOfReservation==formatterDate) {
                     val ora= Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
                     for(i in 8..ora) {
-                        arrayOccupated.add(i.toString()+":00")
+                        arrayOccupated.add("$i:00")
                     }
                 }
                 it.forEach { r ->
@@ -347,8 +347,6 @@ class AddReservationFragment: Fragment(R.layout.add_reservation_fragment) {
         // Handle presses on the action bar menu items
         when (item.itemId) {
             R.id.save_edit_reservation -> {
-                // var spinnerHourValue= view?.findViewById<Spinner>(R.id.spinnerViewHours);
-                // var spinnerDurationValue=view?.findViewById<Spinner>(R.id.spinnerDuration);
                 val chkEquipment=view?.findViewById<CheckBox>(R.id.rentingEquipment)
 
                 if (chkEquipment != null) {

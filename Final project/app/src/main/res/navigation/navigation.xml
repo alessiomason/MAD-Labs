@@ -32,7 +32,11 @@
             app:popExitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_calendarFragment_to_pendingInvitations"
-            app:destination="@id/pendingInvitations" />
+            app:destination="@id/pendingInvitations"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/showReservationFragment"
@@ -86,13 +90,21 @@
             app:popExitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_addReservationFragment_to_seeRatings"
-            app:destination="@id/seeRatings" />
+            app:destination="@id/seeRatings"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_addReservationFragment_to_showReservationFragment"
             app:destination="@id/showReservationFragment" />
         <action
             android:id="@+id/action_addReservationFragment_to_favoritePlaygroundsFragment"
-            app:destination="@id/favoritePlaygroundsFragment" />
+            app:destination="@id/favoritePlaygroundsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/editReservationFragment"
@@ -110,7 +122,11 @@
             app:popExitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_editReservationFragment_to_showReservationFragment"
-            app:destination="@id/showReservationFragment" />
+            app:destination="@id/showReservationFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/playgroundsAvailabilityFragment"
@@ -136,16 +152,23 @@
             app:argType="string" />
         <action
             android:id="@+id/action_ratingPlaygrounds_to_showReservationFragment"
-            app:destination="@id/showReservationFragment" />
+            app:destination="@id/showReservationFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_ratingPlaygrounds_to_seeRatings"
-            app:destination="@id/seeRatings" />
+            app:destination="@id/seeRatings"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/seeRatings"
         android:name="it.polito.mad.playgroundsreservations.reservations.SeeRatings"
-        android:label="fragment_see_ratings"
-        tools:layout="@layout/fragment_see_ratings" >
+        android:label="fragment_see_ratings" >
         <argument
             android:name="playgroundId"
             app:argType="string" />
@@ -170,5 +193,12 @@
             android:name="canChoosePlayground"
             app:argType="boolean"
             android:defaultValue="false" />
+        <action
+            android:id="@+id/action_favoritePlaygroundsFragment_to_seeRatings"
+            app:destination="@id/seeRatings"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 </navigation>
