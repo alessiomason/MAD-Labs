@@ -1,6 +1,9 @@
 package it.polito.mad.playgroundsreservations.reservations.invite_friends
 
+import android.content.Intent
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -24,7 +27,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -41,11 +43,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.firebase.firestore.DocumentReference
 import com.smarttoolfactory.ratingbar.RatingBar
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.database.Invitation
@@ -54,6 +54,7 @@ import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.database.User
+import it.polito.mad.playgroundsreservations.profile.ShowProfileActivity
 import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
@@ -74,30 +75,25 @@ fun FriendBox(
         reservation.value!!.invitations.map { it.userId }.contains(friend.id)
     ) }
     var isFriend by remember { mutableStateOf(friends.contains(friend)) }
-    var mostra by remember {
-        mutableStateOf(false)
+    var showToast by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val intent = Intent(context, ShowProfileActivity::class.java)
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        intent.removeExtra("reservationCreatorId")
     }
-    var idPlayg: String =""
+
     LaunchedEffect(reservation.value!!.invitations.size) {
         isInvited = reservation.value!!.invitations.map { it.userId }.contains(friend.id)
-
     }
 
     LaunchedEffect(friends.size) {
         isFriend = friends.contains(friend)
     }
-    LaunchedEffect(true )
-    {
 
-        viewModel.reservations.value!!.forEach { r ->
-            if (r.id==reservation.value!!.id) {
-                idPlayg=r.playgroundId.id
-            }
-        }
-        viewModel.getPlayground(idPlayg,playground)
+    LaunchedEffect(true) {
+        viewModel.getPlayground(reservation.value!!.playgroundId.id, playground)
     }
-
-
 
     val sportIcon = when (sport) {
         Sport.TENNIS -> R.drawable.tennis_ball
@@ -211,15 +207,15 @@ fun FriendBox(
                                 }
                             } else {
                                 if (reservation.value!!.invitations.count {
-                                        it.invitationStatus.toString().lowercase() == "accepted"
+                                        it.invitationStatus == InvitationStatus.ACCEPTED
                                     }
                                     + reservation.value!!.invitations.count {
-                                        it.invitationStatus.toString().lowercase() == "pending"
+                                        it.invitationStatus == InvitationStatus.PENDING
                                     } + 1 == playground.value!!.maxPlayers) {
-                                    mostra = true
+                                    showToast = true
                                 }
                                 else {
-                                    mostra=false
+                                    showToast=false
                                     reservation.value!!.invitations.add(
                                         Invitation(
                                             friend.id,
@@ -244,9 +240,9 @@ fun FriendBox(
                         )
                     }
 
-                    if (mostra) {
+                    if (showToast) {
                         ShowToastMessage()
-                        mostra = false
+                        showToast = false
                     }
 
                     OutlinedButton(
@@ -270,6 +266,28 @@ fun FriendBox(
                                 .aspectRatio(1f)
                         )
                     }
+                }
+            }
+
+            Row(modifier = Modifier.padding(top = 10.dp)) {
+                OutlinedButton(
+                    onClick = {
+                        intent.putExtra("reservationCreatorId", friend.id)
+                        intent.putExtra("title", "CreatorTitle")
+                        val options = ActivityOptionsCompat.makeCustomAnimation(
+                            context,
+                            R.anim.fade_in,
+                            R.anim.no_anim
+                        )
+                        launcher.launch(intent, options)
+                    },
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = PrimaryVariantColor),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp)
+                ) {
+                    Text(text = stringResource(id = R.string.show_inviter_profile, friend.fullName))
                 }
             }
 
