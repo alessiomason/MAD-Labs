@@ -195,7 +195,6 @@ fun PendingInvitationBox(
                 OutlinedButton(
                     onClick = {
                         intent.putExtra("reservationCreatorId", reservation.userId.id)
-                        intent.putExtra("title", "CreatorTitle")
                         val options = ActivityOptionsCompat.makeCustomAnimation(
                             context,
                             R.anim.fade_in,

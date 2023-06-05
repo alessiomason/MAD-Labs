@@ -81,7 +81,7 @@ fun FriendBox(
     val context = LocalContext.current
     val intent = Intent(context, ShowProfileActivity::class.java)
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        intent.removeExtra("reservationCreatorId")
+        intent.removeExtra("friendId")
     }
 
     LaunchedEffect(reservation.value?.invitations?.size) {
@@ -281,8 +281,7 @@ fun FriendBox(
             Row(modifier = Modifier.padding(top = 10.dp)) {
                 OutlinedButton(
                     onClick = {
-                        intent.putExtra("reservationCreatorId", friend.id)
-                        intent.putExtra("title", "CreatorTitle")
+                        intent.putExtra("friendId", friend.id)
                         val options = ActivityOptionsCompat.makeCustomAnimation(
                             context,
                             R.anim.fade_in,

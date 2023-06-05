@@ -67,21 +67,22 @@ class ShowProfileActivity: AppCompatActivity() {
         logoutButton = findViewById(R.id.logout_button)
         favoriteCourtsButton = findViewById(R.id.favoriteCourtsButton)
         yourFriendsButton = findViewById(R.id.friendsListButton)
-        val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
-        val title: String = intent.getStringExtra("title").toString()
 
-        if (userId == Global.userId!!) {
-            this.title = resources?.getString(R.string.user_profile)
-        } else if (title == "CreatorTitle") {
+        if (intent.getStringExtra("reservationCreatorId") != null) {
             this.title = resources?.getString(R.string.reservation_creator_profile)
             favoriteCourtsButton.visibility = GONE
             yourFriendsButton.visibility = GONE
             logoutButton.visibility = GONE
-        } else {
+        } else if (intent.getStringExtra("friendId") != null) {
             this.title = resources?.getString(R.string.contact_profile)
             favoriteCourtsButton.visibility = GONE
             yourFriendsButton.visibility = GONE
             logoutButton.visibility = GONE
+        } else {
+            this.title = resources?.getString(R.string.user_profile)
+            favoriteCourtsButton.visibility = VISIBLE
+            yourFriendsButton.visibility = VISIBLE
+            logoutButton.visibility = VISIBLE
         }
 
         nameView = findViewById(R.id.textFullName)
@@ -150,7 +151,13 @@ class ShowProfileActivity: AppCompatActivity() {
             .replace(R.id.loadingShowProfileFragment, SpinnerFragment()).commit()
         loading.visibility = VISIBLE
 
-        val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
+        val userId: String = if (intent.getStringExtra("reservationCreatorId") != null) {
+            intent.getStringExtra("reservationCreatorId")!!
+        } else if (intent.getStringExtra("friendId") != null) {
+            intent.getStringExtra("friendId")!!
+        } else {
+            Global.userId!!
+        }
 
         viewModel.getUserInfo(userId).observe(this) { user ->
             if (user != null) {
@@ -232,7 +239,13 @@ class ShowProfileActivity: AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val userId: String = intent.getStringExtra("reservationCreatorId") ?: Global.userId!!
+        val userId: String = if (intent.getStringExtra("reservationCreatorId") != null) {
+            intent.getStringExtra("reservationCreatorId")!!
+        } else if (intent.getStringExtra("friendId") != null) {
+            intent.getStringExtra("friendId")!!
+        } else {
+            Global.userId!!
+        }
         if (userId == Global.userId) {
             // Inflate the menu to use in the action bar
             val inflater = menuInflater
