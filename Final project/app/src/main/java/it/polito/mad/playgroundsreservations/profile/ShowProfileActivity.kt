@@ -126,7 +126,6 @@ class ShowProfileActivity: AppCompatActivity() {
             val intent = Intent(this, YourFriendsActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.fade_in, R.anim.no_anim)
-            finish()
         }
 
         logoutButton.setOnClickListener {

@@ -166,7 +166,7 @@ class ShowReservationFragment: Fragment(R.layout.show_reservation_fragment) {
                     Sport.GOLF -> { image.setImageResource(R.drawable.golf_field); sportIcon.setImageResource(R.drawable.golf_ball) }
                 }
             }
-            priceElement.text=(myPlayground.pricePerHour*myReservation.duration.toHours().toInt()).toString()
+            priceElement.text = activity?.resources?.getString(R.string.price_with_currency, myPlayground.pricePerHour*myReservation.duration.toHours())
             val inviteFriendsButton = view.findViewById<Button>(R.id.invite_friends_button)
 
             if(myReservation.userId!= viewModel.getUserReference(Global.userId!!))

@@ -103,6 +103,13 @@ fun SportDropDownMenu(sportFilter: MutableState<Sport?>, sportFilterExpanded: Mu
             sportFilterExpanded.value = false
         }
     ) {
+        DropdownMenuItem(onClick = {
+            sportFilter.value = null
+            sportFilterExpanded.value = false
+        }) {
+            Text(text = stringResource(id = R.string.all_sports))
+        }
+
         Sport.values().forEach { item ->
             DropdownMenuItem(onClick = {
                 sportFilter.value = item

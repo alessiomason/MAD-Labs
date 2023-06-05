@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:maxWidth="320dp"
-            android:text="@string/login"
+            android:text="@string/login_signup"
             app:layout_constraintBottom_toTopOf="@+id/spacer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

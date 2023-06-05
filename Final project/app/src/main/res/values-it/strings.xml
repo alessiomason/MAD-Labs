@@ -26,7 +26,7 @@
     <string name="home_title">Benvenuto!</string>
     <string name="home_subtitle">Esplora la disponibilità dei campi o accedi per scoprire tutte le funzionalità!</string>
     <string name="show_playgrounds_availability">Esplora la disponibilità dei campi</string>
-    <string name="login">Login</string>
+    <string name="login_signup">Login/registrati</string>
     <string name="login_email">Accedi con la tua email</string>
 
     <!-- CALENDAR FRAGMENT TUTORIAL -->
@@ -109,13 +109,14 @@
     <string name="ratings_playground">Valutazioni</string>
     <string name="loading">Caricamento…</string>
     <string name="created_by">Creato da </string>
+    <string name="price_with_currency">%1$d euro (totale)</string>
 
     <!-- INVITE FRIENDS -->
     <string name="invite_friends">Invita amici</string>
     <string name="search_users">Cerca tra tutti gli utenti</string>
     <string name="invite_selected">Invita i selezionati</string>
-    <string name="see_less">Vedi di più</string>
-    <string name="see_more">Vedi di meno</string>
+    <string name="see_less">Vedi di meno</string>
+    <string name="see_more">Vedi di più</string>
     <string name="see_all">Vedi tutti</string>
     <string name="no_rating_for_sport">L\'utente non ha inserito una valutazione personale per questo sport.</string>
     <string name="recently_invited">Invitati di recente</string>
