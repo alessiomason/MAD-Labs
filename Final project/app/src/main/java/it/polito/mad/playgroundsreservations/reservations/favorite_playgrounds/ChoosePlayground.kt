@@ -50,8 +50,8 @@ import it.polito.mad.playgroundsreservations.reservations.ViewModel
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PlaygroundsReservationsTheme
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
 
-class FavoritePlaygrounds: Fragment() {
-    private val args by navArgs<FavoritePlaygroundsArgs>()
+class ChoosePlayground: Fragment() {
+    private val args by navArgs<ChoosePlaygroundArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,7 +68,7 @@ class FavoritePlaygrounds: Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        FavoritePlaygroundsScreen(
+                        ChoosePlaygroundScreen(
                             canChoosePlayground = args.canChoosePlayground,
                             navController = findNavController()
                         )
@@ -79,7 +79,7 @@ class FavoritePlaygrounds: Fragment() {
     }
 }
 
-class FavoritePlaygroundsFromProfile: Fragment() {
+class ChoosePlaygroundFromProfile: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -95,7 +95,7 @@ class FavoritePlaygroundsFromProfile: Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        FavoritePlaygroundsScreen(
+                        ChoosePlaygroundScreen(
                             canChoosePlayground = false,
                             navController = null
                         )
@@ -107,7 +107,7 @@ class FavoritePlaygroundsFromProfile: Fragment() {
 }
 
 @Composable
-fun FavoritePlaygroundsScreen(canChoosePlayground: Boolean, navController: NavController?) {
+fun ChoosePlaygroundScreen(canChoosePlayground: Boolean, navController: NavController?) {
     val viewModel: ViewModel = viewModel()
 
     var stillLoading by remember { mutableStateOf(true) }
@@ -120,7 +120,7 @@ fun FavoritePlaygroundsScreen(canChoosePlayground: Boolean, navController: NavCo
     }
 
     val seeRatings: (String) -> Unit = { playgroundId ->
-        val action = FavoritePlaygroundsDirections
+        val action = ChoosePlaygroundDirections
             .actionFavoritePlaygroundsFragmentToSeeRatings(playgroundId)
         navController?.navigate(action)
     }
@@ -137,7 +137,7 @@ fun FavoritePlaygroundsScreen(canChoosePlayground: Boolean, navController: NavCo
         LoadingScreen()
     else {
         stillLoading = false
-        FavoritePlaygroundsScreenContent(
+        ChoosePlaygroundScreenContent(
             canChoosePlayground = canChoosePlayground,
             choosePlayground = choosePlayground,
             seeRatings = seeRatings,
@@ -149,7 +149,7 @@ fun FavoritePlaygroundsScreen(canChoosePlayground: Boolean, navController: NavCo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoritePlaygroundsScreenContent(
+fun ChoosePlaygroundScreenContent(
     canChoosePlayground: Boolean,
     choosePlayground: (HashMap<String, String>) -> Unit,
     seeRatings: (String) -> Unit,
@@ -211,7 +211,7 @@ fun FavoritePlaygroundsScreenContent(
         }
 
         if (searchQuery == "" && sportFilter.value == null && regionFilter.value == null && cityFilter.value == null) {
-            FavoritePlaygroundsList(
+            ChoosePlaygroundFavoritesList(
                 canChoosePlayground = canChoosePlayground,
                 choosePlayground = choosePlayground,
                 seeRatings = seeRatings,
@@ -226,7 +226,7 @@ fun FavoritePlaygroundsScreenContent(
                                 (regionFilter.value == null || playground.region == regionFilter.value) &&
                                 (cityFilter.value == null || playground.city == cityFilter.value)
                     }, key = { it.id }) { playground ->
-                    FavoritePlaygroundBox(
+                    ChoosePlaygroundBox(
                         canChoosePlayground = canChoosePlayground,
                         choosePlayground = choosePlayground,
                         seeRatings = seeRatings,

@@ -187,7 +187,7 @@
         android:label="PendingInvitations" />
     <fragment
         android:id="@+id/favoritePlaygroundsFragment"
-        android:name="it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds.FavoritePlaygrounds"
+        android:name="it.polito.mad.playgroundsreservations.reservations.favorite_playgrounds.ChoosePlayground"
         android:label="FavoritePlaygroundsFragment" >
         <argument
             android:name="canChoosePlayground"

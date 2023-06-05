@@ -32,7 +32,7 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
 
 @Composable
-fun FavoritePlaygroundsList(
+fun ChoosePlaygroundFavoritesList(
     canChoosePlayground: Boolean,
     choosePlayground: (HashMap<String, String>) -> Unit,
     seeRatings: (String) -> Unit,
@@ -80,7 +80,7 @@ fun FavoritePlaygroundsList(
             items = playgrounds.take(2),
             key = { "your_favorite_playgrounds_${it.id}" }
         ) { playground ->
-            FavoritePlaygroundBox(
+            ChoosePlaygroundBox(
                 canChoosePlayground = canChoosePlayground,
                 choosePlayground = choosePlayground,
                 seeRatings = seeRatings,
@@ -99,7 +99,7 @@ fun FavoritePlaygroundsList(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    FavoritePlaygroundBox(
+                    ChoosePlaygroundBox(
                         canChoosePlayground = canChoosePlayground,
                         choosePlayground = choosePlayground,
                         seeRatings = seeRatings,

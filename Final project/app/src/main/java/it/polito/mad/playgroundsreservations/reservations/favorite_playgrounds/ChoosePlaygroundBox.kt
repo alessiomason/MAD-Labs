@@ -52,7 +52,7 @@ import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVarian
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryColor
 
 @Composable
-fun FavoritePlaygroundBox(
+fun ChoosePlaygroundBox(
     canChoosePlayground: Boolean,
     choosePlayground: (HashMap<String, String>) -> Unit,
     seeRatings: (String) -> Unit,
