@@ -90,7 +90,7 @@ fun PendingInvitationsScreen() {
 
         viewModel.updateInvitationStatus(reservationId, newStatus)
         viewModel.deleteInvitationNotification(reservationId)
-        // commented to leave the invitation and only change the buttons
+        // commented to leave the invitation displayed and only change the buttons
         //invitedToReservations.removeIf { it.first.id == reservationId }
     }
 

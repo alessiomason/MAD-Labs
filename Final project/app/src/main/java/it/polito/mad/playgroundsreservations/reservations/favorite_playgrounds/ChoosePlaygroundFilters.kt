@@ -27,7 +27,7 @@ import it.polito.mad.playgroundsreservations.database.toLocalizedStringResourceI
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryVariantColor
 
 @Composable
-fun PlaygroundsFilters(
+fun ChoosePlaygroundFilters(
     playgrounds: SnapshotStateList<Playground>,
     sportFilter: MutableState<Sport?>,
     regionFilter: MutableState<String?>,

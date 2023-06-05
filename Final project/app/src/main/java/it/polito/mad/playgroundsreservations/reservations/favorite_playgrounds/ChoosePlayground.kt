@@ -110,7 +110,7 @@ class ChoosePlaygroundFromProfile: Fragment() {
 fun ChoosePlaygroundScreen(canChoosePlayground: Boolean, navController: NavController?) {
     val viewModel: ViewModel = viewModel()
 
-    var stillLoading by remember { mutableStateOf(true) }
+    val stillLoading = remember { mutableStateOf(true) }
     val playgrounds = remember { mutableStateListOf<Playground>() }
     val recentPlaygrounds = remember { mutableStateListOf<Playground>() }
     val favoritePlaygrounds = remember { mutableStateListOf<Playground>() }
@@ -120,7 +120,8 @@ fun ChoosePlaygroundScreen(canChoosePlayground: Boolean, navController: NavContr
         viewModel.getUserPlaygrounds(
             userId = Global.userId!!,
             recentPlaygroundsState = recentPlaygrounds,
-            favoritePlaygroundsState = favoritePlaygrounds
+            favoritePlaygroundsState = favoritePlaygrounds,
+            stillLoading = stillLoading
         )
     }
 
@@ -135,13 +136,15 @@ fun ChoosePlaygroundScreen(canChoosePlayground: Boolean, navController: NavContr
         navController?.popBackStack()
     }
 
-    if (stillLoading && (   // prevents from going back into loading
-            playgrounds.isEmpty() || favoritePlaygrounds.isEmpty()
-        )
+    if (stillLoading.value && (   // prevents from going back into loading
+                playgrounds.isEmpty() ||
+                        recentPlaygrounds.isEmpty() ||
+                        favoritePlaygrounds.isEmpty()
+                )
     )
         LoadingScreen()
     else {
-        stillLoading = false
+        stillLoading.value = false
         ChoosePlaygroundScreenContent(
             canChoosePlayground = canChoosePlayground,
             choosePlayground = choosePlayground,
@@ -209,7 +212,7 @@ fun ChoosePlaygroundScreenContent(
         }
 
         AnimatedVisibility(visible = showFilters) {
-            PlaygroundsFilters(
+            ChoosePlaygroundFilters(
                 playgrounds = playgrounds,
                 sportFilter = sportFilter,
                 regionFilter = regionFilter,

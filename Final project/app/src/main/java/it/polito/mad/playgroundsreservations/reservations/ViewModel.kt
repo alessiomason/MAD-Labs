@@ -403,7 +403,8 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     fun getUserPlaygrounds(
         userId: String,
         recentPlaygroundsState: SnapshotStateList<Playground>,
-        favoritePlaygroundsState: SnapshotStateList<Playground>
+        favoritePlaygroundsState: SnapshotStateList<Playground>,
+        stillLoading: MutableState<Boolean>
     ) {
         db.collection(usersCollectionPath)
             .document(userId)
@@ -414,10 +415,20 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 recentPlaygroundsState.clear()
                 favoritePlaygroundsState.clear()
 
+                if (u.recentPlaygrounds.isEmpty() && u.myCourts.isEmpty()) {
+                    stillLoading.value = false
+                    return@addOnSuccessListener
+                }
+
                 for (doc in u.recentPlaygrounds) {
                     doc.get()
                         .addOnSuccessListener {
                             recentPlaygroundsState.add(it.toPlayground())
+
+                            // done loading recent playgrounds
+                            if (recentPlaygroundsState.size == u.recentPlaygrounds.size && u.myCourts.isEmpty()) {
+                                stillLoading.value = false
+                            }
                         }
                 }
 
@@ -425,6 +436,11 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                     doc.get()
                         .addOnSuccessListener {
                             favoritePlaygroundsState.add(it.toPlayground())
+
+                            // done loading favorite playgrounds
+                            if (favoritePlaygroundsState.size == u.myCourts.size && u.recentPlaygrounds.isEmpty()) {
+                                stillLoading.value = false
+                            }
                         }
                 }
             }
