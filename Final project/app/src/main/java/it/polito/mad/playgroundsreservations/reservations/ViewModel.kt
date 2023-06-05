@@ -19,7 +19,6 @@ import it.polito.mad.playgroundsreservations.database.InvitationStatus
 import it.polito.mad.playgroundsreservations.database.Playground
 import it.polito.mad.playgroundsreservations.database.PlaygroundRating
 import it.polito.mad.playgroundsreservations.database.Reservation
-import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.database.User
 import it.polito.mad.playgroundsreservations.database.toPlayground
 import it.polito.mad.playgroundsreservations.database.toPlaygroundRating
@@ -146,6 +145,18 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveReservation(reservation: Reservation) {
+        // update recently reserved playgrounds
+
+        // remove if already present (avoid duplication)
+        db.collection(usersCollectionPath)
+            .document(Global.userId!!)
+            .update("recentPlaygrounds", FieldValue.arrayRemove(reservation.playgroundId))
+
+        // properly add
+        db.collection(usersCollectionPath)
+            .document(Global.userId!!)
+            .update("recentPlaygrounds", FieldValue.arrayUnion(reservation.playgroundId))
+
         val r = hashMapOf(
             "userId" to reservation.userId,
             "userFullName" to reservation.userFullName,
@@ -389,19 +400,31 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-    fun getUserPlaygrounds(userId: String, playgroundsState: SnapshotStateList<Playground>) {
+    fun getUserPlaygrounds(
+        userId: String,
+        recentPlaygroundsState: SnapshotStateList<Playground>,
+        favoritePlaygroundsState: SnapshotStateList<Playground>
+    ) {
         db.collection(usersCollectionPath)
             .document(userId)
             .get()
             .addOnSuccessListener { userDoc ->
                 val u = userDoc.toUser()
 
-                playgroundsState.clear()
+                recentPlaygroundsState.clear()
+                favoritePlaygroundsState.clear()
+
+                for (doc in u.recentPlaygrounds) {
+                    doc.get()
+                        .addOnSuccessListener {
+                            recentPlaygroundsState.add(it.toPlayground())
+                        }
+                }
 
                 for (doc in u.myCourts) {
                     doc.get()
                         .addOnSuccessListener {
-                            playgroundsState.add(it.toPlayground())
+                            favoritePlaygroundsState.add(it.toPlayground())
                         }
                 }
             }

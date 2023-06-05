@@ -108,7 +108,7 @@
     <string name="no_ratings_yet_playground">No ratings have been left yet</string>
     <string name="ratings_playground">Ratings</string>
     <string name="loading">Loading…</string>
-    <string name="created_by">Created by: </string>
+    <string name="created_by">Created by </string>
 
     <!-- INVITE FRIENDS -->
     <string name="invite_friends">Invite friends</string>
@@ -138,6 +138,7 @@
     <string name="pending">Pending</string>
 
     <!-- CHOOSE PLAYGROUNDS -->
+    <string name="recently_reserved">Recently reserved</string>
     <string name="all_sports">All sports</string>
     <string name="all_regions">All regions</string>
     <string name="all_cities">All cities</string>

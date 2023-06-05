@@ -20,6 +20,7 @@ data class User(
     var friends: List<DocumentReference>,
     var recentlyInvited: List<DocumentReference>,
     var alreadyShownTutorial: Boolean = false,
+    var recentPlaygrounds: List<DocumentReference>,
     var myCourts: List<DocumentReference>
 ) {
     val age: Int?
@@ -47,6 +48,7 @@ fun DocumentSnapshot.toUser(): User {
     val friends = this.get("friends") as? List<DocumentReference> ?: emptyList()
     val recentlyInvited = this.get("recentlyInvited") as? List<DocumentReference> ?: emptyList()
     val alreadyShownTutorial = this.get("alreadyShownTutorial", Boolean::class.java)
+    val recentPlaygrounds = this.get("recentPlaygrounds") as? List<DocumentReference> ?: emptyList()
     val myCourts = this.get("myCourts") as? List<DocumentReference> ?: emptyList()
 
     return User(
@@ -62,6 +64,7 @@ fun DocumentSnapshot.toUser(): User {
         friends,
         recentlyInvited,
         alreadyShownTutorial ?: false,
+        recentPlaygrounds,
         myCourts
     )
 }

@@ -36,11 +36,82 @@ fun ChoosePlaygroundFavoritesList(
     canChoosePlayground: Boolean,
     choosePlayground: (HashMap<String, String>) -> Unit,
     seeRatings: (String) -> Unit,
-    playgrounds: SnapshotStateList<Playground>
+    recentPlaygrounds: SnapshotStateList<Playground>,
+    favoritePlaygrounds: SnapshotStateList<Playground>
 ) {
+    var showAllRecentPlaygrounds by rememberSaveable { mutableStateOf(false) }
     var showAllFavoritePlaygrounds by rememberSaveable { mutableStateOf(false) }
 
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        item(key = "recent_playgrounds_title") {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.recently_reserved),
+                    color = PrimaryColor,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                )
+
+                if (recentPlaygrounds.size > 2) {
+                    TextButton(
+                        onClick = { showAllRecentPlaygrounds = !showAllRecentPlaygrounds },
+                        colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    ) {
+                        Text(
+                            text = if (showAllRecentPlaygrounds)
+                                stringResource(id = R.string.see_less)
+                            else stringResource(id = R.string.see_all),
+                            color = PrimaryVariantColor,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+        }
+
+        items(
+            items = recentPlaygrounds.take(2),
+            key = { "recent_playgrounds_${it.id}" }
+        ) { playground ->
+            ChoosePlaygroundBox(
+                canChoosePlayground = canChoosePlayground,
+                choosePlayground = choosePlayground,
+                seeRatings = seeRatings,
+                playground = playground,
+                favoritePlaygrounds = favoritePlaygrounds
+            )
+        }
+
+        if (recentPlaygrounds.size > 2) {
+            items(
+                items = recentPlaygrounds.drop(2),
+                key = { "recent_playgrounds_${it.id}" }
+            ) { playground ->
+                AnimatedVisibility(
+                    visible = showAllRecentPlaygrounds,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    ChoosePlaygroundBox(
+                        canChoosePlayground = canChoosePlayground,
+                        choosePlayground = choosePlayground,
+                        seeRatings = seeRatings,
+                        playground = playground,
+                        favoritePlaygrounds = favoritePlaygrounds
+                    )
+                }
+            }
+        }
+
         item(key = "your_favorite_playgrounds_title") {
             Row(
                 modifier = Modifier
@@ -57,7 +128,7 @@ fun ChoosePlaygroundFavoritesList(
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
 
-                if (playgrounds.size > 2) {
+                if (favoritePlaygrounds.size > 2) {
                     TextButton(
                         onClick = { showAllFavoritePlaygrounds = !showAllFavoritePlaygrounds },
                         colors = ButtonDefaults.textButtonColors(contentColor = PrimaryVariantColor),
@@ -77,7 +148,7 @@ fun ChoosePlaygroundFavoritesList(
         }
 
         items(
-            items = playgrounds.take(2),
+            items = favoritePlaygrounds.take(2),
             key = { "your_favorite_playgrounds_${it.id}" }
         ) { playground ->
             ChoosePlaygroundBox(
@@ -85,13 +156,13 @@ fun ChoosePlaygroundFavoritesList(
                 choosePlayground = choosePlayground,
                 seeRatings = seeRatings,
                 playground = playground,
-                favoritePlaygrounds = playgrounds
+                favoritePlaygrounds = favoritePlaygrounds
             )
         }
 
-        if (playgrounds.size > 2) {
+        if (favoritePlaygrounds.size > 2) {
             items(
-                items = playgrounds.drop(2),
+                items = favoritePlaygrounds.drop(2),
                 key = { "your_favorite_playgrounds_${it.id}" }
             ) { playground ->
                 AnimatedVisibility(
@@ -104,7 +175,7 @@ fun ChoosePlaygroundFavoritesList(
                         choosePlayground = choosePlayground,
                         seeRatings = seeRatings,
                         playground = playground,
-                        favoritePlaygrounds = playgrounds
+                        favoritePlaygrounds = favoritePlaygrounds
                     )
                 }
             }

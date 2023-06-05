@@ -109,7 +109,7 @@
     <string name="no_ratings_yet_playground">Non è stato ancora lasciato alcun rating</string>
     <string name="ratings_playground">Valutazioni</string>
     <string name="loading">Caricamento…</string>
-    <string name="created_by">Creato da: </string>
+    <string name="created_by">Creato da </string>
 
     <!-- INVITE FRIENDS -->
     <string name="invite_friends">Invita amici</string>

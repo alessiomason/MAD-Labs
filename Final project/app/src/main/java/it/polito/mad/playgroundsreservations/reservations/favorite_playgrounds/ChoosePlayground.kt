@@ -112,11 +112,16 @@ fun ChoosePlaygroundScreen(canChoosePlayground: Boolean, navController: NavContr
 
     var stillLoading by remember { mutableStateOf(true) }
     val playgrounds = remember { mutableStateListOf<Playground>() }
+    val recentPlaygrounds = remember { mutableStateListOf<Playground>() }
     val favoritePlaygrounds = remember { mutableStateListOf<Playground>() }
 
     LaunchedEffect(true) {
         viewModel.getPlaygrounds(playgrounds)
-        viewModel.getUserPlaygrounds(Global.userId!!, favoritePlaygrounds)
+        viewModel.getUserPlaygrounds(
+            userId = Global.userId!!,
+            recentPlaygroundsState = recentPlaygrounds,
+            favoritePlaygroundsState = favoritePlaygrounds
+        )
     }
 
     val seeRatings: (String) -> Unit = { playgroundId ->
@@ -142,6 +147,7 @@ fun ChoosePlaygroundScreen(canChoosePlayground: Boolean, navController: NavContr
             choosePlayground = choosePlayground,
             seeRatings = seeRatings,
             playgrounds = playgrounds,
+            recentPlaygrounds = recentPlaygrounds,
             favoritePlaygrounds = favoritePlaygrounds
         )
     }
@@ -154,6 +160,7 @@ fun ChoosePlaygroundScreenContent(
     choosePlayground: (HashMap<String, String>) -> Unit,
     seeRatings: (String) -> Unit,
     playgrounds: SnapshotStateList<Playground>,
+    recentPlaygrounds: SnapshotStateList<Playground>,
     favoritePlaygrounds: SnapshotStateList<Playground>
 ) {
     var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -215,7 +222,8 @@ fun ChoosePlaygroundScreenContent(
                 canChoosePlayground = canChoosePlayground,
                 choosePlayground = choosePlayground,
                 seeRatings = seeRatings,
-                playgrounds = favoritePlaygrounds
+                recentPlaygrounds = recentPlaygrounds,
+                favoritePlaygrounds = favoritePlaygrounds
             )
         } else {
             LazyColumn(Modifier.fillMaxWidth()) {
