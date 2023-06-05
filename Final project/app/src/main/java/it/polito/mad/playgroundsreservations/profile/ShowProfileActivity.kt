@@ -158,6 +158,18 @@ class ShowProfileActivity: AppCompatActivity() {
             Global.userId!!
         }
 
+        // show image profile fragment
+        val data = Bundle()
+        data.putString("userId", userId)
+
+        val transaction = fragmentManager.beginTransaction()
+        val imageProfileFragment = ImageProfileFragment()
+        imageProfileFragment.arguments = data
+
+        transaction
+            .replace(R.id.imageProfileFragment, imageProfileFragment)
+            .commit()
+
         viewModel.getUserInfo(userId).observe(this) { user ->
             if (user != null) {
                 loading.visibility = GONE

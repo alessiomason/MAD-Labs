@@ -29,8 +29,12 @@ import com.google.firebase.storage.ktx.storage
 import it.polito.mad.playgroundsreservations.R
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.SecondaryVariantColor
 
+enum class ProfileImageSize {
+    SMALL, MEDIUM, BIG
+}
+
 @Composable
-fun ProfileImage(friendId: String, small: Boolean) {
+fun ProfileImage(friendId: String, size: ProfileImageSize) {
     val storageReference = Firebase.storage.reference.child("profileImages/${friendId}")
     var imageUrl: Uri? by remember { mutableStateOf(null) }
     var showDefaultImage by remember { mutableStateOf(false) }
@@ -42,10 +46,22 @@ fun ProfileImage(friendId: String, small: Boolean) {
         Log.d("IMAGE URL", it.message ?: "")
     }
 
-    val loadingModifier = if (small) {
-        Modifier.size(25.dp).padding(5.dp)
-    } else {
-        Modifier.padding(15.dp)
+    val width = when (size) {
+        ProfileImageSize.SMALL -> 25.dp
+        ProfileImageSize.MEDIUM -> 75.dp
+        ProfileImageSize.BIG -> 250.dp
+    }
+
+    val strokeWidth = when (size) {
+        ProfileImageSize.SMALL -> 2.dp
+        ProfileImageSize.MEDIUM -> 4.dp
+        ProfileImageSize.BIG -> 8.dp
+    }
+
+    val loadingModifier = when (size) {
+        ProfileImageSize.SMALL -> Modifier.size(25.dp).padding(5.dp)
+        ProfileImageSize.MEDIUM -> Modifier.padding(15.dp)
+        ProfileImageSize.BIG -> Modifier.padding(45.dp)
     }
 
     if (imageUrl != null) {
@@ -57,7 +73,7 @@ fun ProfileImage(friendId: String, small: Boolean) {
             contentDescription = "Profile Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .width(if (small) 25.dp else 75.dp)
+                .width(width)
                 .aspectRatio(1f)
                 .clip(CircleShape)
         ) {
@@ -65,7 +81,7 @@ fun ProfileImage(friendId: String, small: Boolean) {
             if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
                 CircularProgressIndicator(
                     color = SecondaryVariantColor,
-                    strokeWidth = if (small) 2.dp else 4.dp,
+                    strokeWidth = strokeWidth,
                     modifier = loadingModifier
                 )
             } else {
@@ -78,14 +94,14 @@ fun ProfileImage(friendId: String, small: Boolean) {
             contentDescription = "Profile image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .width(if (small) 25.dp else 75.dp)
+                .width(width)
                 .aspectRatio(1f)
                 .clip(CircleShape)
         )
     } else {
         CircularProgressIndicator(
             color = SecondaryVariantColor,
-            strokeWidth = if (small) 2.dp else 4.dp,
+            strokeWidth = strokeWidth,
             modifier = loadingModifier
         )
     }

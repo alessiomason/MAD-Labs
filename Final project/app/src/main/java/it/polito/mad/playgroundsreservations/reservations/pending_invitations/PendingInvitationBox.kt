@@ -48,6 +48,7 @@ import it.polito.mad.playgroundsreservations.database.Reservation
 import it.polito.mad.playgroundsreservations.database.Sport
 import it.polito.mad.playgroundsreservations.profile.ShowProfileActivity
 import it.polito.mad.playgroundsreservations.reservations.invite_friends.ProfileImage
+import it.polito.mad.playgroundsreservations.reservations.invite_friends.ProfileImageSize
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.AcceptedColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryColor
 import it.polito.mad.playgroundsreservations.reservations.ui.theme.PrimaryVariantColor
@@ -212,7 +213,7 @@ fun PendingInvitationBox(
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        ProfileImage(friendId = reservation.userId.id, small = true)
+                        ProfileImage(friendId = reservation.userId.id, size = ProfileImageSize.SMALL)
                         Text(text = stringResource(id = R.string.show_inviter_profile, reservation.userFullName))
                     }
                 }

@@ -106,7 +106,7 @@ fun InvitationBox(invitation: Invitation) {
             Column {
                 Row {
                     Column {
-                        ProfileImage(friendId = invitation.userId, small = true)
+                        ProfileImage(friendId = invitation.userId, size = ProfileImageSize.SMALL)
                     }
 
                     Column {

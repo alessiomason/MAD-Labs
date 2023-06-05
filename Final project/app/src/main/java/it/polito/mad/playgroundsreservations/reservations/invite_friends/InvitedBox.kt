@@ -65,7 +65,7 @@ fun InvitedBox(reservation: MutableState<Reservation?>) {
                         modifier = Modifier
                     ) },
                     leadingIcon = {
-                        ProfileImage(friendId = invitation.userId, small = true)
+                        ProfileImage(friendId = invitation.userId, size = ProfileImageSize.SMALL)
                     },
                     trailingIcon = {
                         IconButton(

@@ -128,7 +128,7 @@ fun FriendBox(
                         modifier = Modifier
                             .padding(horizontal = 5.dp)
                     ) {
-                        ProfileImage(friendId = friend.id, small = false)
+                        ProfileImage(friendId = friend.id, size = ProfileImageSize.MEDIUM)
                     }
 
                     Column(
