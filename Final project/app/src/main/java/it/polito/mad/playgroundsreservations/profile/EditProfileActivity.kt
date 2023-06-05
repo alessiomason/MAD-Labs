@@ -464,6 +464,7 @@ class EditProfileActivity: AppCompatActivity() {
                                 mySports = it.mySports,
                                 friends = it.friends,
                                 recentlyInvited = it.recentlyInvited,
+                                invitations = it.invitations,
                                 alreadyShownTutorial = it.alreadyShownTutorial,
                                 recentPlaygrounds = it.recentPlaygrounds,
                                 myCourts = it.myCourts

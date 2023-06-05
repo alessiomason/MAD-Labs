@@ -19,6 +19,7 @@ data class User(
     var mySports: MutableMap<Sport, Float> = mutableMapOf(),
     var friends: List<DocumentReference>,
     var recentlyInvited: List<DocumentReference>,
+    var invitations: List<DocumentReference>,
     var alreadyShownTutorial: Boolean = false,
     var recentPlaygrounds: List<DocumentReference>,
     var myCourts: List<DocumentReference>
@@ -47,6 +48,7 @@ fun DocumentSnapshot.toUser(): User {
     val mySports = mySportsStrings?.map{ (s, r) -> s.toSport() to r }?.toMap() ?: emptyMap()
     val friends = this.get("friends") as? List<DocumentReference> ?: emptyList()
     val recentlyInvited = this.get("recentlyInvited") as? List<DocumentReference> ?: emptyList()
+    val invitations = this.get("invitations") as? List<DocumentReference> ?: emptyList()
     val alreadyShownTutorial = this.get("alreadyShownTutorial", Boolean::class.java)
     val recentPlaygrounds = this.get("recentPlaygrounds") as? List<DocumentReference> ?: emptyList()
     val myCourts = this.get("myCourts") as? List<DocumentReference> ?: emptyList()
@@ -63,6 +65,7 @@ fun DocumentSnapshot.toUser(): User {
         mySports.toMutableMap(),
         friends,
         recentlyInvited,
+        invitations,
         alreadyShownTutorial ?: false,
         recentPlaygrounds,
         myCourts

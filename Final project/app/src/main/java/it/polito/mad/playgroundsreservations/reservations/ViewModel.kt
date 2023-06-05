@@ -26,8 +26,8 @@ import it.polito.mad.playgroundsreservations.database.toReservation
 import it.polito.mad.playgroundsreservations.database.toUser
 import java.util.Date
 
-// AGGIUNGERE controlli di conflitti fatti dal db in precedenza
-// CAMBIARE value!! con controllo != null
+// should add controls for conflicts previously done by the Room database
+// should change value!! with check != null
 
 class ViewModel(application: Application) : AndroidViewModel(application) {
     override fun onCleared() {
@@ -121,7 +121,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             .document(Global.userId!!)
             .addSnapshotListener { value, error ->
                 if (error != null) {
-                    Log.w(TAG, "Failed to read users's notifications.", error)
+                    Log.w(TAG, "Failed to read user's notifications.", error)
                     return@addSnapshotListener
                 }
 
@@ -157,6 +157,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             .document(Global.userId!!)
             .update("recentPlaygrounds", FieldValue.arrayUnion(reservation.playgroundId))
 
+        // save reservation
         val r = hashMapOf(
             "userId" to reservation.userId,
             "userFullName" to reservation.userFullName,
@@ -181,7 +182,6 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
 
     fun updateReservation(reservation: Reservation) {
         val r = hashMapOf(
-            "id" to reservation.id,
             "userId" to reservation.userId,
             "userFullName" to reservation.userFullName,
             "playgroundId" to reservation.playgroundId,
@@ -482,7 +482,10 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             "mySports" to user.mySports.map { (s, r) -> s.name.lowercase() to r }.toMap(),
             "friends" to user.friends,
             "recentlyInvited" to user.recentlyInvited,
-            "alreadyShownTutorial" to user.alreadyShownTutorial
+            "invitations" to user.invitations,
+            "alreadyShownTutorial" to user.alreadyShownTutorial,
+            "recentPlaygrounds" to user.recentPlaygrounds,
+            "myCourts" to user.myCourts
         )
 
         db.collection(usersCollectionPath)
@@ -571,12 +574,12 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         db.collection(usersCollectionPath)
             .document(Global.userId!!)
             .get()
-            .addOnSuccessListener { user ->
+            .addOnSuccessListener { doc ->
                 invitedToReservationsState.clear()
 
-                val invitationsList = user.get("invitations") as? List<DocumentReference>
+                val invitationsList = doc.toUser().invitations
 
-                if (invitationsList.isNullOrEmpty()) {
+                if (invitationsList.isEmpty()) {
                     stillLoading.value = false
                     return@addOnSuccessListener
                 }
