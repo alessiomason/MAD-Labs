@@ -154,4 +154,8 @@
     <string name="max_number_of_people">Numero massimo di persone</string>
     <string name="n_people">%1$d persone</string>
     <string name="playgrounds_availability_explanation">Visualizza tutti i campi prenotati: se non vedi una prenotazione, il campo è tuo!</string>
+    <string name="empty_recent_playgrounds">Nessun campo recente trovato! Fai una prenotazione!</string>
+    <string name="empty_favorite_playgrounds">Nessun campo preferito trovato! Cercane uno e mettilo tra i preferiti!</string>
+    <string name="empty_recently_invited">Nessun utente invitato recentemente trovato! Fai una prenotazione e invita un amico!</string>
+    <string name="empty_friends">Nessun amico trovato! Cerca un utente e mettilo tra i preferiti!</string>
 </resources>

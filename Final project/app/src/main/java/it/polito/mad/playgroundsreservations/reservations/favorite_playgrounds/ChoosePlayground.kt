@@ -68,7 +68,7 @@ class ChoosePlayground: Fragment() {
                 PlaygroundsReservationsTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
+                        color = Color.White
                     ) {
                         ChoosePlaygroundScreen(
                             canChoosePlayground = args.canChoosePlayground,
@@ -95,7 +95,7 @@ class ChoosePlaygroundFromProfile: Fragment() {
                 PlaygroundsReservationsTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
+                        color = Color.White
                     ) {
                         ChoosePlaygroundScreen(
                             canChoosePlayground = false,

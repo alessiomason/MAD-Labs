@@ -79,6 +79,26 @@ fun ChoosePlaygroundFavoritesList(
                 }
             }
 
+            if (recentPlaygrounds.isEmpty()) {
+                item(key = "recent_playgrounds_empty") {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.empty_recent_playgrounds),
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp, end = 10.dp)
+                        )
+                    }
+                }
+            }
+
             items(
                 items = recentPlaygrounds.take(2),
                 key = { "recent_playgrounds_${it.id}" }
@@ -145,6 +165,26 @@ fun ChoosePlaygroundFavoritesList(
                             textAlign = TextAlign.Center
                         )
                     }
+                }
+            }
+        }
+
+        if (favoritePlaygrounds.isEmpty()) {
+            item(key = "favorite_playgrounds_empty") {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.empty_favorite_playgrounds),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp, end = 10.dp)
+                    )
                 }
             }
         }

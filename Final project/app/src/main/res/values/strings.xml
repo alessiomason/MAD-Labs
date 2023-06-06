@@ -153,4 +153,8 @@
     <string name="max_number_of_people">Maximum number of people</string>
     <string name="n_people">%1$d people</string>
     <string name="playgrounds_availability_explanation">See all reserved playgrounds: if you don\'t see a reservation, it\'s yours for the taking!</string>
+    <string name="empty_recent_playgrounds">No recent playgrounds found! Make a reservation!</string>
+    <string name="empty_favorite_playgrounds">No favorite playgrounds found! Search for your favorite one and star it!</string>
+    <string name="empty_recently_invited">No recently invited users found! Make a reservation and invite a friend!</string>
+    <string name="empty_friends">No friends found! Search for a user and star them!</string>
 </resources>

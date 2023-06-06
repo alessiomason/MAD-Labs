@@ -81,6 +81,26 @@ fun FriendsList(
                 }
             }
 
+            if (recentlyInvited.isEmpty()) {
+                item(key = "recently_invited_empty") {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.empty_recently_invited),
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp, end = 10.dp)
+                        )
+                    }
+                }
+            }
+
             items(
                 items = recentlyInvited.take(2),
                 key = { "recently_invited_${it.id}" }
@@ -145,6 +165,26 @@ fun FriendsList(
                             textAlign = TextAlign.Center
                         )
                     }
+                }
+            }
+        }
+
+        if (friends.isEmpty()) {
+            item(key = "friends_empty") {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.empty_friends),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp, end = 10.dp)
+                    )
                 }
             }
         }
