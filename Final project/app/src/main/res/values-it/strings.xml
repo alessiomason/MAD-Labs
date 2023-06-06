@@ -150,7 +150,7 @@
     <string name="search_all_playgrounds">Cerca tra tutti i campi</string>
     <string name="select_playground">Scegli campo</string>
     <string name="price_per_hour">Prezzo all\'ora</string>
-    <string name="price">%1%s €/h</string>
+    <string name="price">%1$s €/h</string>
     <string name="max_number_of_people">Numero massimo di persone</string>
     <string name="n_people">%1$d persone</string>
     <string name="playgrounds_availability_explanation">Visualizza tutti i campi prenotati: se non vedi una prenotazione, il campo è tuo!</string>
