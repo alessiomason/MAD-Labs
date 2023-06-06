@@ -20,9 +20,9 @@ Optimizations were also not performed, mostly due to time constraints: most nota
 - Explore the playgrounds availability, also without logging in
 - Login and sign up with email/password or with a Google account
 - Visualize already placed reservation through a calendar
-- Make a new reservation, selecting a playground from recents or favorites ones or searching for one through filters
+- Make a new reservation, selecting a playground from recents or favourites ones or searching for one through filters
 - Edit or delete an existing reservation
-- Invite friends to a reservation, selecting from recents or favorites users or searching for one
+- Invite friends to a reservation, selecting from recents or favourites users or searching for one
 - Receive in-app notifications for incoming invitations to reservation
 - Withdraw participation from an accepted invitation to a reservation
 - Personalize your profile with personal information to be displayed to friends and users of the app
@@ -38,6 +38,7 @@ Optimizations were also not performed, mostly due to time constraints: most nota
 - Firestore Firebase database
 - Firebase UI authentication
 - Firebase storage for saving profile images
+- Local Room database for labs 3 and 4
 
 ### Known bugs and limitations
 - The app supports a dark mode too, but the color scheme was not dutifully tested
@@ -53,5 +54,31 @@ We apologize if any of the techologies, plugins or components used required an a
 | :-------------: | :-------------: | :-------------: |
 | ![Choose playground](images/en/Choose%20playground.jpg) **Choose playground** | ![Show reservation](images/en/Show%20reservation.jpg) **Show reservation** | ![Notifications screen](images/en/Notifications%20screen.jpg) **Notifications screen** |
 | ![Show profile](images/en/Show%20profile.jpg) **Show profile** | | |
+
+### Folders content and brief changelog
+
+- Lab 2
+	- Show and edit personal profile
+
+- Lab 3 
+	- Show personal reservations
+	- Explore playgrounds availability
+	- Add, edit and delete a reservation
+	- Introduced local Room database
+
+- Lab 4
+	- Rate a previously reserved court
+
+- Lab 5
+	- See past ratings for a specific playground
+	- Login (multi-user interactions properly managed)
+	- Loading screens
+	- Moved to Firebase database
+
+- Final project
+	- Invite friends to reservations
+	- Manage received invites from notifications
+	- Add friends and playgrounds to favourites
+	- General bug fixing and management of corner cases
 
 [🌐 Qui in italiano](README_it.md)
