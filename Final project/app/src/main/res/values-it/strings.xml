@@ -100,8 +100,8 @@
     <string name="optional_description_rating">Aggiungi una descrizione (facoltativa)</string>
     <string name="rating_label">Valutazione:</string>
     <string name="title_activity_rating_playgrounds">Valuta campo</string>
-    <string name="save_rating">Salva Rating</string>
-    <string name="see_ratings">Guarda i ratings</string>
+    <string name="save_rating">Salva valutazione</string>
+    <string name="see_ratings">Guarda le valutazioni</string>
     <string name="optional_description_entered">Nessuna descrizione opzionale inserita</string>
     <string name="my_review_title">LA MIA VALUTAZIONE:</string>
     <string name="no_ratings_yet">NON È STATO ANCORA LASCIATO ALCUN RATING</string>
