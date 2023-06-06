@@ -23,19 +23,19 @@ Optimizations were also not performed, mostly due to time constraints: most nota
 - Make a new reservation, selecting a playground from recents or favourites ones or searching for one through filters
 - Edit or delete an existing reservation
 - Invite friends to a reservation, selecting from recents or favourites users or searching for one
-- Receive in-app notifications for incoming invitations to reservation
+- Receive in-app notifications for incoming invitations to reservations
 - Withdraw participation from an accepted invitation to a reservation
 - Personalize your profile with personal information to be displayed to friends and users of the app
 
 ### Horizontal features
 - The app supports multi-language localization and is fully translated in English and Italian
-- The app supports both portrait and landscape orientations and the layout is sufficiently diversified fot the two alternatives
+- The app supports both portrait and landscape orientations and the layout is sufficiently diversified for the two alternatives
 
 ### Technologies used
 - The app is fully developed in Kotlin
 - View-based activities and fragment
 - Jetpack Compose fragments (to integrate with the navigation graph used for fragments)
-- Firestore Firebase database
+- Firebase Firestore database
 - Firebase UI authentication
 - Firebase storage for saving profile images
 - Local Room database for labs 3 and 4
@@ -45,8 +45,9 @@ Optimizations were also not performed, mostly due to time constraints: most nota
 - Accepting an invitation while the inviter disinvites you
 - Two users making a reservation at the same time
 - In general, concurrency has not been handled
+- As previously mentioned, several performance optimizations would be needed
 
-We apologize if any of the techologies, plugins or components used required an aknowledgement and it was not provided: please note that the app was never meant to be public or operative.
+We apologize if any of the technologies, plugins or components used required an acknowledgement and it was not provided: please note that the app was never meant to be public or operative.
 
 ### Screenshots
 
@@ -71,9 +72,9 @@ We apologize if any of the techologies, plugins or components used required an a
 
 - Lab 5
 	- See past ratings for a specific playground
+	- Moved to Firebase database
 	- Login (multi-user interactions properly managed)
 	- Loading screens
-	- Moved to Firebase database
 
 - Final project
 	- Invite friends to reservations

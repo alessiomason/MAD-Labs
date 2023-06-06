@@ -237,7 +237,7 @@ fun ChoosePlaygroundBox(
                 Column {
                     Row {
                         Text(
-                            text = "Address",
+                            text = stringResource(id = R.string.address),
                             color = PrimaryColor,
                             modifier = Modifier.padding(horizontal = 5.dp)
                         )

@@ -150,6 +150,7 @@
     <string name="select_playground">Select playground</string>
     <string name="price_per_hour">Price per hour</string>
     <string name="price">%1$s €/h</string>
+    <string name="address">Address</string>
     <string name="max_number_of_people">Maximum number of people</string>
     <string name="n_people">%1$d people</string>
     <string name="playgrounds_availability_explanation">See all reserved playgrounds: if you don\'t see a reservation, it\'s yours for the taking!</string>
