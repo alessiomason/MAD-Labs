@@ -161,7 +161,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="11dp"
                         android:paddingBottom="10dp"
-                        android:text="@string/price_string"
+                        android:text="@string/price_with_currency"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="@android:color/secondary_text_light"
                         android:textStyle="italic" />

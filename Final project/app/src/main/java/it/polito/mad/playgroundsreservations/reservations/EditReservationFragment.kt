@@ -172,7 +172,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
                 val spinner = view.findViewById<Spinner>(R.id.spinnerViewHours)
                 spinner.adapter = adapter
                 spinner.setSelection(0)
-                for (j in 0..hours.size) {
+                for (j in 0 until hours.size) {
                     if (hours[j].split(":")[0] == myReservation.time.hour.toString()) {
                         spinner.setSelection((j))
                         break
@@ -254,7 +254,7 @@ class EditReservationFragment : Fragment(R.layout.edit_reservation_fragment) {
                             val selectedItem = parent.getItemAtPosition(position).toString()
                             myReservation.duration = Duration.ofHours(selectedItem.split(' ')[0].toLong())
                             price=pricePerHour*(selectedItem.split(' ')[0].toInt())
-                            priceElement.text = price.toString()
+                            priceElement.text = activity?.resources?.getString(R.string.price_with_currency, price)
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>?) {
