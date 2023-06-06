@@ -235,8 +235,8 @@
                             android:layout_marginTop="3dp"
                             android:layout_marginStart="20dp"
                             style="@style/Widget.MaterialRatingBar.RatingBar"
-                            android:scaleX="0.8"
-                            android:scaleY="0.8" />
+                            android:scaleX="0.9"
+                            android:scaleY="0.9" />
                     </TableRow>
 
                     <!-- Riga 2 -->
@@ -269,8 +269,8 @@
                             android:layout_marginTop="3dp"
                             android:layout_marginStart="20dp"
                             style="@style/Widget.MaterialRatingBar.RatingBar"
-                            android:scaleX="0.8"
-                            android:scaleY="0.8"/>
+                            android:scaleX="0.9"
+                            android:scaleY="0.9"/>
                     </TableRow>
 
                     <!-- Riga 3 -->
@@ -303,8 +303,8 @@
                             android:layout_marginTop="3dp"
                             android:layout_marginStart="20dp"
                             style="@style/Widget.MaterialRatingBar.RatingBar"
-                            android:scaleX="0.8"
-                            android:scaleY="0.8"/>
+                            android:scaleX="0.9"
+                            android:scaleY="0.9"/>
                     </TableRow>
 
                     <!-- Riga 4 -->
@@ -337,8 +337,8 @@
                             android:layout_marginTop="3dp"
                             android:layout_marginStart="20dp"
                             style="@style/Widget.MaterialRatingBar.RatingBar"
-                            android:scaleX="0.8"
-                            android:scaleY="0.8"/>
+                            android:scaleX="0.9"
+                            android:scaleY="0.9"/>
                     </TableRow>
 
                     <!-- Riga 5 -->
@@ -371,8 +371,8 @@
                             android:layout_marginTop="3dp"
                             android:layout_marginStart="20dp"
                             style="@style/Widget.MaterialRatingBar.RatingBar"
-                            android:scaleX="0.8"
-                            android:scaleY="0.8"/>
+                            android:scaleX="0.9"
+                            android:scaleY="0.9"/>
                     </TableRow>
 
                 </TableLayout>
