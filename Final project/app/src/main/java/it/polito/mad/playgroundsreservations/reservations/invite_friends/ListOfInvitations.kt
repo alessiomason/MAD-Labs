@@ -54,7 +54,7 @@ class ListOfInvitations: Fragment() {
                 PlaygroundsReservationsTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
+                        color = Color.White
                     ) {
                         ListOfInvitationsContent(reservationId = reservationId)
                     }

@@ -49,13 +49,13 @@ fun ProfileImage(friendId: String, size: ProfileImageSize) {
     val width = when (size) {
         ProfileImageSize.SMALL -> 25.dp
         ProfileImageSize.MEDIUM -> 75.dp
-        ProfileImageSize.BIG -> 250.dp
+        ProfileImageSize.BIG -> 200.dp
     }
 
     val strokeWidth = when (size) {
         ProfileImageSize.SMALL -> 2.dp
         ProfileImageSize.MEDIUM -> 4.dp
-        ProfileImageSize.BIG -> 8.dp
+        ProfileImageSize.BIG -> 4.dp
     }
 
     val loadingModifier = when (size) {
