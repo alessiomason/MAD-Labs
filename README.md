@@ -2,6 +2,8 @@
 ### Repository for the laboratories of the Mobile Application Development course
 The repository contains the 5 laboratories and the final project for the Mobile Application Development course (A.Y. 2022/23, Politecnico di Torino). Each folder contains the PDF of the assignment.
 
+[🌐 Qui in italiano](README_it.md)
+
 ## Lab 1: Kotlin Exercism exercises
 4 exercises from the Exercism Kotlin track: Bank account, Forth, List-Ops and Minesweeper
 
@@ -77,5 +79,3 @@ Optimizations were also not performed, mostly due to time constraints: most nota
 ---
 
 We apologize if any of the technologies, plugins or components used required an acknowledgement and it was not provided: please note that the app was never meant to be public or operative.
-
-[🌐 Qui in italiano](README_it.md)
