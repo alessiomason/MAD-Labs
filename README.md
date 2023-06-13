@@ -1,14 +1,11 @@
 # Mobile Application Development Labs
 ### Repository for the laboratories of the Mobile Application Development course
-
 The repository contains the 5 laboratories and the final project for the Mobile Application Development course (A.Y. 2022/23, Politecnico di Torino). Each folder contains the PDF of the assignment.
 
 ## Lab 1: Kotlin Exercism exercises
-
 4 exercises from the Exercism Kotlin track: Bank account, Forth, List-Ops and Minesweeper
 
 ## Labs 2-5 and final project: Playgrounds Reservations
-
 The following labs and the final project were aimed at creating an app for making reservations for available playgrounds to play a selection of sports.
 
 The app is what can be considered a proof of concept: its main goal was to test and showcase all the different technologies that can be used to develop an Android application. For this very reason the app is a mix of activities and fragments, view-based screens and Jetpack Compose ones.
@@ -16,9 +13,8 @@ The app is what can be considered a proof of concept: its main goal was to test 
 Optimizations were also not performed, mostly due to time constraints: most notably, the whole app operates from the main thread and frequently skips frames.
 
 ### Features
-
 - Explore the playgrounds availability, also without logging in
-- Login and sign up with email/password or with a Google account
+- Login or sign up with email and password or with a Google account
 - Visualize already placed reservation through a calendar
 - Make a new reservation, selecting a playground from recents or favourites ones or searching for one through filters
 - Edit or delete an existing reservation
@@ -41,23 +37,19 @@ Optimizations were also not performed, mostly due to time constraints: most nota
 - Local Room database for labs 3 and 4
 
 ### Known bugs and limitations
-- The app supports a dark mode too, but the color scheme was not dutifully tested
+- The app supports a dark mode too, but the color scheme was not dutifully considered nor tested
 - Accepting an invitation while the inviter disinvites you
 - Two users making a reservation at the same time
 - In general, concurrency has not been handled
 - As previously mentioned, several performance optimizations would be needed
 
-We apologize if any of the technologies, plugins or components used required an acknowledgement and it was not provided: please note that the app was never meant to be public or operative.
-
 ### Screenshots
-
 | ![Calendar](images/en/Calendar.jpg) Calendar | ![Playgrounds availability](images/en/Playgrounds%20availability.jpg) Playgrounds availability | ![Add reservation](images/en/Add%20reservation.jpg) Add reservation |
 | :-------------: | :-------------: | :-------------: |
 | ![Choose playground](images/en/Choose%20playground.jpg) **Choose playground** | ![Show reservation](images/en/Show%20reservation.jpg) **Show reservation** | ![Notifications screen](images/en/Notifications%20screen.jpg) **Notifications screen** |
 | ![Show profile](images/en/Show%20profile.jpg) **Show profile** | | |
 
 ### Folders content and brief changelog
-
 - Lab 2
 	- Show and edit personal profile
 
@@ -72,7 +64,7 @@ We apologize if any of the technologies, plugins or components used required an 
 
 - Lab 5
 	- See past ratings for a specific playground
-	- Moved to Firebase database
+	- Moved to Firebase Firestore database
 	- Login (multi-user interactions properly managed)
 	- Loading screens
 
@@ -81,5 +73,9 @@ We apologize if any of the technologies, plugins or components used required an 
 	- Manage received invites from notifications
 	- Add friends and playgrounds to favourites
 	- General bug fixing and management of corner cases
+
+---
+
+We apologize if any of the technologies, plugins or components used required an acknowledgement and it was not provided: please note that the app was never meant to be public or operative.
 
 [🌐 Qui in italiano](README_it.md)
