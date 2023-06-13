@@ -27,7 +27,7 @@ Inoltre, non sono state operate ottimizzazioni, soprattutto a causa di limiti di
 - Revoca la partecipazione per un invito ad una prenotazione accettato
 - Personalizza il tuo profilo con informazioni personali da mostrare ad amici e utenti dell'app
 
-## Feature orizzontali
+### Feature orizzontali
 
 - L'app supporta la localizzazione multilingue ed è completamemte tradotta in inglese ed italiano
 - L'app supporta sia l'orientamento verticale sia quello orizzontale ed è sufficientemente diversificata per le due alternative
