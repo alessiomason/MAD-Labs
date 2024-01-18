@@ -4,13 +4,13 @@ Il repository contiene i 5 laboratori e il progetto finale per il corso di Mobil
 
 [🌐 Here in English](README.md)
 
-## Lab 1: exercizi Kotlin da Exercism
+## Lab 1: esercizi Kotlin da Exercism
 
 4 esercizi dalla track Kotlin di Exercism: Bank account, Forth, List-Ops e Minesweeper.
 
 ## Lab 2-5 e progetto finale: Playgrounds Reservations
 
-I laboratori successivi e il progetto finale avevano lo scopo di creare un'applicazione per la prenotazione di campi disponibili per giocare una selezione di sport.
+I laboratori successivi e il progetto finale avevano lo scopo di creare un'applicazione per la prenotazione di campi disponibili per giocare ad una selezione di sport.
 
 Il progetto e l'app sono puramente dimostrativi: lo scopo principale era quello di testare e, appunto, dimostrare tutte le diverse tecnologie che possono essere utilizzate per sviluppare un applicazione Android. Per questa specifica ragione l'app è un misto tra activity e fragment, schermate view-based e Jetpack Compose.
 
@@ -30,7 +30,7 @@ Inoltre, non sono state operate ottimizzazioni, soprattutto a causa di limiti di
 
 ### Feature orizzontali
 
-- L'app supporta la localizzazione multilingue ed è completamemte tradotta in inglese ed italiano
+- L'app supporta la localizzazione multilingue ed è completamente tradotta in inglese ed italiano
 - L'app supporta sia l'orientamento verticale sia quello orizzontale ed è sufficientemente diversificata per le due alternative
 
 ### Tecnologie usate
